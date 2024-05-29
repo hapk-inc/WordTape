@@ -113,7 +113,6 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
                 case WordValidate.alreadyFilled:
                   return const DotIndicator(color: idleColor);
               }
-              return const DotIndicator(color: idleColor);
             },
           ),
         );

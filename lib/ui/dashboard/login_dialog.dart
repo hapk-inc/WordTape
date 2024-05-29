@@ -4,10 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../../logic/auth/bloc.dart';
 import '../../theme/colors.dart';
-
-final EdgeInsets _dialogPadding =
-    EdgeInsets.symmetric(vertical: 7.5.r, horizontal: 24.r);
 
 class LoginDialog extends ConsumerWidget {
   const LoginDialog({super.key});
@@ -24,11 +22,11 @@ class LoginDialog extends ConsumerWidget {
   }
 }
 
-class LoginDialogState extends StatelessWidget {
+class LoginDialogState extends ConsumerWidget {
   const LoginDialogState({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       width: 540.r,
@@ -57,15 +55,14 @@ class LoginDialogState extends StatelessWidget {
                 alignment: WrapAlignment.end,
                 children: [
                   OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => ref.read(googleLoginProvider),
                     child: const Text(
                       "GOOGLE PLAY",
                       style: TextStyle(color: filledColor),
                     ),
                   ),
-                  //  SizedBox.square(dimension: 3.r),
                   OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => ref.read(appleLoginProvider),
                     child: const Text(
                       "APPLE ACCOUNT",
                       style: TextStyle(color: payneGray),

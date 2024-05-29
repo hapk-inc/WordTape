@@ -11,7 +11,6 @@ import '../logic/dashboard.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/login_dialog.dart';
-import 'dashboard/login_panel.dart';
 import 'dashboard/puzzle_calendar.dart';
 
 final BorderRadius _topPanel =
@@ -64,7 +63,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
           SlidingUpPanel(
             backdropColor: raisinBlack,
-            padding: EdgeInsets.symmetric(horizontal: 4.5),
+            padding: EdgeInsets.symmetric(horizontal: 4.5.r),
             backdropEnabled: true,
             backdropOpacity: 0.75,
             borderRadius: _topPanel,
