@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
+
+import '../../theme/colors.dart';
+import '../../theme/text_theme.dart';
+
+MyTextTheme _textTheme = MyTextTheme();
+
+class PuzzleCalendar extends ConsumerWidget {
+  const PuzzleCalendar({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // context.router.current.args
+    final DateTime now = DateTime.now();
+    return AppBar(
+      leadingWidth: 150.r,
+      leading: Center(
+        child: InkWell(
+          child: Text(
+            //"MAY 11, 2024",
+            DateFormat.yMMMd().format(now).toUpperCase(),
+            style: _textTheme.headlineMedium?.copyWith(color: teal),
+          ),
+        ),
+      ),
+      actionsIconTheme: const IconThemeData(color: ashGray, size: 24),
+      actions: [
+        IconButton(
+          onPressed: () {
+            // context.router.current.args
+            //ref.read(dashboardNotifierProvider).delete();
+          },
+          icon: const Icon(Icons.settings),
+        ),
+        const Gap(15)
+      ],
+    );
+  }
+}

@@ -1,0 +1,6 @@
+flutter_native_splash:
+  color: "#12263a"
+  # background_image: "images/wordtape.png"
+
+  android_12:
+    color: "#12263a"
