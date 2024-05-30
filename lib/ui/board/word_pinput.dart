@@ -117,6 +117,10 @@ class _WordPinputState extends ConsumerState<WordPinput> {
 
         //
         errorBuilder: (errorText, pin) => Container(),
+        validator: (value) {
+          debugPrint("120--");
+          return null;
+        },
       ),
     );
   }

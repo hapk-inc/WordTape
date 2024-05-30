@@ -7,13 +7,13 @@ part 'word.g.dart';
 
 @freezed
 class Word with _$Word {
+  @JsonSerializable(includeIfNull: false)
   const factory Word({
     required String value,
     String? note,
-    final String? hint,
-
+    String? hint,
     //
-    @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+    @JsonKey(includeToJson: false, includeFromJson: false)
     @Default(WordValidate.idle)
     WordValidate validate,
   }) = _Word;

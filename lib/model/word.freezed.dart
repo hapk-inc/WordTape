@@ -23,7 +23,7 @@ mixin _$Word {
   String get value => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
   String? get hint => throw _privateConstructorUsedError; //
-  @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   WordValidate get validate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,8 +40,7 @@ abstract class $WordCopyWith<$Res> {
       {String value,
       String? note,
       String? hint,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
+      @JsonKey(includeToJson: false, includeFromJson: false)
       WordValidate validate});
 }
 
@@ -95,8 +94,7 @@ abstract class _$$WordImplCopyWith<$Res> implements $WordCopyWith<$Res> {
       {String value,
       String? note,
       String? hint,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
+      @JsonKey(includeToJson: false, includeFromJson: false)
       WordValidate validate});
 }
 
@@ -137,14 +135,14 @@ class __$$WordImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(includeIfNull: false)
 class _$WordImpl implements _Word {
   const _$WordImpl(
       {required this.value,
       this.note,
       this.hint,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
+      @JsonKey(includeToJson: false, includeFromJson: false)
       this.validate = WordValidate.idle});
 
   factory _$WordImpl.fromJson(Map<String, dynamic> json) =>
@@ -158,7 +156,7 @@ class _$WordImpl implements _Word {
   final String? hint;
 //
   @override
-  @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   final WordValidate validate;
 
   @override
@@ -201,8 +199,7 @@ abstract class _Word implements Word {
       {required final String value,
       final String? note,
       final String? hint,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
+      @JsonKey(includeToJson: false, includeFromJson: false)
       final WordValidate validate}) = _$WordImpl;
 
   factory _Word.fromJson(Map<String, dynamic> json) = _$WordImpl.fromJson;
@@ -214,7 +211,7 @@ abstract class _Word implements Word {
   @override
   String? get hint;
   @override //
-  @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+  @JsonKey(includeToJson: false, includeFromJson: false)
   WordValidate get validate;
   @override
   @JsonKey(ignore: true)

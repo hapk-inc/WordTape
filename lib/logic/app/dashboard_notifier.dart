@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../enum/enum.dart';
 import '../auth/bloc.dart';
@@ -44,5 +43,8 @@ class AppNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  AuthValidate get authValidate => _authValidate;
+  //AuthValidate get authValidate => _authValidate;
+
+  bool get notLogged => _authValidate == AuthValidate.notLogged;
+  bool get loggedIn => _authValidate == AuthValidate.loggedIn;
 }

@@ -30,7 +30,7 @@ class PuzzleCalendar extends ConsumerWidget {
           ),
         ),
       ),
-      actionsIconTheme: const IconThemeData(color: ashGray, size: 24),
+      //actionsIconTheme: const IconThemeData(color: slateGray, size: 24),
       actions: [
         IconButton(
           onPressed: () {

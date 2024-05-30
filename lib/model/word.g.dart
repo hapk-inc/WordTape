@@ -12,9 +12,18 @@ _$WordImpl _$$WordImplFromJson(Map<String, dynamic> json) => _$WordImpl(
       hint: json['hint'] as String?,
     );
 
-Map<String, dynamic> _$$WordImplToJson(_$WordImpl instance) =>
-    <String, dynamic>{
-      'value': instance.value,
-      'note': instance.note,
-      'hint': instance.hint,
-    };
+Map<String, dynamic> _$$WordImplToJson(_$WordImpl instance) {
+  final val = <String, dynamic>{
+    'value': instance.value,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('note', instance.note);
+  writeNotNull('hint', instance.hint);
+  return val;
+}

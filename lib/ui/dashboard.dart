@@ -7,15 +7,10 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:animate_do/animate_do.dart';
 
-import '../logic/app/dashboard_notifier.dart';
 import '../logic/app/panel.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
-import 'dashboard/login_dialog.dart';
 import 'dashboard/puzzle_calendar.dart';
-
-final BorderRadius _topPanel =
-    BorderRadius.vertical(top: Radius.circular(15.r));
 
 @RoutePage()
 class DashboardPage extends ConsumerStatefulWidget {
@@ -26,15 +21,6 @@ class DashboardPage extends ConsumerStatefulWidget {
 }
 
 class _DashboardPageState extends ConsumerState<DashboardPage> {
-  late double dSize;
-  // late BoardNotifier boardNotifier;
-
-  @override
-  void initState() {
-    debugPrint(context.router.current.args.toString());
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final TextTheme tTheme = Theme.of(context).textTheme;
@@ -67,7 +53,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             padding: EdgeInsets.symmetric(horizontal: 4.5.r),
             backdropEnabled: true,
             backdropOpacity: 0.75,
-            borderRadius: _topPanel,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
             minHeight: 0,
             maxHeight: ref.watch(dPanelWidgetProvider).height,
             controller: ref.read(panelControllerProvider),

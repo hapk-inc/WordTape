@@ -2,12 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mock_data/mock_data.dart';
 import 'package:timelines/timelines.dart';
 
 import '../../enum/enum.dart';
+import '../../logic/puzzle/bloc.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
+import '../../model/word.dart';
 import '../../router/my_route.dart';
 import '../../theme/colors.dart';
 import 'word_pinput.dart';
@@ -26,15 +27,13 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
   @override
   void initState() {
     final args = context.router.current.args;
-    //puzzle =  (context.router.current.args as PuzzleBoardRouteArgs).puzzle;
     puzzle = args is PuzzleBoardRouteArgs ? args.puzzle : Puzzle.fromRandom();
-    //puzzle = Puzzle.fromRandom();
 
-    final int random = mockInteger(1, 3);
+    /* final int random = mockInteger(1, 3);
     found = Found(
       rowNo: random,
       mistake: random == 2 ? puzzle.words[1].value : null,
-    );
+    );*/
     super.initState();
   }
 
@@ -51,35 +50,31 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
 
   @override
   Widget build(BuildContext context) {
+    found = ref.watch(foundNotifierProvider).value ?? const Found();
+    if (found.id == null) return Container();
+    debugPrint("56--$found");
     return LayoutBuilder(
       builder: (ctx, constraints) {
-        final double maxW = constraints.maxWidth;
-        final double maxH = constraints.maxHeight;
+        final double mW = constraints.maxWidth;
+        final double mH = constraints.maxHeight;
         return FixedTimeline.tileBuilder(
           theme: TimelineTheme.of(ctx).copyWith(
             nodePosition: 0,
-            connectorTheme: ConnectorThemeData(
-              thickness: maxW * 0.0015,
-              color: ashGray,
-            ),
-            indicatorTheme: IndicatorThemeData(
-              size: maxW * 0.0225,
-              color: teal,
-            ),
+            connectorTheme:
+                ConnectorThemeData(thickness: mW * 0.0015, color: ashGray),
+            indicatorTheme: IndicatorThemeData(size: mW * 0.0225, color: teal),
           ),
           builder: TimelineTileBuilder.connected(
             itemCount: puzzle.words.length,
             contentsAlign: ContentsAlign.basic,
             contentsBuilder: (_, index) {
               WordValidate validate = validation(index);
-
+              final Word word =
+                  puzzle.words[index].copyWith(validate: validate);
               return Container(
-                height: maxH / puzzle.words.length,
-                padding: EdgeInsets.only(left: maxW * 0.03),
-                child: WordPinput(
-                  index,
-                  puzzle.words[index].copyWith(validate: validate),
-                ),
+                height: mH / puzzle.words.length,
+                padding: EdgeInsets.only(left: mW * 0.03),
+                child: WordPinput(index, word),
               );
             },
             firstConnectorBuilder: (_) => endConnector,

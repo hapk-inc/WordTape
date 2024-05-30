@@ -40,7 +40,7 @@ class LoginDialogState extends ConsumerWidget {
           children: [
             Text(
               "Login",
-              style: textTheme.titleMedium?.copyWith(color: filledColor),
+              style: textTheme.titleMedium?.copyWith(color: raisinBlack),
             ),
             Gap(15.h),
             const Text(

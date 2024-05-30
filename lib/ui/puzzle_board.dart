@@ -19,23 +19,19 @@ class PuzzleBoardPage extends StatelessWidget {
         color: greenWhite,
         child: LayoutBuilder(
           builder: (_, constraint) {
-            final double maxW = constraint.maxWidth;
+            final double mW = constraint.maxWidth;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBar(leadingWidth: 60.r),
                 Gap(30.h),
                 Container(
-                  //color: ashGray,
-                  height: constraint.maxHeight * 0.51,
-                  margin: EdgeInsets.only(
-                    left: maxW * 0.06,
-                    right: maxW * 0.045,
-                  ),
+                  height: 69.75.h * puzzle.words.length,
+                  margin: EdgeInsets.only(left: mW * 0.06, right: mW * 0.045),
                   alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: maxW * 0.012),
+                  // color: ashGray,
+                  padding: EdgeInsets.symmetric(horizontal: mW * 0.012),
                   child: const FixedBoard(),
-                  //child: Container(),
                 )
               ],
             );

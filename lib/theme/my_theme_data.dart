@@ -7,10 +7,7 @@ import 'text_theme.dart';
 MyTextTheme _textTheme = MyTextTheme();
 
 ThemeData buildThemeData() => ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: teal,
-        surface: prussianBlue,
-      ),
+      colorScheme: ColorScheme.fromSeed(seedColor: teal, surface: prussianBlue),
       useMaterial3: true,
       scaffoldBackgroundColor: greenWhite,
       textTheme: _textTheme,
@@ -18,7 +15,7 @@ ThemeData buildThemeData() => ThemeData(
         toolbarHeight: 75.h,
         backgroundColor: greenWhite,
         elevation: 0,
-        iconTheme: IconThemeData(color: payneGray, size: 21.r),
+        iconTheme: IconThemeData(color: slateGray, size: 24.r),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(style: _buttonStyle),
       primaryTextTheme: _textTheme,
@@ -35,6 +32,8 @@ ThemeData buildThemeData() => ThemeData(
               borderRadius: BorderRadius.circular(24.r),
             ),
           ),
+          textStyle: WidgetStatePropertyAll(
+              _textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600)),
           side: const WidgetStatePropertyAll(
             BorderSide(width: 0.45, color: slateGray),
           ),
