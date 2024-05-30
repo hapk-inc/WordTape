@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+import '../../logic/auth/bloc.dart';
+import '../../logic/dashboard_notifier.dart';
 import '../../theme/colors.dart';
 import '../../theme/text_theme.dart';
 
@@ -15,7 +17,8 @@ class PuzzleCalendar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // context.router.current.args
-    final DateTime now = DateTime.now();
+    //final DateTime now = DateTime.now();
+    final DateTime now = ref.watch(dashboardNotifierProvider).dateTime;
     return AppBar(
       leadingWidth: 150.r,
       leading: Center(
@@ -31,6 +34,7 @@ class PuzzleCalendar extends ConsumerWidget {
       actions: [
         IconButton(
           onPressed: () {
+            ref.read(signOutProvider);
             // context.router.current.args
             //ref.read(dashboardNotifierProvider).delete();
           },
