@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -19,7 +20,7 @@ Future<Puzzle?> puzzle(PuzzleRef ref) async {
   return ref.read(datastoreProvider).puzzle(app.dateTime);
 }
 
-@Riverpod(dependencies: [authUser, puzzle])
+@Riverpod(keepAlive: true, dependencies: [authUser, puzzle])
 class FoundNotifier extends _$FoundNotifier {
   final FoundDatabase _db = FoundDatabase();
 
@@ -29,7 +30,7 @@ class FoundNotifier extends _$FoundNotifier {
     if (puzzle.id == null) return null;
     final String id = puzzle.id!;
     Found f = const Found().copyWith(id: id);
-    if (ref.watch(authUserProvider).value == null) return f;
+    if (ref.read(authUserProvider).value == null) return f;
     if (kIsWeb) {
       return f;
     } else {
@@ -37,12 +38,20 @@ class FoundNotifier extends _$FoundNotifier {
     }
     return f;
   }
-}
 
-/*@Riverpod(dependencies: [puzzle])
-Future<Found?> found(FoundRef ref) async {
-  final Puzzle? puzzle = ref.watch(puzzleProvider).value;
-  final AppNotifier app = ref.watch(appNotifierProvider);
-  if (app.notLogged) return null;
-  return const Found();
-}*/
+  Future get changeFound async {
+    final User? user = ref.read(authUserProvider).value;
+    if (user == null) await ref.read(anonymousLoginProvider.future);
+    if (kIsWeb) {
+    } else {
+      Found found = state.value!;
+      found = found.copyWith(rowNo: found.rowNo + 1, lastFound: DateTime.now());
+
+      await _db.insertOrder(found);
+    }
+  }
+
+  newMistake(String s) {}
+
+  Future delete() => _db.delete();
+}

@@ -52,7 +52,7 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
   Widget build(BuildContext context) {
     found = ref.watch(foundNotifierProvider).value ?? const Found();
     if (found.id == null) return Container();
-    debugPrint("56--$found");
+    //debugPrint("56--$found");
     return LayoutBuilder(
       builder: (ctx, constraints) {
         final double mW = constraints.maxWidth;

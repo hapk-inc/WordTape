@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../enum/enum.dart';
+import '../../logic/puzzle/bloc.dart';
+import '../../model/found.dart';
 import '../../model/word.dart';
 import '../../theme/colors.dart';
 import '../../theme/text_theme.dart';
@@ -35,8 +37,10 @@ class _WordPinputState extends ConsumerState<WordPinput> {
         textStyle: _textTheme.headlineMedium,
       );
 
+  late FoundNotifier foundNotifier;
   late TextEditingController controller;
   late WordValidate validate;
+  late Found? found;
 
   _onTextChanged() {
     String firstLetter = widget.word.value.characters.first;
@@ -51,12 +55,17 @@ class _WordPinputState extends ConsumerState<WordPinput> {
   @override
   void initState() {
     final String str = widget.word.value.toUpperCase();
+    foundNotifier = ref.read(foundNotifierProvider.notifier);
+    found = ref.read(foundNotifierProvider).value;
+
+    //
     validate = widget.word.validate;
     controller = TextEditingController()
       ..text = validate == WordValidate.alreadyFilled
           ? str
           : validate == WordValidate.error
-              ? str //  mistake
+              ? found?.mistake ?? "" //  mistake
+              //? str //  mistake
               : validate == WordValidate.focused
                   ? str.characters.first
                   : ""
@@ -117,10 +126,25 @@ class _WordPinputState extends ConsumerState<WordPinput> {
 
         //
         errorBuilder: (errorText, pin) => Container(),
-        validator: (value) {
-          debugPrint("120--");
-          return null;
+        onCompleted: (value) async {
+          //if (value == null) return null;
+          bool isEqual = widget.word.value == value;
+          if (isEqual) {
+            await foundNotifier.changeFound;
+          } else {
+            foundNotifier.newMistake(value);
+          }
         },
+        /*validator: (value) {
+          if (value == null) return null;
+          bool isEqual = widget.word.value == value;
+          if (isEqual) {
+            foundNotifier.changeFound();
+          } else {
+            foundNotifier.newMistake(value);
+          }
+          return isEqual ? null : "Incorrect word";
+        },*/
       ),
     );
   }

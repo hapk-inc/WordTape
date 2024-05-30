@@ -94254,3 +94254,28 @@ at:
 [IgnoreCode] 2024-05-30T14:57:10.107310 #17     _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:429:5)
 [IgnoreCode] 2024-05-30T14:57:10.107310 #18     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:184:12)
 [IgnoreCode] 2024-05-30T14:57:10.107310
+The request edit.getAssists failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+A request threw the exception:Bad state: Unable to find the context to /Users/harish/StudioProjects/wordtape/ios/.symlinks/plugins/cloud_firestore/example/integration_test/document_reference_e2e.dart
+#0      AnalysisContextCollectionImpl.contextFor (package:analyzer/src/dart/analysis/analysis_context_collection.dart:151:5)
+#1      _ClientAnalyzerPlugin.handleEditGetAssists (package:custom_lint_builder/src/client.dart:453:47)
+<asynchronous suspension>
+#2      ServerPlugin._getResponse (package:analyzer_plugin/plugin/plugin.dart:556:18)
+<asynchronous suspension>
+#3      ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
+<asynchronous suspension>
+
+at:
+#0      SocketCustomLintServerToClientChannel.sendCustomLintRequest.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:268:11)
+#1      _$CustomLintResponseAnalyzerPluginResponseImpl.map (package:custom_lint/src/v2/protocol.freezed.dart:928:34)
+#2      SocketCustomLintServerToClientChannel.sendCustomLintRequest (package:custom_lint/src/v2/server_to_client_channel.dart:262:14)
+<asynchronous suspension>
+#3      SocketCustomLintServerToClientChannel.sendAnalyzerPluginRequest (package:custom_lint/src/v2/server_to_client_channel.dart:234:22)
+<asynchronous suspension>
+#4      CustomLintServer._handleRequest.<anonymous closure>.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:188:17)
+<asynchronous suspension>
+#5      PendingOperation.run (package:custom_lint/src/async_operation.dart:22:14)
+<asynchronous suspension>
+#6      CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:171:22)
+<asynchronous suspension>
+

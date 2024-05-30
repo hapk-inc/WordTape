@@ -23,8 +23,8 @@ mixin _$Found {
   int get rowNo => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false)
   String? get mistake => throw _privateConstructorUsedError;
-  DateTime? get lastFound => throw _privateConstructorUsedError;
-  @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+  DateTime? get lastFound => throw _privateConstructorUsedError; //
+  @JsonKey(includeIfNull: false)
   String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,9 +41,7 @@ abstract class $FoundCopyWith<$Res> {
       {int rowNo,
       @JsonKey(includeIfNull: false) String? mistake,
       DateTime? lastFound,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
-      String? id});
+      @JsonKey(includeIfNull: false) String? id});
 }
 
 /// @nodoc
@@ -96,9 +94,7 @@ abstract class _$$FoundImplCopyWith<$Res> implements $FoundCopyWith<$Res> {
       {int rowNo,
       @JsonKey(includeIfNull: false) String? mistake,
       DateTime? lastFound,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
-      String? id});
+      @JsonKey(includeIfNull: false) String? id});
 }
 
 /// @nodoc
@@ -139,15 +135,14 @@ class __$$FoundImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(includeIfNull: false)
 class _$FoundImpl implements _Found {
   const _$FoundImpl(
       {this.rowNo = 1,
       @JsonKey(includeIfNull: false) this.mistake,
       this.lastFound,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
-      this.id});
+      @JsonKey(includeIfNull: false) this.id});
 
   factory _$FoundImpl.fromJson(Map<String, dynamic> json) =>
       _$$FoundImplFromJson(json);
@@ -160,8 +155,9 @@ class _$FoundImpl implements _Found {
   final String? mistake;
   @override
   final DateTime? lastFound;
+//
   @override
-  @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+  @JsonKey(includeIfNull: false)
   final String? id;
 
   @override
@@ -204,9 +200,7 @@ abstract class _Found implements Found {
       {final int rowNo,
       @JsonKey(includeIfNull: false) final String? mistake,
       final DateTime? lastFound,
-      @JsonKey(
-          includeIfNull: false, includeToJson: false, includeFromJson: false)
-      final String? id}) = _$FoundImpl;
+      @JsonKey(includeIfNull: false) final String? id}) = _$FoundImpl;
 
   factory _Found.fromJson(Map<String, dynamic> json) = _$FoundImpl.fromJson;
 
@@ -217,8 +211,8 @@ abstract class _Found implements Found {
   String? get mistake;
   @override
   DateTime? get lastFound;
-  @override
-  @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+  @override //
+  @JsonKey(includeIfNull: false)
   String? get id;
   @override
   @JsonKey(ignore: true)
