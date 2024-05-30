@@ -7,7 +7,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:animate_do/animate_do.dart';
 
-import '../logic/dashboard_notifier.dart';
+import '../logic/app/dashboard_notifier.dart';
+import '../logic/app/panel.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/login_dialog.dart';
@@ -68,9 +69,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             backdropOpacity: 0.75,
             borderRadius: _topPanel,
             minHeight: 0,
-            maxHeight: 210.r,
-            controller: panelController,
-            panel: const LoginDialogState(),
+            maxHeight: ref.watch(dPanelWidgetProvider).height,
+            controller: ref.read(panelControllerProvider),
+            panel: ref.watch(dPanelWidgetProvider).child,
           ),
         ],
       ),

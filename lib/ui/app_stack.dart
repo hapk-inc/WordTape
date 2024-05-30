@@ -11,6 +11,7 @@ class AppStackPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       // color: prussianBlue,
       backgroundColor: prussianBlue,
       body: SafeArea(

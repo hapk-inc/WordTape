@@ -62,7 +62,12 @@ class LoginDialogState extends ConsumerWidget {
                     ),
                   ),
                   OutlinedButton(
-                    onPressed: () => ref.read(appleLoginProvider),
+                    onPressed: () => ref.read(appleLoginProvider).when(
+                          data: (data) => debugPrint("Loading $data"),
+                          error: (error, stackTrace) =>
+                              debugPrint("Loading $error"),
+                          loading: () => debugPrint("Loading"),
+                        ),
                     child: const Text(
                       "APPLE ACCOUNT",
                       style: TextStyle(color: payneGray),

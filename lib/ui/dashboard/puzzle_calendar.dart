@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../logic/auth/bloc.dart';
-import '../../logic/dashboard_notifier.dart';
+import '../../logic/app/dashboard_notifier.dart';
 import '../../theme/colors.dart';
 import '../../theme/text_theme.dart';
 
@@ -18,7 +18,7 @@ class PuzzleCalendar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // context.router.current.args
     //final DateTime now = DateTime.now();
-    final DateTime now = ref.watch(dashboardNotifierProvider).dateTime;
+    final DateTime now = ref.watch(appNotifierProvider).dateTime;
     return AppBar(
       leadingWidth: 150.r,
       leading: Center(

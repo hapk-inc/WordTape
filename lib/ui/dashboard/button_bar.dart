@@ -2,9 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wordtape/enum/enum.dart';
 
-import '../../logic/dashboard_notifier.dart';
+import '../../logic/app/dashboard_notifier.dart';
+import '../../logic/app/panel.dart';
 import '../../model/puzzle.dart';
 import '../../router/my_route.dart';
 import '../../theme/colors.dart';
@@ -15,8 +17,7 @@ class DButtonBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DashboardNotifier dashboardNotifier =
-        ref.watch(dashboardNotifierProvider);
+    final AppNotifier dashboardNotifier = ref.watch(appNotifierProvider);
     final AuthValidate validate = dashboardNotifier.authValidate;
     debugPrint(validate.name);
     return Padding(
@@ -49,22 +50,15 @@ class DButtonBar extends ConsumerWidget {
               onPressed: () {
                 final double ratio = 900.h / 360.w;
                 if (ratio > 2) {
-                  if (panelController.isPanelClosed) panelController.open();
+                  final PanelController panel =
+                      ref.read(panelControllerProvider);
+                  if (panel.isPanelClosed) panel.open();
                 } else {
                   showDialog(
                     context: context,
                     builder: (_) => const LoginDialog(),
                   );
                 }
-
-                /*if (ref.read(deviceSizeStateNotifierProvider) > 2) {
-                if (dashboardPanel.isPanelClosed) dashboardPanel.open();
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (_) => const LoginDialog(),
-                );
-              }*/
               },
               child: const Text(
                 "LOGIN NOW",

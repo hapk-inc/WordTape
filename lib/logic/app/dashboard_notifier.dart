@@ -3,23 +3,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../enum/enum.dart';
-import 'auth/bloc.dart';
+import '../../enum/enum.dart';
+import '../auth/bloc.dart';
 
-PanelController panelController = PanelController();
-
-final ChangeNotifierProvider<DashboardNotifier> dashboardNotifierProvider =
-    ChangeNotifierProvider<DashboardNotifier>(
-  (ref) => DashboardNotifier(ref),
+final ChangeNotifierProvider<AppNotifier> appNotifierProvider =
+    ChangeNotifierProvider<AppNotifier>(
+  (ref) => AppNotifier(ref),
 );
 
-class DashboardNotifier extends ChangeNotifier {
+class AppNotifier extends ChangeNotifier {
   DateTime _dateTime = DateTime.now();
-  final Ref<DashboardNotifier> ref;
+  final Ref<AppNotifier> ref;
 
   AuthValidate _authValidate = AuthValidate.notLogged;
 
-  DashboardNotifier(this.ref);
+  AppNotifier(this.ref);
 
   @override
   void addListener(VoidCallback listener) {
