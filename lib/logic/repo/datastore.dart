@@ -56,7 +56,8 @@ class Datastore {
         debugPrint("49--Found");
         return !snapshot.exists
             ? null
-            : Found.fromJson(snapshot.data() as Map<String, dynamic>);
+            : Found.fromJson(snapshot.data() as Map<String, dynamic>)
+                .copyWith(id: id);
       },
       onError: (e, s) {
         debugPrint("55--$e");

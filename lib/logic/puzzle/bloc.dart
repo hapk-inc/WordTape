@@ -45,6 +45,7 @@ class FoundNotifier extends _$FoundNotifier {
       if (user == null) return found;
       if (kIsWeb) {
         debugPrint("40--Running web");
+
         return ref.read(datastoreProvider).found(found.id!);
       } else {
         return _db.found(found.id!);
