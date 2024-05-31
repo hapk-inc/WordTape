@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../model/player.dart';
+import '../puzzle/bloc.dart';
 import 'auth.dart';
 
 part 'bloc.g.dart';
@@ -12,7 +14,11 @@ Auth auth(AuthRef ref) => Auth(ref);
 Stream<User?> authUser(AuthUserRef ref) => ref.read(authProvider).authUser;
 
 @riverpod
-Future signOut(SignOutRef ref) => ref.read(authProvider).signOut;
+Future signOut(SignOutRef ref) async {
+  final Auth auth = ref.read(authProvider);
+  await auth.signOut;
+  return auth.deleteAccount;
+}
 
 @Riverpod(keepAlive: true, dependencies: [auth])
 User? firebaseUser(FirebaseUserRef ref) => ref.watch(authProvider).currentUser;
@@ -20,6 +26,10 @@ User? firebaseUser(FirebaseUserRef ref) => ref.watch(authProvider).currentUser;
 @riverpod
 Future deleteAccount(DeleteAccountRef ref) =>
     ref.read(authProvider).deleteAccount;
+
+@Riverpod(keepAlive: true, dependencies: [datastore])
+Future<Player?> player(PlayerRef ref) async =>
+    ref.read(datastoreProvider).player;
 
 @riverpod
 Future<UserCredential> anonymousLogin(AnonymousLoginRef ref) =>

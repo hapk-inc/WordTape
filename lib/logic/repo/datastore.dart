@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../firebase/firebase.dart';
 import '../../model/found.dart';
+import '../../model/player.dart';
 import '../../model/puzzle.dart';
 
 class Datastore {
@@ -59,6 +60,20 @@ class Datastore {
       },
       onError: (e, s) {
         debugPrint("55--$e");
+      },
+    );
+  }
+
+  Future<Player?> get player async {
+    final String a = fUser?.uid ?? "NoUser";
+    if (a == "NoUser") return null;
+    return userColl.doc(a).get().then(
+      (DocumentSnapshot snapshot) {
+        if (!snapshot.exists) return null;
+        final Map map = snapshot.data() as Map;
+        Player player = Player.fromJson(Map<String, dynamic>.from(map))
+            .copyWith(id: snapshot.id);
+        return player;
       },
     );
   }

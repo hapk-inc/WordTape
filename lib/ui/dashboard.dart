@@ -6,8 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:wordtape/logic/app/panel.dart';
 
+import '../logic/app/panel.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/puzzle_calendar.dart';
