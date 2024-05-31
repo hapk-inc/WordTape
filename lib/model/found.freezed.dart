@@ -20,11 +20,9 @@ Found _$FoundFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Found {
-  int get rowNo => throw _privateConstructorUsedError;
-  @JsonKey(includeIfNull: false)
+  int get i => throw _privateConstructorUsedError;
   String? get mistake => throw _privateConstructorUsedError;
   DateTime? get lastFound => throw _privateConstructorUsedError; //
-  @JsonKey(includeIfNull: false)
   String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,11 +35,7 @@ abstract class $FoundCopyWith<$Res> {
   factory $FoundCopyWith(Found value, $Res Function(Found) then) =
       _$FoundCopyWithImpl<$Res, Found>;
   @useResult
-  $Res call(
-      {int rowNo,
-      @JsonKey(includeIfNull: false) String? mistake,
-      DateTime? lastFound,
-      @JsonKey(includeIfNull: false) String? id});
+  $Res call({int i, String? mistake, DateTime? lastFound, String? id});
 }
 
 /// @nodoc
@@ -57,15 +51,15 @@ class _$FoundCopyWithImpl<$Res, $Val extends Found>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rowNo = null,
+    Object? i = null,
     Object? mistake = freezed,
     Object? lastFound = freezed,
     Object? id = freezed,
   }) {
     return _then(_value.copyWith(
-      rowNo: null == rowNo
-          ? _value.rowNo
-          : rowNo // ignore: cast_nullable_to_non_nullable
+      i: null == i
+          ? _value.i
+          : i // ignore: cast_nullable_to_non_nullable
               as int,
       mistake: freezed == mistake
           ? _value.mistake
@@ -90,11 +84,7 @@ abstract class _$$FoundImplCopyWith<$Res> implements $FoundCopyWith<$Res> {
       __$$FoundImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int rowNo,
-      @JsonKey(includeIfNull: false) String? mistake,
-      DateTime? lastFound,
-      @JsonKey(includeIfNull: false) String? id});
+  $Res call({int i, String? mistake, DateTime? lastFound, String? id});
 }
 
 /// @nodoc
@@ -108,15 +98,15 @@ class __$$FoundImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rowNo = null,
+    Object? i = null,
     Object? mistake = freezed,
     Object? lastFound = freezed,
     Object? id = freezed,
   }) {
     return _then(_$FoundImpl(
-      rowNo: null == rowNo
-          ? _value.rowNo
-          : rowNo // ignore: cast_nullable_to_non_nullable
+      i: null == i
+          ? _value.i
+          : i // ignore: cast_nullable_to_non_nullable
               as int,
       mistake: freezed == mistake
           ? _value.mistake
@@ -137,32 +127,27 @@ class __$$FoundImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(includeIfNull: false)
-class _$FoundImpl implements _Found {
-  const _$FoundImpl(
-      {this.rowNo = 1,
-      @JsonKey(includeIfNull: false) this.mistake,
-      this.lastFound,
-      @JsonKey(includeIfNull: false) this.id});
+class _$FoundImpl extends _Found {
+  const _$FoundImpl({this.i = 1, this.mistake, this.lastFound, this.id})
+      : super._();
 
   factory _$FoundImpl.fromJson(Map<String, dynamic> json) =>
       _$$FoundImplFromJson(json);
 
   @override
   @JsonKey()
-  final int rowNo;
+  final int i;
   @override
-  @JsonKey(includeIfNull: false)
   final String? mistake;
   @override
   final DateTime? lastFound;
 //
   @override
-  @JsonKey(includeIfNull: false)
   final String? id;
 
   @override
   String toString() {
-    return 'Found(rowNo: $rowNo, mistake: $mistake, lastFound: $lastFound, id: $id)';
+    return 'Found(i: $i, mistake: $mistake, lastFound: $lastFound, id: $id)';
   }
 
   @override
@@ -170,7 +155,7 @@ class _$FoundImpl implements _Found {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FoundImpl &&
-            (identical(other.rowNo, rowNo) || other.rowNo == rowNo) &&
+            (identical(other.i, i) || other.i == i) &&
             (identical(other.mistake, mistake) || other.mistake == mistake) &&
             (identical(other.lastFound, lastFound) ||
                 other.lastFound == lastFound) &&
@@ -179,7 +164,7 @@ class _$FoundImpl implements _Found {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, rowNo, mistake, lastFound, id);
+  int get hashCode => Object.hash(runtimeType, i, mistake, lastFound, id);
 
   @JsonKey(ignore: true)
   @override
@@ -195,24 +180,23 @@ class _$FoundImpl implements _Found {
   }
 }
 
-abstract class _Found implements Found {
+abstract class _Found extends Found {
   const factory _Found(
-      {final int rowNo,
-      @JsonKey(includeIfNull: false) final String? mistake,
+      {final int i,
+      final String? mistake,
       final DateTime? lastFound,
-      @JsonKey(includeIfNull: false) final String? id}) = _$FoundImpl;
+      final String? id}) = _$FoundImpl;
+  const _Found._() : super._();
 
   factory _Found.fromJson(Map<String, dynamic> json) = _$FoundImpl.fromJson;
 
   @override
-  int get rowNo;
+  int get i;
   @override
-  @JsonKey(includeIfNull: false)
   String? get mistake;
   @override
   DateTime? get lastFound;
   @override //
-  @JsonKey(includeIfNull: false)
   String? get id;
   @override
   @JsonKey(ignore: true)

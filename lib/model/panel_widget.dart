@@ -3,12 +3,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../ui/dashboard/login_dialog.dart';
 
-part 'd_panel.freezed.dart';
+part 'panel_widget.freezed.dart';
 
 @freezed
-class DPanel with _$DPanel {
-  const factory DPanel({
+class PanelWidget with _$PanelWidget {
+  const factory PanelWidget({
     @Default(210) double height,
     @Default(LoginDialogState()) Widget child,
-  }) = _DPanel;
+  }) = _PanelWidget;
 }

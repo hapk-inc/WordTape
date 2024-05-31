@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../firebase/firebase.dart';
+import '../../model/found.dart';
 import '../../model/puzzle.dart';
 
 class Datastore {
@@ -34,4 +36,30 @@ class Datastore {
       },
     );
   }
+
+  Future updateFound(Found found) => puzzleColl
+      .doc(found.id)
+      .collection('found')
+      .doc(fUser?.uid)
+      .set(found.toFirestore);
+
+  Future<Found?> found(String id) =>
+      puzzleColl.doc(id).collection('found').doc(fUser!.uid).get().then(
+        (DocumentSnapshot snapshot) {
+          debugPrint("49--Found");
+          return !snapshot.exists
+              ? null
+              : Found.fromJson(snapshot.data() as Map<String, dynamic>);
+        },
+        onError: (e, s) {
+          debugPrint("55--$e");
+        },
+      );
+
+  Future get createUser => userColl.doc(fUser?.uid).set(
+        {
+          'source': kIsWeb ? "web" : "app",
+          'nowTime': DateTime.now().toIso8601String(),
+        },
+      );
 }

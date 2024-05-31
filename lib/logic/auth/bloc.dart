@@ -8,7 +8,7 @@ part 'bloc.g.dart';
 @riverpod
 Auth auth(AuthRef ref) => Auth(ref);
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [auth])
 Stream<User?> authUser(AuthUserRef ref) => ref.read(authProvider).authUser;
 
 @riverpod

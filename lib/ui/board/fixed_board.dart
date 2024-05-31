@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,90 +29,89 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
   void initState() {
     final args = context.router.current.args;
     puzzle = args is PuzzleBoardRouteArgs ? args.puzzle : Puzzle.fromRandom();
-
-    /* final int random = mockInteger(1, 3);
-    found = Found(
-      rowNo: random,
-      mistake: random == 2 ? puzzle.words[1].value : null,
-    );*/
     super.initState();
   }
 
-  WordValidate validation(int index) => index < found.rowNo
+  WordValidate validation(int index, int rowNo) => index < rowNo
       ? WordValidate.alreadyFilled
-      : index == found.rowNo
+      : index == rowNo
           ? found.mistake != null
               ? WordValidate.error
               : WordValidate.focused
           : WordValidate.idle;
 
-  DashedLineConnector get endConnector =>
-      DashedLineConnector(color: filledColor, gap: 3.6.h);
+  Connector get endConnector => const DashedLineConnector(
+        color: filledColor,
+        gap: 3.6,
+      );
 
   @override
   Widget build(BuildContext context) {
-    found = ref.watch(foundNotifierProvider).value ?? const Found();
+    found = ref.watch(foundNotifierProvider).valueOrNull ?? const Found();
     if (found.id == null) return Container();
-    //debugPrint("56--$found");
-    return LayoutBuilder(
-      builder: (ctx, constraints) {
-        final double mW = constraints.maxWidth;
-        final double mH = constraints.maxHeight;
-        return FixedTimeline.tileBuilder(
-          theme: TimelineTheme.of(ctx).copyWith(
-            nodePosition: 0,
-            connectorTheme:
-                ConnectorThemeData(thickness: mW * 0.0015, color: ashGray),
-            indicatorTheme: IndicatorThemeData(size: mW * 0.0225, color: teal),
-          ),
-          builder: TimelineTileBuilder.connected(
-            itemCount: puzzle.words.length,
-            contentsAlign: ContentsAlign.basic,
-            contentsBuilder: (_, index) {
-              WordValidate validate = validation(index);
-              final Word word =
-                  puzzle.words[index].copyWith(validate: validate);
-              return Container(
-                height: mH / puzzle.words.length,
-                padding: EdgeInsets.only(left: mW * 0.03),
-                child: WordPinput(index, word),
-              );
-            },
-            firstConnectorBuilder: (_) => endConnector,
-            lastConnectorBuilder: (_) => endConnector,
-            connectorBuilder: (_, index, __) {
-              WordValidate validate = validation(index);
-              switch (validate) {
-                case WordValidate.filled:
-                  return const SolidLineConnector(color: filledColor);
-                case WordValidate.focused:
-                  return const SolidLineConnector(color: focusedColor);
-                case WordValidate.idle:
-                  return DashedLineConnector(color: idleColor, gap: 3.6.r);
-                case WordValidate.error:
-                  return const SolidLineConnector(color: errorColor);
-                case WordValidate.alreadyFilled:
-                  return const SolidLineConnector(color: prussianBlue);
-              }
-            },
-            indicatorBuilder: (_, index) {
-              WordValidate validate = validation(index);
-              switch (validate) {
-                case WordValidate.filled:
-                  return const DotIndicator(color: filledColor);
-                case WordValidate.focused:
-                  return const DotIndicator(color: focusedColor);
-                case WordValidate.idle:
-                  return const OutlinedDotIndicator(color: ashGray);
-                case WordValidate.error:
-                  return const DotIndicator(color: errorColor);
-                case WordValidate.alreadyFilled:
-                  return const DotIndicator(color: idleColor);
-              }
-            },
-          ),
-        );
-      },
-    );
+    return FadeIn(
+        delay: const Duration(milliseconds: 750),
+        child: LayoutBuilder(
+          builder: (ctx, constraints) {
+            final double mW = constraints.maxWidth;
+            final double mH = constraints.maxHeight;
+            return FixedTimeline.tileBuilder(
+              theme: TimelineTheme.of(ctx).copyWith(
+                nodePosition: 0,
+                connectorTheme:
+                    ConnectorThemeData(thickness: mW * 0.0015, color: ashGray),
+                indicatorTheme:
+                    IndicatorThemeData(size: mW * 0.0225, color: teal),
+              ),
+              builder: TimelineTileBuilder.connected(
+                itemCount: puzzle.words.length,
+                contentsAlign: ContentsAlign.basic,
+                contentsBuilder: (_, index) {
+                  WordValidate validate = validation(index, found.i);
+
+                  final Word word =
+                      puzzle.words[index].copyWith(validate: validate);
+                  return Container(
+                    height: mH / puzzle.words.length,
+                    padding: EdgeInsets.only(left: mW * 0.03),
+                    child: WordPinput(index, word),
+                  );
+                },
+                firstConnectorBuilder: (_) => endConnector,
+                lastConnectorBuilder: (_) => endConnector,
+                connectorBuilder: (_, index, __) {
+                  WordValidate validate = validation(index, found.i);
+                  switch (validate) {
+                    case WordValidate.filled:
+                      return const SolidLineConnector(color: filledColor);
+                    case WordValidate.focused:
+                      return const SolidLineConnector(color: focusedColor);
+                    case WordValidate.idle:
+                      return DashedLineConnector(color: idleColor, gap: 3.6.r);
+                    case WordValidate.error:
+                      return const SolidLineConnector(color: errorColor);
+                    case WordValidate.alreadyFilled:
+                      return const SolidLineConnector(color: prussianBlue);
+                  }
+                },
+                indicatorBuilder: (_, index) {
+                  WordValidate validate = validation(index, found.i);
+                  switch (validate) {
+                    case WordValidate.filled:
+                      return const DotIndicator(color: filledColor);
+                    case WordValidate.focused:
+                      return const DotIndicator(color: focusedColor);
+                    case WordValidate.idle:
+                      return const OutlinedDotIndicator(color: ashGray);
+                    case WordValidate.error:
+                      return const DotIndicator(color: errorColor);
+                    case WordValidate.alreadyFilled:
+                      return const DotIndicator(color: idleColor);
+                  }
+                },
+              ),
+            );
+          },
+        ));
   }
 }

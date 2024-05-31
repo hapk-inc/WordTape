@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../enum/enum.dart';
 import '../auth/bloc.dart';
+import '../puzzle/bloc.dart';
 
 final ChangeNotifierProvider<AppNotifier> appNotifierProvider =
     ChangeNotifierProvider<AppNotifier>(
@@ -21,11 +22,14 @@ class AppNotifier extends ChangeNotifier {
   @override
   void addListener(VoidCallback listener) {
     ref.listen<User?>(
-      authUserProvider.select((value) => value.value),
+      authUserProvider.select<User?>((value) => value.value),
       (prev, n) {
         if (n == null) {
           _authValidate = AuthValidate.notLogged;
         } else {
+          if (n.isAnonymous && prev == null) {
+            ref.read(datastoreProvider).createUser;
+          }
           _authValidate =
               n.isAnonymous ? AuthValidate.guest : AuthValidate.loggedIn;
         }
@@ -43,7 +47,7 @@ class AppNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  //AuthValidate get authValidate => _authValidate;
+  AuthValidate get authValidate => _authValidate;
 
   bool get notLogged => _authValidate == AuthValidate.notLogged;
   bool get loggedIn => _authValidate == AuthValidate.loggedIn;

@@ -5,14 +5,20 @@ part 'found.g.dart';
 
 @freezed
 class Found with _$Found {
+  const Found._();
+
   @JsonSerializable(includeIfNull: false)
   const factory Found({
-    @Default(1) int rowNo,
-    @JsonKey(includeIfNull: false) String? mistake,
+    @Default(1) int i,
+    String? mistake,
     DateTime? lastFound,
     //
-    @JsonKey(includeIfNull: false) String? id,
+    String? id,
   }) = _Found;
 
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
+
+  Map<String, dynamic> get toFirestore => toJson()..remove('id');
+
+  bool get isCompleted => i == 6;
 }

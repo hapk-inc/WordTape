@@ -7,6 +7,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../logic/app/dashboard_notifier.dart';
 import '../../logic/app/panel.dart';
 import '../../logic/puzzle/bloc.dart';
+import '../../model/panel_widget.dart';
 import '../../model/puzzle.dart';
 import '../../router/my_route.dart';
 import '../../theme/colors.dart';
@@ -64,10 +65,15 @@ class LoginNow extends ConsumerWidget {
         style: const ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(xantHous),
         ),
+        //
         onPressed: () {
           final double ratio = 900.h / 360.w;
           if (ratio > 2) {
-            final PanelController panel = ref.read(panelControllerProvider);
+            ref.read(panelNotifierProvider.notifier).state = PanelWidget(
+              height: 210.r,
+              child: const LoginDialogState(),
+            );
+            final PanelController panel = ref.read(dashboardPanelProvider);
             if (panel.isPanelClosed) panel.open();
           } else {
             showDialog(

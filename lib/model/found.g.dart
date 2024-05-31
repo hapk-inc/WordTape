@@ -7,7 +7,7 @@ part of 'found.dart';
 // **************************************************************************
 
 _$FoundImpl _$$FoundImplFromJson(Map<String, dynamic> json) => _$FoundImpl(
-      rowNo: (json['rowNo'] as num?)?.toInt() ?? 1,
+      i: (json['i'] as num?)?.toInt() ?? 1,
       mistake: json['mistake'] as String?,
       lastFound: json['lastFound'] == null
           ? null
@@ -17,7 +17,7 @@ _$FoundImpl _$$FoundImplFromJson(Map<String, dynamic> json) => _$FoundImpl(
 
 Map<String, dynamic> _$$FoundImplToJson(_$FoundImpl instance) {
   final val = <String, dynamic>{
-    'rowNo': instance.rowNo,
+    'i': instance.i,
   };
 
   void writeNotNull(String key, dynamic value) {

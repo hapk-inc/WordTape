@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,15 +33,13 @@ class PuzzleCalendar extends ConsumerWidget {
       ),
       //actionsIconTheme: const IconThemeData(color: slateGray, size: 24),
       actions: [
-        IconButton(
-          onPressed: () {
-            ref.read(signOutProvider);
-            // context.router.current.args
-            //ref.read(dashboardNotifierProvider).delete();
-          },
-          icon: const Icon(Icons.settings),
-        ),
-        const Gap(15)
+        if (kDebugMode) ...[
+          IconButton(
+            onPressed: () => ref.read(signOutProvider),
+            icon: const Icon(Icons.settings),
+          ),
+          const Gap(7.5)
+        ]
       ],
     );
   }

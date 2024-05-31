@@ -6,8 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:wordtape/logic/app/panel.dart';
 
-import '../logic/app/panel.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/puzzle_calendar.dart';
@@ -55,9 +55,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             backdropOpacity: 0.75,
             borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
             minHeight: 0,
-            maxHeight: ref.watch(dPanelWidgetProvider).height,
-            controller: ref.read(panelControllerProvider),
-            panel: ref.watch(dPanelWidgetProvider).child,
+            maxHeight: ref.watch(panelNotifierProvider).height,
+            controller: ref.read(dashboardPanelProvider),
+            panel: ref.watch(panelNotifierProvider).child,
           ),
         ],
       ),

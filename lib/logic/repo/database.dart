@@ -22,7 +22,7 @@ class FoundDatabase {
               '('
               'id TEXT PRIMARY KEY,'
               'lastFound TEXT,' // date variable
-              'rowNo INTEGER,'
+              'i INTEGER,'
               'mistake TEXT'
               ')');
         },
