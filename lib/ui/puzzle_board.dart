@@ -29,9 +29,7 @@ class PuzzleBoardPage extends ConsumerWidget {
     final Found? found = ref.watch(foundNotifierProvider).valueOrNull;
 
     ref.listen(
-      foundNotifierProvider.select(
-        (value) => value.value,
-      ),
+      foundNotifierProvider.select((value) => value.value),
       (previous, next) {
         final double ratio = 900.h / 360.w;
         if ((next?.isCompleted ?? false) &&

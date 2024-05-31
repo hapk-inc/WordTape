@@ -34,6 +34,28 @@
     // The value below is injected by flutter build, do not touch.
     const serviceWorkerVersion = null;
   </script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.2.2/firebase-app-compat.js"></script>
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/10.2.2/firebase-analytics-compat.js"></script>
+  <script>
+    var firebaseConfig = {
+    apiKey: 'AIzaSyC_ofsbwaGd6G6VTPK42qp_Wj_1WeANwuc',
+    appId: '1:784902004586:web:ce926de5e5e9087576cf13',
+    messagingSenderId: '784902004586',
+    projectId: 'wordtape-demo',
+    authDomain: 'wordtape-demo.firebaseapp.com',
+    storageBucket: 'wordtape-demo.appspot.com',
+    measurementId: 'G-F89YXK6RWF',
+    };
+  // Initialize Firebase
+
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  </script>
+
+
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer=""></script>
   

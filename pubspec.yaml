@@ -170,4 +170,6 @@ flutter:
   # dart run build_runner watch
   # dart run flutter_native_splash:create
 
+  # flutter build web --web-renderer canvaskit
+
   # https://github.com/rrousselGit/riverpod/tree/master/packages/riverpod_lint#provider_dependencies-riverpod_generator-only

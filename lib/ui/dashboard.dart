@@ -39,7 +39,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   style: tTheme.titleLarge?.copyWith(color: engineeringOrange),
                 ),
               ),
-              Gap(15.h),
+              Gap(15.r),
               Text(
                 "Creating a word combination sequence",
                 style: tTheme.bodyMedium?.copyWith(color: payneGray),

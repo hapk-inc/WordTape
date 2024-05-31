@@ -23,12 +23,14 @@ class AppNotifier extends ChangeNotifier {
   void addListener(VoidCallback listener) {
     ref.listen<User?>(
       authUserProvider.select<User?>((value) => value.value),
-      (prev, n) {
+      (prev, n) async {
+        debugPrint("27--AuthUser Listening");
         if (n == null) {
           _authValidate = AuthValidate.notLogged;
         } else {
+          debugPrint("UserID = ${n.uid}");
           if (n.isAnonymous && prev == null) {
-            ref.read(datastoreProvider).createUser;
+            await ref.read(datastoreProvider).createUser;
           }
           _authValidate =
               n.isAnonymous ? AuthValidate.guest : AuthValidate.loggedIn;

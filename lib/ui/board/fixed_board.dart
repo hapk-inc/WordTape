@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +9,6 @@ import '../../logic/puzzle/bloc.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
 import '../../model/word.dart';
-import '../../router/my_route.dart';
 import '../../theme/colors.dart';
 import 'word_pinput.dart';
 
@@ -27,8 +25,9 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
 
   @override
   void initState() {
-    final args = context.router.current.args;
-    puzzle = args is PuzzleBoardRouteArgs ? args.puzzle : Puzzle.fromRandom();
+    //final args = context.router.current.args;
+    //puzzle = args is PuzzleBoardRouteArgs ? args.puzzle : Puzzle.fromRandom();
+    puzzle = ref.read(foundNotifierProvider.notifier).puzzle;
     super.initState();
   }
 

@@ -31,6 +31,7 @@ class FoundDatabase {
 
   //Getting userFound Data
   Future<Found?> found(String id) async {
+    debugPrint("Running FoundDB found $id");
     if (kIsWeb) return null;
     final Database db = await database;
     final List<Map<String, dynamic>> maps =
@@ -41,6 +42,7 @@ class FoundDatabase {
   }
 
   Future insertOrder(Found found) async {
+    debugPrint("insertFound $found");
     if (kIsWeb) return;
     final Database db = await database;
     return await db.insert(

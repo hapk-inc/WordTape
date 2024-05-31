@@ -5,7 +5,7 @@ import 'auth.dart';
 
 part 'bloc.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Auth auth(AuthRef ref) => Auth(ref);
 
 @Riverpod(keepAlive: true, dependencies: [auth])
@@ -13,6 +13,9 @@ Stream<User?> authUser(AuthUserRef ref) => ref.read(authProvider).authUser;
 
 @riverpod
 Future signOut(SignOutRef ref) => ref.read(authProvider).signOut;
+
+@Riverpod(keepAlive: true, dependencies: [auth])
+User? firebaseUser(FirebaseUserRef ref) => ref.watch(authProvider).currentUser;
 
 @riverpod
 Future deleteAccount(DeleteAccountRef ref) =>

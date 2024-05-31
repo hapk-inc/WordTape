@@ -19,7 +19,7 @@ class Datastore {
 
   Datastore(this.ref, {this.fUser}) {
     firebaseFirestore = ref.read(firebaseFirestoreProvider);
-    userColl = firebaseFirestore.collection('users');
+    userColl = firebaseFirestore.collection('user');
     puzzleColl = firebaseFirestore.collection('puzzle');
   }
 
@@ -37,29 +37,40 @@ class Datastore {
     );
   }
 
-  Future updateFound(Found found) => puzzleColl
-      .doc(found.id)
-      .collection('found')
-      .doc(fUser?.uid)
-      .set(found.toFirestore);
+  Future updateFound(Found found) {
+    final String a = fUser?.uid ?? "NoUser";
+    debugPrint("Running UpdateFound User -> $a");
+    return puzzleColl
+        .doc(found.id)
+        .collection('found')
+        .doc(a)
+        .set(found.toFirestore);
+  }
 
-  Future<Found?> found(String id) =>
-      puzzleColl.doc(id).collection('found').doc(fUser!.uid).get().then(
-        (DocumentSnapshot snapshot) {
-          debugPrint("49--Found");
-          return !snapshot.exists
-              ? null
-              : Found.fromJson(snapshot.data() as Map<String, dynamic>);
-        },
-        onError: (e, s) {
-          debugPrint("55--$e");
-        },
-      );
+  Future<Found?> found(String id) {
+    final String a = fUser?.uid ?? "NoUser";
+    debugPrint("50--Datastore Found UserID-> $a FoundID -> $id");
+    return puzzleColl.doc(id).collection('found').doc(a).get().then(
+      (DocumentSnapshot snapshot) {
+        debugPrint("49--Found");
+        return !snapshot.exists
+            ? null
+            : Found.fromJson(snapshot.data() as Map<String, dynamic>);
+      },
+      onError: (e, s) {
+        debugPrint("55--$e");
+      },
+    );
+  }
 
-  Future get createUser => userColl.doc(fUser?.uid).set(
-        {
-          'source': kIsWeb ? "web" : "app",
-          'nowTime': DateTime.now().toIso8601String(),
-        },
-      );
+  Future get createUser {
+    final String a = fUser?.uid ?? "NoUser";
+    debugPrint("Creating User ==$a");
+    return userColl.doc(a).set(
+      {
+        'source': kIsWeb ? "web" : "app",
+        'nowTime': DateTime.now().toIso8601String(),
+      },
+    );
+  }
 }

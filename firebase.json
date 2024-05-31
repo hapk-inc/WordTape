@@ -1,1 +1,54 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"wordtape-demo","appId":"1:784902004586:android:c30a4f7f6b9929d276cf13","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"wordtape-demo","appId":"1:784902004586:ios:0b83a7db908bf3a176cf13","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"wordtape-demo","appId":"1:784902004586:ios:0b83a7db908bf3a176cf13","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"wordtape-demo","configurations":{"android":"1:784902004586:android:c30a4f7f6b9929d276cf13","ios":"1:784902004586:ios:0b83a7db908bf3a176cf13","macos":"1:784902004586:ios:0b83a7db908bf3a176cf13","web":"1:784902004586:web:ce926de5e5e9087576cf13"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "wordtape-demo",
+          "appId": "1:784902004586:android:c30a4f7f6b9929d276cf13",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "wordtape-demo",
+          "appId": "1:784902004586:ios:0b83a7db908bf3a176cf13",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "wordtape-demo",
+          "appId": "1:784902004586:ios:0b83a7db908bf3a176cf13",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "wordtape-demo",
+          "configurations": {
+            "android": "1:784902004586:android:c30a4f7f6b9929d276cf13",
+            "ios": "1:784902004586:ios:0b83a7db908bf3a176cf13",
+            "macos": "1:784902004586:ios:0b83a7db908bf3a176cf13",
+            "web": "1:784902004586:web:ce926de5e5e9087576cf13"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

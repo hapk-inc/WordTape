@@ -11,67 +11,88 @@ import '../repo/datastore.dart';
 
 part 'bloc.g.dart';
 
-@Riverpod(keepAlive: true)
-Datastore datastore(DatastoreRef ref) => Datastore(ref);
+@Riverpod(keepAlive: true, dependencies: [authUser])
+Datastore datastore(DatastoreRef ref) {
+  final User? user = ref.watch(authUserProvider).value;
+  debugPrint("16--New User==$user");
+  return Datastore(ref, fUser: user);
+}
 
-@Riverpod(dependencies: [datastore])
+@Riverpod(keepAlive: true, dependencies: [datastore])
 Future<Puzzle?> puzzle(PuzzleRef ref) async {
   final AppNotifier app = ref.watch(appNotifierProvider);
   return ref.read(datastoreProvider).puzzle(app.dateTime);
 }
 
-@Riverpod(keepAlive: true, dependencies: [authUser, puzzle])
+///
+
+@Riverpod(keepAlive: true, dependencies: [firebaseUser, puzzle, datastore])
 class FoundNotifier extends _$FoundNotifier {
   final FoundDatabase _db = FoundDatabase();
   late Puzzle puzzle;
   late User? user;
 
   @override
-  Future<Found?> build() async {
+  FutureOr<Found?> build() async {
     puzzle = ref.read(puzzleProvider).value!;
-    debugPrint("32--$puzzle");
-    if (puzzle.id == null) return null;
-    final String id = puzzle.id!;
-    Found f = const Found().copyWith(id: id);
-    debugPrint("36--${f.id}");
-    user = ref.read(authUserProvider).value;
-    debugPrint("38--$user");
-    debugPrint("38--${ref.read(appNotifierProvider).authValidate}");
-    if (user == null) return f;
-    if (kIsWeb) {
-      debugPrint("40--");
-      f = await ref.read(datastoreProvider).found(id) ?? f;
-    } else {
-      f = await _db.found(id) ?? f;
+    user = ref.watch(firebaseUserProvider);
+
+    //
+    debugPrint("PuzzleID -> ${puzzle.id}; UserID -> ${user?.uid}");
+    Found found = Found(id: puzzle.id);
+
+    if (found.id != null) {
+      if (user == null) return found;
+      if (kIsWeb) {
+        debugPrint("40--Running web");
+        return ref.read(datastoreProvider).found(found.id!);
+      } else {
+        return _db.found(found.id!);
+      }
     }
-    return f;
+    return found;
+  }
+
+  Future onComplete(String str) async {
+    user = ref.read(firebaseUserProvider);
+    debugPrint("OnComplete User--${user?.uid}");
+    int index = state.value?.i ?? 1;
+    String value = puzzle.words[index].value;
+
+    bool isSame = str == value;
+    Found? f = state.value;
+    if (f != null) {
+      f = f.copyWith(
+        lastFound: DateTime.now(),
+        i: index + (isSame ? 1 : 0),
+        mistake: isSame ? null : str,
+      );
+      state = AsyncValue.data(f);
+      if (isSame) {
+        if (user == null) {
+          await ref.read(anonymousLoginProvider.future).then(
+            (value) {
+              user = value.user;
+            },
+          );
+        }
+
+        if (kIsWeb) {
+          debugPrint("69--$f");
+          await ref.read(datastoreProvider).updateFound(f);
+        } else {
+          _db.insertOrder(f);
+          await ref.read(datastoreProvider).updateFound(f);
+        }
+      } else {
+        _db.insertOrder(f);
+        await ref.read(datastoreProvider).updateFound(f);
+      }
+    }
   }
 
   Future delete() => _db.delete();
 
-  Future onComplete(String str) async {
-    int index = state.value?.i ?? 1;
-    String value = puzzle.words[index].value;
-
-    if (str == value) {
-      debugPrint("54--$user");
-      if (user == null) ref.read(anonymousLoginProvider);
-      final Found f = state.value!.copyWith(
-        i: index + 1,
-        mistake: null,
-        lastFound: DateTime.now(),
-      );
-      if (kIsWeb) {
-        await ref.read(datastoreProvider).updateFound(f);
-      } else {
-        await _db.insertOrder(f);
-      }
-    } else {
-      final Found f = state.value!.copyWith(
-        mistake: str,
-        lastFound: DateTime.now(),
-      );
-      await _db.insertOrder(f);
-    }
-  }
+  @override
+  set state(AsyncValue<Found?> newState) => super.state = newState;
 }
