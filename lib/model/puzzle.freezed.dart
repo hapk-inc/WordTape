@@ -135,14 +135,15 @@ class __$$PuzzleImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PuzzleImpl implements _Puzzle {
+class _$PuzzleImpl extends _Puzzle with DiagnosticableTreeMixin {
   const _$PuzzleImpl(
       {required this.date,
       required final List<Word> words,
       final List<String> users = const [],
       @JsonKey(includeToJson: false, includeFromJson: false) this.id})
       : _words = words,
-        _users = users;
+        _users = users,
+        super._();
 
   factory _$PuzzleImpl.fromJson(Map<String, dynamic> json) =>
       _$$PuzzleImplFromJson(json);
@@ -171,8 +172,19 @@ class _$PuzzleImpl implements _Puzzle {
   final String? id;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'Puzzle(date: $date, words: $words, users: $users, id: $id)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'Puzzle'))
+      ..add(DiagnosticsProperty('date', date))
+      ..add(DiagnosticsProperty('words', words))
+      ..add(DiagnosticsProperty('users', users))
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -209,13 +221,14 @@ class _$PuzzleImpl implements _Puzzle {
   }
 }
 
-abstract class _Puzzle implements Puzzle {
+abstract class _Puzzle extends Puzzle {
   const factory _Puzzle(
       {required final DateTime date,
       required final List<Word> words,
       final List<String> users,
       @JsonKey(includeToJson: false, includeFromJson: false)
       final String? id}) = _$PuzzleImpl;
+  const _Puzzle._() : super._();
 
   factory _Puzzle.fromJson(Map<String, dynamic> json) = _$PuzzleImpl.fromJson;
 

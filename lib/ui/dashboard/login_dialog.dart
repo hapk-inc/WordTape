@@ -28,6 +28,7 @@ class LoginDialogState extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final double ratio = 900.h / 360.w;
     return Container(
       width: 540.r,
       padding: EdgeInsets.symmetric(horizontal: 15.h),
@@ -42,7 +43,7 @@ class LoginDialogState extends ConsumerWidget {
               "Login",
               style: textTheme.titleMedium?.copyWith(color: raisinBlack),
             ),
-            Gap(15.h),
+            Gap(15.r),
             const Text(
               "Login with one of the following options.",
               style: TextStyle(color: slateGray),
@@ -64,9 +65,9 @@ class LoginDialogState extends ConsumerWidget {
                           },
                           loading: () => debugPrint("Loading Google"),
                         ),
-                    child: const Text(
-                      "GOOGLE PLAY",
-                      style: TextStyle(color: filledColor),
+                    child: Text(
+                      ratio > 2 ? "GOOGLE" : "GOOGLE ACCOUNT",
+                      style: const TextStyle(color: filledColor),
                     ),
                   ),
                   OutlinedButton(

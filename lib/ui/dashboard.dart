@@ -11,6 +11,7 @@ import '../logic/app/panel.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/puzzle_calendar.dart';
+import 'dashboard/selected_found.dart';
 
 @RoutePage()
 class DashboardPage extends ConsumerStatefulWidget {
@@ -46,6 +47,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               ),
               Gap(30.h),
               const DButtonBar(),
+              Gap(30.h),
+              const SelectedFound(),
             ],
           ),
           SlidingUpPanel(

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,12 +18,29 @@ Datastore datastore(DatastoreRef ref) {
   return Datastore(ref, fUser: user);
 }
 
+@Riverpod(keepAlive: true)
+String excellent(ExcellentRef ref) => [
+      "Well done on solving today's puzzle!",
+      "Excellent work on the puzzle today!",
+      "You did a fantastic job with today's puzzle!",
+      "Congrats on completing today's puzzle!",
+      "Impressive work on today's puzzle!",
+      "Great effort on the puzzle for today!",
+      "Kudos on today's puzzle success!",
+      "You nailed today's puzzle!",
+      "Outstanding job with today's puzzle!",
+      // "Bravo on solving today's puzzle!"
+    ][mockInteger(0, 8)];
+
 @Riverpod(keepAlive: true, dependencies: [authUser, puzzle, datastore])
 Future<Found?> selectedFound(SelectedFoundRef ref) async {
-  final User? user = ref.read(authUserProvider).value;
+  final User? user = ref.watch(authUserProvider).value;
+
   if (user == null) return null;
   final Puzzle? puzzle = ref.watch(puzzleProvider).value;
+
   final Found? found = await ref.read(datastoreProvider).found(puzzle?.id);
+
   return found;
 }
 
@@ -55,9 +73,18 @@ class FoundNotifier extends _$FoundNotifier {
         debugPrint("40--Running web");
         return ref.read(datastoreProvider).found(found.id);
       } else {
-        //
-        return await _db.found(found.id!) ??
-            await ref.read(datastoreProvider).found(found.id);
+        final Found? dbFound = await _db.found(found.id!);
+        if (dbFound == null) {
+          //once check store data
+          final Found? storeFound =
+              await ref.read(datastoreProvider).found(found.id);
+          if (storeFound != null) {
+            _db.insertOrder(storeFound);
+            return storeFound;
+          }
+        } else {
+          return dbFound;
+        }
       }
     }
     return found;
@@ -65,7 +92,7 @@ class FoundNotifier extends _$FoundNotifier {
 
   Future onComplete(String str) async {
     user = user ?? ref.read(authUserProvider).value;
-    debugPrint("OnComplete User--${user?.uid}");
+    //
     int index = state.value?.i ?? 1;
     String value = puzzle.words[index].value;
 
@@ -88,7 +115,6 @@ class FoundNotifier extends _$FoundNotifier {
         }
 
         if (kIsWeb) {
-          debugPrint("69--$f");
           await ref.read(datastoreProvider).updateFound(f);
         } else {
           _db.insertOrder(f);

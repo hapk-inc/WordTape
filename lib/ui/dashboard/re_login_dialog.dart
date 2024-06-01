@@ -29,8 +29,8 @@ class ReLoginDialog extends StatelessWidget {
           Gap(15.h),
           AutoSizeText(
             "Congratulations on completing today's game! Create your profile now to:",
-            style: textTheme.titleMedium
-                ?.copyWith(color: raisinBlack, height: 1.8),
+            style:
+                textTheme.titleMedium?.copyWith(color: payneGray, height: 1.8),
             maxLines: 2,
           ),
           Gap(15.h),

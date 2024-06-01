@@ -958,7 +958,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.32):
     - BoringSSL-GRPC/Interface (= 0.0.32)
   - BoringSSL-GRPC/Interface (0.0.32)
-  - cloud_firestore (4.17.3):
+  - cloud_firestore (4.17.5):
     - Firebase/CoreOnly (~> 10.25.0)
     - Firebase/Firestore (~> 10.25.0)
     - firebase_core
@@ -985,29 +985,29 @@ PODS:
   - Firebase/RemoteConfig (10.25.0):
     - Firebase/CoreOnly
     - FirebaseRemoteConfig (~> 10.25.0)
-  - firebase_analytics (10.10.5):
+  - firebase_analytics (10.10.7):
     - Firebase/Analytics (= 10.25.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_auth (4.19.5):
+  - firebase_auth (4.20.0):
     - Firebase/Auth (~> 10.25.0)
     - Firebase/CoreOnly (~> 10.25.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_core (2.31.0):
+  - firebase_core (2.32.0):
     - Firebase/CoreOnly (~> 10.25.0)
     - FlutterMacOS
-  - firebase_crashlytics (3.5.5):
+  - firebase_crashlytics (3.5.7):
     - Firebase/CoreOnly (~> 10.25.0)
     - Firebase/Crashlytics (~> 10.25.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_messaging (14.9.2):
+  - firebase_messaging (14.9.4):
     - Firebase/CoreOnly (~> 10.25.0)
     - Firebase/Messaging (~> 10.25.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_remote_config (4.4.5):
+  - firebase_remote_config (4.4.7):
     - Firebase/CoreOnly (~> 10.25.0)
     - Firebase/RemoteConfig (~> 10.25.0)
     - firebase_core
@@ -1366,14 +1366,14 @@ SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
-  cloud_firestore: e9533a69290a167590302619e0dfa4896a3a451a
+  cloud_firestore: c037b5acdf0be76bc426c05d978be2090f094219
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06
-  firebase_analytics: 25af54d88e440c4f65ae10a31f3a57268416ce82
-  firebase_auth: 88f0918ad5a62cae02f4bdbc1da7ec848fe9ba1c
-  firebase_core: fdf12e0c4349815c2e832d9dcad59fbff0ff394b
-  firebase_crashlytics: 9ce9fd3b6a89e4bd944cbdb8350813fdc5304247
-  firebase_messaging: d846ba0c4f69424dd537681b466fff6d40d34723
-  firebase_remote_config: 610707ec6f4efbf11225da2c6598e4b092962308
+  firebase_analytics: 47e1f6453c222417b323ca53b1793f1a9ef395f6
+  firebase_auth: e102811c55546b05d1db96ae9af577090e4fb687
+  firebase_core: b5b8b60dad71f93132bbaa21e8d1379367d824f0
+  firebase_crashlytics: 633b73bfae67c0c94148241da3afef6413d1063d
+  firebase_messaging: d821ad7103878837085612e389fe66203c5c6c0c
+  firebase_remote_config: f9ac9d93a6cc460a649523577e4a8df736251868
   FirebaseABTesting: e6e3c3e0e35813874f571d1b7bdae2aab319dd38
   FirebaseAnalytics: ec00fe8b93b41dc6fe4a28784b8e51da0647a248
   FirebaseAppCheckInterop: 5da5ce93e8797a215e3f677fb0654b74e736c8b8

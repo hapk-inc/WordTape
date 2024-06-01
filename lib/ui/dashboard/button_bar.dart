@@ -7,6 +7,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../logic/app/app_notifier.dart';
 import '../../logic/app/panel.dart';
 import '../../logic/puzzle/bloc.dart';
+import '../../model/found.dart';
 import '../../model/panel_widget.dart';
 import '../../model/puzzle.dart';
 import '../../router/my_route.dart';
@@ -35,6 +36,7 @@ class PlayNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Puzzle? puzzle = ref.watch(puzzleProvider).value;
+    final Found? found = ref.watch(selectedFoundProvider).value;
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.resolveWith<Color>(
@@ -51,7 +53,12 @@ class PlayNow extends ConsumerWidget {
         duration: const Duration(milliseconds: 300),
         child: puzzle == null
             ? const Text("NOT TODAY")
-            : const Text("PLAY NOW", style: TextStyle(color: greenWhite)),
+            : found == null
+                ? const Text("PLAY NOW", style: TextStyle(color: greenWhite))
+                : Text(
+                    found.isCompleted ? "COMPLETED" : "RESUME NOW",
+                    style: const TextStyle(color: greenWhite),
+                  ),
       ),
     );
   }
