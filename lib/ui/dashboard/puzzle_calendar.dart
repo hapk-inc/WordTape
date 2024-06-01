@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../logic/auth/bloc.dart';
-import '../../logic/app/dashboard_notifier.dart';
+import '../../logic/app/app_notifier.dart';
 import '../../theme/colors.dart';
 import '../../theme/text_theme.dart';
 
@@ -17,21 +17,17 @@ class PuzzleCalendar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // context.router.current.args
-    //final DateTime now = DateTime.now();
     final DateTime now = ref.watch(appNotifierProvider).dateTime;
     return AppBar(
-      leadingWidth: 150.r,
+      leadingWidth: 135.r,
       leading: Center(
         child: InkWell(
           child: Text(
-            //"MAY 11, 2024",
             DateFormat.yMMMd().format(now).toUpperCase(),
             style: _textTheme.headlineMedium?.copyWith(color: teal),
           ),
         ),
       ),
-      //actionsIconTheme: const IconThemeData(color: slateGray, size: 24),
       actions: [
         if (kDebugMode) ...[
           IconButton(

@@ -55,7 +55,15 @@ class LoginDialogState extends ConsumerWidget {
                 alignment: WrapAlignment.end,
                 children: [
                   OutlinedButton(
-                    onPressed: () => ref.read(googleLoginProvider),
+                    onPressed: () => ref.read(googleLoginProvider).when(
+                          data: (data) {
+                            debugPrint("Google Done");
+                          },
+                          error: (error, stackTrace) {
+                            debugPrint(error.toString());
+                          },
+                          loading: () => debugPrint("Loading Google"),
+                        ),
                     child: const Text(
                       "GOOGLE PLAY",
                       style: TextStyle(color: filledColor),
@@ -82,49 +90,3 @@ class LoginDialogState extends ConsumerWidget {
     );
   }
 }
-
-/*
-class LoginDialog extends ConsumerWidget {
-  const LoginDialog({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme tTheme = Theme.of(context).textTheme;
-    return AlertDialog(
-      insetPadding: EdgeInsets.all(15.r),
-      //alignment: Alignment.center,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.5.r)),
-      elevation: 3.r,
-      backgroundColor: greenWhite,
-      surfaceTintColor: greenWhite,
-      actionsOverflowButtonSpacing: 15.r,
-      title: const Text("Login"),
-      //titlePadding: _dialogPadding.copyWith(top: 30.r),
-      //contentPadding: _dialogPadding.copyWith(bottom: 15.r),
-      titleTextStyle: tTheme.titleMedium?.copyWith(color: filledColor),
-      contentTextStyle: tTheme.bodyMedium?.copyWith(color: slateGray),
-      content: const Text("Login with one of the following options."),
-      //actionsPadding: _dialogPadding.copyWith(top: 15.r, bottom: 30.r),
-      actions: [
-        OutlinedButton(
-          onPressed: () {},
-          child: const Text(
-            "GOOGLE PLAY",
-            style: TextStyle(color: filledColor),
-          ),
-        ),
-        OutlinedButton */
-/*.icon*/ /*
- (
-          onPressed: () {},
-          style: const ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(payneGray),
-          ),
-          //icon: Icon(Icons.apple_outlined, color: greenWhite, size: 21.r),
-          child: const Text("APPLE ID", style: TextStyle(color: greenWhite)),
-        ),
-      ],
-    );
-  }
-}
-*/

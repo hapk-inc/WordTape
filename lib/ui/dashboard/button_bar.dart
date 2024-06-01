@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../logic/app/dashboard_notifier.dart';
+import '../../logic/app/app_notifier.dart';
 import '../../logic/app/panel.dart';
 import '../../logic/puzzle/bloc.dart';
 import '../../model/panel_widget.dart';

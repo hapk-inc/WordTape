@@ -14,6 +14,7 @@ import '../model/puzzle.dart';
 import '../theme/colors.dart';
 import 'board/fixed_board.dart';
 import 'dashboard/puzzle_completed.dart';
+import 'dashboard/re_login_dialog.dart';
 
 const Duration m750 = Duration(milliseconds: 750);
 
@@ -36,77 +37,87 @@ class PuzzleBoardPage extends ConsumerWidget {
             boardPanel.isPanelClosed &&
             ratio > 2) {
           ref.read(panelNotifierProvider.notifier).state = PanelWidget(
-            height: 300.r,
-            child: Container(),
+            height: 360.r,
+            child: const ReLoginDialog(),
           );
+
           Future.delayed(m750 * 2, () => boardPanel.open());
         }
       },
       onError: (error, stackTrace) {},
     );
 
-    return SafeArea(
-      child: Container(
-        color: greenWhite,
-        child: LayoutBuilder(
-          builder: (_, constraint) {
-            final double mW = constraint.maxWidth;
-            return Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return TooltipVisibility(
+        visible: false,
+        child: SafeArea(
+          child: ColoredBox(
+            color: greenWhite,
+            child: LayoutBuilder(
+              builder: (_, constraint) {
+                final double mW = constraint.maxWidth;
+                return Stack(
                   children: [
-                    AppBar(
-                      leadingWidth: 60.r,
-                      actions: [
-                        if (kDebugMode)
-                          IconButton(
-                            onPressed: () => ref
-                                .read(foundNotifierProvider.notifier)
-                                .delete(),
-                            icon: const Icon(Icons.delete, color: ashGray),
-                          ),
-                        const Gap(7.5),
-                        if (kDebugMode)
-                          IconButton(
-                            onPressed: () =>
-                                ref.read(boardPanelProvider).open(),
-                            icon: const Icon(Icons.chair, color: ashGray),
-                          ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppBar(
+                          leadingWidth: 60.r,
+                          actions: [
+                            if (kDebugMode)
+                              IconButton(
+                                onPressed: () => ref
+                                    .read(foundNotifierProvider.notifier)
+                                    .delete(),
+                                icon: const Icon(Icons.delete, color: ashGray),
+                              ),
+                            const Gap(7.5),
+                            if (kDebugMode)
+                              IconButton(
+                                onPressed: () {
+                                  ref
+                                      .read(panelNotifierProvider.notifier)
+                                      .state = PanelWidget(
+                                    height: 360.r,
+                                    child: const ReLoginDialog(),
+                                  );
+                                  boardPanel.open();
+                                },
+                                icon: const Icon(Icons.chair, color: ashGray),
+                              ),
+                          ],
+                        ),
+                        Gap(15.h),
+                        Container(
+                          height: 60.h * puzzle.words.length,
+                          margin: EdgeInsets.only(
+                              left: mW * 0.06, right: mW * 0.045),
+                          alignment: Alignment.center,
+                          // color: ashGray,
+                          padding: EdgeInsets.symmetric(horizontal: mW * 0.012),
+                          child: const FixedBoard(),
+                        ),
+                        Gap(30.h),
+                        if (found?.isCompleted ?? false) PuzzleCompleted(found!)
                       ],
                     ),
-                    Gap(15.h),
-                    Container(
-                      height: 60.h * puzzle.words.length,
-                      margin:
-                          EdgeInsets.only(left: mW * 0.06, right: mW * 0.045),
-                      alignment: Alignment.center,
-                      // color: ashGray,
-                      padding: EdgeInsets.symmetric(horizontal: mW * 0.012),
-                      child: const FixedBoard(),
+                    SlidingUpPanel(
+                      backdropColor: raisinBlack,
+                      padding: EdgeInsets.symmetric(horizontal: 4.5.r),
+                      backdropEnabled: true,
+                      backdropOpacity: 0.75,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(15.r),
+                      ),
+                      minHeight: 0,
+                      maxHeight: panelWidget.height,
+                      controller: boardPanel,
+                      panel: panelWidget.child,
                     ),
-                    Gap(30.h),
-                    if (found?.isCompleted ?? false) PuzzleCompleted(found!)
                   ],
-                ),
-                SlidingUpPanel(
-                  backdropColor: raisinBlack,
-                  padding: EdgeInsets.symmetric(horizontal: 4.5.r),
-                  backdropEnabled: true,
-                  backdropOpacity: 0.75,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(15.r),
-                  ),
-                  minHeight: 0,
-                  maxHeight: panelWidget.height,
-                  controller: boardPanel,
-                  panel: panelWidget.child,
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
+                );
+              },
+            ),
+          ),
+        ));
   }
 }

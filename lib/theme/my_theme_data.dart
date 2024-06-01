@@ -7,6 +7,7 @@ import 'text_theme.dart';
 MyTextTheme _textTheme = MyTextTheme();
 
 ThemeData buildThemeData() => ThemeData(
+      //tooltipTheme: TooltipThemeData(),
       colorScheme: ColorScheme.fromSeed(seedColor: teal, surface: prussianBlue),
       useMaterial3: true,
       scaffoldBackgroundColor: greenWhite,
@@ -15,7 +16,10 @@ ThemeData buildThemeData() => ThemeData(
         toolbarHeight: 75.h,
         backgroundColor: greenWhite,
         elevation: 0,
-        iconTheme: IconThemeData(color: slateGray, size: 24.r),
+        iconTheme: IconThemeData(
+          color: slateGray,
+          size: 24.r,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(style: _buttonStyle),
       primaryTextTheme: _textTheme,

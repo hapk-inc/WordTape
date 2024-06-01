@@ -27,6 +27,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           locale: DevicePreview.locale(context),
           builder: DevicePreview.appBuilder,
           theme: buildThemeData(),
+
           //router
           routerConfig: _router.config(),
           //routeInformationParser: myRouter.defaultRouteParser(),

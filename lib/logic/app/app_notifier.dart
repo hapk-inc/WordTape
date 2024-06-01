@@ -3,9 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../enum/enum.dart';
-import '../../model/player.dart';
 import '../auth/bloc.dart';
-import '../puzzle/bloc.dart';
 
 final ChangeNotifierProvider<AppNotifier> appNotifierProvider =
     ChangeNotifierProvider<AppNotifier>(
@@ -30,10 +28,10 @@ class AppNotifier extends ChangeNotifier {
           _authValidate = AuthValidate.notLogged;
         } else {
           debugPrint("UserID = ${n.uid}");
-          if (n.isAnonymous && prev == null) {
-            final Player? player = await ref.read(playerProvider.future);
-            if (player == null) await ref.read(datastoreProvider).createUser;
-          }
+          // if (n.isAnonymous && prev == null) {
+          //final Player? player = await ref.read(playerProvider.future);
+          //if (player == null) await ref.read(datastoreProvider).createUser;
+          // }
           _authValidate =
               n.isAnonymous ? AuthValidate.guest : AuthValidate.loggedIn;
         }

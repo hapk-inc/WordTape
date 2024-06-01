@@ -38,20 +38,19 @@ class Datastore {
     );
   }
 
-  Future updateFound(Found found) {
-    final String a = fUser?.uid ?? "NoUser";
-    debugPrint("Running UpdateFound User -> $a");
+  Future updateFound(Found found) async {
+    if (fUser?.uid == null) return null;
     return puzzleColl
         .doc(found.id)
         .collection('found')
-        .doc(a)
+        .doc(fUser?.uid)
         .set(found.toFirestore);
   }
 
-  Future<Found?> found(String id) {
-    final String a = fUser?.uid ?? "NoUser";
-    debugPrint("50--Datastore Found UserID-> $a FoundID -> $id");
-    return puzzleColl.doc(id).collection('found').doc(a).get().then(
+  Future<Found?> found(String? id) async {
+    if (id == null || fUser?.uid == null) return null;
+    //
+    return puzzleColl.doc(id).collection('found').doc(fUser?.uid).get().then(
       (DocumentSnapshot snapshot) {
         debugPrint("49--Found");
         return !snapshot.exists
@@ -59,16 +58,13 @@ class Datastore {
             : Found.fromJson(snapshot.data() as Map<String, dynamic>)
                 .copyWith(id: id);
       },
-      onError: (e, s) {
-        debugPrint("55--$e");
-      },
     );
   }
 
   Future<Player?> get player async {
-    final String a = fUser?.uid ?? "NoUser";
-    if (a == "NoUser") return null;
-    return userColl.doc(a).get().then(
+    if (fUser?.uid == null) return null;
+
+    return userColl.doc(fUser?.uid).get().then(
       (DocumentSnapshot snapshot) {
         if (!snapshot.exists) return null;
         final Map map = snapshot.data() as Map;
@@ -79,10 +75,9 @@ class Datastore {
     );
   }
 
-  Future get createUser {
-    final String a = fUser?.uid ?? "NoUser";
-    debugPrint("Creating User ==$a");
-    return userColl.doc(a).set(
+  Future get createUser async {
+    if (fUser?.uid == null) return;
+    return userColl.doc(fUser?.uid).set(
       {
         'source': kIsWeb ? "web" : "app",
         'nowTime': DateTime.now().toIso8601String(),
