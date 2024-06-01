@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:wordtape/ui/dashboard/login_dialog.dart';
 
 import '../../logic/app/panel.dart';
 import '../../model/panel_widget.dart';
 import '../../theme/colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+
+import 'login_dialog.dart';
 
 class ReLoginDialog extends StatelessWidget {
   const ReLoginDialog({super.key});

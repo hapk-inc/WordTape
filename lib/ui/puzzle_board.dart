@@ -74,13 +74,16 @@ class PuzzleBoardPage extends ConsumerWidget {
                             if (kDebugMode)
                               IconButton(
                                 onPressed: () {
-                                  ref
-                                      .read(panelNotifierProvider.notifier)
-                                      .state = PanelWidget(
-                                    height: 360.r,
-                                    child: const ReLoginDialog(),
-                                  );
-                                  boardPanel.open();
+                                  final double ratio = 900.h / 360.w;
+                                  if (ratio > 2) {
+                                    ref
+                                        .read(panelNotifierProvider.notifier)
+                                        .state = PanelWidget(
+                                      height: 360.r,
+                                      child: const ReLoginDialog(),
+                                    );
+                                    boardPanel.open();
+                                  }
                                 },
                                 icon: const Icon(Icons.chair, color: ashGray),
                               ),
