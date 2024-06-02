@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../logic/app/panel.dart';
-import '../logic/puzzle/bloc.dart';
+import '../logic/puzzle/found_notifier.dart';
 import '../model/found.dart';
 import '../model/panel_widget.dart';
 import '../model/puzzle.dart';

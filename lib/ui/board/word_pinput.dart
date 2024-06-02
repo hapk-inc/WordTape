@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../enum/enum.dart';
-import '../../logic/puzzle/bloc.dart';
+import '../../logic/puzzle/found_notifier.dart';
 import '../../model/found.dart';
 import '../../model/word.dart';
 import '../../theme/colors.dart';
