@@ -131,17 +131,19 @@ class _WordPinputState extends ConsumerState<WordPinput> {
           final Puzzle? puzzle = ref.read(puzzleProvider).value;
           final String nextWord = puzzle == null
               ? ""
-              : puzzle.words[widget.index + 1].value.split('').fold(
-                  puzzle.words[widget.index + 1].value.characters.first,
-                  (prev, e) {
-                    if (prev == e) {
-                      return prev;
-                    } else {
-                      String s = "${prev}_";
-                      return s;
-                    }
-                  },
-                );
+              : widget.index + 1 > 5
+                  ? ""
+                  : puzzle.words[widget.index + 1].value.split('').fold(
+                      puzzle.words[widget.index + 1].value.characters.first,
+                      (prev, e) {
+                        if (prev == e) {
+                          return prev;
+                        } else {
+                          String s = "${prev}_";
+                          return s;
+                        }
+                      },
+                    );
           final SnackBar snackBar = isSame
               ? SnackBar(
                   content: Text(
@@ -154,7 +156,9 @@ class _WordPinputState extends ConsumerState<WordPinput> {
                   content: Text("Incorrect one"),
                   backgroundColor: engineeringOrange,
                 );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          if (!(widget.index + 1 > 5)) {
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
           return isSame ? null : "Incorrect";
         },
       ),

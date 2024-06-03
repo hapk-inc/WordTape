@@ -116,7 +116,7 @@ class PuzzleBoardPage extends ConsumerWidget {
                         ),
                         if ((found?.isCompleted ?? false)) ...[
                           Gap(30.h),
-                          PuzzleCompleted(found!)
+                          const PuzzleCompleted()
                         ] else ...[
                           const PuzzleNote()
                         ]
