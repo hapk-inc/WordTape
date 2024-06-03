@@ -22,7 +22,8 @@ Found _$FoundFromJson(Map<String, dynamic> json) {
 mixin _$Found {
   int get i => throw _privateConstructorUsedError;
   String? get mistake => throw _privateConstructorUsedError;
-  DateTime? get lastFound => throw _privateConstructorUsedError; //
+  DateTime? get lastFound => throw _privateConstructorUsedError;
+  int? get hintUsed => throw _privateConstructorUsedError; //
   String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +36,8 @@ abstract class $FoundCopyWith<$Res> {
   factory $FoundCopyWith(Found value, $Res Function(Found) then) =
       _$FoundCopyWithImpl<$Res, Found>;
   @useResult
-  $Res call({int i, String? mistake, DateTime? lastFound, String? id});
+  $Res call(
+      {int i, String? mistake, DateTime? lastFound, int? hintUsed, String? id});
 }
 
 /// @nodoc
@@ -54,6 +56,7 @@ class _$FoundCopyWithImpl<$Res, $Val extends Found>
     Object? i = null,
     Object? mistake = freezed,
     Object? lastFound = freezed,
+    Object? hintUsed = freezed,
     Object? id = freezed,
   }) {
     return _then(_value.copyWith(
@@ -69,6 +72,10 @@ class _$FoundCopyWithImpl<$Res, $Val extends Found>
           ? _value.lastFound
           : lastFound // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      hintUsed: freezed == hintUsed
+          ? _value.hintUsed
+          : hintUsed // ignore: cast_nullable_to_non_nullable
+              as int?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -84,7 +91,8 @@ abstract class _$$FoundImplCopyWith<$Res> implements $FoundCopyWith<$Res> {
       __$$FoundImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int i, String? mistake, DateTime? lastFound, String? id});
+  $Res call(
+      {int i, String? mistake, DateTime? lastFound, int? hintUsed, String? id});
 }
 
 /// @nodoc
@@ -101,6 +109,7 @@ class __$$FoundImplCopyWithImpl<$Res>
     Object? i = null,
     Object? mistake = freezed,
     Object? lastFound = freezed,
+    Object? hintUsed = freezed,
     Object? id = freezed,
   }) {
     return _then(_$FoundImpl(
@@ -116,6 +125,10 @@ class __$$FoundImplCopyWithImpl<$Res>
           ? _value.lastFound
           : lastFound // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      hintUsed: freezed == hintUsed
+          ? _value.hintUsed
+          : hintUsed // ignore: cast_nullable_to_non_nullable
+              as int?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -128,7 +141,8 @@ class __$$FoundImplCopyWithImpl<$Res>
 
 @JsonSerializable(includeIfNull: false)
 class _$FoundImpl extends _Found {
-  const _$FoundImpl({this.i = 1, this.mistake, this.lastFound, this.id})
+  const _$FoundImpl(
+      {this.i = 1, this.mistake, this.lastFound, this.hintUsed, this.id})
       : super._();
 
   factory _$FoundImpl.fromJson(Map<String, dynamic> json) =>
@@ -141,13 +155,15 @@ class _$FoundImpl extends _Found {
   final String? mistake;
   @override
   final DateTime? lastFound;
+  @override
+  final int? hintUsed;
 //
   @override
   final String? id;
 
   @override
   String toString() {
-    return 'Found(i: $i, mistake: $mistake, lastFound: $lastFound, id: $id)';
+    return 'Found(i: $i, mistake: $mistake, lastFound: $lastFound, hintUsed: $hintUsed, id: $id)';
   }
 
   @override
@@ -159,12 +175,15 @@ class _$FoundImpl extends _Found {
             (identical(other.mistake, mistake) || other.mistake == mistake) &&
             (identical(other.lastFound, lastFound) ||
                 other.lastFound == lastFound) &&
+            (identical(other.hintUsed, hintUsed) ||
+                other.hintUsed == hintUsed) &&
             (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, i, mistake, lastFound, id);
+  int get hashCode =>
+      Object.hash(runtimeType, i, mistake, lastFound, hintUsed, id);
 
   @JsonKey(ignore: true)
   @override
@@ -185,6 +204,7 @@ abstract class _Found extends Found {
       {final int i,
       final String? mistake,
       final DateTime? lastFound,
+      final int? hintUsed,
       final String? id}) = _$FoundImpl;
   const _Found._() : super._();
 
@@ -196,6 +216,8 @@ abstract class _Found extends Found {
   String? get mistake;
   @override
   DateTime? get lastFound;
+  @override
+  int? get hintUsed;
   @override //
   String? get id;
   @override

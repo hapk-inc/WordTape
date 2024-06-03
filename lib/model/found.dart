@@ -12,6 +12,7 @@ class Found with _$Found {
     @Default(1) int i,
     String? mistake,
     DateTime? lastFound,
+    int? hintUsed,
     //
     String? id,
   }) = _Found;

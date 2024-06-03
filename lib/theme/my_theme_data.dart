@@ -16,13 +16,20 @@ ThemeData buildThemeData() => ThemeData(
         toolbarHeight: 75.h,
         backgroundColor: greenWhite,
         elevation: 0,
-        iconTheme: IconThemeData(
-          color: slateGray,
-          size: 24.r,
-        ),
+        iconTheme: IconThemeData(color: slateGray, size: 24.r),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(style: _buttonStyle),
       primaryTextTheme: _textTheme,
+      snackBarTheme: SnackBarThemeData(
+        // showCloseIcon: true,
+        // behavior: SnackBarBehavior.floating,
+        // insetPadding: EdgeInsets.all(4.5.r),
+        backgroundColor: raisinBlack,
+        contentTextStyle: _textTheme.bodyLarge?.copyWith(
+          color: greenWhite,
+          height: 1.8,
+        ),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           textStyle: WidgetStatePropertyAll(_textTheme.headlineSmall),
@@ -32,12 +39,11 @@ ThemeData buildThemeData() => ThemeData(
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: _buttonStyle.copyWith(
           shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24.r),
-            ),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
           ),
           textStyle: WidgetStatePropertyAll(
-              _textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600)),
+            _textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+          ),
           side: const WidgetStatePropertyAll(
             BorderSide(width: 0.45, color: slateGray),
           ),

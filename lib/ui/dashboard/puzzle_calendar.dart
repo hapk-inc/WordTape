@@ -19,7 +19,7 @@ class PuzzleCalendar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime now = ref.watch(appNotifierProvider).dateTime;
     return AppBar(
-      leadingWidth: 135.r,
+      leadingWidth: 120.r,
       leading: Center(
         child: InkWell(
           child: Text(

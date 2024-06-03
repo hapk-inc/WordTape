@@ -48,7 +48,7 @@ class FoundNotifier extends _$FoundNotifier {
     return found;
   }
 
-  Future onComplete(String str) async {
+  Future<void> onComplete(String str) async {
     user = user ?? ref.read(authUserProvider).value;
     //
     int index = state.value?.i ?? 1;

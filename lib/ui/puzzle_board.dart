@@ -13,7 +13,8 @@ import '../model/panel_widget.dart';
 import '../model/puzzle.dart';
 import '../theme/colors.dart';
 import 'board/fixed_board.dart';
-import 'dashboard/puzzle_completed.dart';
+import 'board/puzzle_note.dart';
+import 'board/puzzle_completed.dart';
 import 'dashboard/re_login_dialog.dart';
 
 const Duration m750 = Duration(milliseconds: 750);
@@ -83,6 +84,20 @@ class PuzzleBoardPage extends ConsumerWidget {
                                       child: const ReLoginDialog(),
                                     );
                                     boardPanel.open();
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        insetPadding: EdgeInsets.symmetric(
+                                            horizontal: 4.5.r),
+                                        contentPadding: EdgeInsets.all(15.r),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(7.5.r)),
+                                        backgroundColor: greenWhite,
+                                        content: const ReLoginDialog(),
+                                      ),
+                                    );
                                   }
                                 },
                                 icon: const Icon(Icons.chair, color: ashGray),
@@ -95,12 +110,16 @@ class PuzzleBoardPage extends ConsumerWidget {
                           margin: EdgeInsets.only(
                               left: mW * 0.06, right: mW * 0.045),
                           alignment: Alignment.center,
-                          // color: ashGray,
+                          //color: ashGray,
                           padding: EdgeInsets.symmetric(horizontal: mW * 0.012),
                           child: const FixedBoard(),
                         ),
-                        Gap(30.h),
-                        if (found?.isCompleted ?? false) PuzzleCompleted(found!)
+                        if ((found?.isCompleted ?? false)) ...[
+                          Gap(30.h),
+                          PuzzleCompleted(found!)
+                        ] else ...[
+                          const PuzzleNote()
+                        ]
                       ],
                     ),
                     SlidingUpPanel(

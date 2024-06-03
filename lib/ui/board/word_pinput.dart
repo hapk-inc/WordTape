@@ -5,8 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../enum/enum.dart';
+import '../../logic/puzzle/bloc.dart';
 import '../../logic/puzzle/found_notifier.dart';
 import '../../model/found.dart';
+import '../../model/puzzle.dart';
 import '../../model/word.dart';
 import '../../theme/colors.dart';
 import '../../theme/text_theme.dart';
@@ -74,7 +76,7 @@ class _WordPinputState extends ConsumerState<WordPinput> {
                   : ""
       ..addListener(_onTextChanged);
     return LayoutBuilder(
-      builder: (context, constraint) => Pinput(
+      builder: (ctx, constraint) => Pinput(
         controller: controller,
         length: str.length,
 
@@ -123,11 +125,38 @@ class _WordPinputState extends ConsumerState<WordPinput> {
         //
         errorBuilder: (errorText, pin) => Container(),
         onCompleted: (str) =>
-            ref.read(foundNotifierProvider.notifier).onComplete(str)
-        /*.whenComplete(
-              () => ref.refresh(foundNotifierProvider),
-            )*/
-        ,
+            ref.read(foundNotifierProvider.notifier).onComplete(str),
+        validator: (value) {
+          bool isSame = value == str;
+          final Puzzle? puzzle = ref.read(puzzleProvider).value;
+          final String nextWord = puzzle == null
+              ? ""
+              : puzzle.words[widget.index + 1].value.split('').fold(
+                  puzzle.words[widget.index + 1].value.characters.first,
+                  (prev, e) {
+                    if (prev == e) {
+                      return prev;
+                    } else {
+                      String s = "${prev}_";
+                      return s;
+                    }
+                  },
+                );
+          final SnackBar snackBar = isSame
+              ? SnackBar(
+                  content: Text(
+                    "You got it right. "
+                    "FIND OUT THE NEXT WORD - $str $nextWord",
+                  ),
+                  backgroundColor: teal,
+                )
+              : const SnackBar(
+                  content: Text("Incorrect one"),
+                  backgroundColor: engineeringOrange,
+                );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          return isSame ? null : "Incorrect";
+        },
       ),
     );
   }

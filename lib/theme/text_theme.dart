@@ -9,7 +9,7 @@ class MyTextTheme extends TextTheme {
 
   @override
   TextStyle? get bodyMedium =>
-      FontTheme.questrialTheme.copyWith(fontSize: 15.r);
+      FontTheme.questrialTheme.copyWith(fontSize: 16.r);
 
   @override
   TextStyle? get bodySmall => FontTheme.questrialTheme.copyWith(fontSize: 12);
@@ -37,10 +37,11 @@ class MyTextTheme extends TextTheme {
         fontWeight: FontWeight.w700,
       );
 
+  //NUNITO THEME
   @override
-  TextStyle? get labelMedium => FontTheme.poppinsTheme.copyWith(
-        fontSize: 15.r,
-        //fontWeight: FontWeight.w300,
+  TextStyle? get labelMedium => FontTheme.nunitoTheme.copyWith(
+        fontSize: 18.r,
+        fontWeight: FontWeight.w300,
       );
 }
 
@@ -73,6 +74,14 @@ mixin FontTheme {
         fontFamily: 'Montserrat',
         letterSpacing: 0,
         fontWeight: FontWeight.w700,
+        height: 0,
+        fontSize: 14,
+        color: payneGray,
+      );
+
+  static TextStyle get nunitoTheme => const TextStyle(
+        fontFamily: 'Nunito',
+        letterSpacing: 0,
         height: 0,
         fontSize: 14,
         color: payneGray,
