@@ -8,7 +8,6 @@ import '../../firebase/firebase.dart';
 import '../../model/found.dart';
 import '../../model/player.dart';
 import '../../model/puzzle.dart';
-import '../puzzle/bloc.dart';
 
 class Datastore {
   final Ref<Datastore> ref;

@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'firebase/firebase.dart';
 import 'firebase/firebase_options_dev.dart';
+import 'firebase/firebase_options_prod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,10 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
   final FirebaseApp app = await Firebase.initializeApp(
-      options: DefaultFirebaseOptionsDev.currentPlatform);
+    options: kDebugMode
+        ? DefaultFirebaseOptionsDev.currentPlatform
+        : DefaultFirebaseOptionsProd.currentPlatform,
+  );
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);
   final FirebaseFirestore fireStore = FirebaseFirestore.instanceFor(app: app);

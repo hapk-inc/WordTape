@@ -35,28 +35,46 @@
     const serviceWorkerVersion = null;
   </script>
 
-  <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+  
 
-  <meta name="google-signin-client_id" content="784902004586-12flsv1ai4cui16do9ad8ucvm5027eiv.apps.googleusercontent.com">
+  <!-- Add Firebase SDKs here -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
-  <script src="https://www.gstatic.com/firebasejs/10.2.2/firebase-app-compat.js"></script>
-  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-  <script src="https://www.gstatic.com/firebasejs/10.2.2/firebase-analytics-compat.js"></script>
+
+  <!--validate firebase -->
   <script>
-    var firebaseConfig = {
-    apiKey: 'AIzaSyC_ofsbwaGd6G6VTPK42qp_Wj_1WeANwuc',
-    appId: '1:784902004586:web:ce926de5e5e9087576cf13',
-    messagingSenderId: '784902004586',
-    projectId: 'wordtape-demo',
-    authDomain: 'wordtape-demo.firebaseapp.com',
-    storageBucket: 'wordtape-demo.appspot.com',
-    measurementId: 'G-F89YXK6RWF',
+    // Firebase configurations
+    const firebaseConfigDev = {
+      apiKey: 'AIzaSyC_ofsbwaGd6G6VTPK42qp_Wj_1WeANwuc',
+      appId: '1:784902004586:web:ce926de5e5e9087576cf13',
+      messagingSenderId: '784902004586',
+      projectId: 'wordtape-demo',
+      authDomain: 'wordtape-demo.firebaseapp.com',
+      storageBucket: 'wordtape-demo.appspot.com',
+      measurementId: 'G-F89YXK6RWF',
     };
-  // Initialize Firebase
 
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
+    const firebaseConfigProd = {
+      apiKey: "AIzaSyDqKEgP7ZRnJyN3BEhFrXEUbce5OX1g4oc",
+      authDomain: "wordtape-51.firebaseapp.com",
+      projectId: "wordtape-51",
+      storageBucket: "wordtape-51.appspot.com",
+      messagingSenderId: "15743304421",
+      appId: "1:15743304421:web:1fb1d8183e72b7352c4a0c",
+      measurementId: "G-NW90FRE1L6"
+    };
 
+    // Determine the current environment
+    const environment = window.location.hostname === 'wordtape-51.web.app' ? 'Prod' : 'Dev';
+    console.log(`Environment: ${environment}`);
+    // Select the appropriate Firebase configuration
+    const firebaseConfig = environment === 'Prod' ? firebaseConfigProd : firebaseConfigDev;
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
   </script>
 
 
