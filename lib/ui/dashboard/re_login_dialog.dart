@@ -1,59 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../../logic/puzzle/found_notifier.dart';
+import '../../model/found.dart';
 import '../../theme/colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'create_account.dart';
 
-class ReLoginDialog extends StatelessWidget {
+class ReLoginDialog extends ConsumerWidget {
   const ReLoginDialog({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-
+    final Found? found = ref.watch(foundNotifierProvider).value;
     return Container(
-      // height: 450.r,
       width: 540.r,
       height: 360.r,
-
-      padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.r),
-      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.symmetric(vertical: 30.r, horizontal: 15.r),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Gap(15.h),
-            AutoSizeText(
-              "Congratulations on completing today's game! Create your profile now to:",
-              style: textTheme.titleMedium
-                  ?.copyWith(color: payneGray, height: 1.8),
+            AutoSizeText.rich(
+              TextSpan(
+                children: [
+                  if (found?.isCompleted ?? false)
+                    const TextSpan(
+                      text: "Congratulations on completing today's game! ",
+                    ),
+                  const TextSpan(text: "Create your profile now to:"),
+                ],
+              ),
+              style: textTheme.titleMedium?.copyWith(
+                color: payneGray,
+                height: 1.8,
+              ),
               maxLines: 2,
             ),
-            Gap(15.h),
-            Text("Access and play previous puzzles", style: _subFont),
             Gap(7.5.h),
-            Text("View your stats", style: _subFont),
-            Gap(7.5.h),
-            Text(
-              "Suggest a puzzle that might be featured as daily challenge",
-              style: _subFont,
+            const AutoSizeText.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: "Access and play previous puzzles\n"),
+                  TextSpan(text: "View your stats \n"),
+                  TextSpan(
+                    text: "Suggest a puzzle that might be "
+                        "featured as daily challenge\n",
+                  )
+                ],
+                style: TextStyle(color: slateGray, height: 2.1),
+              ),
             ),
-            Gap(30.h),
-            const ButtonBar(children: [CreateAccount()])
+            const ButtonBar(
+              buttonPadding: EdgeInsets.zero,
+              children: [CreateAccount()],
+            )
           ],
         ),
       ),
     );
   }
 }
-
-TextStyle get _subFont => const TextStyle(
-      color: slateGray,
-      height: 1.8,
-    );
-
-/*  */

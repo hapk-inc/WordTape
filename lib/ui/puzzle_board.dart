@@ -68,9 +68,12 @@ class PuzzleBoardPage extends ConsumerWidget {
                             TextButton(
                               onPressed: () =>
                                   context.router.push(HowToPlayRoute()),
-                              child: const Text(
+                              child: Text(
                                 "HOW TO PLAY",
-                                style: TextStyle(color: ashGray),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(color: ashGray),
                               ),
                             )
                             /* if (kDebugMode)

@@ -37,13 +37,13 @@ class LoginDialogState extends ConsumerWidget {
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "Login",
               style: textTheme.titleMedium?.copyWith(color: raisinBlack),
             ),
-            Gap(15.r),
+            Gap(12.r),
             const Text(
               "Login with one of the following options.",
               style: TextStyle(color: slateGray),

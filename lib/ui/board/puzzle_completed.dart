@@ -24,8 +24,8 @@ class PuzzleCompleted extends ConsumerWidget {
     final DateTime lastFound = found.lastFound ?? now;
 
     final String str = now.day == lastFound.day
-        ? "Today at ${DateFormat('h:mm a').format(lastFound)}"
-        : DateFormat('MMMM d, y h:mm a').format(lastFound);
+        ? "Today ${DateFormat('h : mm a').format(lastFound)}"
+        : DateFormat('MMMM d, y h: mm a').format(lastFound);
 
     final TextTheme textTheme = Theme.of(context).textTheme;
 
@@ -55,44 +55,20 @@ class PuzzleCompleted extends ConsumerWidget {
                     children: [
                       const StarLottie(),
                       Text(
-                        "  Congratulations",
+                        "Congratulations",
                         style: textTheme.titleMedium?.copyWith(height: 2.1),
                       ),
                     ],
                   ),
                 ),
                 Positioned(
-                  //right: constraint.maxWidth * 0.036,
                   right: 0,
                   top: constraint.maxHeight * 0.12,
-                  child: Text(str,
-                      style: textTheme.bodySmall?.copyWith(color: elbow)),
+                  child: Text(
+                    str,
+                    style: textTheme.labelSmall?.copyWith(color: elbow),
+                  ),
                 )
-                /* const Positioned(
-                left: 45,
-                right: 45,
-                bottom: 15,
-                child: StarLottie(),
-              ),
-              Positioned(
-                left: 15,
-                right: 15,
-                height: constraint.maxHeight * 0.54,
-                bottom: 0,
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Congratulations",
-                      style: textTheme.titleMedium?.copyWith(height: 2.1),
-                    ),
-                    Text(
-                      "Completed $str",
-                      style: const TextStyle(color: xantHous),
-                    )
-                  ],
-                ),
-              ),*/
               ],
             ),
           ),
@@ -118,6 +94,7 @@ class _StarLottieState extends State<StarLottie> {
           fit: BoxFit.fill,
           child: Lottie.asset(
             'lottie/trophy.json',
+            errorBuilder: (_, __, ___) => const Text("🏆"),
             repeat: repeat,
             onLoaded: (composition) {
               Future.delayed(

@@ -4,8 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
+import '../../logic/app/device_size.dart';
+import '../../logic/app/panel.dart';
 import '../../logic/auth/auth_notifier.dart';
+import '../../model/panel_widget.dart';
 import '../../theme/colors.dart';
+import 're_login_dialog.dart';
 
 class PuzzleCalendar extends ConsumerWidget {
   const PuzzleCalendar({super.key});
@@ -45,7 +49,15 @@ class SubscribeButton extends ConsumerWidget {
         style: const ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(xantHous),
         ),
-        onPressed: () {},
+        onPressed: () {
+          if (ref.read(deviceSizeProvider) >= 2.0) {
+            ref.read(panelNotifierProvider.notifier).state = PanelWidget(
+              height: 360.r,
+              child: const ReLoginDialog(),
+            );
+            ref.read(dashboardPanelProvider).open();
+          } else {}
+        },
         child: const Text(
           "SUBSCRIBE",
           style: TextStyle(color: engineeringOrange),

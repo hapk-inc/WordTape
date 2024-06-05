@@ -33,7 +33,7 @@ class MyTextTheme extends TextTheme {
 
   @override
   TextStyle? get headlineSmall => FontTheme.montserratTheme.copyWith(
-        fontSize: 12.45.r,
+        fontSize: 13.5.r,
         fontWeight: FontWeight.w700,
       );
 
@@ -41,6 +41,12 @@ class MyTextTheme extends TextTheme {
   @override
   TextStyle? get labelMedium => FontTheme.nunitoTheme.copyWith(
         fontSize: 18.r,
+        fontWeight: FontWeight.w300,
+      );
+
+  @override
+  TextStyle? get labelSmall => FontTheme.montserratTheme.copyWith(
+        fontSize: 15.r,
         fontWeight: FontWeight.w300,
       );
 }

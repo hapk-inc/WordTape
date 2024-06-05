@@ -1,9 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../logic/app/device_size.dart';
 import '../../logic/app/panel.dart';
 import '../../model/panel_widget.dart';
+import '../../router/my_route.dart';
 import '../../theme/colors.dart';
 import 'login_dialog.dart';
 
@@ -22,13 +26,20 @@ class CreateAccount extends ConsumerWidget {
         ),
       ),
       onPressed: () {
-        final double ratio = 900.h / 360.w;
+        final double ratio = ref.read(deviceSizeProvider);
 
         if (ratio > 2) {
+          final PanelController panel =
+              context.router.current.name == DashboardRoute.name
+                  ? ref.read(dashboardPanelProvider)
+                  : ref.read(boardPanelProvider);
+          panel.close();
+
           ref.read(panelNotifierProvider.notifier).state = PanelWidget(
             height: 210.r,
             child: const LoginDialogState(),
           );
+          Future.delayed(const Duration(milliseconds: 300), () => panel.open());
         } else {
           Navigator.pop(context);
           showDialog(
