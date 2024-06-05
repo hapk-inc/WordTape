@@ -66,7 +66,7 @@ class _WordPinputState extends ConsumerState<WordPinput> {
 
     wv = widget.word.validate;
     controller = TextEditingController()
-      ..text = wv == WordValidate.alreadyFilled
+      ..text = wv == WordValidate.alreadyFilled || wv == WordValidate.previous
           ? str
           : wv == WordValidate.error
               ? found?.mistake ?? "" //  mistake
@@ -76,91 +76,105 @@ class _WordPinputState extends ConsumerState<WordPinput> {
                   : ""
       ..addListener(_onTextChanged);
     return LayoutBuilder(
-      builder: (ctx, constraint) => Pinput(
-        controller: controller,
-        length: str.length,
+      builder: (ctx, constraint) => AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        color: widget.index == 0
+            ? greenWhite
+            : (found?.isCompleted ?? false)
+                ? seaSalt
+                : wv == WordValidate.previous ||
+                        wv == WordValidate.focused ||
+                        wv == WordValidate.error
+                    ? seaSalt
+                    : null,
+        alignment: Alignment.centerLeft,
+        child: Pinput(
+          controller: controller,
+          length: str.length,
 
-        //
-        defaultPinTheme: _defaultPinTheme(constraint),
-        disabledPinTheme: _defaultPinTheme(constraint).copyWith(
-          textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
-                color: wv == WordValidate.filled ? filledColor : idleColor,
-              ),
-        ),
-        errorPinTheme: _defaultPinTheme(constraint, color: errorColor).copyWith(
-          textStyle: _defaultPinTheme(constraint)
-              .textStyle
-              ?.copyWith(color: errorColor),
-        ),
-        focusedPinTheme:
-            _defaultPinTheme(constraint, color: textColor).copyWith(
-          textStyle: _defaultPinTheme(constraint)
-              .textStyle
-              ?.copyWith(color: textColor),
-        ),
-
-        //
-        isCursorAnimationEnabled: true,
-        pinAnimationType: PinAnimationType.fade,
-        animationDuration: const Duration(milliseconds: 150),
-        pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-        //
-        keyboardType: TextInputType.name,
-        textCapitalization: TextCapitalization.characters,
-        separatorBuilder: (_) => SizedBox(width: constraint.maxWidth * 0.015),
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(
-            //regex pattern for blank space and capital letters
-            RegExp(r"^$|[A-Z]+$"),
-            replacementString: widget.word.value.characters.first,
+          //
+          defaultPinTheme: _defaultPinTheme(constraint),
+          disabledPinTheme: _defaultPinTheme(constraint).copyWith(
+            textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
+                  color: wv == WordValidate.filled ? filledColor : idleColor,
+                ),
           ),
-        ],
+          errorPinTheme:
+              _defaultPinTheme(constraint, color: errorColor).copyWith(
+            textStyle: _defaultPinTheme(constraint)
+                .textStyle
+                ?.copyWith(color: errorColor),
+          ),
+          focusedPinTheme:
+              _defaultPinTheme(constraint, color: textColor).copyWith(
+            textStyle: _defaultPinTheme(constraint)
+                .textStyle
+                ?.copyWith(color: textColor),
+          ),
 
-        //
-        autofocus: wv == WordValidate.focused,
-        enabled: wv == WordValidate.focused || wv == WordValidate.error,
-        forceErrorState: wv == WordValidate.error,
-        showCursor: true,
+          //
+          isCursorAnimationEnabled: true,
+          pinAnimationType: PinAnimationType.fade,
+          animationDuration: const Duration(milliseconds: 150),
+          pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+          //
+          keyboardType: TextInputType.name,
+          textCapitalization: TextCapitalization.characters,
+          separatorBuilder: (_) => SizedBox(width: constraint.maxWidth * 0.015),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(
+              //regex pattern for blank space and capital letters
+              RegExp(r"^$|[A-Z]+$"),
+              replacementString: widget.word.value.characters.first,
+            ),
+          ],
 
-        //
-        errorBuilder: (errorText, pin) => Container(),
-        onCompleted: (str) =>
-            ref.read(foundNotifierProvider.notifier).onComplete(str),
-        validator: (value) {
-          bool isSame = value == str;
-          final Puzzle? puzzle = ref.read(puzzleProvider).value;
-          final String nextWord = puzzle == null
-              ? ""
-              : widget.index + 1 > 5
-                  ? ""
-                  : puzzle.words[widget.index + 1].value.split('').fold(
-                      puzzle.words[widget.index + 1].value.characters.first,
-                      (prev, e) {
-                        if (prev == e) {
-                          return prev;
-                        } else {
-                          String s = "${prev}_";
-                          return s;
-                        }
-                      },
-                    );
-          final SnackBar snackBar = isSame
-              ? SnackBar(
-                  content: Text(
-                    "You got it right. "
-                    "FIND OUT THE NEXT WORD - $str $nextWord",
-                  ),
-                  backgroundColor: teal,
-                )
-              : const SnackBar(
-                  content: Text("Incorrect one"),
-                  backgroundColor: engineeringOrange,
-                );
-          if (!(widget.index + 1 > 5)) {
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-          return isSame ? null : "Incorrect";
-        },
+          //
+          autofocus: wv == WordValidate.focused,
+          enabled: wv == WordValidate.focused || wv == WordValidate.error,
+          forceErrorState: wv == WordValidate.error,
+          showCursor: true,
+
+          //
+          errorBuilder: (errorText, pin) => Container(),
+          onCompleted: (str) =>
+              ref.read(foundNotifierProvider.notifier).onComplete(str),
+          validator: (value) {
+            bool isSame = value == str;
+            final Puzzle? puzzle = ref.read(puzzleProvider).value;
+            final String nextWord = puzzle == null
+                ? ""
+                : widget.index + 1 > 5
+                    ? ""
+                    : puzzle.words[widget.index + 1].value.split('').fold(
+                        puzzle.words[widget.index + 1].value.characters.first,
+                        (prev, e) {
+                          if (prev == e) {
+                            return prev;
+                          } else {
+                            String s = "${prev}_";
+                            return s;
+                          }
+                        },
+                      );
+            final SnackBar snackBar = isSame
+                ? SnackBar(
+                    content: Text(
+                      "You got it right. "
+                      "FIND OUT THE NEXT WORD - $str $nextWord",
+                    ),
+                    backgroundColor: teal,
+                  )
+                : const SnackBar(
+                    content: Text("Incorrect one"),
+                    backgroundColor: engineeringOrange,
+                  );
+            if (!(widget.index + 1 > 5)) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+            return isSame ? null : "Incorrect";
+          },
+        ),
       ),
     );
   }

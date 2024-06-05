@@ -2,10 +2,106 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:wordtape/logic/auth/auth_notifier.dart';
+
+import '../../logic/puzzle/bloc.dart';
+import '../../model/found.dart';
+import '../../model/puzzle.dart';
+import '../../router/my_route.dart';
+import '../../theme/colors.dart';
+
+class DashboardButtonBar extends StatelessWidget {
+  const DashboardButtonBar({super.key});
+
+  @override
+  Widget build(BuildContext context) => Align(
+        alignment: Alignment.centerRight,
+        child: Wrap(
+          spacing: 9.r,
+          children: const [
+            PlayNowButton(),
+            ShareButton(),
+            SizedBox.square(dimension: 7.5)
+          ],
+        ),
+      );
+}
+
+class PlayNowButton extends ConsumerWidget {
+  const PlayNowButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Puzzle? puzzle = ref.watch(puzzleProvider).value;
+    final Found? found = ref.watch(selectedFoundProvider).value;
+
+    return ElevatedButton(
+      onPressed: puzzle == null
+          ? null
+          : () {
+              final AuthNotifier authNotifier = ref.read(authNotifierProvider);
+              if (authNotifier.notLogged) {
+                context.router.push(const HowToPlayRoute());
+              } else {
+                context.router.push(PuzzleBoardRoute(puzzle: puzzle));
+              }
+            },
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) return ashGray;
+            return teal; // Use the component's default.
+          },
+        ),
+        foregroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.disabled)) return raisinBlack;
+            return greenWhite; // Use the component's default.
+          },
+        ),
+      ),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: puzzle == null
+            ? const Text("NOT TODAY")
+            : found == null
+                ? const Text("PLAY NOW")
+                : found.isCompleted
+                    ? const Text("COMPLETED")
+                    : const Text("RESUME NOW"),
+      ),
+    );
+  }
+}
+
+class ShareButton extends ConsumerWidget {
+  const ShareButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Puzzle? puzzle = ref.watch(puzzleProvider).value;
+    return OutlinedButton(
+      onPressed: puzzle == null
+          ? null
+          : () => Share.share(puzzle.shareCode).then(
+                (ShareResult result) {},
+              ),
+      //: () => context.router.push(PuzzleBoardRoute(puzzle: puzzle)),
+      child: const Text("SHARE"),
+    );
+  }
+}
+
+/*
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../logic/app/app_notifier.dart';
 import '../../logic/app/panel.dart';
+import '../../logic/auth/auth_notifier.dart';
 import '../../logic/puzzle/bloc.dart';
 import '../../model/found.dart';
 import '../../model/panel_widget.dart';
@@ -19,12 +115,15 @@ class DButtonBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppNotifier app = ref.watch(appNotifierProvider);
+    final AuthNotifier authNotifier = ref.watch(authNotifierProvider);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 1.5.w),
       child: ButtonBar(
-        children: [const PlayNow(), if (!app.loggedIn) const LoginNow()],
+        children: [
+          const PlayNow(),
+          if (!authNotifier.loggedIn) const LoginNow()
+        ],
       ),
     );
   }
@@ -95,3 +194,4 @@ class LoginNow extends ConsumerWidget {
         ),
       );
 }
+*/

@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,26 +6,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'package:animate_do/animate_do.dart';
-
 import '../logic/app/panel.dart';
 import '../model/panel_widget.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/puzzle_calendar.dart';
-import 'dashboard/selected_found.dart';
 
 @RoutePage()
-class DashboardPage extends ConsumerStatefulWidget {
+class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
 
   @override
-  ConsumerState createState() => _DashboardPageState();
-}
-
-class _DashboardPageState extends ConsumerState<DashboardPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme tTheme = Theme.of(context).textTheme;
     final PanelWidget panelWidget = ref.watch(panelNotifierProvider);
 
@@ -34,26 +27,29 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         children: [
           SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const PuzzleCalendar(),
-                Container(height: 210.r),
+                Gap(210.r),
                 FadeIn(
-                  child: Text(
-                    "WORDTAPE",
-                    style: tTheme.titleLarge?.copyWith(
-                      color: engineeringOrange,
+                  delay: const Duration(milliseconds: 300),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                    title: Text(
+                      "WORDTAPE",
+                      style: tTheme.titleLarge?.copyWith(
+                        color: engineeringOrange,
+                        height: 1.5,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      "  Challenging word puzzle game",
+                      style: TextStyle(color: slateGray, height: 1.5),
                     ),
                   ),
                 ),
-                Gap(13.5.r),
-                Text(
-                  "Creating a word combination sequence",
-                  style: tTheme.bodyMedium?.copyWith(color: slateGray),
-                ),
-                Gap(30.h),
-                const DButtonBar(),
-                Gap(30.h),
-                const SelectedFound(),
+                Gap(30.r),
+                const DashboardButtonBar()
               ],
             ),
           ),

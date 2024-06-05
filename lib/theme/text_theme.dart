@@ -21,7 +21,7 @@ class MyTextTheme extends TextTheme {
   TextStyle? get titleMedium => FontTheme.gugiTheme.copyWith(fontSize: 27.r);
 
   @override
-  TextStyle? get titleSmall => FontTheme.gugiTheme.copyWith(fontSize: 24.r);
+  TextStyle? get titleSmall => FontTheme.gugiTheme.copyWith(fontSize: 21.r);
 
   @override
   TextStyle? get headlineLarge =>

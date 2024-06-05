@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../ui/dashboard.dart';
 import '../ui/app_stack.dart';
+import '../ui/how_to_play.dart';
 import '../ui/puzzle_board.dart';
 import '../model/puzzle.dart';
 import 'package:flutter/material.dart';
@@ -19,13 +20,9 @@ class MyRouter extends _$MyRouter {
           page: AppStackRoute.page,
           initial: true,
           children: [
-            AutoRoute(
-              page: DashboardRoute.page,
-              initial: true,
-            ),
-            AutoRoute(
-              page: PuzzleBoardRoute.page,
-            ),
+            AutoRoute(page: DashboardRoute.page, initial: true),
+            AutoRoute(page: PuzzleBoardRoute.page),
+            AutoRoute(page: HowToPlayRoute.page),
           ],
         )
       ];

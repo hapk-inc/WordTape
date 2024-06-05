@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
-import '../app/app_notifier.dart';
+import '../auth/auth_notifier.dart';
 import '../auth/bloc.dart';
 import '../repo/datastore.dart';
 
@@ -44,7 +44,7 @@ Future<Found?> selectedFound(SelectedFoundRef ref) async {
 
 @Riverpod(keepAlive: true, dependencies: [datastore])
 Future<Puzzle?> puzzle(PuzzleRef ref) async {
-  final AppNotifier app = ref.watch(appNotifierProvider);
+  final AuthNotifier app = ref.watch(authNotifierProvider);
   return ref.read(datastoreProvider).puzzle(app.dateTime);
 }
 

@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:mock_data/mock_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/router/my_route.dart';
 
 import '../logic/app/panel.dart';
 import '../logic/puzzle/found_notifier.dart';
@@ -63,8 +64,17 @@ class PuzzleBoardPage extends ConsumerWidget {
                       children: [
                         AppBar(
                           leadingWidth: 60.r,
+                          title: Text("No. ${mockInteger(1, 10)}"),
                           actions: [
-                            if (kDebugMode)
+                            TextButton(
+                              onPressed: () =>
+                                  context.router.push(const HowToPlayRoute()),
+                              child: const Text(
+                                "HOW TO PLAY",
+                                style: TextStyle(color: ashGray),
+                              ),
+                            )
+                            /* if (kDebugMode)
                               IconButton(
                                 onPressed: () => ref
                                     .read(foundNotifierProvider.notifier)
@@ -101,7 +111,7 @@ class PuzzleBoardPage extends ConsumerWidget {
                                   }
                                 },
                                 icon: const Icon(Icons.chair, color: ashGray),
-                              ),
+                              ),*/
                           ],
                         ),
                         Gap(15.h),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,17 +14,17 @@ ThemeData buildThemeData() => ThemeData(
       scaffoldBackgroundColor: greenWhite,
       textTheme: _textTheme,
       appBarTheme: AppBarTheme(
-        toolbarHeight: 75.h,
+        toolbarHeight: 90.h,
+        titleSpacing: 7.5.r,
         backgroundColor: greenWhite,
+        centerTitle: false,
+        titleTextStyle: _textTheme.titleSmall?.copyWith(color: filledColor),
         elevation: 0,
-        iconTheme: IconThemeData(color: slateGray, size: 24.r),
+        iconTheme: IconThemeData(color: slateGray, size: 21.r),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(style: _buttonStyle),
       primaryTextTheme: _textTheme,
       snackBarTheme: SnackBarThemeData(
-        // showCloseIcon: true,
-        // behavior: SnackBarBehavior.floating,
-        // insetPadding: EdgeInsets.all(4.5.r),
         backgroundColor: raisinBlack,
         contentTextStyle: _textTheme.bodyLarge?.copyWith(
           color: greenWhite,
@@ -31,8 +32,9 @@ ThemeData buildThemeData() => ThemeData(
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: ButtonStyle(
-          textStyle: WidgetStatePropertyAll(_textTheme.headlineSmall),
+        style: _buttonStyle.copyWith(
+          foregroundColor: const WidgetStatePropertyAll(payneGray),
+          textStyle: WidgetStatePropertyAll(_textTheme.headlineMedium),
         ),
       ),
       //iconButtonTheme: IconButtonThemeData(style: _buttonStyle),
@@ -41,11 +43,12 @@ ThemeData buildThemeData() => ThemeData(
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
           ),
+          foregroundColor: const WidgetStatePropertyAll(payneGray),
           textStyle: WidgetStatePropertyAll(
             _textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
           ),
-          side: const WidgetStatePropertyAll(
-            BorderSide(width: 0.45, color: slateGray),
+          side: WidgetStatePropertyAll(
+            BorderSide(width: 0.45.r, color: payneGray),
           ),
         ),
       ),
@@ -53,8 +56,7 @@ ThemeData buildThemeData() => ThemeData(
 
 ButtonStyle get _buttonStyle => ButtonStyle(
       textStyle: WidgetStatePropertyAll(_textTheme.headlineSmall),
-      minimumSize: const WidgetStatePropertyAll(Size.square(40)),
+      minimumSize: WidgetStatePropertyAll(Size.square(kIsWeb ? 48.h : 45.h)),
       padding: WidgetStatePropertyAll(
-        EdgeInsets.symmetric(horizontal: 27.r, vertical: 15.r),
-      ),
+          EdgeInsets.symmetric(horizontal: 30.r, vertical: 15.r) * 0.96),
     );

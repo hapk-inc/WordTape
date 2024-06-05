@@ -27,6 +27,12 @@ abstract class _$MyRouter extends RootStackRouter {
         child: const DashboardPage(),
       );
     },
+    HowToPlayRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const HowToPlayPage(),
+      );
+    },
     PuzzleBoardRoute.name: (routeData) {
       final args = routeData.argsAs<PuzzleBoardRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -64,6 +70,20 @@ class DashboardRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'DashboardRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [HowToPlayPage]
+class HowToPlayRoute extends PageRouteInfo<void> {
+  const HowToPlayRoute({List<PageRouteInfo>? children})
+      : super(
+          HowToPlayRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HowToPlayRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

@@ -32,17 +32,43 @@ class PuzzleCompleted extends ConsumerWidget {
     return FadeIn(
       delay: const Duration(milliseconds: 1200),
       child: Container(
-        height: 210.h,
+        height: 180.h,
         margin: EdgeInsets.symmetric(horizontal: 15.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: teal,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(7.5.r),
         ),
         child: LayoutBuilder(
-          builder: (_, constraint) => Stack(
-            children: [
-              const Positioned(
+          builder: (_, constraint) => Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: constraint.maxWidth * 0.036),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  height: constraint.maxHeight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const StarLottie(),
+                      Text(
+                        "  Congratulations",
+                        style: textTheme.titleMedium?.copyWith(height: 2.1),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  //right: constraint.maxWidth * 0.036,
+                  right: 0,
+                  top: constraint.maxHeight * 0.12,
+                  child: Text(str,
+                      style: textTheme.bodySmall?.copyWith(color: elbow)),
+                )
+                /* const Positioned(
                 left: 45,
                 right: 45,
                 bottom: 15,
@@ -66,8 +92,9 @@ class PuzzleCompleted extends ConsumerWidget {
                     )
                   ],
                 ),
-              ),
-            ],
+              ),*/
+              ],
+            ),
           ),
         ),
       ),
@@ -85,18 +112,22 @@ class StarLottie extends StatefulWidget {
 class _StarLottieState extends State<StarLottie> {
   bool repeat = true;
   @override
-  Widget build(BuildContext context) {
-    return Lottie.asset(
-      'lottie/star.json',
-      repeat: repeat,
-      onLoaded: (composition) {
-        Future.delayed(
-          composition.duration * 2,
-          () => setState(() => repeat = false),
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        constraints: BoxConstraints.tight(Size.square(75.r)),
+        child: FittedBox(
+          fit: BoxFit.fill,
+          child: Lottie.asset(
+            'lottie/trophy.json',
+            repeat: repeat,
+            onLoaded: (composition) {
+              Future.delayed(
+                composition.duration * 6,
+                () => mounted ? setState(() => repeat = false) : null,
+              );
+            },
+          ),
+        ),
+      );
 }
 
 /*

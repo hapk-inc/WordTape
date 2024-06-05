@@ -31,13 +31,18 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
     super.initState();
   }
 
-  WordValidate validation(int index, int rowNo) => index < rowNo
-      ? WordValidate.alreadyFilled
-      : index == rowNo
-          ? found.mistake != null
-              ? WordValidate.error
-              : WordValidate.focused
-          : WordValidate.idle;
+  WordValidate validation(int index, int rowNo) {
+    //
+    if (index == (rowNo - 1)) return WordValidate.previous;
+
+    return index < rowNo
+        ? WordValidate.alreadyFilled
+        : index == rowNo
+            ? found.mistake != null
+                ? WordValidate.error
+                : WordValidate.focused
+            : WordValidate.idle;
+  }
 
   Connector get endConnector => const DashedLineConnector(
         color: filledColor,
@@ -83,6 +88,8 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
                   switch (validate) {
                     case WordValidate.filled:
                       return const SolidLineConnector(color: filledColor);
+                    case WordValidate.previous:
+                      return const SolidLineConnector(color: focusedColor);
                     case WordValidate.focused:
                       return const SolidLineConnector(color: focusedColor);
                     case WordValidate.idle:
@@ -97,6 +104,8 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
                   WordValidate validate = validation(index, found.i);
                   switch (validate) {
                     case WordValidate.filled:
+                      return const DotIndicator(color: filledColor);
+                    case WordValidate.previous:
                       return const DotIndicator(color: filledColor);
                     case WordValidate.focused:
                       return const DotIndicator(color: focusedColor);

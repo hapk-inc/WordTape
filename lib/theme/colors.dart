@@ -19,6 +19,7 @@ const Color columbiaBlue = Color(0xFFCADDDC);
 
 const Color elbow = Color(0xffFAFF7F);
 const Color xantHous = Color(0xffffc759);
+const Color parchment = Color(0xffEFEACE);
 const Color chryslerBlue = Color(0xff5F00BA);
 
 const Color idleColor = slateGray;
