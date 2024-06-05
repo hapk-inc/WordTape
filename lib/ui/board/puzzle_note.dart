@@ -24,7 +24,7 @@ class PuzzleNote extends ConsumerWidget {
     if (note == null) return Container();
     //
     return FadeIn(
-      delay: const Duration(milliseconds: 1500),
+      delay: const Duration(milliseconds: 750),
       child: Container(
         height: 60.h,
         alignment: Alignment.centerLeft,

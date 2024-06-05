@@ -24,7 +24,7 @@ class PuzzleCompleted extends ConsumerWidget {
     final DateTime lastFound = found.lastFound ?? now;
 
     final String str = now.day == lastFound.day
-        ? "Today ${DateFormat('h : mm a').format(lastFound)}"
+        ? "Today ${DateFormat('h:mm a').format(lastFound)}"
         : DateFormat('MMMM d, y h: mm a').format(lastFound);
 
     final TextTheme textTheme = Theme.of(context).textTheme;

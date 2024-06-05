@@ -141,7 +141,32 @@ class _WordPinputState extends ConsumerState<WordPinput> {
               ref.read(foundNotifierProvider.notifier).onComplete(str),
           validator: (value) {
             bool isSame = value == str;
-            final Puzzle? puzzle = ref.read(puzzleProvider).value;
+
+            final SnackBar snackBar = isSame
+                ? const SnackBar(
+                    content: Text("You got it right."),
+                    backgroundColor: teal,
+                  )
+                : SnackBar(
+                    //margin: EdgeInsets.symmetric(vertical: 7.5),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.r,
+                      horizontal: 30.r,
+                    ),
+                    content: const Text("Incorrect one"),
+                    backgroundColor: engineeringOrange,
+                  );
+            if (!(widget.index + 1 > 5)) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+            return isSame ? null : "Incorrect";
+          },
+        ),
+      ),
+    );
+  }
+}
+/*  final Puzzle? puzzle = ref.read(puzzleProvider).value;
             final String nextWord = puzzle == null
                 ? ""
                 : widget.index + 1 > 5
@@ -156,26 +181,5 @@ class _WordPinputState extends ConsumerState<WordPinput> {
                             return s;
                           }
                         },
-                      );
-            final SnackBar snackBar = isSame
-                ? SnackBar(
-                    content: Text(
-                      "You got it right. "
-                      "FIND OUT THE NEXT WORD - $str $nextWord",
-                    ),
-                    backgroundColor: teal,
-                  )
-                : const SnackBar(
-                    content: Text("Incorrect one"),
-                    backgroundColor: engineeringOrange,
-                  );
-            if (!(widget.index + 1 > 5)) {
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-            return isSame ? null : "Incorrect";
-          },
-        ),
-      ),
-    );
-  }
-}
+                      );*/
+//"FIND OUT THE NEXT WORD - $str $nextWord",

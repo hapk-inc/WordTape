@@ -13,6 +13,7 @@ class Found with _$Found {
     String? mistake,
     DateTime? lastFound,
     int? hintUsed,
+    int? rank,
     //
     String? id,
   }) = _Found;

@@ -13,6 +13,7 @@ _$FoundImpl _$$FoundImplFromJson(Map<String, dynamic> json) => _$FoundImpl(
           ? null
           : DateTime.parse(json['lastFound'] as String),
       hintUsed: (json['hintUsed'] as num?)?.toInt(),
+      rank: (json['rank'] as num?)?.toInt(),
       id: json['id'] as String?,
     );
 
@@ -30,6 +31,7 @@ Map<String, dynamic> _$$FoundImplToJson(_$FoundImpl instance) {
   writeNotNull('mistake', instance.mistake);
   writeNotNull('lastFound', instance.lastFound?.toIso8601String());
   writeNotNull('hintUsed', instance.hintUsed);
+  writeNotNull('rank', instance.rank);
   writeNotNull('id', instance.id);
   return val;
 }

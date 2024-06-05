@@ -45,9 +45,11 @@ class FoundDatabase {
     debugPrint("insertFound $found");
     if (kIsWeb) return;
     final Database db = await database;
+    final Map<String, dynamic> map = found.toJson();
+    if (map.containsKey('rank')) map.remove('rank');
     return await db.insert(
       _tableName,
-      found.toJson(),
+      map,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

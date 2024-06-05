@@ -23,18 +23,15 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) => ScreenUtilInit(
         designSize: const Size(360, 900),
         useInheritedMediaQuery: true,
-        builder: (_, __) {
-          debugPrint("Ratio--${900.h / 360.w}");
-          return MaterialApp.router(
-            locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
-            theme: buildThemeData(),
+        builder: (_, __) => MaterialApp.router(
+          locale: DevicePreview.locale(context),
+          builder: DevicePreview.appBuilder,
+          theme: buildThemeData(),
 
-            //router
-            routerConfig: _router.config(),
-            //routeInformationParser: myRouter.defaultRouteParser(),
-            //routerDelegate: myRouter.delegate(),
-          );
-        },
+          //router
+          routerConfig: _router.config(),
+          //routeInformationParser: myRouter.defaultRouteParser(),
+          //routerDelegate: myRouter.delegate(),
+        ),
       );
 }

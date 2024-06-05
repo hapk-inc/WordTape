@@ -56,10 +56,18 @@ class FoundNotifier extends _$FoundNotifier {
 
     bool isSame = str == value;
     Found? f = state.value;
+
     if (f != null) {
+      final int fIndex = index + (isSame ? 1 : 0);
+
+      if (fIndex == 6) {
+        final Puzzle? p = await ref.refresh(puzzleProvider.future);
+        int prev = p?.users.length ?? 0;
+        f = f.copyWith(rank: prev + 1);
+      }
       f = f.copyWith(
         lastFound: DateTime.now(),
-        i: index + (isSame ? 1 : 0),
+        i: fIndex,
         mistake: isSame ? null : str,
       );
       state = AsyncValue.data(f);
