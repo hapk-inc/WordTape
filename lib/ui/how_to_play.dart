@@ -13,11 +13,14 @@ import 'board/word_pinput.dart';
 
 @RoutePage()
 class HowToPlayPage extends StatelessWidget {
-  const HowToPlayPage({super.key});
+  final bool understand;
+
+  const HowToPlayPage({this.understand = false, super.key});
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+
     return SafeArea(
       child: Container(
         color: greenWhite,
@@ -27,16 +30,18 @@ class HowToPlayPage extends StatelessWidget {
             AppBar(
               toolbarHeight: 75.h,
               actions: [
-                Consumer(
-                  builder: (_, ref, __) => TextButton(
-                    onPressed: () {
-                      final Puzzle? puzzle =
-                          ref.read(puzzleProvider).valueOrNull;
-                      context.router.replace(PuzzleBoardRoute(puzzle: puzzle!));
-                    },
-                    child: const Text("I UNDERSTAND"),
-                  ),
-                )
+                if (understand)
+                  Consumer(
+                    builder: (_, ref, __) => TextButton(
+                      onPressed: () {
+                        final Puzzle? puzzle =
+                            ref.read(puzzleProvider).valueOrNull;
+                        context.router
+                            .replace(PuzzleBoardRoute(puzzle: puzzle!));
+                      },
+                      child: const Text("I UNDERSTAND"),
+                    ),
+                  )
               ],
             ),
             Expanded(

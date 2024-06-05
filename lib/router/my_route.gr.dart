@@ -28,9 +28,14 @@ abstract class _$MyRouter extends RootStackRouter {
       );
     },
     HowToPlayRoute.name: (routeData) {
+      final args = routeData.argsAs<HowToPlayRouteArgs>(
+          orElse: () => const HowToPlayRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const HowToPlayPage(),
+        child: HowToPlayPage(
+          understand: args.understand,
+          key: args.key,
+        ),
       );
     },
     PuzzleBoardRoute.name: (routeData) {
@@ -76,16 +81,40 @@ class DashboardRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [HowToPlayPage]
-class HowToPlayRoute extends PageRouteInfo<void> {
-  const HowToPlayRoute({List<PageRouteInfo>? children})
-      : super(
+class HowToPlayRoute extends PageRouteInfo<HowToPlayRouteArgs> {
+  HowToPlayRoute({
+    bool understand = false,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           HowToPlayRoute.name,
+          args: HowToPlayRouteArgs(
+            understand: understand,
+            key: key,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'HowToPlayRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<HowToPlayRouteArgs> page =
+      PageInfo<HowToPlayRouteArgs>(name);
+}
+
+class HowToPlayRouteArgs {
+  const HowToPlayRouteArgs({
+    this.understand = false,
+    this.key,
+  });
+
+  final bool understand;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'HowToPlayRouteArgs{understand: $understand, key: $key}';
+  }
 }
 
 /// generated route for

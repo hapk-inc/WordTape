@@ -42,7 +42,7 @@ class PlayNowButton extends ConsumerWidget {
           : () {
               final AuthNotifier authNotifier = ref.read(authNotifierProvider);
               if (authNotifier.notLogged) {
-                context.router.push(const HowToPlayRoute());
+                context.router.push(HowToPlayRoute(understand: true));
               } else {
                 context.router.push(PuzzleBoardRoute(puzzle: puzzle));
               }

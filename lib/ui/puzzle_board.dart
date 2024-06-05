@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:mock_data/mock_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/router/my_route.dart';
 
 import '../logic/app/panel.dart';
 import '../logic/puzzle/found_notifier.dart';
 import '../model/found.dart';
 import '../model/panel_widget.dart';
 import '../model/puzzle.dart';
+import '../router/my_route.dart';
 import '../theme/colors.dart';
 import 'board/fixed_board.dart';
 import 'board/puzzle_note.dart';
@@ -64,11 +63,11 @@ class PuzzleBoardPage extends ConsumerWidget {
                       children: [
                         AppBar(
                           leadingWidth: 60.r,
-                          title: Text("No. ${mockInteger(1, 10)}"),
+                          //title: Text("No. ${mockInteger(1, 10)}"),
                           actions: [
                             TextButton(
                               onPressed: () =>
-                                  context.router.push(const HowToPlayRoute()),
+                                  context.router.push(HowToPlayRoute()),
                               child: const Text(
                                 "HOW TO PLAY",
                                 style: TextStyle(color: ashGray),
