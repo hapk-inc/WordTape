@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../ui/dashboard.dart';
 import '../ui/app_stack.dart';
 import '../ui/how_to_play.dart';
+import '../ui/privacy_policy.dart';
 import '../ui/puzzle_board.dart';
 import '../model/puzzle.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class MyRouter extends _$MyRouter {
             AutoRoute(page: DashboardRoute.page, initial: true),
             AutoRoute(page: PuzzleBoardRoute.page),
             AutoRoute(page: HowToPlayRoute.page),
+            AutoRoute(page: PrivacyPolicyRoute.page),
           ],
         )
       ];

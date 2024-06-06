@@ -30,7 +30,7 @@ class DashboardPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const PuzzleCalendar(),
-                Gap(210.r),
+                Gap(150.r),
                 FadeIn(
                   delay: const Duration(milliseconds: 300),
                   child: ListTile(

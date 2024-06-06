@@ -20,7 +20,8 @@ class ReLoginDialog extends ConsumerWidget {
     return Container(
       width: 540.r,
       height: 360.r,
-      padding: EdgeInsets.symmetric(vertical: 30.r, horizontal: 15.r),
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: 15.r),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -59,4 +59,5 @@ ButtonStyle get _buttonStyle => ButtonStyle(
       minimumSize: WidgetStatePropertyAll(Size.square(kIsWeb ? 48.h : 45.h)),
       padding: WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: 30.r, vertical: 15.r) * 0.96),
+      elevation: WidgetStatePropertyAll(3.r),
     );

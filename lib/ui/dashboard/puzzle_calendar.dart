@@ -52,7 +52,7 @@ class SubscribeButton extends ConsumerWidget {
         onPressed: () {
           if (ref.read(deviceSizeProvider) >= 2.0) {
             ref.read(panelNotifierProvider.notifier).state = PanelWidget(
-              height: 360.r,
+              height: 390.h,
               child: const ReLoginDialog(),
             );
             ref.read(dashboardPanelProvider).open();

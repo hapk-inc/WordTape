@@ -33,7 +33,7 @@ class MyTextTheme extends TextTheme {
 
   @override
   TextStyle? get headlineSmall => FontTheme.montserratTheme.copyWith(
-        fontSize: 13.5.r,
+        fontSize: 13.2.r,
         fontWeight: FontWeight.w700,
       );
 

@@ -38,6 +38,12 @@ abstract class _$MyRouter extends RootStackRouter {
         ),
       );
     },
+    PrivacyPolicyRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PrivacyPolicyPage(),
+      );
+    },
     PuzzleBoardRoute.name: (routeData) {
       final args = routeData.argsAs<PuzzleBoardRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -115,6 +121,20 @@ class HowToPlayRouteArgs {
   String toString() {
     return 'HowToPlayRouteArgs{understand: $understand, key: $key}';
   }
+}
+
+/// generated route for
+/// [PrivacyPolicyPage]
+class PrivacyPolicyRoute extends PageRouteInfo<void> {
+  const PrivacyPolicyRoute({List<PageRouteInfo>? children})
+      : super(
+          PrivacyPolicyRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PrivacyPolicyRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

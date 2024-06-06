@@ -39,7 +39,7 @@ class PuzzleBoardPage extends ConsumerWidget {
             boardPanel.isPanelClosed &&
             ratio > 2) {
           ref.read(panelNotifierProvider.notifier).state = PanelWidget(
-            height: 360.r,
+            height: 390.h,
             child: const ReLoginDialog(),
           );
 
@@ -68,7 +68,7 @@ class PuzzleBoardPage extends ConsumerWidget {
                           actions: [
                             TextButton(
                               onPressed: () =>
-                                  context.router.push(HowToPlayRoute()),
+                                  context.router.push(PrivacyPolicyRoute()),
                               child: Text(
                                 "HOW TO PLAY",
                                 style: Theme.of(context)
