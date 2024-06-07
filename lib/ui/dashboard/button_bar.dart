@@ -63,12 +63,12 @@ class PlayNowButton extends ConsumerWidget {
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: puzzle == null
-            ? const Text("NOT TODAY")
+            ? const Text("NOT TODAY", key: ValueKey("NOT TODAY"))
             : found == null
-                ? const Text("PLAY NOW")
+                ? const Text("PLAY NOW", key: ValueKey("PLAY NOW"))
                 : found.isCompleted
-                    ? const Text("COMPLETED")
-                    : const Text("RESUME NOW"),
+                    ? const Text("COMPLETED", key: ValueKey("COMPLETED"))
+                    : const Text("RESUME NOW", key: ValueKey("RESUME NOW")),
       ),
     );
   }

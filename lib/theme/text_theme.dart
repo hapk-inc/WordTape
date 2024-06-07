@@ -9,13 +9,13 @@ class MyTextTheme extends TextTheme {
 
   @override
   TextStyle? get bodyMedium =>
-      FontTheme.questrialTheme.copyWith(fontSize: 16.r);
+      FontTheme.questrialTheme.copyWith(fontSize: 15.r);
 
   @override
   TextStyle? get bodySmall => FontTheme.questrialTheme.copyWith(fontSize: 12);
 
   @override
-  TextStyle? get titleLarge => FontTheme.gugiTheme.copyWith(fontSize: 60.r);
+  TextStyle? get titleLarge => FontTheme.gugiTheme.copyWith(fontSize: 54.r);
 
   @override
   TextStyle? get titleMedium => FontTheme.gugiTheme.copyWith(fontSize: 27.r);
@@ -33,8 +33,8 @@ class MyTextTheme extends TextTheme {
 
   @override
   TextStyle? get headlineSmall => FontTheme.montserratTheme.copyWith(
-        fontSize: 13.2.r,
-        fontWeight: FontWeight.w700,
+        fontSize: 12.r,
+        fontWeight: FontWeight.w600,
       );
 
   //NUNITO THEME

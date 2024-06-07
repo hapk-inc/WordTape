@@ -56,8 +56,14 @@ ThemeData buildThemeData() => ThemeData(
 
 ButtonStyle get _buttonStyle => ButtonStyle(
       textStyle: WidgetStatePropertyAll(_textTheme.headlineSmall),
-      minimumSize: WidgetStatePropertyAll(Size.square(kIsWeb ? 48.h : 45.h)),
+      minimumSize: WidgetStatePropertyAll(
+        Size.square(kIsWeb ? 48.h : 40.5.h),
+      ),
       padding: WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 30.r, vertical: 15.r) * 0.96),
+        EdgeInsets.symmetric(
+          horizontal: 30.r,
+          vertical: kIsWeb ? 15.r : 0,
+        ),
+      ),
       elevation: WidgetStatePropertyAll(3.r),
     );

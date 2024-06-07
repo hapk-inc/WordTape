@@ -19,7 +19,7 @@ class AppStackPage extends ConsumerWidget {
     final bool onlyPrivacyPolicy =
         kIsWeb && (context.router.currentPath == "/privacy-policy-route");
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: prussianBlue,
       body: SafeArea(
         child: Stack(
@@ -33,13 +33,14 @@ class AppStackPage extends ConsumerWidget {
             ),
             Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxWidth: onlyPrivacyPolicy ? double.maxFinite : 450.r),
+                constraints:
+                    BoxConstraints(maxWidth: onlyPrivacyPolicy ? 480.r : 450.r),
                 child: SlidingUpPanel(
                   controller: ref.read(panelControllerProvider),
                   backdropColor: raisinBlack,
-                  padding: EdgeInsets.all(15.r),
+                  //padding: EdgeInsets.all(24.r),
                   backdropEnabled: true,
+                  isDraggable: false,
                   backdropOpacity: 0.75,
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(15.r),
@@ -49,10 +50,43 @@ class AppStackPage extends ConsumerWidget {
                   onPanelClosed: () {
                     ref.read(panelNotifierProvider.notifier).state =
                         const SizedBox();
+                    /*ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Text(
+                              "Create account with",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: greenWhite),
+                            ),
+                            Gap(15.r),
+                            LoginButton(
+                              onClick: () => ref.read(googleLoginProvider),
+                              child: Padding(
+                                padding: EdgeInsets.all(3.6.r),
+                                child: Image.asset('images/gLogo.png'),
+                              ),
+                            ),
+                            Gap(1.5.r),
+                            LoginButton(
+                              onClick: () {},
+                              child: const Icon(Icons.apple),
+                            ),
+                          ],
+                        ),
+                        padding: EdgeInsets.only(
+                          bottom: 30.h,
+                          top: 15.h,
+                          left: 15.r,
+                        ),
+                      ),
+                    );*/
                   },
                   body: const SizedBox(),
                   minHeight: 0,
-                  maxHeight: 360.h,
+                  maxHeight: 330.h,
                 ),
               ),
             ),

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "784902004586",
+    "project_id": "wordtape-demo",
+    "storage_bucket": "wordtape-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784902004586:android:c30a4f7f6b9929d276cf13",
+        "android_client_info": {
+          "package_name": "com.hapk.wordtape"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784902004586-0l2lv2qkbk02b2v3uq5ue89nba6hprr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hapk.wordtape",
+            "certificate_hash": "9a28ba5f7178d47964657b081f8dbdb2bc631936"
+          }
+        },
+        {
+          "client_id": "784902004586-12flsv1ai4cui16do9ad8ucvm5027eiv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYxYJYb3m0HBbpYmnA30EaIIzaTz91TE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784902004586-12flsv1ai4cui16do9ad8ucvm5027eiv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "784902004586-2qgsdjpjnprg6rekt6v26j8tjog4lddt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hapk.wordtape"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

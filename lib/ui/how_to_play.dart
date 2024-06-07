@@ -32,6 +32,11 @@ class HowToPlayPage extends StatelessWidget {
               if (understand)
                 Consumer(
                   builder: (_, ref, __) => TextButton(
+                    style: const ButtonStyle(
+                      padding: WidgetStatePropertyAll(
+                        EdgeInsets.symmetric(horizontal: 7.5),
+                      ),
+                    ),
                     onPressed: () {
                       final Puzzle? puzzle =
                           ref.read(puzzleProvider).valueOrNull;
@@ -39,7 +44,8 @@ class HowToPlayPage extends StatelessWidget {
                     },
                     child: const Text("I UNDERSTAND"),
                   ),
-                )
+                ),
+              const Gap(15)
             ],
           ),
           Expanded(

@@ -44,7 +44,11 @@ class Auth {
   Future<UserCredential?> get googleLogin async {
     final AuthCredential? credential = await AuthLoginOption.googleCredentials;
     if (credential == null) return null;
-    return _auth.signInWithCredential(credential);
+    if (_auth.currentUser == null) {
+      return _auth.signInWithCredential(credential);
+    }
+    return _auth.currentUser?.linkWithCredential(credential);
+    //return _auth.signInWithCredential(credential);
   }
 
   Future<UserCredential?> get appleLogin async {

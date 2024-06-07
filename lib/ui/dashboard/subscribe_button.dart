@@ -19,7 +19,7 @@ class SubscribeButton extends ConsumerWidget {
           ref.read(panelControllerProvider).open();
         },
         child: const Text(
-          "SUBSCRIBE",
+          "SUBSCRIBE WORDTAPE",
           style: TextStyle(color: engineeringOrange),
         ),
       );
