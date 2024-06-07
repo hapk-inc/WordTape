@@ -1,16 +1,19 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-
-import '../../logic/puzzle/found_notifier.dart';
-import '../../model/found.dart';
-import '../../theme/colors.dart';
 
 const Duration m750 = Duration(milliseconds: 750);
 
+class PuzzleCompleted extends StatelessWidget {
+  const PuzzleCompleted({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+/*
 class PuzzleCompleted extends ConsumerWidget {
   const PuzzleCompleted({super.key});
 
@@ -56,7 +59,8 @@ class PuzzleCompleted extends ConsumerWidget {
                       const StarLottie(),
                       Text(
                         "Congratulations",
-                        style: textTheme.titleMedium?.copyWith(height: 2.1),
+                        //"No. ${found.rank ?? 0}",
+                        style: textTheme.titleSmall?.copyWith(height: 2.1),
                       ),
                     ],
                   ),
@@ -77,6 +81,7 @@ class PuzzleCompleted extends ConsumerWidget {
     );
   }
 }
+*/
 
 class StarLottie extends StatefulWidget {
   const StarLottie({super.key});

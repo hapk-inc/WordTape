@@ -5,13 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../enum/enum.dart';
 import 'bloc.dart';
 
-//part 'auth_notifier.g.dart';
-
-/*
-@Riverpod(keepAlive: true)
-AuthNotifier authNotifier(AuthNotifierRef ref) => AuthNotifier(ref);
-*/
-
 final ChangeNotifierProvider<AuthNotifier> authNotifierProvider =
     ChangeNotifierProvider<AuthNotifier>((ref) => AuthNotifier(ref));
 
@@ -25,7 +18,6 @@ class AuthNotifier extends ChangeNotifier {
 
   @override
   void addListener(VoidCallback listener) {
-    debugPrint("24--");
     ref.listen<User?>(
       authUserProvider.select((value) => value.value),
       (prev, next) async {

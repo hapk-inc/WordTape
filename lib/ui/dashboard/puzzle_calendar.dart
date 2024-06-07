@@ -4,22 +4,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../logic/app/device_size.dart';
-import '../../logic/app/panel.dart';
 import '../../logic/auth/auth_notifier.dart';
-import '../../model/panel_widget.dart';
+
 import '../../theme/colors.dart';
-import 're_login_dialog.dart';
+import 'subscribe_button.dart';
 
 class PuzzleCalendar extends ConsumerWidget {
   const PuzzleCalendar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final AuthNotifier authNotifier = ref.watch(authNotifierProvider);
     return AppBar(
       leadingWidth: 135.r,
       leading: const PuzzleDate(),
-      actions: const [SubscribeButton(), Gap(15)],
+      actions: [
+        if (!authNotifier.loggedIn) const SubscribeButton(),
+        const Gap(15),
+      ],
     );
   }
 }
@@ -39,30 +41,6 @@ class PuzzleDate extends ConsumerWidget {
       ),
     );
   }
-}
-
-class SubscribeButton extends ConsumerWidget {
-  const SubscribeButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) => ElevatedButton(
-        style: const ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(xantHous),
-        ),
-        onPressed: () {
-          if (ref.read(deviceSizeProvider) >= 2.0) {
-            ref.read(panelNotifierProvider.notifier).state = PanelWidget(
-              height: 390.h,
-              child: const ReLoginDialog(),
-            );
-            ref.read(dashboardPanelProvider).open();
-          } else {}
-        },
-        child: const Text(
-          "SUBSCRIBE",
-          style: TextStyle(color: engineeringOrange),
-        ),
-      );
 }
 
 /* onPressed: () {

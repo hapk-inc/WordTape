@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:wordtape/logic/auth/auth_notifier.dart';
 
+import '../../logic/auth/auth_notifier.dart';
 import '../../logic/puzzle/bloc.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
@@ -35,7 +35,6 @@ class PlayNowButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Puzzle? puzzle = ref.watch(puzzleProvider).value;
     final Found? found = ref.watch(selectedFoundProvider).value;
-
     return ElevatedButton(
       onPressed: puzzle == null
           ? null

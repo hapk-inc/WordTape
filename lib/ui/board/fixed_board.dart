@@ -23,14 +23,6 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
   late Puzzle puzzle;
   late Found found;
 
-  @override
-  void initState() {
-    //final args = context.router.current.args;
-    //puzzle = args is PuzzleBoardRouteArgs ? args.puzzle : Puzzle.fromRandom();
-    puzzle = ref.read(foundNotifierProvider.notifier).puzzle;
-    super.initState();
-  }
-
   WordValidate validation(int index, int rowNo) {
     //
     if (index == (rowNo - 1)) return WordValidate.previous;
@@ -53,12 +45,13 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
   Widget build(BuildContext context) {
     found = ref.watch(foundNotifierProvider).valueOrNull ?? const Found();
     if (found.id == null) return Container();
+    puzzle = ref.read(foundNotifierProvider.notifier).puzzle;
     return FadeIn(
         delay: const Duration(milliseconds: 750),
         child: LayoutBuilder(
-          builder: (ctx, constraints) {
-            final double mW = constraints.maxWidth;
-            final double mH = constraints.maxHeight;
+          builder: (ctx, constraint) {
+            final double mW = constraint.maxWidth;
+            final double mH = constraint.maxHeight;
             return FixedTimeline.tileBuilder(
               theme: TimelineTheme.of(ctx).copyWith(
                 nodePosition: 0,
@@ -123,3 +116,23 @@ class _FixedBoardState extends ConsumerState<FixedBoard> {
         ));
   }
 }
+
+/*  @override
+  void initState() {
+    //final args = context.router.current.args;
+    //puzzle = args is PuzzleBoardRouteArgs ? args.puzzle : Puzzle.fromRandom();
+    //puzzle = ref.read(foundNotifierProvider.notifier).puzzle;
+    //puzzle = ref.read(puzzleProvider).value!;
+    /*found = ref.refresh(foundNotifierProvider.notifier).state.value ??
+        const Found();*/
+/*    found = ref.refresh(foundNotifierProvider.notifier).state.when(
+          data: (data) => data,
+          error: (error, stackTrace) {
+            debugPrintStack(stackTrace: stackTrace);
+            return Found();
+          },
+          loading: () => Found(),
+        );*/
+    super.initState();
+  }
+*/

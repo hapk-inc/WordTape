@@ -120,128 +120,126 @@ class PrivacyPolicyPage extends StatelessWidget {
       color: teal,
       height: 2.1,
     );
-    return SafeArea(
-      child: Container(
-        color: greenWhite,
-        child: Column(
-          children: [
-            AppBar(toolbarHeight: 75.h, actions: []),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                alignment: Alignment.centerLeft,
-                child: SingleChildScrollView(
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(text: "Privacy Policy", style: titleStyle),
-                        _doubleLine,
-                        const TextSpan(text: _text1), _doubleLine,
-                        const TextSpan(text: _text2), _doubleLine,
-                        const TextSpan(text: _text3), _doubleLine,
-                        const TextSpan(text: _text4), _doubleLine,
-                        TextSpan(
-                          text: "Information Collection and Use",
-                          style: subtitle,
-                        ),
-                        _doubleLine,
-                        const TextSpan(text: _text5), _doubleLine,
-                        const TextSpan(text: _text6), _doubleLine,
-                        const TextSpan(text: _text7), _doubleLine,
-                        TextSpan(
-                          text: "•  ",
-                          children: [
-                            TextSpan(
-                              text: "Google Play Services",
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => launch(
-                                      'https://policies.google.com/privacy',
-                                    ),
-                              style: const TextStyle(color: filledColor),
-                            ),
-                          ],
-                        ),
-                        _singleLine,
-                        TextSpan(
-                          text: "•  ",
-                          children: [
-                            TextSpan(
-                              text: "Google Analytics for Firebase",
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => launch(
-                                      'https://firebase.google.com/policies/analytics',
-                                    ),
-                              style: const TextStyle(color: filledColor),
-                            )
-                          ],
-                        ),
-                        _singleLine,
-                        TextSpan(
-                          text: "•  ",
-                          children: [
-                            TextSpan(
-                              text: "Firebase Crashlytics",
-                              style: const TextStyle(color: filledColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => launch(
-                                      'https://firebase.google.com/support/privacy/',
-                                    ),
-                            )
-                          ],
-                        ),
-                        _doubleLine,
-                        TextSpan(text: "Log Data", style: subtitle),
-                        _doubleLine,
-                        const TextSpan(text: _text8),
-                        _doubleLine,
-                        TextSpan(text: "Cookies", style: subtitle),
-                        _doubleLine,
-                        const TextSpan(text: _text9), _doubleLine,
-                        const TextSpan(text: _text10), _doubleLine,
-                        TextSpan(text: "Service Providers", style: subtitle),
-                        _doubleLine,
-                        const TextSpan(text: _text11), _doubleLine,
-                        const TextSpan(text: _text12), _doubleLine,
-                        const TextSpan(text: _text13), _doubleLine,
-
-                        TextSpan(text: "Security", style: subtitle),
-                        _doubleLine,
-                        const TextSpan(text: _text14), _doubleLine,
-                        TextSpan(text: "Links to Other Sites", style: subtitle),
-                        _doubleLine,
-                        const TextSpan(text: _text15), _doubleLine,
-                        TextSpan(text: "Children’s Privacy", style: subtitle),
-                        _doubleLine,
-                        const TextSpan(text: _text16), _doubleLine,
-                        TextSpan(
-                          text: "Changes to This Privacy Policy",
-                          style: subtitle,
-                        ),
-                        _doubleLine,
-                        const TextSpan(text: _text17), _doubleLine,
-                        const TextSpan(text: _text18), _doubleLine,
-                        TextSpan(text: "Contact us", style: subtitle),
-                        _singleLine,
-                        const TextSpan(text: _text19),
-                        const TextSpan(
-                          text: _text20,
-                          style: TextStyle(color: teal),
-                        ),
-                        _doubleLine,
-                        //
-                        _doubleLine,
-                      ],
-                      style: textTheme.bodyMedium?.copyWith(
-                        height: 1.8,
-                        color: slateGray,
+    return ColoredBox(
+      color: greenWhite,
+      child: Column(
+        children: [
+          AppBar(toolbarHeight: 75.h),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              alignment: Alignment.centerLeft,
+              child: SingleChildScrollView(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(text: "Privacy Policy", style: titleStyle),
+                      _doubleLine,
+                      const TextSpan(text: _text1), _doubleLine,
+                      const TextSpan(text: _text2), _doubleLine,
+                      const TextSpan(text: _text3), _doubleLine,
+                      const TextSpan(text: _text4), _doubleLine,
+                      TextSpan(
+                        text: "Information Collection and Use",
+                        style: subtitle,
                       ),
+                      _doubleLine,
+                      const TextSpan(text: _text5), _doubleLine,
+                      const TextSpan(text: _text6), _doubleLine,
+                      const TextSpan(text: _text7), _doubleLine,
+                      TextSpan(
+                        text: "•  ",
+                        children: [
+                          TextSpan(
+                            text: "Google Play Services",
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => launch(
+                                    'https://policies.google.com/privacy',
+                                  ),
+                            style: const TextStyle(color: filledColor),
+                          ),
+                        ],
+                      ),
+                      _singleLine,
+                      TextSpan(
+                        text: "•  ",
+                        children: [
+                          TextSpan(
+                            text: "Google Analytics for Firebase",
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => launch(
+                                    'https://firebase.google.com/policies/analytics',
+                                  ),
+                            style: const TextStyle(color: filledColor),
+                          )
+                        ],
+                      ),
+                      _singleLine,
+                      TextSpan(
+                        text: "•  ",
+                        children: [
+                          TextSpan(
+                            text: "Firebase Crashlytics",
+                            style: const TextStyle(color: filledColor),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => launch(
+                                    'https://firebase.google.com/support/privacy/',
+                                  ),
+                          )
+                        ],
+                      ),
+                      _doubleLine,
+                      TextSpan(text: "Log Data", style: subtitle),
+                      _doubleLine,
+                      const TextSpan(text: _text8),
+                      _doubleLine,
+                      TextSpan(text: "Cookies", style: subtitle),
+                      _doubleLine,
+                      const TextSpan(text: _text9), _doubleLine,
+                      const TextSpan(text: _text10), _doubleLine,
+                      TextSpan(text: "Service Providers", style: subtitle),
+                      _doubleLine,
+                      const TextSpan(text: _text11), _doubleLine,
+                      const TextSpan(text: _text12), _doubleLine,
+                      const TextSpan(text: _text13), _doubleLine,
+
+                      TextSpan(text: "Security", style: subtitle),
+                      _doubleLine,
+                      const TextSpan(text: _text14), _doubleLine,
+                      TextSpan(text: "Links to Other Sites", style: subtitle),
+                      _doubleLine,
+                      const TextSpan(text: _text15), _doubleLine,
+                      TextSpan(text: "Children’s Privacy", style: subtitle),
+                      _doubleLine,
+                      const TextSpan(text: _text16), _doubleLine,
+                      TextSpan(
+                        text: "Changes to This Privacy Policy",
+                        style: subtitle,
+                      ),
+                      _doubleLine,
+                      const TextSpan(text: _text17), _doubleLine,
+                      const TextSpan(text: _text18), _doubleLine,
+                      TextSpan(text: "Contact us", style: subtitle),
+                      _singleLine,
+                      const TextSpan(text: _text19),
+                      const TextSpan(
+                        text: _text20,
+                        style: TextStyle(color: teal),
+                      ),
+                      _doubleLine,
+                      //
+                      _doubleLine,
+                    ],
+                    style: textTheme.bodyMedium?.copyWith(
+                      height: 1.8,
+                      color: slateGray,
                     ),
                   ),
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
