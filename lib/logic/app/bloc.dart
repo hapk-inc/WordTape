@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -18,4 +19,9 @@ class PanelNotifier extends _$PanelNotifier {
 
   @override
   set state(Widget value) => super.state = value;
+}
+
+@riverpod
+Future<PackageInfo> package(PackageRef ref) async {
+  return PackageInfo.fromPlatform();
 }

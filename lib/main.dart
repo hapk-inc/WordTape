@@ -14,17 +14,27 @@ import 'firebase/firebase.dart';
 import 'firebase/firebase_options_dev.dart';
 import 'firebase/firebase_options_prod.dart';
 
+import 'package:web/web.dart' as web;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  //
-  //final PackageInfo info = await PackageInfo.fromPlatform();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
+  final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
+  String url = kIsWeb ? web.window.location.href : "";
+  debugPrint(url);
+
+  ///Uri.base.path;
   final FirebaseApp app = await Firebase.initializeApp(
     options: kDebugMode
-        ? DefaultFirebaseOptionsDev.currentPlatform
-        : DefaultFirebaseOptionsProd.currentPlatform,
+        ? dev
+        : kIsWeb
+            ? url.contains('demo')
+                ? dev
+                : prod
+            : prod,
   );
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);

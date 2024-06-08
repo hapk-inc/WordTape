@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../logic/app/bloc.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/puzzle_calendar.dart';
@@ -16,36 +17,51 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const PuzzleCalendar(),
-          Gap(150.r),
-          FadeIn(
-            delay: const Duration(milliseconds: 300),
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-              title: Text(
-                "WORDTAPE",
-                style: textTheme.titleLarge?.copyWith(
-                  color: engineeringOrange,
-                  height: 1.5,
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const PuzzleCalendar(),
+              Gap(150.r),
+              FadeIn(
+                delay: const Duration(milliseconds: 300),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                  title: Text(
+                    "WORDTAPE",
+                    style: textTheme.titleLarge?.copyWith(
+                      color: engineeringOrange,
+                      height: 1.5,
+                    ),
+                  ),
+                  subtitle: Text(
+                    "Challenging word puzzle game",
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: payneGray,
+                      height: 1.5,
+                    ),
+                  ),
                 ),
               ),
-              subtitle: Text(
-                "Challenging word puzzle game",
-                style: textTheme.bodyMedium?.copyWith(
-                  color: payneGray,
-                  height: 1.5,
-                ),
-              ),
-            ),
+              Gap(30.r),
+              const DashboardButtonBar()
+            ],
           ),
-          Gap(30.r),
-          const DashboardButtonBar()
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 30.r,
+          left: 15.r,
+          child: ref.watch(packageProvider).maybeWhen(
+                data: (info) => Text(
+                  "VERSION: ${info.buildNumber}",
+                  style: textTheme.headlineSmall?.copyWith(color: ashGray),
+                ),
+                orElse: () => Container(),
+              ),
+        )
+      ],
     );
   }
 }
