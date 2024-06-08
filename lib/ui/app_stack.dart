@@ -8,8 +8,6 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../logic/app/bloc.dart';
 import '../theme/colors.dart';
 
-final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
 @RoutePage()
 class AppStackPage extends ConsumerWidget {
   const AppStackPage({super.key});
@@ -19,6 +17,7 @@ class AppStackPage extends ConsumerWidget {
     final bool onlyPrivacyPolicy =
         kIsWeb && (context.router.currentPath == "/privacy-policy-route");
     return Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomInset: true,
       backgroundColor: prussianBlue,
       body: SafeArea(

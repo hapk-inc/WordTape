@@ -47,6 +47,7 @@ class FoundDatabase {
     final Database db = await database;
     final Map<String, dynamic> map = found.toJson();
     if (map.containsKey('rank')) map.remove('rank');
+    if (map.containsKey('hintUsed')) map.remove('hintUsed');
     return await db.insert(
       _tableName,
       map,

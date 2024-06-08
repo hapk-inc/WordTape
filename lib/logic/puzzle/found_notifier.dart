@@ -88,7 +88,7 @@ class FoundNotifier extends _$FoundNotifier {
         }
       } else {
         _db.insertOrder(f);
-        await ref.read(datastoreProvider).updateFound(f);
+        if (f.i != 1) await ref.read(datastoreProvider).updateFound(f);
       }
     }
   }
@@ -97,4 +97,14 @@ class FoundNotifier extends _$FoundNotifier {
 
   @override
   set state(AsyncValue<Found> newState) => super.state = newState;
+
+  incrementHintUsed() async {
+    Found? f = state.value;
+    f = f?.copyWith(
+      lastFound: DateTime.now(),
+      hintUsed: (f.hintUsed ?? 0) + 1,
+    );
+    state = AsyncValue.data(f!);
+    ref.read(datastoreProvider).updateFound(f);
+  }
 }

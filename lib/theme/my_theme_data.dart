@@ -13,6 +13,11 @@ ThemeData buildThemeData() => ThemeData(
       useMaterial3: true,
       scaffoldBackgroundColor: greenWhite,
       textTheme: _textTheme,
+      cardTheme: CardTheme(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(7.5.r),
+        ),
+      ),
       appBarTheme: AppBarTheme(
         toolbarHeight: 90.h,
         titleSpacing: 7.5.r,

@@ -22,6 +22,9 @@ const Color xantHous = Color(0xffffc759);
 const Color parchment = Color(0xffEFEACE);
 const Color chryslerBlue = Color(0xff5F00BA);
 
+const Color darkPurple = Color(0xff31081F);
+const Color africanViolet = Color(0xff9F86C0);
+
 const Color idleColor = slateGray;
 const Color textColor = prussianBlue;
 const Color focusedColor = teal;

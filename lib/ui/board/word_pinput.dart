@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,7 @@ class _WordPinputState extends ConsumerState<WordPinput> {
   late Found? found;
   late WordValidate wv;
   late String str;
+  bool hintUsed = false;
 
   static PinTheme _defaultPinTheme(BoxConstraints box,
           {Color color = idleColor}) =>
@@ -192,27 +194,57 @@ class _WordPinputState extends ConsumerState<WordPinput> {
 
           //
           errorBuilder: (errorText, pin) => Container(),
-          onCompleted: (str) =>
-              ref.read(foundNotifierProvider.notifier).onComplete(str),
+          onCompleted: ref.read(foundNotifierProvider.notifier).onComplete,
           validator: (value) {
             bool isSame = value == str;
 
-            final SnackBar snackBar = isSame
-                ? const SnackBar(
-                    content: Text("You got it right."),
-                    backgroundColor: teal,
-                  )
-                : SnackBar(
-                    //margin: EdgeInsets.symmetric(vertical: 7.5),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 15.r,
-                      horizontal: 30.r,
-                    ),
-                    content: const Text("Incorrect one"),
-                    backgroundColor: engineeringOrange,
-                  );
+            const SnackBar correctOne = SnackBar(
+              content: Text("You got it right."),
+              backgroundColor: teal,
+            );
+
+            SnackBar wrongOne = SnackBar(
+              backgroundColor: darkPurple,
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Incorrect one",
+                    style: TextStyle(color: greenWhite),
+                  ),
+                  if (widget.word.hint != null && !hintUsed)
+                    InkWell(
+                      onTap: () => ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            content: AutoSizeText("Hint: ${widget.word.hint}"),
+                          ),
+                        ).closed.then(
+                          (value) {
+                            setState(() => hintUsed = true);
+                            ref
+                                .read(foundNotifierProvider.notifier)
+                                .incrementHintUsed();
+                          },
+                        ),
+                      child: Text(
+                        "NEED HINT",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(color: elbow),
+                      ),
+                    )
+                ],
+              ),
+            );
+
             if (!(widget.index + 1 > 5)) {
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              ScaffoldMessenger.of(context).showSnackBar(
+                isSame ? correctOne : wrongOne,
+              );
             }
             return isSame ? null : "Incorrect";
           },
@@ -221,3 +253,14 @@ class _WordPinputState extends ConsumerState<WordPinput> {
     );
   }
 }
+/* /*final SnackBar snackBar = isSame
+                ? correctOne
+                : SnackBar(
+                    //margin: EdgeInsets.symmetric(vertical: 7.5),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.r,
+                      horizontal: 30.r,
+                    ),
+                    content: const Text("Incorrect one"),
+                    backgroundColor: engineeringOrange,
+                  );*/*/
