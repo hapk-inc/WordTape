@@ -22,7 +22,9 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 mixin _$Player {
   String get name => throw _privateConstructorUsedError;
   String? get rName => throw _privateConstructorUsedError;
-  num? get userId => throw _privateConstructorUsedError; //
+  num? get userId => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  String? get photoURL => throw _privateConstructorUsedError; //
 //String? appVersion,
   DateTime? get nowTime => throw _privateConstructorUsedError;
   String? get id => throw _privateConstructorUsedError;
@@ -42,6 +44,8 @@ abstract class $PlayerCopyWith<$Res> {
       {String name,
       String? rName,
       num? userId,
+      String? email,
+      String? photoURL,
       DateTime? nowTime,
       String? id,
       String? source});
@@ -63,6 +67,8 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
     Object? name = null,
     Object? rName = freezed,
     Object? userId = freezed,
+    Object? email = freezed,
+    Object? photoURL = freezed,
     Object? nowTime = freezed,
     Object? id = freezed,
     Object? source = freezed,
@@ -80,6 +86,14 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as num?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      photoURL: freezed == photoURL
+          ? _value.photoURL
+          : photoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
       nowTime: freezed == nowTime
           ? _value.nowTime
           : nowTime // ignore: cast_nullable_to_non_nullable
@@ -107,6 +121,8 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       {String name,
       String? rName,
       num? userId,
+      String? email,
+      String? photoURL,
       DateTime? nowTime,
       String? id,
       String? source});
@@ -126,6 +142,8 @@ class __$$PlayerImplCopyWithImpl<$Res>
     Object? name = null,
     Object? rName = freezed,
     Object? userId = freezed,
+    Object? email = freezed,
+    Object? photoURL = freezed,
     Object? nowTime = freezed,
     Object? id = freezed,
     Object? source = freezed,
@@ -143,6 +161,14 @@ class __$$PlayerImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as num?,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      photoURL: freezed == photoURL
+          ? _value.photoURL
+          : photoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
       nowTime: freezed == nowTime
           ? _value.nowTime
           : nowTime // ignore: cast_nullable_to_non_nullable
@@ -167,6 +193,8 @@ class _$PlayerImpl extends _Player {
       {this.name = "User#",
       this.rName,
       this.userId,
+      this.email,
+      this.photoURL,
       this.nowTime,
       this.id,
       this.source})
@@ -182,6 +210,10 @@ class _$PlayerImpl extends _Player {
   final String? rName;
   @override
   final num? userId;
+  @override
+  final String? email;
+  @override
+  final String? photoURL;
 //
 //String? appVersion,
   @override
@@ -210,6 +242,8 @@ abstract class _Player extends Player {
       {final String name,
       final String? rName,
       final num? userId,
+      final String? email,
+      final String? photoURL,
       final DateTime? nowTime,
       final String? id,
       final String? source}) = _$PlayerImpl;
@@ -223,6 +257,10 @@ abstract class _Player extends Player {
   String? get rName;
   @override
   num? get userId;
+  @override
+  String? get email;
+  @override
+  String? get photoURL;
   @override //
 //String? appVersion,
   DateTime? get nowTime;

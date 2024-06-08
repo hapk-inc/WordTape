@@ -13,6 +13,8 @@ class Player extends Equatable with _$Player {
     @Default("User#") String name,
     String? rName,
     num? userId,
+    String? email,
+    String? photoURL,
 
     //
     //String? appVersion,

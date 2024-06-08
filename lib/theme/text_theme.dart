@@ -47,7 +47,7 @@ class MyTextTheme extends TextTheme {
 
   @override
   TextStyle? get labelSmall => FontTheme.montserratTheme.copyWith(
-        fontSize: 15.r,
+        fontSize: 10.8.r,
         fontWeight: FontWeight.w300,
       );
 }

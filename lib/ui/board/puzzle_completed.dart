@@ -1,19 +1,74 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../logic/puzzle/found_notifier.dart';
+import '../../model/found.dart';
 import '../../theme/colors.dart';
 
 const Duration m750 = Duration(milliseconds: 750);
 
-class PuzzleCompleted extends StatelessWidget {
+class PuzzleCompleted extends ConsumerWidget {
   const PuzzleCompleted({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 30.h,
-      color: teal,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Found? found = ref.watch(foundNotifierProvider).value;
+
+    if (found == null) return Container();
+
+    final DateTime now = DateTime.now();
+    final DateTime lastFound = found.lastFound ?? now;
+
+    final String str = now.day == lastFound.day
+        ? "Today ${DateFormat('h:mm a').format(lastFound)}"
+        : DateFormat('MMMM d, y h: mm a').format(lastFound);
+
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return FadeIn(
+      child: SizedBox(
+        height: 120.h,
+        width: double.maxFinite,
+        child: Card(
+          color: teal,
+          elevation: 3.r,
+          margin: const EdgeInsets.symmetric(horizontal: 30),
+          child: Padding(
+            padding: EdgeInsets.all(15.r),
+            child: Row(
+              children: [
+                const AspectRatio(aspectRatio: 0.9, child: StarLottie()),
+                Gap(15.r),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AutoSizeText(
+                        (found.rank ?? 1) == 1
+                            ? "First Winner"
+                            : "Congratulations (No. ${found.rank})",
+                        style: textTheme.titleSmall?.copyWith(height: 2.1),
+                        maxLines: 1,
+                      ),
+                      Text(
+                        str,
+                        style: textTheme.labelSmall
+                            ?.copyWith(color: elbow, height: 1.8),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -101,7 +156,7 @@ class _StarLottieState extends State<StarLottie> {
   Widget build(BuildContext context) => Container(
         constraints: BoxConstraints.tight(Size.square(75.r)),
         child: FittedBox(
-          fit: BoxFit.fill,
+          fit: BoxFit.fitWidth,
           child: Lottie.asset(
             'lottie/trophy.json',
             errorBuilder: (_, __, ___) => const Text("🏆"),
