@@ -16,7 +16,8 @@ final MyTextTheme _textTheme = MyTextTheme();
 class WordPinput extends ConsumerStatefulWidget {
   final int index;
   final Word word;
-  const WordPinput(this.index, this.word, {super.key});
+  final bool demo;
+  const WordPinput(this.index, this.word, {this.demo = false, super.key});
 
   @override
   ConsumerState createState() => _WordPinputState();
@@ -54,11 +55,67 @@ class _WordPinputState extends ConsumerState<WordPinput> {
   @override
   void initState() {
     str = widget.word.value;
+    if (widget.demo) {
+      if (widget.index == 0) {
+        controller = TextEditingController(text: str);
+      } else {
+        controller = TextEditingController(text: str.characters.first);
+        for (var e in str.substring(1).characters) {
+          Future.delayed(
+              const Duration(milliseconds: 1200), () => controller.text += e);
+        }
+      }
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.demo) {
+      return LayoutBuilder(
+        builder: (ctx, constraint) => Container(
+          color: widget.index == 0 ? seaSalt : null,
+          alignment: Alignment.centerLeft,
+          child: Pinput(
+            controller: controller,
+            length: str.length,
+
+            //
+            defaultPinTheme: _defaultPinTheme(constraint),
+            disabledPinTheme: _defaultPinTheme(constraint).copyWith(
+              textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
+                    color: widget.index == 1 ? filledColor : idleColor,
+                  ),
+            ),
+
+            //
+            isCursorAnimationEnabled: true,
+            pinAnimationType: PinAnimationType.fade,
+            animationDuration: const Duration(milliseconds: 150),
+            pinputAutovalidateMode: PinputAutovalidateMode.disabled,
+            //
+            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.characters,
+            separatorBuilder: (_) =>
+                SizedBox(width: constraint.maxWidth * 0.015),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                //regex pattern for blank space and capital letters
+                RegExp(r"^$|[A-Z]+$"),
+                replacementString: widget.word.value.characters.first,
+              ),
+            ],
+
+            //
+            autofocus: false,
+            enabled: false,
+
+            //
+            errorBuilder: (errorText, pin) => Container(),
+          ),
+        ),
+      );
+    }
     found = ref.watch(foundNotifierProvider).value;
     if (found == null) return Container();
 
@@ -164,20 +221,3 @@ class _WordPinputState extends ConsumerState<WordPinput> {
     );
   }
 }
-/*  final Puzzle? puzzle = ref.read(puzzleProvider).value;
-            final String nextWord = puzzle == null
-                ? ""
-                : widget.index + 1 > 5
-                    ? ""
-                    : puzzle.words[widget.index + 1].value.split('').fold(
-                        puzzle.words[widget.index + 1].value.characters.first,
-                        (prev, e) {
-                          if (prev == e) {
-                            return prev;
-                          } else {
-                            String s = "${prev}_";
-                            return s;
-                          }
-                        },
-                      );*/
-//"FIND OUT THE NEXT WORD - $str $nextWord",

@@ -94,10 +94,18 @@ class HowToPlayPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Flexible(
-                            child: WordPinput(0, Word(value: "WASHING")),
+                            child: WordPinput(
+                              0,
+                              Word(value: "WASHING"),
+                              demo: true,
+                            ),
                           ),
                           Flexible(
-                            child: WordPinput(1, Word(value: "MACHINE")),
+                            child: WordPinput(
+                              1,
+                              Word(value: "MACHINE"),
+                              demo: true,
+                            ),
                           ),
                         ],
                       ),
