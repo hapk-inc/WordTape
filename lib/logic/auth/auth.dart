@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -47,15 +48,29 @@ class Auth {
     if (_auth.currentUser == null) {
       return _auth.signInWithCredential(credential);
     }
-    return _auth.currentUser?.linkWithCredential(credential);
+    return await _auth.currentUser?.linkWithCredential(credential).catchError(
+      (e, s) {
+        if (e is FirebaseAuthException) {
+          debugPrint("54--${e.code}");
+          switch (e.code) {
+            case "credential-already-in-use":
+              return _auth.signInWithCredential(credential);
+            default:
+              throw e;
+          }
+        }
+        throw e;
+      },
+    );
     //return _auth.signInWithCredential(credential);
   }
 
   Future<UserCredential?> get appleLogin async {
-    //_AuthLoginOption authLoginOption = _AuthLoginOption();
     final AuthCredential credential = await AuthLoginOption.appleLogin;
     return _auth.signInWithCredential(credential);
   }
+
+  Future createUser(UserCredential credential) async {}
 }
 
 mixin AuthLoginOption {

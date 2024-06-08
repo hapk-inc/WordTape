@@ -50,43 +50,10 @@ class AppStackPage extends ConsumerWidget {
                   onPanelClosed: () {
                     ref.read(panelNotifierProvider.notifier).state =
                         const SizedBox();
-                    /*ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Row(
-                          children: [
-                            Text(
-                              "Create account with",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: greenWhite),
-                            ),
-                            Gap(15.r),
-                            LoginButton(
-                              onClick: () => ref.read(googleLoginProvider),
-                              child: Padding(
-                                padding: EdgeInsets.all(3.6.r),
-                                child: Image.asset('images/gLogo.png'),
-                              ),
-                            ),
-                            Gap(1.5.r),
-                            LoginButton(
-                              onClick: () {},
-                              child: const Icon(Icons.apple),
-                            ),
-                          ],
-                        ),
-                        padding: EdgeInsets.only(
-                          bottom: 30.h,
-                          top: 15.h,
-                          left: 15.r,
-                        ),
-                      ),
-                    );*/
                   },
                   body: const SizedBox(),
                   minHeight: 0,
-                  maxHeight: 330.h,
+                  maxHeight: 300.r,
                 ),
               ),
             ),

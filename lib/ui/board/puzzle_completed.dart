@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../theme/colors.dart';
+
 const Duration m750 = Duration(milliseconds: 750);
 
 class PuzzleCompleted extends StatelessWidget {
@@ -9,7 +11,10 @@ class PuzzleCompleted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      height: 30.h,
+      color: teal,
+    );
   }
 }
 

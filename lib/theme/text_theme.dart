@@ -12,13 +12,14 @@ class MyTextTheme extends TextTheme {
       FontTheme.questrialTheme.copyWith(fontSize: 15.r);
 
   @override
-  TextStyle? get bodySmall => FontTheme.questrialTheme.copyWith(fontSize: 12);
+  TextStyle? get bodySmall =>
+      FontTheme.questrialTheme.copyWith(fontSize: 13.5.r);
 
   @override
   TextStyle? get titleLarge => FontTheme.gugiTheme.copyWith(fontSize: 54.r);
 
   @override
-  TextStyle? get titleMedium => FontTheme.gugiTheme.copyWith(fontSize: 27.r);
+  TextStyle? get titleMedium => FontTheme.gugiTheme.copyWith(fontSize: 24.r);
 
   @override
   TextStyle? get titleSmall => FontTheme.gugiTheme.copyWith(fontSize: 21.r);

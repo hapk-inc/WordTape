@@ -14,44 +14,38 @@ class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const PuzzleCalendar(),
-            Gap(150.r),
-            FadeIn(
-              delay: const Duration(milliseconds: 300),
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                title: Text(
-                  "WORDTAPE",
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: engineeringOrange,
-                        height: 1.5,
-                      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const PuzzleCalendar(),
+          Gap(150.r),
+          FadeIn(
+            delay: const Duration(milliseconds: 300),
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+              title: Text(
+                "WORDTAPE",
+                style: textTheme.titleLarge?.copyWith(
+                  color: engineeringOrange,
+                  height: 1.5,
                 ),
-                subtitle: const Text(
-                  "Challenging word puzzle game",
-                  style: TextStyle(color: slateGray, height: 1.5),
+              ),
+              subtitle: Text(
+                "Challenging word puzzle game",
+                style: textTheme.bodyMedium?.copyWith(
+                  color: payneGray,
+                  height: 1.5,
                 ),
               ),
             ),
-            Gap(30.r),
-            const DashboardButtonBar()
-          ],
-        ),
-      );
+          ),
+          Gap(30.r),
+          const DashboardButtonBar()
+        ],
+      ),
+    );
+  }
 }
-
-/*SlidingUpPanel(
-            backdropColor: raisinBlack,
-            padding: EdgeInsets.symmetric(horizontal: 4.5.r),
-            backdropEnabled: true,
-            backdropOpacity: 0.75,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(15.r)),
-            minHeight: 0,
-            maxHeight: 360.h,
-            controller: ref.read(dashboardPanelProvider),
-            panel: panelWidget.child,
-          ),*/
