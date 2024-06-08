@@ -28,6 +28,10 @@ class Puzzle with _$Puzzle {
       );
 
   String get shareCode {
+    DateTime jun10 = kDebugMode
+        ? DateTime(2024, 6, DateTime.now().day)
+        : DateTime(2024, 6, 10);
+    final int puzzleNo = date.difference(jun10).inDays + 1;
     final String text = words.fold(
       "",
       (prev, e) {
@@ -52,31 +56,7 @@ class Puzzle with _$Puzzle {
       },
     );
     //debugPrint("76-- $text");
-    return "WORDTAPE No.234\n\n$text";
+    return "WORDTAPE No.$puzzleNo\n\n$text\n\n"
+        "https://wordtape-51.web.app/";
   }
-/*  String shareText() {
-    debugPrint("69--${puzzle.puzzle.length}");
-    final String text = puzzle.puzzle.fold(
-      "",
-      (prev, word) {
-        final String value = word.word;
-        String x = prev;
-        if (puzzle.puzzle.first.word != value) {
-          String firstLetter = value.characters.first;
-          String dashed = value.characters.fold("", (prev, e) {
-            if (prev.isEmpty && e == firstLetter) return e;
-            return "$prev ⎯ ";
-          });
-          x += dashed;
-        } else {
-          x = value;
-        }
-
-        if (word != puzzle.puzzle.last) x += "\n";
-        return x;
-      },
-    );
-    debugPrint("76-- $text");
-    return "WORDTAPE No.234\n\n$text";
-  }*/
 }

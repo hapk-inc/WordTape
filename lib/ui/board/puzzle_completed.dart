@@ -53,13 +53,18 @@ class PuzzleCompleted extends ConsumerWidget {
                         (found.rank ?? 1) == 1
                             ? "First Winner"
                             : "Congratulations (No. ${found.rank})",
-                        style: textTheme.titleSmall?.copyWith(height: 2.1),
+                        style: textTheme.labelLarge?.copyWith(
+                          height: 2.1,
+                          color: greenWhite,
+                        ),
                         maxLines: 1,
                       ),
                       Text(
                         str,
-                        style: textTheme.labelSmall
-                            ?.copyWith(color: elbow, height: 1.8),
+                        style: textTheme.labelSmall?.copyWith(
+                          color: elbow,
+                          height: 1.8,
+                        ),
                       ),
                     ],
                   ),
@@ -72,76 +77,6 @@ class PuzzleCompleted extends ConsumerWidget {
     );
   }
 }
-
-/*
-class PuzzleCompleted extends ConsumerWidget {
-  const PuzzleCompleted({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Found? found = ref.watch(foundNotifierProvider).value;
-
-    if (found == null) return Container();
-
-    final DateTime now = DateTime.now();
-    final DateTime lastFound = found.lastFound ?? now;
-
-    final String str = now.day == lastFound.day
-        ? "Today ${DateFormat('h:mm a').format(lastFound)}"
-        : DateFormat('MMMM d, y h: mm a').format(lastFound);
-
-    final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return FadeIn(
-      delay: const Duration(milliseconds: 1200),
-      child: Container(
-        height: 180.h,
-        margin: EdgeInsets.symmetric(horizontal: 15.r),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: teal,
-          borderRadius: BorderRadius.circular(7.5.r),
-        ),
-        child: LayoutBuilder(
-          builder: (_, constraint) => Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: constraint.maxWidth * 0.036),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  height: constraint.maxHeight,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const StarLottie(),
-                      Text(
-                        "Congratulations",
-                        //"No. ${found.rank ?? 0}",
-                        style: textTheme.titleSmall?.copyWith(height: 2.1),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: constraint.maxHeight * 0.12,
-                  child: Text(
-                    str,
-                    style: textTheme.labelSmall?.copyWith(color: elbow),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
 
 class StarLottie extends StatefulWidget {
   const StarLottie({super.key});

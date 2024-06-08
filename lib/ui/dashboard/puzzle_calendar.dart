@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +20,7 @@ class PuzzleCalendar extends ConsumerWidget {
       leadingWidth: 135.r,
       leading: const PuzzleDate(),
       actions: [
-        if (!authNotifier.loggedIn) const SubscribeButton(),
+        if ((!authNotifier.loggedIn) && kDebugMode) const SubscribeButton(),
         const Gap(15),
       ],
     );

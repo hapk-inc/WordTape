@@ -40,6 +40,12 @@ class MyTextTheme extends TextTheme {
 
   //NUNITO THEME
   @override
+  TextStyle? get labelLarge => FontTheme.nunitoTheme.copyWith(
+        fontSize: 21.r,
+        fontWeight: FontWeight.w300,
+      );
+
+  @override
   TextStyle? get labelMedium => FontTheme.nunitoTheme.copyWith(
         fontSize: 18.r,
         fontWeight: FontWeight.w300,
