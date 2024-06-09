@@ -76,6 +76,9 @@ class FoundNotifier extends _$FoundNotifier {
           await ref.read(anonymousLoginProvider.future).then(
             (value) {
               ref.read(datastoreProvider).createUser;
+              /* ref
+                  .read(wordAnalyticsProvider)
+                  .createUser(value.user?.uid ?? "unknown");*/
             },
           );
         }

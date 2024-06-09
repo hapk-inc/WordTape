@@ -7,7 +7,7 @@ part of 'player.dart';
 // **************************************************************************
 
 _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
-      name: json['name'] as String? ?? "User#",
+      name: json['name'] as String?,
       rName: json['rName'] as String?,
       userId: json['userId'] as num?,
       email: json['email'] as String?,
@@ -20,9 +20,7 @@ _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
     );
 
 Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) {
-  final val = <String, dynamic>{
-    'name': instance.name,
-  };
+  final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -30,6 +28,7 @@ Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) {
     }
   }
 
+  writeNotNull('name', instance.name);
   writeNotNull('rName', instance.rName);
   writeNotNull('userId', instance.userId);
   writeNotNull('email', instance.email);

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:mock_data/mock_data.dart';
 
 import '../../firebase/firebase.dart';
 import '../../model/found.dart';
@@ -92,11 +93,11 @@ class Datastore {
 
   Future get createUser async {
     if (fUser?.uid == null) return;
-    return userColl.doc(fUser?.uid).set(
-      {
-        'source': kIsWeb ? "web" : "app",
-        'nowTime': DateTime.now().toIso8601String(),
-      },
+    Player player = Player(
+      source: kIsWeb ? "web" : "app",
+      nowTime: DateTime.now(),
+      userId: mockInteger(100000, 999999),
     );
+    return userColl.doc(fUser?.uid).set(player.toJson());
   }
 }

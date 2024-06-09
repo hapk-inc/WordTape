@@ -27,6 +27,14 @@ class Puzzle with _$Puzzle {
         id: mockString(8),
       );
 
+  String get puzzleNo {
+    DateTime jun10 = kDebugMode
+        ? DateTime(2024, 6, DateTime.now().day)
+        : DateTime(2024, 6, 10);
+    final int puzzleNo = date.difference(jun10).inDays + 1;
+    return puzzleNo.toString();
+  }
+
   String get shareCode {
     DateTime jun10 = kDebugMode
         ? DateTime(2024, 6, DateTime.now().day)

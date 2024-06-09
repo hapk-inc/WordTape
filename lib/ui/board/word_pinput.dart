@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/model/word_event.dart';
 
 import '../../enum/enum.dart';
+import '../../logic/puzzle/bloc.dart';
 import '../../logic/puzzle/found_notifier.dart';
 import '../../model/found.dart';
 import '../../model/word.dart';
@@ -219,11 +221,19 @@ class _WordPinputState extends ConsumerState<WordPinput> {
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
                           SnackBar(
-                            content: AutoSizeText("Hint: ${widget.word.hint}"),
+                            content: AutoSizeText(
+                              "Hint: ${widget.word.hint}",
+                            ),
                           ),
                         ).closed.then(
                           (value) {
                             setState(() => hintUsed = true);
+                            ref.read(wordAnalyticsProvider).hintUsed(
+                                  WordEvent(
+                                    id: found?.id ?? "",
+                                    word: str,
+                                  ),
+                                );
                             ref
                                 .read(foundNotifierProvider.notifier)
                                 .incrementHintUsed();
@@ -231,10 +241,9 @@ class _WordPinputState extends ConsumerState<WordPinput> {
                         ),
                       child: Text(
                         "NEED HINT",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(color: elbow),
+                        style: _textTheme.headlineMedium?.copyWith(
+                          color: elbow,
+                        ),
                       ),
                     )
                 ],

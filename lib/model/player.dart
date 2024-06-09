@@ -10,7 +10,7 @@ class Player extends Equatable with _$Player {
 
   @JsonSerializable(includeIfNull: false)
   const factory Player({
-    @Default("User#") String name,
+    String? name,
     String? rName,
     num? userId,
     String? email,

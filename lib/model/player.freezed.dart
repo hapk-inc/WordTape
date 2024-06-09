@@ -20,7 +20,7 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Player {
-  String get name => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
   String? get rName => throw _privateConstructorUsedError;
   num? get userId => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $PlayerCopyWith<$Res> {
       _$PlayerCopyWithImpl<$Res, Player>;
   @useResult
   $Res call(
-      {String name,
+      {String? name,
       String? rName,
       num? userId,
       String? email,
@@ -64,7 +64,7 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? name = freezed,
     Object? rName = freezed,
     Object? userId = freezed,
     Object? email = freezed,
@@ -74,10 +74,10 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
     Object? source = freezed,
   }) {
     return _then(_value.copyWith(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       rName: freezed == rName
           ? _value.rName
           : rName // ignore: cast_nullable_to_non_nullable
@@ -118,7 +118,7 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String name,
+      {String? name,
       String? rName,
       num? userId,
       String? email,
@@ -139,7 +139,7 @@ class __$$PlayerImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? name = freezed,
     Object? rName = freezed,
     Object? userId = freezed,
     Object? email = freezed,
@@ -149,10 +149,10 @@ class __$$PlayerImplCopyWithImpl<$Res>
     Object? source = freezed,
   }) {
     return _then(_$PlayerImpl(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       rName: freezed == rName
           ? _value.rName
           : rName // ignore: cast_nullable_to_non_nullable
@@ -190,7 +190,7 @@ class __$$PlayerImplCopyWithImpl<$Res>
 @JsonSerializable(includeIfNull: false)
 class _$PlayerImpl extends _Player {
   const _$PlayerImpl(
-      {this.name = "User#",
+      {this.name,
       this.rName,
       this.userId,
       this.email,
@@ -204,8 +204,7 @@ class _$PlayerImpl extends _Player {
       _$$PlayerImplFromJson(json);
 
   @override
-  @JsonKey()
-  final String name;
+  final String? name;
   @override
   final String? rName;
   @override
@@ -239,7 +238,7 @@ class _$PlayerImpl extends _Player {
 
 abstract class _Player extends Player {
   const factory _Player(
-      {final String name,
+      {final String? name,
       final String? rName,
       final num? userId,
       final String? email,
@@ -252,7 +251,7 @@ abstract class _Player extends Player {
   factory _Player.fromJson(Map<String, dynamic> json) = _$PlayerImpl.fromJson;
 
   @override
-  String get name;
+  String? get name;
   @override
   String? get rName;
   @override
