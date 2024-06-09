@@ -22,6 +22,7 @@ Found _$FoundFromJson(Map<String, dynamic> json) {
 mixin _$Found {
   int get i => throw _privateConstructorUsedError;
   String? get mistake => throw _privateConstructorUsedError;
+  List<String> get revealed => throw _privateConstructorUsedError;
   DateTime? get lastFound => throw _privateConstructorUsedError;
   int? get hintUsed => throw _privateConstructorUsedError;
   int? get rank => throw _privateConstructorUsedError; //
@@ -40,6 +41,7 @@ abstract class $FoundCopyWith<$Res> {
   $Res call(
       {int i,
       String? mistake,
+      List<String> revealed,
       DateTime? lastFound,
       int? hintUsed,
       int? rank,
@@ -61,6 +63,7 @@ class _$FoundCopyWithImpl<$Res, $Val extends Found>
   $Res call({
     Object? i = null,
     Object? mistake = freezed,
+    Object? revealed = null,
     Object? lastFound = freezed,
     Object? hintUsed = freezed,
     Object? rank = freezed,
@@ -75,6 +78,10 @@ class _$FoundCopyWithImpl<$Res, $Val extends Found>
           ? _value.mistake
           : mistake // ignore: cast_nullable_to_non_nullable
               as String?,
+      revealed: null == revealed
+          ? _value.revealed
+          : revealed // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       lastFound: freezed == lastFound
           ? _value.lastFound
           : lastFound // ignore: cast_nullable_to_non_nullable
@@ -105,6 +112,7 @@ abstract class _$$FoundImplCopyWith<$Res> implements $FoundCopyWith<$Res> {
   $Res call(
       {int i,
       String? mistake,
+      List<String> revealed,
       DateTime? lastFound,
       int? hintUsed,
       int? rank,
@@ -124,6 +132,7 @@ class __$$FoundImplCopyWithImpl<$Res>
   $Res call({
     Object? i = null,
     Object? mistake = freezed,
+    Object? revealed = null,
     Object? lastFound = freezed,
     Object? hintUsed = freezed,
     Object? rank = freezed,
@@ -138,6 +147,10 @@ class __$$FoundImplCopyWithImpl<$Res>
           ? _value.mistake
           : mistake // ignore: cast_nullable_to_non_nullable
               as String?,
+      revealed: null == revealed
+          ? _value._revealed
+          : revealed // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       lastFound: freezed == lastFound
           ? _value.lastFound
           : lastFound // ignore: cast_nullable_to_non_nullable
@@ -165,11 +178,13 @@ class _$FoundImpl extends _Found {
   const _$FoundImpl(
       {this.i = 1,
       this.mistake,
+      final List<String> revealed = const [],
       this.lastFound,
       this.hintUsed,
       this.rank,
       this.id})
-      : super._();
+      : _revealed = revealed,
+        super._();
 
   factory _$FoundImpl.fromJson(Map<String, dynamic> json) =>
       _$$FoundImplFromJson(json);
@@ -179,6 +194,15 @@ class _$FoundImpl extends _Found {
   final int i;
   @override
   final String? mistake;
+  final List<String> _revealed;
+  @override
+  @JsonKey()
+  List<String> get revealed {
+    if (_revealed is EqualUnmodifiableListView) return _revealed;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_revealed);
+  }
+
   @override
   final DateTime? lastFound;
   @override
@@ -191,7 +215,7 @@ class _$FoundImpl extends _Found {
 
   @override
   String toString() {
-    return 'Found(i: $i, mistake: $mistake, lastFound: $lastFound, hintUsed: $hintUsed, rank: $rank, id: $id)';
+    return 'Found(i: $i, mistake: $mistake, revealed: $revealed, lastFound: $lastFound, hintUsed: $hintUsed, rank: $rank, id: $id)';
   }
 
   @override
@@ -201,6 +225,7 @@ class _$FoundImpl extends _Found {
             other is _$FoundImpl &&
             (identical(other.i, i) || other.i == i) &&
             (identical(other.mistake, mistake) || other.mistake == mistake) &&
+            const DeepCollectionEquality().equals(other._revealed, _revealed) &&
             (identical(other.lastFound, lastFound) ||
                 other.lastFound == lastFound) &&
             (identical(other.hintUsed, hintUsed) ||
@@ -211,8 +236,15 @@ class _$FoundImpl extends _Found {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, i, mistake, lastFound, hintUsed, rank, id);
+  int get hashCode => Object.hash(
+      runtimeType,
+      i,
+      mistake,
+      const DeepCollectionEquality().hash(_revealed),
+      lastFound,
+      hintUsed,
+      rank,
+      id);
 
   @JsonKey(ignore: true)
   @override
@@ -232,6 +264,7 @@ abstract class _Found extends Found {
   const factory _Found(
       {final int i,
       final String? mistake,
+      final List<String> revealed,
       final DateTime? lastFound,
       final int? hintUsed,
       final int? rank,
@@ -244,6 +277,8 @@ abstract class _Found extends Found {
   int get i;
   @override
   String? get mistake;
+  @override
+  List<String> get revealed;
   @override
   DateTime? get lastFound;
   @override

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:wordtape/theme/colors.dart';
 
+import '../logic/app/bloc.dart';
 import '../logic/puzzle/found_notifier.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
@@ -26,7 +27,18 @@ class PuzzleBoardPage extends ConsumerWidget {
 
     ref.listen(
       foundNotifierProvider.select((value) => value.value),
-      (previous, next) {},
+      (previous, next) {
+        if (next?.isCompleted ?? false) {
+          debugPrint("32--");
+          ref.read(panelNotifierProvider.notifier).state = Container();
+          Future.delayed(
+            const Duration(milliseconds: 900),
+            () {
+              ref.read(panelControllerProvider).open();
+            },
+          );
+        }
+      },
       onError: (error, stackTrace) {},
     );
 

@@ -102,7 +102,7 @@ class LoginDialog extends ConsumerWidget {
                     TextButton(
                       style: ButtonStyle(
                         padding: WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(horizontal: mW * 0.045),
+                          EdgeInsets.symmetric(horizontal: mW * 0.036),
                         ),
                       ),
                       onPressed: () => ref.read(googleLoginProvider),

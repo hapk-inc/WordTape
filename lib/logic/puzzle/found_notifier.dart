@@ -96,6 +96,10 @@ class FoundNotifier extends _$FoundNotifier {
     }
   }
 
+  Future<void> revealed(Found f, String word) async {
+    await ref.read(datastoreProvider).updateReveal(f, word);
+  }
+
   Future delete() => _db.delete();
 
   @override

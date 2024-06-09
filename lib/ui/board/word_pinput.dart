@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 import 'package:wordtape/model/word_event.dart';
 
@@ -207,13 +208,14 @@ class _WordPinputState extends ConsumerState<WordPinput> {
 
             SnackBar wrongOne = SnackBar(
               backgroundColor: darkPurple,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 21),
               content: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Incorrect one",
-                    style: TextStyle(color: greenWhite),
+                    style: _textTheme.labelMedium?.copyWith(color: greenWhite),
                   ),
                   if (widget.word.hint != null && !hintUsed)
                     InkWell(
@@ -246,6 +248,42 @@ class _WordPinputState extends ConsumerState<WordPinput> {
                         ),
                       ),
                     )
+                  else
+                    InkWell(
+                      onTap: () => ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            content: AutoSizeText(
+                              "Answer: ${widget.word.value}",
+                            ),
+                          ),
+                        ).closed.then(
+                          (value) {
+                            //setState(() => hintUsed = true);
+                            setState(() => controller.text = widget.word.value);
+
+                            ref
+                                .read(foundNotifierProvider.notifier)
+                                .revealed(found!, str);
+                            ref.read(wordAnalyticsProvider).revealWord(
+                                  WordEvent(
+                                    id: found?.id ?? "",
+                                    word: str,
+                                  ),
+                                );
+                            ref
+                                .read(foundNotifierProvider.notifier)
+                                .incrementHintUsed();
+                          },
+                        ),
+                      child: Text(
+                        "REVEAL NOW",
+                        style: _textTheme.headlineSmall?.copyWith(
+                          color: elbow,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             );

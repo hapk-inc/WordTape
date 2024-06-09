@@ -27,9 +27,18 @@ class WordAnalytics {
         },
       ).whenComplete(() => debugPrint("puzzle_share done"));
 
-  Future hintUsed(WordEvent event) => analytics.logEvent(
+  Future hintUsed(WordEvent wordEvent) => analytics.logEvent(
         name: "hint_used",
-        parameters: {...event.copyWith(user: fUser?.uid ?? "unknown").toJson()},
+        parameters: {
+          ...wordEvent.copyWith(user: fUser?.uid ?? "unknown").toJson()
+        },
+      );
+
+  Future revealWord(WordEvent wordEvent) => analytics.logEvent(
+        name: "revel_word",
+        parameters: {
+          ...wordEvent.copyWith(user: fUser?.uid ?? "unknown").toJson()
+        },
       );
 
   // Future createUser(String id) => analytics.setUserId(id: id);

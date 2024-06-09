@@ -11,6 +11,7 @@ class Found with _$Found {
   const factory Found({
     @Default(1) int i,
     String? mistake,
+    @Default([]) List<String> revealed,
     DateTime? lastFound,
     int? hintUsed,
     int? rank,

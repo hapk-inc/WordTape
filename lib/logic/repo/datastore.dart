@@ -100,4 +100,11 @@ class Datastore {
     );
     return userColl.doc(fUser?.uid).set(player.toJson());
   }
+
+  Future updateReveal(Found f, String word) =>
+      puzzleColl.doc(f.id).collection('found').doc(fUser?.uid ?? "").update(
+        {
+          "revealed": FieldValue.arrayUnion([word])
+        },
+      );
 }
