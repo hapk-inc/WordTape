@@ -37,6 +37,7 @@ class AppStackPage extends ConsumerWidget {
                 child: SlidingUpPanel(
                   controller: ref.read(panelControllerProvider),
                   backdropColor: raisinBlack,
+                  color: greenWhite,
                   //padding: EdgeInsets.all(24.r),
                   backdropEnabled: true,
                   isDraggable: false,
@@ -45,7 +46,16 @@ class AppStackPage extends ConsumerWidget {
                     top: Radius.circular(15.r),
                   ),
                   //panel: const SubscribeDialog(),
-                  panel: ref.watch(panelNotifierProvider),
+                  //panel: ref.watch(panelNotifierProvider),
+                  panel: Stack(
+                    children: [
+                      Container(
+                        constraints: BoxConstraints.expand(width: 450.r),
+                        padding: EdgeInsets.symmetric(horizontal: 24.r),
+                        child: ref.watch(panelNotifierProvider),
+                      )
+                    ],
+                  ),
                   onPanelClosed: () {
                     ref.read(panelNotifierProvider.notifier).state =
                         const SizedBox();

@@ -29,8 +29,6 @@ class FoundNotifier extends ChangeNotifier {
     //_validate = List.filled(puzzle.words.length, WordValidate.idle);
 
     _found = ref.read(selectedFoundProvider).value ?? Found(id: puzzle.id);
-
-    debugPrint("27--$_found");
     updateValidate(init: true);
   }
 
@@ -61,7 +59,7 @@ class FoundNotifier extends ChangeNotifier {
             _found.mistake != null ? WordValidate.error : WordValidate.focused;
       }
     }
-    debugPrint("60--$_validate");
+    //debugPrint("60--$_validate");
   }
 
   correctOne() {

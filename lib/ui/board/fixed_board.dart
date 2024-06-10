@@ -7,6 +7,7 @@ import 'package:wordtape/ui/board/hint_button.dart';
 
 //
 import '../../enum/enum.dart';
+import '../../logic/app/bloc.dart';
 import '../../logic/auth/auth_notifier.dart';
 import '../../logic/auth/bloc.dart';
 import '../../logic/puzzle/bloc.dart';
@@ -15,6 +16,7 @@ import '../../model/puzzle.dart';
 import '../../model/word.dart';
 import '../../model/word_event.dart';
 import '../../theme/colors.dart';
+import '../common/share_dialog.dart';
 import 'reveal_button.dart';
 import 'word_pinput.dart';
 
@@ -33,7 +35,7 @@ class FixedBoard extends ConsumerWidget {
     ref.listen(
       foundNotifierProvider.select((value) => value.found),
       (_, next) {
-        debugPrint("27-- $next");
+        //debugPrint("27-- $next");
 
         ref.read(foundNotifierProvider.notifier).updateValidate();
         if (next.i > 1) {
@@ -82,6 +84,10 @@ class FixedBoard extends ConsumerWidget {
               }
             },
           );
+        }
+        if (next.isCompleted) {
+          ref.read(panelNotifierProvider.notifier).state = const ShareDialog();
+          ref.read(panelControllerProvider).open();
         }
       },
     );

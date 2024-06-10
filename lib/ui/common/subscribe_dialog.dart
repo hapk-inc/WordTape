@@ -12,7 +12,7 @@ import '../../logic/auth/bloc.dart';
 import '../../router/my_route.dart';
 import '../../theme/colors.dart';
 
-class SubscribeDialog extends ConsumerWidget {
+/*class SubscribeDialog extends ConsumerWidget {
   const SubscribeDialog({super.key});
 
   @override
@@ -29,10 +29,10 @@ class SubscribeDialog extends ConsumerWidget {
       ],
     );
   }
-}
+}*/
 
-class CongratulationDialog extends ConsumerWidget {
-  const CongratulationDialog({super.key});
+class SubscribeDialog extends ConsumerWidget {
+  const SubscribeDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

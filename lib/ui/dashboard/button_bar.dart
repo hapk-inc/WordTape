@@ -76,12 +76,19 @@ class PlayNowButton extends ConsumerWidget {
 }
 
 class ShareButton extends ConsumerWidget {
-  const ShareButton({super.key});
+  final bool tealColor;
+  const ShareButton({this.tealColor = false, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Puzzle? puzzle = ref.watch(puzzleProvider).value;
     return OutlinedButton(
+      style: tealColor
+          ? const ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(teal),
+              foregroundColor: WidgetStatePropertyAll(greenWhite),
+            )
+          : null,
       onPressed: puzzle == null
           ? null
           : () => Share.share(puzzle.shareCode).then(

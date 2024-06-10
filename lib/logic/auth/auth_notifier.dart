@@ -24,7 +24,7 @@ class AuthNotifier extends ChangeNotifier {
     ref.listen<User?>(
       authUserProvider.select((value) => value.value),
       (prev, next) async {
-        debugPrint("AuthNotifier addListening = $next");
+        //debugPrint("AuthNotifier addListening = $next");
 
         if (next == null) {
           _authValidate = AuthValidate.notLogged;
