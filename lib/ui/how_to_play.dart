@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:wordtape/model/word.dart';
 import 'package:wordtape/router/my_route.dart';
+import 'package:wordtape/ui/board/pinput_demo.dart';
 
 import '../logic/puzzle/bloc.dart';
 import '../model/puzzle.dart';
@@ -91,15 +94,62 @@ class HowToPlayPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Gap(15.h),
-                    SizedBox(
-                      height: 150.h,
-                      child: const Column(
+                    Gap(15.r),
+                    Container(
+                      color: seaSalt,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(7.5.r),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [],
+                        children: [
+                          Gap(15.h),
+                          const AutoSizeText.rich(
+                            TextSpan(
+                              text: "Ex: ",
+                              children: [
+                                TextSpan(text: "WASHING "),
+                                TextSpan(text: "MACHINE"),
+                              ],
+                              style: TextStyle(color: teal),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 150.h,
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                PinputDemo(0, Word(value: "WASHING")),
+                                PinputDemo(1, Word(value: "MACHINE")),
+                              ],
+                            ),
+                          ),
+                          Gap(15.h),
+                          const AutoSizeText.rich(
+                            TextSpan(
+                              text: "Ex: ",
+                              children: [
+                                TextSpan(text: "WEB"),
+                                TextSpan(text: "SITE"),
+                              ],
+                              style: TextStyle(color: teal),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 150.h,
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                PinputDemo(0, Word(value: "WEB")),
+                                PinputDemo(1, Word(value: "SITE")),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Gap(15.h),
+                    Gap(15.r),
                     RichText(
                       text: TextSpan(
                         children: [

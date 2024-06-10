@@ -23,7 +23,7 @@ class BoardAppBar extends ConsumerWidget {
           onPressed: () => context.router.push(HowToPlayRoute()),
           child: Text(
             "HOW TO PLAY",
-            style: textTheme.headlineSmall?.copyWith(color: slateGray),
+            style: textTheme.headlineSmall?.copyWith(color: ashGray),
           ),
         ),
         if (kDebugMode) ...[
