@@ -14,8 +14,8 @@ final ChangeNotifierProvider<FoundNotifier> foundNotifierProvider =
 
 class FoundNotifier extends ChangeNotifier {
   late Puzzle puzzle;
-  List<WordValidate> _validate = [];
-  List<bool?> _hintArr = [];
+  final List<WordValidate> _validate = [];
+  final List<bool?> _hintArr = [];
   final Ref<FoundNotifier> ref;
   late Found _found;
 

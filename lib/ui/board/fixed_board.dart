@@ -13,6 +13,7 @@ import '../../logic/puzzle/bloc.dart';
 import '../../logic/puzzle/found_notifier.dart';
 import '../../model/puzzle.dart';
 import '../../model/word.dart';
+import '../../model/word_event.dart';
 import '../../theme/colors.dart';
 import 'reveal_button.dart';
 import 'word_pinput.dart';
@@ -70,9 +71,14 @@ class FixedBoard extends ConsumerWidget {
             (SnackBarClosedReason reason) {
               debugPrint(reason.name);
               if (reason == SnackBarClosedReason.hide) {
+                // for reveal button
                 ref.read(foundNotifierProvider).revealWord(w);
               } else if (reason == SnackBarClosedReason.remove) {
+                //for hint button
                 ref.read(foundNotifierProvider).updateHintFlag();
+                ref.read(wordAnalyticsProvider).hintUsed(
+                      WordEvent(id: next.id ?? "", word: w),
+                    );
               }
             },
           );
