@@ -7,9 +7,23 @@ import 'package:wordtape/router/my_route.dart';
 
 import '../logic/puzzle/bloc.dart';
 import '../model/puzzle.dart';
-import '../model/word.dart';
 import '../theme/colors.dart';
-import 'board/word_pinput.dart';
+
+const String _text1 = "Each puzzle starts with five compound nouns or "
+    "phrases arranged vertically.";
+
+const String _text2 = "The second half of the first compound noun becomes the "
+    "first half of the second compound noun, and so on, creating a chain of connected words.";
+
+const String _text3 = "Your goal is to fill in the missing letters in each "
+    "blank space to complete all five words.";
+
+const String _text4 = "Start by focusing on the first word. Once you've "
+    "filled in the blanks there, move on to the second word, and so on,"
+    " following the chain.";
+
+//TextSpan get _singleLine => const TextSpan(text: "\n");
+TextSpan get _doubleLine => const TextSpan(text: "\n\n");
 
 @RoutePage()
 class HowToPlayPage extends StatelessWidget {
@@ -65,21 +79,11 @@ class HowToPlayPage extends StatelessWidget {
                     RichText(
                       text: TextSpan(
                         children: [
-                          _pts(
-                              "Five Words, One Chain",
-                              "Each puzzle starts with five compound nouns "
-                                  "or phrases arranged vertically.\n\n"),
-                          _pts(
-                            "Join the Tape",
-                            "The second half of the first compound noun "
-                                "becomes the first half of the second compound noun,"
-                                " and so on, "
-                                "creating a chain of connected words.\n\n",
-                          ),
-                          _pts(
-                              "Fill in the Blanks",
-                              "Your goal is to fill in the missing letters "
-                                  "in each blank space to complete all five words.")
+                          _pts("Five Words, One Chain", _text1),
+                          _doubleLine,
+                          _pts("Join the Tape", _text2),
+                          _doubleLine,
+                          _pts("Fill in the Blanks", _text3)
                         ],
                         style: textTheme.bodyMedium?.copyWith(
                           color: raisinBlack,
@@ -92,35 +96,14 @@ class HowToPlayPage extends StatelessWidget {
                       height: 150.h,
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: WordPinput(
-                              0,
-                              Word(value: "WASHING"),
-                              demo: true,
-                            ),
-                          ),
-                          Flexible(
-                            child: WordPinput(
-                              1,
-                              Word(value: "MACHINE"),
-                              demo: true,
-                            ),
-                          ),
-                        ],
+                        children: [],
                       ),
                     ),
                     Gap(15.h),
                     RichText(
                       text: TextSpan(
                         children: [
-                          _pts(
-                            "Work Your Way Down",
-                            "Start by focusing on the first word. "
-                                "Once you've filled in the blanks there,"
-                                " move on to the second word, and so on,"
-                                " following the chain.",
-                          ),
+                          _pts("Work Your Way Down", _text4),
                         ],
                         style: textTheme.bodyMedium?.copyWith(
                           color: raisinBlack,

@@ -1,166 +1,61 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 
-import '../../logic/puzzle/found_notifier.dart';
 import '../../model/found.dart';
 import '../../theme/colors.dart';
+import 'trophy_lottie.dart';
 
-const Duration m750 = Duration(milliseconds: 750);
-
-class PuzzleCompleted extends ConsumerWidget {
-  const PuzzleCompleted({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Found? found = ref.watch(foundNotifierProvider).value;
-
-    if (found == null) return Container();
-
-    final DateTime now = DateTime.now();
-    final DateTime lastFound = found.lastFound ?? now;
-
-    final String str = now.day == lastFound.day
-        ? "Today ${DateFormat('h:mm a').format(lastFound)}"
-        : DateFormat('MMMM d, y h: mm a').format(lastFound);
-
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    return FadeIn(
-      child: SizedBox(
-        height: 120.h,
-        width: double.maxFinite,
-        child: Card(
-          color: teal,
-          elevation: 3.r,
-          margin: const EdgeInsets.symmetric(horizontal: 30),
-          child: Padding(
-            padding: EdgeInsets.all(15.r),
-            child: Row(
-              children: [
-                const AspectRatio(aspectRatio: 0.9, child: StarLottie()),
-                Gap(15.r),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AutoSizeText(
-                        (found.rank ?? 1) == 1
-                            ? "First Winner"
-                            : "Congratulations (No. ${found.rank})",
-                        style: textTheme.labelLarge?.copyWith(
-                          height: 2.1,
-                          color: greenWhite,
-                        ),
-                        maxLines: 1,
-                      ),
-                      Text(
-                        str,
-                        style: textTheme.labelSmall?.copyWith(
-                          color: elbow,
-                          height: 1.8,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class StarLottie extends StatefulWidget {
-  const StarLottie({super.key});
-
-  @override
-  State<StarLottie> createState() => _StarLottieState();
-}
-
-class _StarLottieState extends State<StarLottie> {
-  bool repeat = true;
-  @override
-  Widget build(BuildContext context) => Container(
-        constraints: BoxConstraints.tight(Size.square(75.r)),
-        child: FittedBox(
-          fit: BoxFit.fitWidth,
-          child: Lottie.asset(
-            'lottie/trophy.json',
-            errorBuilder: (_, __, ___) => const Text("🏆"),
-            repeat: repeat,
-            onLoaded: (composition) {
-              Future.delayed(
-                composition.duration * 6,
-                () => mounted ? setState(() => repeat = false) : null,
-              );
-            },
-          ),
-        ),
-      );
-}
-
-/*
 class PuzzleCompleted extends ConsumerWidget {
   final Found found;
   const PuzzleCompleted(this.found, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Puzzle? puzzle = ref.read(puzzleProvider).value;
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     final DateTime now = DateTime.now();
     final DateTime lastFound = found.lastFound ?? DateTime.now();
     final String str = now.day == lastFound.day
         ? "Today at ${DateFormat('h:mm a').format(lastFound)}"
         : DateFormat('MMMM d, y h:mm a').format(lastFound);
     return FadeIn(
-      delay: m750,
-      child: Container(
-        height: 120.r,
-        color: seaSalt,
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.symmetric(horizontal: 15.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      delay: const Duration(milliseconds: 1500),
+      child: SizedBox(
+        height: 210.h,
+        child: Card(
+          margin: const EdgeInsets.symmetric(horizontal: 30),
+          elevation: 3.r,
+          color: found.fullScore ? teal : raisinBlack,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                TrophyLottie(found.fullScore),
+                Gap(7.5.r),
                 Text(
-                  "Completed",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: teal),
+                  found.fullScore ? "Congratulations" : "Better Luck Next Time",
+                  style: textTheme.titleSmall?.copyWith(
+                    color: greenWhite,
+                    height: 2.1,
+                  ),
                 ),
-                OutlinedButton.icon(
-                  icon: Icon(Icons.share, size: 21.r, color: ashGray),
-                  onPressed: () => Clipboard.setData(
-                    ClipboardData(text: puzzle?.shareCode ?? ""),
-                  ).then(
-                    (value) {},
+                Text(
+                  "${found.revealed == null ? 5 : (5 - (found.revealed?.length ?? 0))} "
+                  "out of 5 found. $str",
+                  style: textTheme.labelSmall?.copyWith(
+                    color: elbow,
+                    height: 1.5,
                   ),
-                  label: const Text(
-                    "SHARE TODAY'S GAME",
-                    style: TextStyle(color: teal),
-                  ),
-                )
+                ),
               ],
             ),
-            Gap(7.5.r),
-            Text(str, style: const TextStyle(color: ashGray)),
-          ],
+          ),
         ),
       ),
     );
   }
 }
-*/

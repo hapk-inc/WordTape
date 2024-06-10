@@ -22,10 +22,14 @@ Found _$FoundFromJson(Map<String, dynamic> json) {
 mixin _$Found {
   int get i => throw _privateConstructorUsedError;
   String? get mistake => throw _privateConstructorUsedError;
-  List<String> get revealed => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  List<String>? get revealed => throw _privateConstructorUsedError;
   DateTime? get lastFound => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   int? get hintUsed => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   int? get rank => throw _privateConstructorUsedError; //
+  @JsonKey(includeToJson: false)
   String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,11 +45,11 @@ abstract class $FoundCopyWith<$Res> {
   $Res call(
       {int i,
       String? mistake,
-      List<String> revealed,
+      @JsonKey(includeIfNull: false) List<String>? revealed,
       DateTime? lastFound,
-      int? hintUsed,
-      int? rank,
-      String? id});
+      @JsonKey(includeIfNull: false) int? hintUsed,
+      @JsonKey(includeIfNull: false) int? rank,
+      @JsonKey(includeToJson: false) String? id});
 }
 
 /// @nodoc
@@ -63,7 +67,7 @@ class _$FoundCopyWithImpl<$Res, $Val extends Found>
   $Res call({
     Object? i = null,
     Object? mistake = freezed,
-    Object? revealed = null,
+    Object? revealed = freezed,
     Object? lastFound = freezed,
     Object? hintUsed = freezed,
     Object? rank = freezed,
@@ -78,10 +82,10 @@ class _$FoundCopyWithImpl<$Res, $Val extends Found>
           ? _value.mistake
           : mistake // ignore: cast_nullable_to_non_nullable
               as String?,
-      revealed: null == revealed
+      revealed: freezed == revealed
           ? _value.revealed
           : revealed // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
       lastFound: freezed == lastFound
           ? _value.lastFound
           : lastFound // ignore: cast_nullable_to_non_nullable
@@ -112,11 +116,11 @@ abstract class _$$FoundImplCopyWith<$Res> implements $FoundCopyWith<$Res> {
   $Res call(
       {int i,
       String? mistake,
-      List<String> revealed,
+      @JsonKey(includeIfNull: false) List<String>? revealed,
       DateTime? lastFound,
-      int? hintUsed,
-      int? rank,
-      String? id});
+      @JsonKey(includeIfNull: false) int? hintUsed,
+      @JsonKey(includeIfNull: false) int? rank,
+      @JsonKey(includeToJson: false) String? id});
 }
 
 /// @nodoc
@@ -132,7 +136,7 @@ class __$$FoundImplCopyWithImpl<$Res>
   $Res call({
     Object? i = null,
     Object? mistake = freezed,
-    Object? revealed = null,
+    Object? revealed = freezed,
     Object? lastFound = freezed,
     Object? hintUsed = freezed,
     Object? rank = freezed,
@@ -147,10 +151,10 @@ class __$$FoundImplCopyWithImpl<$Res>
           ? _value.mistake
           : mistake // ignore: cast_nullable_to_non_nullable
               as String?,
-      revealed: null == revealed
-          ? _value._revealed
+      revealed: freezed == revealed
+          ? _value.revealed
           : revealed // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
       lastFound: freezed == lastFound
           ? _value.lastFound
           : lastFound // ignore: cast_nullable_to_non_nullable
@@ -172,19 +176,17 @@ class __$$FoundImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(includeIfNull: false)
+@JsonSerializable()
 class _$FoundImpl extends _Found {
   const _$FoundImpl(
       {this.i = 1,
       this.mistake,
-      final List<String> revealed = const [],
+      @JsonKey(includeIfNull: false) this.revealed,
       this.lastFound,
-      this.hintUsed,
-      this.rank,
-      this.id})
-      : _revealed = revealed,
-        super._();
+      @JsonKey(includeIfNull: false) this.hintUsed,
+      @JsonKey(includeIfNull: false) this.rank,
+      @JsonKey(includeToJson: false) this.id})
+      : super._();
 
   factory _$FoundImpl.fromJson(Map<String, dynamic> json) =>
       _$$FoundImplFromJson(json);
@@ -194,23 +196,20 @@ class _$FoundImpl extends _Found {
   final int i;
   @override
   final String? mistake;
-  final List<String> _revealed;
   @override
-  @JsonKey()
-  List<String> get revealed {
-    if (_revealed is EqualUnmodifiableListView) return _revealed;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_revealed);
-  }
-
+  @JsonKey(includeIfNull: false)
+  final List<String>? revealed;
   @override
   final DateTime? lastFound;
   @override
+  @JsonKey(includeIfNull: false)
   final int? hintUsed;
   @override
+  @JsonKey(includeIfNull: false)
   final int? rank;
 //
   @override
+  @JsonKey(includeToJson: false)
   final String? id;
 
   @override
@@ -225,7 +224,7 @@ class _$FoundImpl extends _Found {
             other is _$FoundImpl &&
             (identical(other.i, i) || other.i == i) &&
             (identical(other.mistake, mistake) || other.mistake == mistake) &&
-            const DeepCollectionEquality().equals(other._revealed, _revealed) &&
+            const DeepCollectionEquality().equals(other.revealed, revealed) &&
             (identical(other.lastFound, lastFound) ||
                 other.lastFound == lastFound) &&
             (identical(other.hintUsed, hintUsed) ||
@@ -240,7 +239,7 @@ class _$FoundImpl extends _Found {
       runtimeType,
       i,
       mistake,
-      const DeepCollectionEquality().hash(_revealed),
+      const DeepCollectionEquality().hash(revealed),
       lastFound,
       hintUsed,
       rank,
@@ -264,11 +263,11 @@ abstract class _Found extends Found {
   const factory _Found(
       {final int i,
       final String? mistake,
-      final List<String> revealed,
+      @JsonKey(includeIfNull: false) final List<String>? revealed,
       final DateTime? lastFound,
-      final int? hintUsed,
-      final int? rank,
-      final String? id}) = _$FoundImpl;
+      @JsonKey(includeIfNull: false) final int? hintUsed,
+      @JsonKey(includeIfNull: false) final int? rank,
+      @JsonKey(includeToJson: false) final String? id}) = _$FoundImpl;
   const _Found._() : super._();
 
   factory _Found.fromJson(Map<String, dynamic> json) = _$FoundImpl.fromJson;
@@ -278,14 +277,18 @@ abstract class _Found extends Found {
   @override
   String? get mistake;
   @override
-  List<String> get revealed;
+  @JsonKey(includeIfNull: false)
+  List<String>? get revealed;
   @override
   DateTime? get lastFound;
   @override
+  @JsonKey(includeIfNull: false)
   int? get hintUsed;
   @override
+  @JsonKey(includeIfNull: false)
   int? get rank;
   @override //
+  @JsonKey(includeToJson: false)
   String? get id;
   @override
   @JsonKey(ignore: true)

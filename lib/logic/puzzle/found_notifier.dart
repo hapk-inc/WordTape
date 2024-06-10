@@ -1,117 +1,104 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../logic/puzzle/bloc.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
-import '../auth/bloc.dart';
-import '../repo/database.dart';
-import 'bloc.dart';
+import '../../enum/enum.dart';
 
-part 'found_notifier.g.dart';
+final ChangeNotifierProvider<FoundNotifier> foundNotifierProvider =
+    ChangeNotifierProvider<FoundNotifier>(
+  (ref) => FoundNotifier(ref),
+);
 
-@Riverpod(keepAlive: true, dependencies: [authUser, puzzle, datastore])
-class FoundNotifier extends _$FoundNotifier {
-  final FoundDatabase _db = FoundDatabase();
+class FoundNotifier extends ChangeNotifier {
   late Puzzle puzzle;
-  late User? user;
+  List<WordValidate> _validate = [];
+  List<bool?> _hintArr = [];
+  final Ref<FoundNotifier> ref;
+  late Found _found;
 
-  @override
-  Future<Found> build() async {
+  FoundNotifier(this.ref) {
     puzzle = ref.read(puzzleProvider).value!;
-    user = ref.read(authUserProvider).value;
 
-    //
-    debugPrint("PuzzleID -> ${puzzle.id}; UserID -> ${user?.uid}");
-    Found found = Found(id: puzzle.id);
+    for (var word in puzzle.words) {
+      _validate.add(WordValidate.idle);
+      _hintArr.add(word.hint == null ? null : false);
+    }
+    //_validate = List.filled(puzzle.words.length, WordValidate.idle);
 
-    if (found.id != null) {
-      if (user == null) return found;
-      if (kIsWeb) {
-        debugPrint("40--Running web");
-        return await ref.read(datastoreProvider).found(found.id) ?? found;
-      } else {
-        final Found? dbFound = await _db.found(found.id!);
-        if (dbFound == null) {
-          //once check store data
-          final Found? storeFound =
-              await ref.read(datastoreProvider).found(found.id);
-          if (storeFound != null) {
-            _db.insertOrder(storeFound);
-            return storeFound;
-          }
+    _found = ref.read(selectedFoundProvider).value ?? Found(id: puzzle.id);
+
+    debugPrint("27--$_found");
+    updateValidate(init: true);
+  }
+
+  updateValidate({bool init = false}) {
+    if (found.isCompleted) {
+      for (int i = 0; i <= 5; i++) {
+        if (i == 0) {
+          _validate[i] = WordValidate.alreadyFilled;
+        } else if ((found.revealed ?? []).contains(puzzle.words[i].value)) {
+          _validate[i] = WordValidate.revealed;
         } else {
-          return dbFound;
+          _validate[i] = WordValidate.filled;
         }
+      }
+    } else {
+      final int currentIndex = _found.i;
+      for (int i = 0; i < currentIndex; i++) {
+        _validate[i] =
+            init || i == 0 || _validate[i] == WordValidate.alreadyFilled
+                ? WordValidate.alreadyFilled
+                : (_found.revealed ?? []).contains(puzzle.words[i].value)
+                    ? WordValidate.revealed
+                    : WordValidate.filled;
+      }
+      _validate[currentIndex - 1] = WordValidate.previous;
+      if (currentIndex != 6) {
+        _validate[currentIndex] =
+            _found.mistake != null ? WordValidate.error : WordValidate.focused;
       }
     }
-    return found;
+    debugPrint("60--$_validate");
   }
 
-  Future<void> onComplete(String str) async {
-    user = user ?? ref.read(authUserProvider).value;
-    //
-    int index = state.value?.i ?? 1;
-    String value = puzzle.words[index].value;
-
-    bool isSame = str == value;
-    Found? f = state.value;
-
-    if (f != null) {
-      final int fIndex = index + (isSame ? 1 : 0);
-
-      if (fIndex == 6) {
-        final Puzzle? p = await ref.refresh(puzzleProvider.future);
-        int prev = p?.users.length ?? 0;
-        f = f.copyWith(rank: prev + 1);
-      }
-      f = f.copyWith(
-        lastFound: DateTime.now(),
-        i: fIndex,
-        mistake: isSame ? null : str,
-      );
-      state = AsyncValue.data(f);
-      if (isSame) {
-        if (user == null) {
-          await ref.read(anonymousLoginProvider.future).then(
-            (value) {
-              ref.read(datastoreProvider).createUser;
-              /* ref
-                  .read(wordAnalyticsProvider)
-                  .createUser(value.user?.uid ?? "unknown");*/
-            },
-          );
-        }
-
-        if (kIsWeb) {
-          await ref.read(datastoreProvider).updateFound(f);
-        } else {
-          _db.insertOrder(f);
-          await ref.read(datastoreProvider).updateFound(f);
-        }
-      } else {
-        _db.insertOrder(f);
-        if (f.i != 1) await ref.read(datastoreProvider).updateFound(f);
-      }
-    }
+  correctOne() {
+    final int index = _found.i;
+    final DateTime now = DateTime.now();
+    _found = _found.copyWith(i: index + 1, lastFound: now, mistake: null);
+    notifyListeners();
   }
 
-  Future<void> revealed(Found f, String word) async {
-    await ref.read(datastoreProvider).updateReveal(f, word);
+  wrongOne(String value) {
+    final DateTime now = DateTime.now();
+    _found = _found.copyWith(lastFound: now, mistake: value);
+    notifyListeners();
   }
 
-  Future delete() => _db.delete();
-
-  @override
-  set state(AsyncValue<Found> newState) => super.state = newState;
-
-  incrementHintUsed() async {
-    Found? f = state.value;
-    f = f?.copyWith(
-      lastFound: DateTime.now(),
-      hintUsed: (f.hintUsed ?? 0) + 1,
+  revealWord(String word) {
+    final int index = _found.i;
+    final DateTime now = DateTime.now();
+    final List<String> reveal = _found.revealed ?? [];
+    reveal.add(word);
+    _found = _found.copyWith(
+      i: index + 1,
+      lastFound: now,
+      mistake: null,
+      revealed: reveal,
     );
-    state = AsyncValue.data(f!);
-    ref.read(datastoreProvider).updateFound(f);
+    notifyListeners();
   }
+
+  updateHintFlag() {
+    _hintArr[found.i] = true;
+    notifyListeners();
+  }
+
+  Found get found => _found;
+
+  List<WordValidate> get validate => _validate;
+
+  List<bool?> get hintArr => _hintArr;
 }

@@ -22,9 +22,7 @@ Word _$WordFromJson(Map<String, dynamic> json) {
 mixin _$Word {
   String get value => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
-  String? get hint => throw _privateConstructorUsedError; //
-  @JsonKey(includeToJson: false, includeFromJson: false)
-  WordValidate get validate => throw _privateConstructorUsedError;
+  String? get hint => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,12 +34,7 @@ abstract class $WordCopyWith<$Res> {
   factory $WordCopyWith(Word value, $Res Function(Word) then) =
       _$WordCopyWithImpl<$Res, Word>;
   @useResult
-  $Res call(
-      {String value,
-      String? note,
-      String? hint,
-      @JsonKey(includeToJson: false, includeFromJson: false)
-      WordValidate validate});
+  $Res call({String value, String? note, String? hint});
 }
 
 /// @nodoc
@@ -60,7 +53,6 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
     Object? value = null,
     Object? note = freezed,
     Object? hint = freezed,
-    Object? validate = null,
   }) {
     return _then(_value.copyWith(
       value: null == value
@@ -75,10 +67,6 @@ class _$WordCopyWithImpl<$Res, $Val extends Word>
           ? _value.hint
           : hint // ignore: cast_nullable_to_non_nullable
               as String?,
-      validate: null == validate
-          ? _value.validate
-          : validate // ignore: cast_nullable_to_non_nullable
-              as WordValidate,
     ) as $Val);
   }
 }
@@ -90,12 +78,7 @@ abstract class _$$WordImplCopyWith<$Res> implements $WordCopyWith<$Res> {
       __$$WordImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String value,
-      String? note,
-      String? hint,
-      @JsonKey(includeToJson: false, includeFromJson: false)
-      WordValidate validate});
+  $Res call({String value, String? note, String? hint});
 }
 
 /// @nodoc
@@ -111,7 +94,6 @@ class __$$WordImplCopyWithImpl<$Res>
     Object? value = null,
     Object? note = freezed,
     Object? hint = freezed,
-    Object? validate = null,
   }) {
     return _then(_$WordImpl(
       value: null == value
@@ -126,10 +108,6 @@ class __$$WordImplCopyWithImpl<$Res>
           ? _value.hint
           : hint // ignore: cast_nullable_to_non_nullable
               as String?,
-      validate: null == validate
-          ? _value.validate
-          : validate // ignore: cast_nullable_to_non_nullable
-              as WordValidate,
     ));
   }
 }
@@ -138,12 +116,7 @@ class __$$WordImplCopyWithImpl<$Res>
 
 @JsonSerializable(includeIfNull: false)
 class _$WordImpl implements _Word {
-  const _$WordImpl(
-      {required this.value,
-      this.note,
-      this.hint,
-      @JsonKey(includeToJson: false, includeFromJson: false)
-      this.validate = WordValidate.idle});
+  const _$WordImpl({required this.value, this.note, this.hint});
 
   factory _$WordImpl.fromJson(Map<String, dynamic> json) =>
       _$$WordImplFromJson(json);
@@ -154,14 +127,10 @@ class _$WordImpl implements _Word {
   final String? note;
   @override
   final String? hint;
-//
-  @override
-  @JsonKey(includeToJson: false, includeFromJson: false)
-  final WordValidate validate;
 
   @override
   String toString() {
-    return 'Word(value: $value, note: $note, hint: $hint, validate: $validate)';
+    return 'Word(value: $value, note: $note, hint: $hint)';
   }
 
   @override
@@ -171,14 +140,12 @@ class _$WordImpl implements _Word {
             other is _$WordImpl &&
             (identical(other.value, value) || other.value == value) &&
             (identical(other.note, note) || other.note == note) &&
-            (identical(other.hint, hint) || other.hint == hint) &&
-            (identical(other.validate, validate) ||
-                other.validate == validate));
+            (identical(other.hint, hint) || other.hint == hint));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, value, note, hint, validate);
+  int get hashCode => Object.hash(runtimeType, value, note, hint);
 
   @JsonKey(ignore: true)
   @override
@@ -198,9 +165,7 @@ abstract class _Word implements Word {
   const factory _Word(
       {required final String value,
       final String? note,
-      final String? hint,
-      @JsonKey(includeToJson: false, includeFromJson: false)
-      final WordValidate validate}) = _$WordImpl;
+      final String? hint}) = _$WordImpl;
 
   factory _Word.fromJson(Map<String, dynamic> json) = _$WordImpl.fromJson;
 
@@ -210,9 +175,6 @@ abstract class _Word implements Word {
   String? get note;
   @override
   String? get hint;
-  @override //
-  @JsonKey(includeToJson: false, includeFromJson: false)
-  WordValidate get validate;
   @override
   @JsonKey(ignore: true)
   _$$WordImplCopyWith<_$WordImpl> get copyWith =>

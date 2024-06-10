@@ -52,9 +52,9 @@ class MyTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle? get labelSmall => FontTheme.montserratTheme.copyWith(
+  TextStyle? get labelSmall => FontTheme.poppinsTheme.copyWith(
         fontSize: 10.8.r,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w200,
       );
 }
 

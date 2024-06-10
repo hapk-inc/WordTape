@@ -10,9 +10,8 @@ _$FoundImpl _$$FoundImplFromJson(Map<String, dynamic> json) => _$FoundImpl(
       i: (json['i'] as num?)?.toInt() ?? 1,
       mistake: json['mistake'] as String?,
       revealed: (json['revealed'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
+          ?.map((e) => e as String)
+          .toList(),
       lastFound: json['lastFound'] == null
           ? null
           : DateTime.parse(json['lastFound'] as String),
@@ -24,6 +23,7 @@ _$FoundImpl _$$FoundImplFromJson(Map<String, dynamic> json) => _$FoundImpl(
 Map<String, dynamic> _$$FoundImplToJson(_$FoundImpl instance) {
   final val = <String, dynamic>{
     'i': instance.i,
+    'mistake': instance.mistake,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -32,11 +32,9 @@ Map<String, dynamic> _$$FoundImplToJson(_$FoundImpl instance) {
     }
   }
 
-  writeNotNull('mistake', instance.mistake);
-  val['revealed'] = instance.revealed;
-  writeNotNull('lastFound', instance.lastFound?.toIso8601String());
+  writeNotNull('revealed', instance.revealed);
+  val['lastFound'] = instance.lastFound?.toIso8601String();
   writeNotNull('hintUsed', instance.hintUsed);
   writeNotNull('rank', instance.rank);
-  writeNotNull('id', instance.id);
   return val;
 }

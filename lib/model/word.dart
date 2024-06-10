@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enum/enum.dart';
-
 part 'word.freezed.dart';
 part 'word.g.dart';
 
@@ -13,9 +11,9 @@ class Word with _$Word {
     String? note,
     String? hint,
     //
-    @JsonKey(includeToJson: false, includeFromJson: false)
-    @Default(WordValidate.idle)
-    WordValidate validate,
+    //@JsonKey(includeToJson: false, includeFromJson: false)
+    //@Default(WordValidate.idle)
+    //WordValidate validate,
   }) = _Word;
 
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);

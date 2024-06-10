@@ -9,6 +9,7 @@ import '../../firebase/firebase.dart';
 import '../../model/found.dart';
 import '../../model/player.dart';
 import '../../model/puzzle.dart';
+import '../puzzle/found_notifier.dart';
 
 class Datastore {
   final Ref<Datastore> ref;
@@ -39,42 +40,17 @@ class Datastore {
     );
   }
 
-  Future updateFound(Found found) async {
-    if (fUser?.uid == null) return null;
-
-    final CollectionReference foundColl =
-        puzzleColl.doc(found.id).collection('found');
-    if (found.i == 2) {
-      return foundColl.doc(fUser?.uid).set(found.toFirestore);
-    }
-    WriteBatch batch = firebaseFirestore.batch();
-    batch.update(foundColl.doc(fUser?.uid), found.toFirestore);
-    if (found.i == 6) {
-      batch.update(
-        puzzleColl.doc(found.id),
-        {
-          "users": FieldValue.arrayUnion([fUser?.uid])
-        },
-      );
-    }
-
-    return batch.commit();
-  }
-
   Future<Found?> found(String? id) async {
     if (id == null || fUser?.uid == null) return null;
     final CollectionReference foundColl =
         puzzleColl.doc(id).collection('found');
     //
     return foundColl.doc(fUser?.uid).get().then(
-      (DocumentSnapshot snapshot) {
-        debugPrint("49--Found");
-        return !snapshot.exists
-            ? null
-            : Found.fromJson(snapshot.data() as Map<String, dynamic>)
-                .copyWith(id: id);
-      },
-    );
+          (DocumentSnapshot snapshot) => !snapshot.exists
+              ? null
+              : Found.fromJson(snapshot.data() as Map<String, dynamic>)
+                  .copyWith(id: id),
+        );
   }
 
   Future<Player?> get player async {
@@ -92,19 +68,38 @@ class Datastore {
   }
 
   Future get createUser async {
-    if (fUser?.uid == null) return;
     Player player = Player(
       source: kIsWeb ? "web" : "app",
       nowTime: DateTime.now(),
       userId: mockInteger(100000, 999999),
     );
-    return userColl.doc(fUser?.uid).set(player.toJson());
+
+    WriteBatch batch = firebaseFirestore.batch();
+    batch.set(userColl.doc(fUser?.uid), player.toJson());
+
+    final Found found = ref.read(foundNotifierProvider).found;
+
+    CollectionReference foundColl =
+        puzzleColl.doc(found.id).collection('found');
+
+    batch.set(foundColl.doc(fUser?.uid), found.toJson());
+
+    return batch.commit();
   }
 
-  Future updateReveal(Found f, String word) =>
-      puzzleColl.doc(f.id).collection('found').doc(fUser?.uid ?? "").update(
-        {
-          "revealed": FieldValue.arrayUnion([word])
-        },
-      );
+  Future updateFound(Found found) async {
+    CollectionReference foundColl =
+        puzzleColl.doc(found.id).collection('found');
+    DocumentReference docRef = foundColl.doc(fUser?.uid ?? "unknown");
+    return firebaseFirestore.runTransaction(
+      (transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(docRef);
+        if (!snapshot.exists) {
+          transaction.set(docRef, found.toJson());
+        } else {
+          transaction.update(docRef, found.toJson());
+        }
+      },
+    );
+  }
 }

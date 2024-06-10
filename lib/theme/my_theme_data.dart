@@ -23,9 +23,9 @@ ThemeData buildThemeData() => ThemeData(
         titleSpacing: 7.5.r,
         backgroundColor: greenWhite,
         centerTitle: false,
-        titleTextStyle: _textTheme.titleSmall?.copyWith(color: filledColor),
+        titleTextStyle: _textTheme.titleSmall?.copyWith(color: teal),
         elevation: 0,
-        iconTheme: IconThemeData(color: slateGray, size: 21.r),
+        iconTheme: const IconThemeData(color: slateGray, size: 18),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(style: _buttonStyle),
       primaryTextTheme: _textTheme,
@@ -35,6 +35,7 @@ ThemeData buildThemeData() => ThemeData(
           color: greenWhite,
           height: 1.8,
         ),
+        insetPadding: EdgeInsets.zero,
       ),
       textButtonTheme: TextButtonThemeData(
         style: _buttonStyle.copyWith(

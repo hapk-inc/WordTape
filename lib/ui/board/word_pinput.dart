@@ -1,14 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
-import 'package:wordtape/model/word_event.dart';
 
 import '../../enum/enum.dart';
-import '../../logic/puzzle/bloc.dart';
 import '../../logic/puzzle/found_notifier.dart';
 import '../../model/found.dart';
 import '../../model/word.dart';
@@ -17,297 +13,126 @@ import '../../theme/text_theme.dart';
 
 final MyTextTheme _textTheme = MyTextTheme();
 
-class WordPinput extends ConsumerStatefulWidget {
+//const Duration _m300 = Duration(milliseconds: 300);
+
+PinTheme _defaultPinTheme(BoxConstraints box, {Color color = idleColor}) =>
+    PinTheme(
+      width: box.maxWidth * 0.105,
+      height: box.maxHeight * 0.75,
+      margin: EdgeInsets.zero,
+      padding: EdgeInsets.zero,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: color, width: 0.9.r),
+        ),
+      ),
+      textStyle: _textTheme.headlineMedium,
+    );
+
+class WordPinput extends ConsumerWidget {
   final int index;
   final Word word;
-  final bool demo;
-  const WordPinput(this.index, this.word, {this.demo = false, super.key});
+
+  const WordPinput(this.index, this.word, {super.key});
 
   @override
-  ConsumerState createState() => _WordPinputState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    late TextEditingController controller;
+    String firstLetter = word.value.characters.first;
 
-class _WordPinputState extends ConsumerState<WordPinput> {
-  late TextEditingController controller;
-  late Found? found;
-  late WordValidate wv;
-  late String str;
-  bool hintUsed = false;
-
-  static PinTheme _defaultPinTheme(BoxConstraints box,
-          {Color color = idleColor}) =>
-      PinTheme(
-        width: box.maxWidth * 0.105,
-        height: box.maxHeight * 0.75,
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: color, width: 0.9.r)),
-        ),
-        textStyle: _textTheme.headlineMedium,
-      );
-
-  _onTextChanged() {
-    String firstLetter = widget.word.value.characters.first;
-    if (!controller.text.startsWith(firstLetter) || controller.text.isEmpty) {
-      controller.value = controller.value.copyWith(
-        text: firstLetter,
-        selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
-      );
-    }
-  }
-
-  @override
-  void initState() {
-    str = widget.word.value;
-    if (widget.demo) {
-      if (widget.index == 0) {
-        controller = TextEditingController(text: str);
-      } else {
-        controller = TextEditingController(text: str.characters.first);
-        for (var e in str.substring(1).characters) {
-          Future.delayed(
-              const Duration(milliseconds: 1200), () => controller.text += e);
-        }
+    onTextChanged() {
+      if (!controller.text.startsWith(firstLetter) || controller.text.isEmpty) {
+        controller.value = controller.value.copyWith(
+          text: firstLetter,
+          selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
+        );
       }
     }
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    if (widget.demo) {
-      return LayoutBuilder(
-        builder: (ctx, constraint) => Container(
-          color: widget.index == 0 ? seaSalt : null,
-          alignment: Alignment.centerLeft,
-          child: Pinput(
-            controller: controller,
-            length: str.length,
+    final FoundNotifier notifier = ref.watch(foundNotifierProvider.notifier);
+    final WordValidate wv = notifier.validate[index];
+    final Found found = ref.watch(foundNotifierProvider).found;
 
-            //
-            defaultPinTheme: _defaultPinTheme(constraint),
-            disabledPinTheme: _defaultPinTheme(constraint).copyWith(
-              textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
-                    color: widget.index == 1 ? filledColor : idleColor,
-                  ),
-            ),
+    //
+    String mistake = found.mistake ?? "";
+    //final User? user = ref.watch(authUserProvider).valueOrNull;
 
-            //
-            isCursorAnimationEnabled: true,
-            pinAnimationType: PinAnimationType.fade,
-            animationDuration: const Duration(milliseconds: 150),
-            pinputAutovalidateMode: PinputAutovalidateMode.disabled,
-            //
-            keyboardType: TextInputType.name,
-            textCapitalization: TextCapitalization.characters,
-            separatorBuilder: (_) =>
-                SizedBox(width: constraint.maxWidth * 0.015),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                //regex pattern for blank space and capital letters
-                RegExp(r"^$|[A-Z]+$"),
-                replacementString: widget.word.value.characters.first,
-              ),
-            ],
-
-            //
-            autofocus: false,
-            enabled: false,
-
-            //
-            errorBuilder: (errorText, pin) => Container(),
-          ),
-        ),
-      );
-    }
-    found = ref.watch(foundNotifierProvider).value;
-    if (found == null) return Container();
-
-    wv = widget.word.validate;
     controller = TextEditingController()
-      ..text = wv == WordValidate.alreadyFilled || wv == WordValidate.previous
-          ? str
+      ..text = filledState(wv)
+          ? word.value
           : wv == WordValidate.error
-              ? found?.mistake ?? "" //  mistake
-              //? str //  mistake
+              ? mistake
               : wv == WordValidate.focused
-                  ? str.characters.first
+                  ? firstLetter
                   : ""
-      ..addListener(_onTextChanged);
+      ..addListener(onTextChanged);
+
     return LayoutBuilder(
-      builder: (ctx, constraint) => AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        color: widget.index == 0
-            ? greenWhite
-            : (found?.isCompleted ?? false)
-                ? seaSalt
-                : wv == WordValidate.previous ||
-                        wv == WordValidate.focused ||
-                        wv == WordValidate.error
-                    ? seaSalt
-                    : null,
-        alignment: Alignment.centerLeft,
-        child: Pinput(
-          controller: controller,
-          length: str.length,
+      builder: (_, constraint) => Pinput(
+        controller: controller,
+        length: word.value.length,
 
-          //
-          defaultPinTheme: _defaultPinTheme(constraint),
-          disabledPinTheme: _defaultPinTheme(constraint).copyWith(
-            textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
-                  color: wv == WordValidate.filled ? filledColor : idleColor,
-                ),
-          ),
-          errorPinTheme:
-              _defaultPinTheme(constraint, color: errorColor).copyWith(
-            textStyle: _defaultPinTheme(constraint)
-                .textStyle
-                ?.copyWith(color: errorColor),
-          ),
-          focusedPinTheme:
-              _defaultPinTheme(constraint, color: textColor).copyWith(
-            textStyle: _defaultPinTheme(constraint)
-                .textStyle
-                ?.copyWith(color: textColor),
-          ),
-
-          //
-          isCursorAnimationEnabled: true,
-          pinAnimationType: PinAnimationType.fade,
-          animationDuration: const Duration(milliseconds: 150),
-          pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-          //
-          keyboardType: TextInputType.name,
-          textCapitalization: TextCapitalization.characters,
-          separatorBuilder: (_) => SizedBox(width: constraint.maxWidth * 0.015),
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(
-              //regex pattern for blank space and capital letters
-              RegExp(r"^$|[A-Z]+$"),
-              replacementString: widget.word.value.characters.first,
-            ),
-          ],
-
-          //
-          autofocus: wv == WordValidate.focused,
-          enabled: wv == WordValidate.focused || wv == WordValidate.error,
-          forceErrorState: wv == WordValidate.error,
-          showCursor: true,
-
-          //
-          errorBuilder: (errorText, pin) => Container(),
-          onCompleted: ref.read(foundNotifierProvider.notifier).onComplete,
-          validator: (value) {
-            bool isSame = value == str;
-
-            const SnackBar correctOne = SnackBar(
-              content: Text("You got it right."),
-              backgroundColor: teal,
-            );
-
-            SnackBar wrongOne = SnackBar(
-              backgroundColor: darkPurple,
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 21),
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Incorrect one",
-                    style: _textTheme.labelMedium?.copyWith(color: greenWhite),
-                  ),
-                  if (widget.word.hint != null && !hintUsed)
-                    InkWell(
-                      onTap: () => ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(
-                            content: AutoSizeText(
-                              "Hint: ${widget.word.hint}",
-                            ),
-                          ),
-                        ).closed.then(
-                          (value) {
-                            setState(() => hintUsed = true);
-                            ref.read(wordAnalyticsProvider).hintUsed(
-                                  WordEvent(
-                                    id: found?.id ?? "",
-                                    word: str,
-                                  ),
-                                );
-                            ref
-                                .read(foundNotifierProvider.notifier)
-                                .incrementHintUsed();
-                          },
-                        ),
-                      child: Text(
-                        "NEED HINT",
-                        style: _textTheme.headlineMedium?.copyWith(
-                          color: elbow,
-                        ),
-                      ),
-                    )
-                  else
-                    InkWell(
-                      onTap: () => ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(
-                            content: AutoSizeText(
-                              "Answer: ${widget.word.value}",
-                            ),
-                          ),
-                        ).closed.then(
-                          (value) {
-                            //setState(() => hintUsed = true);
-                            setState(() => controller.text = widget.word.value);
-
-                            ref
-                                .read(foundNotifierProvider.notifier)
-                                .revealed(found!, str);
-                            ref.read(wordAnalyticsProvider).revealWord(
-                                  WordEvent(
-                                    id: found?.id ?? "",
-                                    word: str,
-                                  ),
-                                );
-                            ref
-                                .read(foundNotifierProvider.notifier)
-                                .incrementHintUsed();
-                          },
-                        ),
-                      child: Text(
-                        "REVEAL NOW",
-                        style: _textTheme.headlineSmall?.copyWith(
-                          color: elbow,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            );
-
-            if (!(widget.index + 1 > 5)) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                isSame ? correctOne : wrongOne,
-              );
-            }
-            return isSame ? null : "Incorrect";
-          },
+        //
+        defaultPinTheme: _defaultPinTheme(constraint),
+        disabledPinTheme: _defaultPinTheme(constraint).copyWith(
+          textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
+              color: found.isCompleted
+                  ? index == 0
+                      ? idleColor
+                      : ((found.revealed ?? []).contains(word.value))
+                          ? errorColor
+                          : filledColor
+                  : idleColor),
         ),
+        errorPinTheme: _defaultPinTheme(constraint, color: errorColor).copyWith(
+          textStyle: _defaultPinTheme(constraint)
+              .textStyle
+              ?.copyWith(color: errorColor),
+        ),
+        focusedPinTheme:
+            _defaultPinTheme(constraint, color: textColor).copyWith(
+          textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
+                color: textColor,
+              ),
+        ),
+
+        //
+        //
+        isCursorAnimationEnabled: true,
+        pinAnimationType: PinAnimationType.fade,
+        animationDuration: const Duration(milliseconds: 150),
+        pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+        //
+        keyboardType: TextInputType.name,
+        textCapitalization: TextCapitalization.characters,
+        separatorBuilder: (_) => SizedBox(width: constraint.maxWidth * 0.015),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(
+            //regex pattern for blank space and capital letters
+            RegExp(r"^$|[A-Z]+$"),
+            replacementString: word.value.characters.first,
+          ),
+        ],
+
+        //
+        autofocus: wv == WordValidate.focused,
+        enabled: wv == WordValidate.focused || wv == WordValidate.error,
+        forceErrorState: wv == WordValidate.error,
+        showCursor: true,
+
+        //
+        errorBuilder: (errorText, pin) => Container(),
+
+        onCompleted: (value) async {
+          final FoundNotifier read = ref.read(foundNotifierProvider.notifier);
+          debugPrint("120--");
+          if (value == word.value) {
+            await read.correctOne();
+          } else {
+            await read.wrongOne(value);
+          }
+        },
       ),
     );
   }
 }
-/* /*final SnackBar snackBar = isSame
-                ? correctOne
-                : SnackBar(
-                    //margin: EdgeInsets.symmetric(vertical: 7.5),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 15.r,
-                      horizontal: 30.r,
-                    ),
-                    content: const Text("Incorrect one"),
-                    backgroundColor: engineeringOrange,
-                  );*/*/
