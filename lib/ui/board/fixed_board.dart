@@ -72,22 +72,25 @@ class FixedBoard extends ConsumerWidget {
               .then(
             (SnackBarClosedReason reason) {
               debugPrint(reason.name);
+              final String x = next.id ?? "";
+              WordEvent wordEvent = WordEvent(id: x, word: w);
               if (reason == SnackBarClosedReason.hide) {
                 // for reveal button
                 ref.read(foundNotifierProvider).revealWord(w);
+                ref.read(wordAnalyticsProvider).revealWord(wordEvent);
               } else if (reason == SnackBarClosedReason.remove) {
                 //for hint button
                 ref.read(foundNotifierProvider).updateHintFlag();
-                ref.read(wordAnalyticsProvider).hintUsed(
-                      WordEvent(id: next.id ?? "", word: w),
-                    );
+                ref.read(wordAnalyticsProvider).hintUsed(wordEvent);
               }
             },
           );
         }
         if (next.isCompleted) {
           ref.read(panelNotifierProvider.notifier).state = const ShareDialog();
-          ref.read(panelControllerProvider).open();
+          Future.delayed(const Duration(milliseconds: 750), () {
+            ref.read(panelControllerProvider).open();
+          });
         }
       },
     );

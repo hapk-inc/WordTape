@@ -21,7 +21,7 @@ class WordAnalytics {
         name: "puzzle_share",
         parameters: {
           "id": puzzle.id ?? "unknown",
-          "user": fUser?.uid ?? "unKnown",
+          "user": fUser?.uid ?? "unknown",
           "puzzle_no": puzzle.puzzleNo,
           "method": kIsWeb ? "web" : "app"
         },
