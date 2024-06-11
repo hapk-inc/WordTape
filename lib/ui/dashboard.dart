@@ -17,6 +17,8 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    //final Player? player = ref.read(playerProvider).value;
+    //debugPrint("24--$player");
     return Stack(
       children: [
         SingleChildScrollView(
@@ -39,7 +41,7 @@ class DashboardPage extends ConsumerWidget {
                   subtitle: Text(
                     "Challenging word puzzle game",
                     style: textTheme.bodyMedium?.copyWith(
-                      color: payneGray,
+                      color: slateGray,
                       height: 1.5,
                     ),
                   ),

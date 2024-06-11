@@ -67,22 +67,26 @@ class Datastore {
     );
   }
 
-  Future get createUser async {
+  Future createUser(String user) async {
+    final String id = fUser?.uid ?? user;
+    final DateTime now = DateTime.now();
+
     Player player = Player(
       source: kIsWeb ? "web" : "app",
-      nowTime: DateTime.now(),
+      nowTime: now,
       userId: mockInteger(100000, 999999),
     );
 
     WriteBatch batch = firebaseFirestore.batch();
-    batch.set(userColl.doc(fUser?.uid), player.toJson());
+    batch.set(userColl.doc(id), player.toJson());
 
     final Found found = ref.read(foundNotifierProvider).found;
+    if (found.id != null) {
+      CollectionReference foundColl =
+          puzzleColl.doc(found.id).collection('found');
 
-    CollectionReference foundColl =
-        puzzleColl.doc(found.id).collection('found');
-
-    batch.set(foundColl.doc(fUser?.uid), found.toJson());
+      batch.set(foundColl.doc(id), found.toJson());
+    }
 
     return batch.commit();
   }

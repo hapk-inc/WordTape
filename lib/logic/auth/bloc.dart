@@ -29,7 +29,7 @@ Future deleteAccount(DeleteAccountRef ref) =>
 
 @Riverpod(keepAlive: true, dependencies: [datastore])
 Future<Player?> player(PlayerRef ref) async =>
-    ref.read(datastoreProvider).player;
+    ref.watch(datastoreProvider).player;
 
 @riverpod
 Future<UserCredential> anonymousLogin(AnonymousLoginRef ref) =>

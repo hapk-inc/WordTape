@@ -34,8 +34,8 @@ class AuthNotifier extends ChangeNotifier {
           final DateTime now = DateTime.now();
           DateTime creation = next.metadata.creationTime ?? now;
           if (now.difference(creation) < _sec30) {
-            debugPrint("NewUser--${next.uid}");
-            ref.read(datastoreProvider).createUser;
+            //debugPrint("NewUser--${next.uid}");
+            ref.read(datastoreProvider).createUser(next.uid);
           }
         }
 

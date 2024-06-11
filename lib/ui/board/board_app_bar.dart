@@ -2,7 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 
+import '../../logic/auth/bloc.dart';
 import '../../logic/puzzle/bloc.dart';
 import '../../model/puzzle.dart';
 import '../../router/my_route.dart';
@@ -27,11 +30,11 @@ class BoardAppBar extends ConsumerWidget {
           ),
         ),
         if (kDebugMode) ...[
-          /*IconButton(
-            //onPressed: () => ref.read(foundNotifierProvider.notifier).delete(),
-            icon: const Icon(Icons.delete, color: ashGray), onPressed: () {},
+          IconButton(
+            onPressed: () => ref.read(signOutProvider),
+            icon: const Icon(Icons.delete, color: ashGray),
           ),
-          Gap(15.r),*/
+          Gap(15.r),
         ]
       ],
     );

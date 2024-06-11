@@ -51,12 +51,18 @@ class _PinputDemoState extends State<PinputDemo> {
       Future.wait(
         widget.word.value.substring(1).characters.map(
               (e) => Future.delayed(const Duration(seconds: 3), () async {
-                setState(() => controller.text += e);
+                if (mounted) setState(() => controller.text += e);
               }),
             ),
       );
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
