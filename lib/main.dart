@@ -15,7 +15,7 @@ import 'firebase/firebase.dart';
 import 'firebase/firebase_options_dev.dart';
 import 'firebase/firebase_options_prod.dart';
 
-//import 'package:web/web.dart' as web;
+import 'package:web/web.dart' as web;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +24,8 @@ Future<void> main() async {
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
-  //String url = kIsWeb ? web.window.location.href : "";
-  String url = "";
+  String url = kIsWeb ? web.window.location.href : "";
+  //String url = "";
   debugPrint(url);
 
   ///Uri.base.path;
