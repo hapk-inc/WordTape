@@ -35,10 +35,15 @@ class WordAnalytics {
       );
 
   Future revealWord(WordEvent wordEvent) => analytics.logEvent(
-        name: "revel_word",
+        name: "reveal_word",
         parameters: {
           ...wordEvent.copyWith(user: fUser?.uid ?? "unknown").toJson()
         },
+      );
+
+  Future foundWord(WordEvent event) => analytics.logEvent(
+        name: "found_word",
+        parameters: {...event.copyWith(user: fUser?.uid ?? "unknown").toJson()},
       );
 
   // Future createUser(String id) => analytics.setUserId(id: id);

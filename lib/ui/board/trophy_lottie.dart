@@ -14,7 +14,7 @@ class _TrophyLottieState extends State<TrophyLottie> {
   bool repeat = true;
   @override
   Widget build(BuildContext context) => Container(
-        constraints: BoxConstraints.tight(Size.square(90.r)),
+        constraints: BoxConstraints.tight(Size.square(75.r)),
         child: FittedBox(
           fit: BoxFit.fitHeight,
           child: Lottie.asset(

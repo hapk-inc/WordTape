@@ -3,10 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../enum/enum.dart';
-import '../puzzle/bloc.dart';
 import 'bloc.dart';
 
-const Duration _sec30 = Duration(seconds: 30);
+//const Duration _sec30 = Duration(seconds: 30);
 
 final ChangeNotifierProvider<AuthNotifier> authNotifierProvider =
     ChangeNotifierProvider<AuthNotifier>((ref) => AuthNotifier(ref));
@@ -31,12 +30,6 @@ class AuthNotifier extends ChangeNotifier {
         } else {
           _authValidate =
               next.isAnonymous ? AuthValidate.guest : AuthValidate.loggedIn;
-          final DateTime now = DateTime.now();
-          DateTime creation = next.metadata.creationTime ?? now;
-          if (now.difference(creation) < _sec30) {
-            //debugPrint("NewUser--${next.uid}");
-            ref.read(datastoreProvider).createUser(next.uid);
-          }
         }
 
         notifyListeners();

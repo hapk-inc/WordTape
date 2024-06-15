@@ -74,7 +74,9 @@ class ShareDialog extends StatelessWidget {
               ),
             ),
           ),
-          const ButtonBar(children: [ShareButton(tealColor: true)])
+          const ButtonBar(children: [
+            ShareButton(tealColor: true, showPanel: false),
+          ])
         ],
       ),
     );

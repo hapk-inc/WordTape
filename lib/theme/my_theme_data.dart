@@ -29,9 +29,10 @@ ThemeData buildThemeData() => ThemeData(
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(style: _buttonStyle),
       primaryTextTheme: _textTheme,
+      //actionIconTheme: ActionIconThemeData(),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: raisinBlack,
-        contentTextStyle: _textTheme.bodyLarge?.copyWith(
+        contentTextStyle: _textTheme.headlineMedium?.copyWith(
           color: greenWhite,
           height: 1.8,
         ),

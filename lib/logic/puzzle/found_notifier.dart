@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wordtape/model/word_event.dart';
 
 import '../../logic/puzzle/bloc.dart';
 
@@ -63,23 +64,33 @@ class FoundNotifier extends ChangeNotifier {
   }
 
   correctOne() {
+    debugPrint("correctOne");
     final int index = _found.i;
     final DateTime now = DateTime.now();
+    final String w = puzzle.words[index].value;
     _found = _found.copyWith(i: index + 1, lastFound: now, mistake: null);
+    ref.read(wordAnalyticsProvider).foundWord(
+          WordEvent(id: puzzle.id ?? "Unknown-puzzle-id", word: w),
+        );
     notifyListeners();
   }
 
   wrongOne(String value) {
+    debugPrint("wrongOne");
     final DateTime now = DateTime.now();
     _found = _found.copyWith(lastFound: now, mistake: value);
     notifyListeners();
   }
 
-  revealWord(String word) {
+  revealWord() {
     final int index = _found.i;
     final DateTime now = DateTime.now();
     final List<String> reveal = _found.revealed ?? [];
-    reveal.add(word);
+    final String w = puzzle.words[index].value;
+    ref.read(wordAnalyticsProvider).revealWord(
+          WordEvent(id: puzzle.id ?? "Unknown-puzzle-id", word: w),
+        );
+    reveal.add(w);
     _found = _found.copyWith(
       i: index + 1,
       lastFound: now,
@@ -90,9 +101,24 @@ class FoundNotifier extends ChangeNotifier {
   }
 
   updateHintFlag() {
-    _hintArr[found.i] = true;
+    _hintArr[_found.i] = true;
+    _found = _found.copyWith(hintUsed: (_found.hintUsed ?? 0) + 1);
+    ref.read(wordAnalyticsProvider).hintUsed(
+          WordEvent(
+            id: puzzle.id ?? "Unknown-puzzle-id",
+            word: puzzle.words[_found.i].value,
+          ),
+        );
     notifyListeners();
   }
+
+  String? get wordNote => puzzle.words[found.i].note;
+
+  String get hint => puzzle.words[_found.i].hint ?? "";
+
+  bool get hasHint => _hintArr[_found.i] != null;
+
+  bool get seeHint => _hintArr[_found.i] ?? false;
 
   Found get found => _found;
 

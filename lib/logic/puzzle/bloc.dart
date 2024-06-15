@@ -5,15 +5,15 @@ import '../../model/found.dart';
 import '../../model/puzzle.dart';
 import '../auth/auth_notifier.dart';
 import '../auth/bloc.dart';
-import '../repo/datastore.dart';
+import '../repo/puzzle_datastore.dart';
 import '../repo/word_analytics.dart';
 
 part 'bloc.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [authUser])
-Datastore datastore(DatastoreRef ref) {
+PuzzleDatastore datastore(DatastoreRef ref) {
   final User? user = ref.watch(authUserProvider).value;
-  return Datastore(ref, fUser: user);
+  return PuzzleDatastore(ref, fUser: user);
 }
 
 @Riverpod(keepAlive: true, dependencies: [authUser])

@@ -958,7 +958,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.32):
     - BoringSSL-GRPC/Interface (= 0.0.32)
   - BoringSSL-GRPC/Interface (0.0.32)
-  - cloud_firestore (5.0.0):
+  - cloud_firestore (5.0.1):
     - Firebase/CoreOnly (~> 10.27.0)
     - Firebase/Firestore (~> 10.27.0)
     - firebase_core
@@ -979,19 +979,19 @@ PODS:
   - Firebase/Messaging (10.27.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.27.0)
-  - firebase_analytics (11.0.0):
+  - firebase_analytics (11.0.1):
     - Firebase/Analytics (= 10.27.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_auth (5.0.0):
+  - firebase_auth (5.1.0):
     - Firebase/Auth (~> 10.27.0)
     - Firebase/CoreOnly (~> 10.27.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_core (3.0.0):
+  - firebase_core (3.1.0):
     - Firebase/CoreOnly (~> 10.27.0)
     - FlutterMacOS
-  - firebase_messaging (15.0.0):
+  - firebase_messaging (15.0.1):
     - Firebase/CoreOnly (~> 10.27.0)
     - Firebase/Messaging (~> 10.27.0)
     - firebase_core
@@ -1318,12 +1318,12 @@ SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
-  cloud_firestore: 66e4fdde53950750b7e64d3bc2d438dde81fe36f
+  cloud_firestore: f38b338965a7a0dfe2ba367180f383fd67116d7b
   Firebase: 26b040b20866a55f55eb3611b9fcf3ae64816b86
-  firebase_analytics: 79645347d6b5d49a08bee45c7975477e93dff383
-  firebase_auth: e5aa229f58913e922c26e9d3b37a4664adeb40f3
-  firebase_core: 0b3b9c6c93f774c7392f1f9a6712f0d9ce9b1771
-  firebase_messaging: cea8e96b86f4fa6344d7b858d8fc8816e55f1b64
+  firebase_analytics: 2370857414db883542ff3cc0cf4634d1de55b37b
+  firebase_auth: 4a2a30c21caf945540f5d0f377c071795fe718d2
+  firebase_core: 3cf30a8be4c850f7192bf9597f5939d0c3af706b
+  firebase_messaging: 122ef6eefe1c2bb8abe454da56377d19c916c357
   FirebaseAnalytics: f9211b719db260cc91aebee8bb539cb367d0dfd1
   FirebaseAppCheckInterop: 0dd062c9926a76332ca5711dbed6f1a9ac540b54
   FirebaseAuth: 77a012b7e08042bf44d0db835ca2e86e6ca7bbd3

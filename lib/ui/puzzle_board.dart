@@ -1,8 +1,13 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:mock_data/mock_data.dart';
+
+import '../theme/colors.dart';
 import '../ui/board/board_app_bar.dart';
 
 import '../logic/puzzle/found_notifier.dart';
@@ -18,7 +23,7 @@ class PuzzleBoardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final FoundNotifier notifier = ref.watch(foundNotifierProvider);
-
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return LayoutBuilder(
       builder: (_, constraints) {
         final double mW = constraints.maxWidth;
@@ -35,9 +40,76 @@ class PuzzleBoardPage extends ConsumerWidget {
                 //color: ashGray,
                 child: const FixedBoard(),
               ),
+              Gap(30.r),
               if (notifier.found.isCompleted) ...[
-                Gap(30.r),
                 PuzzleCompleted(notifier.found)
+              ] else ...[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (notifier.seeHint)
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 750),
+                        color: seaSalt,
+                        alignment: Alignment.centerLeft,
+                        height: !notifier.seeHint ? 0.h : 90.h,
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: !notifier.seeHint
+                            ? null
+                            : FadeIn(
+                                delay: const Duration(milliseconds: 450),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Hint",
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        color: slateGray,
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                    AutoSizeText(
+                                      notifier.hint,
+                                      style: textTheme.titleSmall?.copyWith(
+                                        color: filledColor,
+                                        height: 1.8,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                      ),
+                    Gap(30.r),
+                    if (notifier.wordNote != null)
+                      FadeIn(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Note",
+                                style: textTheme.bodyMedium?.copyWith(
+                                  color: ashGray,
+                                ),
+                              ),
+                              Gap(10.5.r),
+                              AutoSizeText(
+                                mockString(32),
+                                style: textTheme.labelSmall?.copyWith(
+                                  color: africanViolet,
+                                  height: 1.8,
+                                ),
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                  ],
+                )
               ]
             ],
           ),

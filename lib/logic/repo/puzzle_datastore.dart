@@ -1,28 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:mock_data/mock_data.dart';
 
 import '../../firebase/firebase.dart';
 import '../../model/found.dart';
-import '../../model/player.dart';
 import '../../model/puzzle.dart';
-import '../puzzle/found_notifier.dart';
+import '../auth/bloc.dart';
 
-class Datastore {
-  final Ref<Datastore> ref;
+class PuzzleDatastore {
+  final Ref<PuzzleDatastore> ref;
 
   late FirebaseFirestore firebaseFirestore;
   late CollectionReference puzzleColl;
-  late CollectionReference userColl;
 
   User? fUser;
 
-  Datastore(this.ref, {this.fUser}) {
+  PuzzleDatastore(this.ref, {this.fUser}) {
     firebaseFirestore = ref.read(firebaseFirestoreProvider);
-    userColl = firebaseFirestore.collection('user');
     puzzleColl = firebaseFirestore.collection('puzzle');
   }
 
@@ -53,48 +48,12 @@ class Datastore {
         );
   }
 
-  Future<Player?> get player async {
-    if (fUser?.uid == null) return null;
-
-    return userColl.doc(fUser?.uid).get().then(
-      (DocumentSnapshot snapshot) {
-        if (!snapshot.exists) return null;
-        final Map map = snapshot.data() as Map;
-        Player player = Player.fromJson(Map<String, dynamic>.from(map))
-            .copyWith(id: snapshot.id);
-        return player;
-      },
-    );
-  }
-
-  Future createUser(String user) async {
-    final String id = fUser?.uid ?? user;
-    final DateTime now = DateTime.now();
-
-    Player player = Player(
-      source: kIsWeb ? "web" : "app",
-      nowTime: now,
-      userId: mockInteger(100000, 999999),
-    );
-
-    WriteBatch batch = firebaseFirestore.batch();
-    batch.set(userColl.doc(id), player.toJson());
-
-    final Found found = ref.read(foundNotifierProvider).found;
-    if (found.id != null) {
-      CollectionReference foundColl =
-          puzzleColl.doc(found.id).collection('found');
-
-      batch.set(foundColl.doc(id), found.toJson());
-    }
-
-    return batch.commit();
-  }
-
   Future updateFound(Found found) async {
+    final String id =
+        fUser?.uid ?? ref.read(authUserProvider).value?.uid ?? "unknown";
     CollectionReference foundColl =
         puzzleColl.doc(found.id).collection('found');
-    DocumentReference docRef = foundColl.doc(fUser?.uid ?? "unknown");
+    DocumentReference docRef = foundColl.doc(id);
     return firebaseFirestore.runTransaction(
       (transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);

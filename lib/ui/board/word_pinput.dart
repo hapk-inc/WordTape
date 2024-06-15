@@ -40,11 +40,17 @@ class WordPinput extends ConsumerWidget {
     late TextEditingController controller;
     String firstLetter = word.value.characters.first;
 
-    onTextChanged() {
-      if (!controller.text.startsWith(firstLetter) || controller.text.isEmpty) {
+    _onTextChanged() {
+      final String txt = controller.text;
+      controller.value = controller.value.copyWith(text: txt.toUpperCase());
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+      if (!txt.startsWith(firstLetter) || txt.isEmpty) {
         controller.value = controller.value.copyWith(
           text: firstLetter,
-          selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
+          selection: TextSelection.fromPosition(
+            const TextPosition(offset: 1),
+          ),
         );
       }
     }
@@ -55,7 +61,6 @@ class WordPinput extends ConsumerWidget {
 
     //
     String mistake = found.mistake ?? "";
-    //final User? user = ref.watch(authUserProvider).valueOrNull;
 
     controller = TextEditingController()
       ..text = filledState(wv)
@@ -65,7 +70,7 @@ class WordPinput extends ConsumerWidget {
               : wv == WordValidate.focused
                   ? firstLetter
                   : ""
-      ..addListener(onTextChanged);
+      ..addListener(_onTextChanged);
 
     return LayoutBuilder(
       builder: (_, constraint) => Pinput(
@@ -76,13 +81,14 @@ class WordPinput extends ConsumerWidget {
         defaultPinTheme: _defaultPinTheme(constraint),
         disabledPinTheme: _defaultPinTheme(constraint).copyWith(
           textStyle: _defaultPinTheme(constraint).textStyle?.copyWith(
-              color: found.isCompleted
-                  ? index == 0
-                      ? idleColor
-                      : ((found.revealed ?? []).contains(word.value))
-                          ? errorColor
-                          : filledColor
-                  : idleColor),
+                color: found.isCompleted
+                    ? index == 0
+                        ? idleColor
+                        : ((found.revealed ?? []).contains(word.value))
+                            ? errorColor
+                            : filledColor
+                    : idleColor,
+              ),
         ),
         errorPinTheme: _defaultPinTheme(constraint, color: errorColor).copyWith(
           textStyle: _defaultPinTheme(constraint)
@@ -109,8 +115,9 @@ class WordPinput extends ConsumerWidget {
         inputFormatters: [
           FilteringTextInputFormatter.allow(
             //regex pattern for blank space and capital letters
-            RegExp(r"^$|[A-Z]+$"),
+            RegExp(r"^$|[a-zA-Z]+$"),
             replacementString: word.value.characters.first,
+            //replacementString: controller.text.toUpperCase(),
           ),
         ],
 

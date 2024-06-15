@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../logic/app/bloc.dart';
 import '../../logic/auth/auth_notifier.dart';
 import '../../logic/puzzle/bloc.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
 import '../../router/my_route.dart';
 import '../../theme/colors.dart';
+import '../common/share_dialog.dart';
 
 class DashboardButtonBar extends StatelessWidget {
   const DashboardButtonBar({super.key});
@@ -77,7 +79,8 @@ class PlayNowButton extends ConsumerWidget {
 
 class ShareButton extends ConsumerWidget {
   final bool tealColor;
-  const ShareButton({this.tealColor = false, super.key});
+  final bool showPanel;
+  const ShareButton({this.tealColor = false, this.showPanel = true, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,7 +94,34 @@ class ShareButton extends ConsumerWidget {
           : null,
       onPressed: puzzle == null
           ? null
-          : () => Share.share(puzzle.shareCode).then(
+          : showPanel
+              ? () {
+                  ref.read(panelNotifierProvider.notifier).state =
+                      const ShareDialog();
+                  ref.read(panelControllerProvider).open();
+                }
+              : () => Share.share(puzzle.shareCode)
+                      .then(
+                    (ShareResult result) =>
+                        result.status == ShareResultStatus.success
+                            ? ref.read(wordAnalyticsProvider).shareLog(puzzle)
+                            : null,
+                  )
+                      .onError(
+                    (error, stackTrace) {
+                      if (kIsWeb) {
+                        debugPrint("External error - $error");
+                        ref.read(wordAnalyticsProvider).shareLog(puzzle);
+                      }
+                      //debugPrint("94--${error.toString()}");
+                    },
+                  ),
+      child: const Text("SHARE"),
+    );
+  }
+}
+
+/* () => Share.share(puzzle.shareCode).then(
                 (ShareResult result) {
                   debugPrint("92--${result.status.name}");
                   return result.status == ShareResultStatus.success
@@ -106,8 +136,4 @@ class ShareButton extends ConsumerWidget {
                   }
                   //debugPrint("94--${error.toString()}");
                 },
-              ),
-      child: const Text("SHARE"),
-    );
-  }
-}
+              )*/

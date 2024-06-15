@@ -2,28 +2,28 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:timelines/timelines.dart';
 import 'package:wordtape/ui/board/hint_button.dart';
 
 //
 import '../../enum/enum.dart';
-import '../../logic/app/bloc.dart';
 import '../../logic/auth/auth_notifier.dart';
 import '../../logic/auth/bloc.dart';
 import '../../logic/puzzle/bloc.dart';
 import '../../logic/puzzle/found_notifier.dart';
+import '../../model/found.dart';
 import '../../model/puzzle.dart';
 import '../../model/word.dart';
-import '../../model/word_event.dart';
 import '../../theme/colors.dart';
-import '../common/share_dialog.dart';
+import 'puzzle_snack.dart';
 import 'reveal_button.dart';
 import 'word_pinput.dart';
 
-Connector get endConnector => const DashedLineConnector(
-      color: filledColor,
-      gap: 3.6,
-    );
+//const Duration _sec45 = Duration(seconds: 90);
+
+Connector get endConnector =>
+    const DashedLineConnector(color: filledColor, gap: 3.6);
 
 class FixedBoard extends ConsumerWidget {
   const FixedBoard({super.key});
@@ -32,70 +32,9 @@ class FixedBoard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Puzzle? puzzle = ref.read(puzzleProvider).value;
     if (puzzle == null) return Container();
-    ref.listen(
-      foundNotifierProvider.select((value) => value.found),
-      (_, next) {
-        //debugPrint("27-- $next");
 
-        ref.read(foundNotifierProvider.notifier).updateValidate();
-        if (next.i > 1) {
-          bool notLogged = ref.read(authNotifierProvider).notLogged;
-          if (notLogged) {
-            ref.read(anonymousLoginProvider);
-          } else {
-            debugPrint("Update Found");
-            ref.read(datastoreProvider).updateFound(next);
-          }
-        }
-        if (next.mistake != null) {
-          String w = puzzle.words[next.i].value;
-          final bool showHint =
-              !(ref.read(foundNotifierProvider).hintArr[next.i] ?? true);
-          final ScaffoldMessengerState scaffoldMessengerState =
-              ScaffoldMessenger.of(context);
-          scaffoldMessengerState
-              .showSnackBar(
-                SnackBar(
-                  content: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Incorrect One"),
-                      showHint
-                          ? HintButton(puzzle.words[next.i].hint ?? "")
-                          : RevealButton(w),
-                    ],
-                  ),
-                ),
-              )
-              .closed
-              .then(
-            (SnackBarClosedReason reason) {
-              debugPrint(reason.name);
-              final String x = next.id ?? "";
-              WordEvent wordEvent = WordEvent(id: x, word: w);
-              if (reason == SnackBarClosedReason.hide) {
-                // for reveal button
-                ref.read(foundNotifierProvider).revealWord(w);
-                ref.read(wordAnalyticsProvider).revealWord(wordEvent);
-              } else if (reason == SnackBarClosedReason.remove) {
-                //for hint button
-                ref.read(foundNotifierProvider).updateHintFlag();
-                ref.read(wordAnalyticsProvider).hintUsed(wordEvent);
-              }
-            },
-          );
-        }
-        if (next.isCompleted) {
-          ref.read(panelNotifierProvider.notifier).state = const ShareDialog();
-          Future.delayed(const Duration(milliseconds: 750), () {
-            ref.read(panelControllerProvider).open();
-          });
-        }
-      },
-    );
-
-    final FoundNotifier notifier = ref.watch(foundNotifierProvider);
+    listening(context, ref);
+    //
     return FadeIn(
       delay: const Duration(milliseconds: 750),
       child: LayoutBuilder(
@@ -104,83 +43,136 @@ class FixedBoard extends ConsumerWidget {
           return FixedTimeline.tileBuilder(
             theme: TimelineTheme.of(ctx).copyWith(
               nodePosition: 0,
-              connectorTheme:
-                  ConnectorThemeData(thickness: mW * 0.0015, color: ashGray),
-              indicatorTheme:
-                  IndicatorThemeData(size: mW * 0.0225, color: teal),
+              connectorTheme: ConnectorThemeData(
+                thickness: mW * 0.0018,
+                color: ashGray,
+              ),
+              indicatorTheme: IndicatorThemeData(
+                size: mW * 0.0225,
+                color: teal,
+              ),
             ),
-            builder: TimelineTileBuilder.connected(
-              itemCount: puzzle.words.length,
-              contentsAlign: ContentsAlign.basic,
-              contentsBuilder: (context, index) {
-                final Word word = puzzle.words[index];
-                final WordValidate wv = notifier.validate[index];
-
-                return AnimatedOpacity(
-                  opacity: notifier.found.isCompleted
-                      ? 1
-                      : wv == WordValidate.alreadyFilled ||
-                              wv == WordValidate.filled ||
-                              wv == WordValidate.revealed
-                          ? 0.24
-                          : 1,
-                  duration: const Duration(milliseconds: 300),
-                  child: Container(
-                    height: 60.h,
-                    padding: EdgeInsets.only(left: mW * 0.03),
-                    child: WordPinput(index, word),
-                  ),
-                );
-              },
-              connectorBuilder: (context, index, type) {
-                if (notifier.found.isCompleted) {
-                  return const SolidLineConnector(color: filledColor);
-                } else {
-                  switch (notifier.validate[index]) {
-                    case WordValidate.idle:
-                      return DashedLineConnector(color: idleColor, gap: 3.6.r);
-                    case WordValidate.previous:
-                      return const SolidLineConnector(color: teal);
-                    case WordValidate.focused:
-                      return const SolidLineConnector(color: focusedColor);
-                    case WordValidate.error:
-                      return DashedLineConnector(color: teal, gap: 3.6.r);
-                    default:
-                      return Container();
-                  }
-                }
-              },
-              indicatorBuilder: (context, index) {
-                if (notifier.found.isCompleted) {
-                  switch (notifier.validate[index]) {
-                    case WordValidate.alreadyFilled:
-                      return const DotIndicator(color: idleColor);
-                    case WordValidate.filled:
-                      return const DotIndicator(color: filledColor);
-                    case WordValidate.revealed:
-                      return const DotIndicator(color: errorColor);
-                    default:
-                      return Container();
-                  }
-                } else {
-                  switch (notifier.validate[index]) {
-                    case WordValidate.idle:
-                      return const OutlinedDotIndicator(color: ashGray);
-                    case WordValidate.previous:
-                      return const DotIndicator(color: teal);
-                    case WordValidate.focused:
-                      return const DotIndicator(color: focusedColor);
-                    case WordValidate.error:
-                      return const DotIndicator(color: errorColor);
-                    default:
-                      return Container();
-                  }
-                }
-              },
-            ),
+            builder: initTimelineBuilder(ref),
           );
         },
       ),
     );
   }
+}
+
+listening(BuildContext context, WidgetRef ref) {
+  ref.listen<Found>(
+    foundNotifierProvider.select((value) => value.found),
+    (previous, next) async {
+      ref.read(foundNotifierProvider.notifier).updateValidate();
+      bool notLogged = ref.read(authNotifierProvider).notLogged;
+      if (notLogged) await ref.read(anonymousLoginProvider.future);
+      ref.read(datastoreProvider).updateFound(next);
+    },
+  );
+
+  ref.listen<String?>(
+    foundNotifierProvider.select((value) => value.found.mistake),
+    (previous, next) {
+      if (next != null) {
+        //final double ratio = 900.h / 360.w;
+        bool isBottom = true;
+
+        Get.rawSnackbar(
+          snackPosition: isBottom ? SnackPosition.BOTTOM : SnackPosition.TOP,
+          snackStyle: isBottom ? SnackStyle.GROUNDED : SnackStyle.FLOATING,
+          barBlur: 15,
+          borderRadius: 15,
+          messageText: const PuzzleSnack(),
+          margin: isBottom
+              ? EdgeInsets.zero
+              : const EdgeInsets.symmetric(horizontal: 7.5),
+          mainButton: ref.read(foundNotifierProvider).hasHint
+              ? ref.read(foundNotifierProvider).seeHint
+                  ? const RevealButton()
+                  : const HintButton()
+              : const RevealButton(),
+        );
+      }
+    },
+  );
+
+/*  ref.listen(
+    foundNotifierProvider.select((value) => value.found.hintUsed),
+    (previous, next) {},
+  );*/
+}
+
+TimelineTileBuilder initTimelineBuilder(WidgetRef ref) {
+  final Puzzle p = ref.read(puzzleProvider).value!;
+  final FoundNotifier notifier = ref.watch(foundNotifierProvider);
+
+  return TimelineTileBuilder.connected(
+    itemCount: p.words.length,
+    contentsAlign: ContentsAlign.basic,
+    contentsBuilder: (_, index) {
+      final Word word = p.words[index];
+      final WordValidate wv = notifier.validate[index];
+      final double opacity = notifier.found.isCompleted
+          ? 1
+          : wv == WordValidate.alreadyFilled ||
+                  wv == WordValidate.filled ||
+                  wv == WordValidate.revealed
+              ? 0.24
+              : 1;
+      return AnimatedOpacity(
+        opacity: opacity,
+        duration: const Duration(milliseconds: 300),
+        child: Container(
+          height: 60.h,
+          padding: const EdgeInsets.only(left: 15),
+          child: WordPinput(index, word),
+        ),
+      );
+    },
+    connectorBuilder: (_, index, __) {
+      if (notifier.found.isCompleted) {
+        return SolidLineConnector(
+          color: notifier.validate[index] == WordValidate.error
+              ? errorColor
+              : filledColor,
+        );
+      } else {
+        switch (notifier.validate[index]) {
+          case WordValidate.idle:
+            return DashedLineConnector(color: idleColor, gap: 3.6.r);
+          case WordValidate.previous:
+            return const SolidLineConnector(color: teal);
+          case WordValidate.focused:
+            return const SolidLineConnector(color: focusedColor);
+          case WordValidate.error:
+            return DashedLineConnector(color: teal, gap: 3.6.r);
+          default:
+            return Container();
+        }
+      }
+    },
+    indicatorBuilder: (_, index) {
+      if (notifier.found.isCompleted) {
+        return DotIndicator(
+          color: notifier.validate[index] == WordValidate.error
+              ? errorColor
+              : filledColor,
+        );
+      } else {
+        switch (notifier.validate[index]) {
+          case WordValidate.idle:
+            return const OutlinedDotIndicator(color: ashGray);
+          case WordValidate.previous:
+            return const DotIndicator(color: teal);
+          case WordValidate.focused:
+            return const DotIndicator(color: focusedColor);
+          case WordValidate.error:
+            return const DotIndicator(color: errorColor);
+          default:
+            return Container();
+        }
+      }
+    },
+  );
 }

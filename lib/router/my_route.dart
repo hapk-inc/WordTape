@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 import '../ui/dashboard.dart';
 import '../ui/app_stack.dart';
@@ -12,19 +12,22 @@ part 'my_route.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class MyRouter extends _$MyRouter {
-  final User? fUser;
+  //final User? fUser;
 
-  MyRouter({this.fUser});
+  MyRouter() : super(navigatorKey: Get.key);
+  //MyRouter({this.fUser});
+
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
           page: AppStackRoute.page,
           initial: true,
+          path: '/',
           children: [
-            AutoRoute(page: DashboardRoute.page, initial: true),
-            AutoRoute(page: PuzzleBoardRoute.page),
-            AutoRoute(page: HowToPlayRoute.page),
-            AutoRoute(page: PrivacyPolicyRoute.page),
+            AutoRoute(page: DashboardRoute.page, initial: true, path: 'home'),
+            AutoRoute(page: PuzzleBoardRoute.page, path: 'daily-challenge'),
+            AutoRoute(page: HowToPlayRoute.page, path: 'instructions'),
+            AutoRoute(page: PrivacyPolicyRoute.page, path: 'privacy-policy'),
           ],
         )
       ];

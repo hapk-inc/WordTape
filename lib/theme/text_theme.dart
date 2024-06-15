@@ -5,7 +5,7 @@ import 'colors.dart';
 
 class MyTextTheme extends TextTheme {
   @override
-  TextStyle? get bodyLarge => FontTheme.questrialTheme.copyWith(fontSize: 18.r);
+  TextStyle? get bodyLarge => FontTheme.questrialTheme.copyWith(fontSize: 18);
 
   @override
   TextStyle? get bodyMedium =>
@@ -49,12 +49,6 @@ class MyTextTheme extends TextTheme {
   TextStyle? get labelMedium => FontTheme.nunitoTheme.copyWith(
         fontSize: 18.r,
         fontWeight: FontWeight.w300,
-      );
-
-  @override
-  TextStyle? get labelSmall => FontTheme.poppinsTheme.copyWith(
-        fontSize: 10.8.r,
-        fontWeight: FontWeight.w200,
       );
 }
 

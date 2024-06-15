@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 
-import '../../logic/app/bloc.dart';
 import '../../theme/colors.dart';
-import '../common/share_dialog.dart';
 
 class SubscribeButton extends ConsumerWidget {
   const SubscribeButton({super.key});
@@ -14,8 +13,16 @@ class SubscribeButton extends ConsumerWidget {
           backgroundColor: WidgetStatePropertyAll(xantHous),
         ),
         onPressed: () {
-          ref.read(panelNotifierProvider.notifier).state = const ShareDialog();
-          ref.read(panelControllerProvider).open();
+          //ref.read(panelNotifierProvider.notifier).state = const ShareDialog();
+          //ref.read(panelControllerProvider).open();
+          Get.showSnackbar(
+            const GetSnackBar(
+              title: "Title",
+              message: "Message",
+              duration: const Duration(seconds: 3),
+            ),
+          );
+          //Get.snackbar("Hi", "Message");
         },
         child: const Text(
           "SUBSCRIBE WORDTAPE",

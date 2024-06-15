@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../model/player.dart';
-import '../puzzle/bloc.dart';
+import '../repo/user_datastore.dart';
 import 'auth.dart';
 
 part 'bloc.g.dart';
@@ -27,10 +27,6 @@ User? firebaseUser(FirebaseUserRef ref) => ref.watch(authProvider).currentUser;
 Future deleteAccount(DeleteAccountRef ref) =>
     ref.read(authProvider).deleteAccount;
 
-@Riverpod(keepAlive: true, dependencies: [datastore])
-Future<Player?> player(PlayerRef ref) async =>
-    ref.watch(datastoreProvider).player;
-
 @riverpod
 Future<UserCredential> anonymousLogin(AnonymousLoginRef ref) =>
     ref.read(authProvider).anonymousUser;
@@ -48,5 +44,27 @@ Future nameChange(NameChangeRef ref, {required String userName}) async {
   final Auth auth = ref.read(authProvider);
   return auth.updateName(userName);
 }
+
+@Riverpod(keepAlive: true, dependencies: [authUser])
+UserDatastore userDatastore(UserDatastoreRef ref) {
+  final User? user = ref.watch(authUserProvider).value;
+  return UserDatastore(ref, fUser: user);
+}
+
+@Riverpod(keepAlive: true, dependencies: [userDatastore])
+Future<Player?> player(PlayerRef ref) async =>
+    ref.watch(userDatastoreProvider).player;
+
+/*@Riverpod(keepAlive: true, dependencies: [authUser])
+UserDatastore userDatastore(UserDatastoreRef ref) {
+  final User? user = ref.watch(authUserProvider).value;
+  return UserDatastore(ref, fUser: user);
+}*/
+
+/*
+@Riverpod(keepAlive: true, dependencies: [datastore])
+Future<Player?> player(PlayerRef ref) async =>
+    ref.watch(userDatastoreProvider).player;
+*/
 
 //https://riverpod.dev/docs/concepts/about_code_generation

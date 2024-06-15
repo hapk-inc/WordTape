@@ -1,0 +1,67 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../firebase/firebase.dart';
+import '../../model/player.dart';
+
+class UserDatastore {
+  final Ref<UserDatastore> ref;
+
+  late FirebaseFirestore firebaseFirestore;
+  late CollectionReference userColl;
+
+  User? fUser;
+
+  UserDatastore(this.ref, {this.fUser}) {
+    firebaseFirestore = ref.read(firebaseFirestoreProvider);
+    userColl = firebaseFirestore.collection('user');
+    if (fUser != null) updateUser;
+  }
+
+  Future get updateUser async {
+    DocumentReference docRef = userColl.doc(fUser?.uid ?? "unknown");
+    return firebaseFirestore.runTransaction(
+      (transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(docRef);
+        if (!snapshot.exists) {
+          transaction.set(docRef, Player.newUser().toJson());
+        } else {
+          Map map = snapshot.data() as Map;
+          Map<String, dynamic> json = Map<String, dynamic>.from(map);
+          Player player = Player.fromJson(json).copyWith(
+            nowTime: DateTime.now(),
+          );
+          transaction.update(docRef, player.toJson());
+        }
+      },
+    );
+  }
+
+  Future<Player?> get player async {
+    if (fUser?.uid == null) return null;
+
+    return userColl.doc(fUser?.uid).get().then(
+      (DocumentSnapshot snapshot) {
+        if (!snapshot.exists) return null;
+        final Map map = snapshot.data() as Map;
+        Player player = Player.fromJson(Map<String, dynamic>.from(map))
+            .copyWith(id: snapshot.id);
+        return player;
+      },
+    );
+  }
+}
+/*CollectionReference foundColl =
+        puzzleColl.doc(found.id).collection('found');
+    DocumentReference docRef = foundColl.doc(fUser?.uid ?? "unknown");
+    return firebaseFirestore.runTransaction(
+      (transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(docRef);
+        if (!snapshot.exists) {
+          transaction.set(docRef, found.toJson());
+        } else {
+          transaction.update(docRef, found.toJson());
+        }
+      },
+    );*/

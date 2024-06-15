@@ -20,7 +20,7 @@ class PuzzleCompleted extends ConsumerWidget {
     final DateTime now = DateTime.now();
     final DateTime lastFound = found.lastFound ?? DateTime.now();
     final String str = now.day == lastFound.day
-        ? "Today at ${DateFormat('h:mm a').format(lastFound)}"
+        ? "at ${DateFormat('h:mm a').format(lastFound)}"
         : DateFormat('MMMM d, y h:mm a').format(lastFound);
     return FadeIn(
       delay: const Duration(milliseconds: 1500),
@@ -30,8 +30,11 @@ class PuzzleCompleted extends ConsumerWidget {
           margin: const EdgeInsets.symmetric(horizontal: 30),
           elevation: 3.r,
           color: found.fullScore ? teal : raisinBlack,
-          child: Center(
+          child: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TrophyLottie(found.fullScore),
@@ -45,8 +48,8 @@ class PuzzleCompleted extends ConsumerWidget {
                 ),
                 Text(
                   "${found.revealed == null ? 5 : (5 - (found.revealed?.length ?? 0))} "
-                  "out of 5 found. $str",
-                  style: textTheme.labelSmall?.copyWith(
+                  "out of 5 found $str",
+                  style: textTheme.bodySmall?.copyWith(
                     color: elbow,
                     height: 1.5,
                   ),
