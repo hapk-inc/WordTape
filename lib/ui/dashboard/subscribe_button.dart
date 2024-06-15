@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 
 import '../../theme/colors.dart';
 
@@ -15,13 +14,13 @@ class SubscribeButton extends ConsumerWidget {
         onPressed: () {
           //ref.read(panelNotifierProvider.notifier).state = const ShareDialog();
           //ref.read(panelControllerProvider).open();
-          Get.showSnackbar(
+          /*Get.showSnackbar(
             const GetSnackBar(
               title: "Title",
               message: "Message",
-              duration: const Duration(seconds: 3),
+              duration: Duration(seconds: 3),
             ),
-          );
+          );*/
           //Get.snackbar("Hi", "Message");
         },
         child: const Text(

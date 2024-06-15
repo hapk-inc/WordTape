@@ -10,6 +10,7 @@ import '../logic/auth/bloc.dart';
 import '../model/player.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
+import 'dashboard/found_count_user.dart';
 import 'dashboard/puzzle_calendar.dart';
 
 @RoutePage()
@@ -28,7 +29,7 @@ class DashboardPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const PuzzleCalendar(),
-              Gap(150.r),
+              const FoundCountUser(),
               FadeIn(
                 delay: const Duration(milliseconds: 300),
                 child: ListTile(

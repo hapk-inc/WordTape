@@ -35,8 +35,17 @@ class PuzzleDatastore {
     );
   }
 
+  Future<int> foundCount(String? id) async {
+    if (id == null) return 0;
+    //late BehaviorSubject<int> subject;
+    final CollectionReference fColl = puzzleColl.doc(id).collection('found');
+    final AggregateQuery countQuery = fColl.count();
+    final AggregateQuerySnapshot snapshot = await countQuery.get();
+    return snapshot.count ?? 0;
+  }
+
   Future<Found?> found(String? id) async {
-    if (id == null || fUser?.uid == null) return null;
+    if (id == null || fUser == null) return null;
     final CollectionReference foundColl =
         puzzleColl.doc(id).collection('found');
     //
@@ -51,6 +60,7 @@ class PuzzleDatastore {
   Future updateFound(Found found) async {
     final String id =
         fUser?.uid ?? ref.read(authUserProvider).value?.uid ?? "unknown";
+    if (id == "unknown") return;
     CollectionReference foundColl =
         puzzleColl.doc(found.id).collection('found');
     DocumentReference docRef = foundColl.doc(id);
@@ -60,8 +70,22 @@ class PuzzleDatastore {
         if (!snapshot.exists) {
           transaction.set(docRef, found.toJson());
         } else {
+          if (found.isCompleted && found.fullScore && found.id != null) {
+            updatePuzzle(found.id!);
+          }
           transaction.update(docRef, found.toJson());
         }
+      },
+    );
+  }
+
+  Future updatePuzzle(String found) async {
+    final String id =
+        fUser?.uid ?? ref.read(authUserProvider).value?.uid ?? "unknown";
+
+    return puzzleColl.doc(found).update(
+      {
+        'users': FieldValue.arrayUnion([id])
       },
     );
   }

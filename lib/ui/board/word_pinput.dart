@@ -40,7 +40,7 @@ class WordPinput extends ConsumerWidget {
     late TextEditingController controller;
     String firstLetter = word.value.characters.first;
 
-    _onTextChanged() {
+    onTextChanged() {
       final String txt = controller.text;
       controller.value = controller.value.copyWith(text: txt.toUpperCase());
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -70,7 +70,7 @@ class WordPinput extends ConsumerWidget {
               : wv == WordValidate.focused
                   ? firstLetter
                   : ""
-      ..addListener(_onTextChanged);
+      ..addListener(onTextChanged);
 
     return LayoutBuilder(
       builder: (_, constraint) => Pinput(
