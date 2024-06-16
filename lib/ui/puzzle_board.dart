@@ -95,10 +95,9 @@ class PuzzleBoardPage extends ConsumerWidget {
                                   color: ashGray,
                                 ),
                               ),
-                              Gap(10.5.r),
                               AutoSizeText(
                                 notifier.wordNote ?? "",
-                                style: textTheme.labelSmall?.copyWith(
+                                style: textTheme.titleSmall?.copyWith(
                                   color: africanViolet,
                                   height: 1.8,
                                 ),
