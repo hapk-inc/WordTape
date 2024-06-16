@@ -112,7 +112,7 @@ class FoundNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? get wordNote => puzzle.words[found.i].note;
+  String? get wordNote => puzzle.words[_found.i].note;
 
   String get hint => puzzle.words[_found.i].hint ?? "";
 
