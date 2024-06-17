@@ -28,10 +28,14 @@ class UserDatastore {
           transaction.set(docRef, Player.newUser().toJson());
         } else {
           Map map = snapshot.data() as Map;
+          final DateTime now = DateTime.now();
           Map<String, dynamic> json = Map<String, dynamic>.from(map);
-          Player player = Player.fromJson(json).copyWith(
-            nowTime: DateTime.now(),
-          );
+          Player player = Player.fromJson(json);
+
+          if (player.nowTime != null) {
+            bool sameDay = (player.nowTime?.day ?? 0) != now.day;
+            if (!sameDay) player = player.copyWith(nowTime: now);
+          }
           transaction.update(docRef, player.toJson());
         }
       },

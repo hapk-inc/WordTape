@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:mock_data/mock_data.dart';
 
 import '../theme/colors.dart';
 import '../ui/board/board_app_bar.dart';
@@ -83,7 +82,7 @@ class PuzzleBoardPage extends ConsumerWidget {
                               ),
                       ),
                     Gap(30.r),
-                    if (notifier.wordNote == null)
+                    if (notifier.wordNote != null)
                       FadeIn(
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.r),
@@ -91,7 +90,7 @@ class PuzzleBoardPage extends ConsumerWidget {
                             borderType: BorderType.RRect,
                             padding: EdgeInsets.zero,
                             dashPattern: [9.r, 4.5.r],
-                            color: slateGray,
+                            color: ashGray,
                             strokeWidth: 1,
                             radius: Radius.circular(15.r),
                             child: Container(
