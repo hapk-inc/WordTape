@@ -23,16 +23,11 @@ class FoundCountUser extends ConsumerWidget {
           AnimatedFlipCounter(
             value: foundCount,
             wholeDigits: 2,
-            textStyle: textTheme.titleLarge?.copyWith(
-              color: verdiGris,
-            ),
+            textStyle: textTheme.titleLarge?.copyWith(color: verdiGris),
           ),
           Text(
             "users played today",
-            style: textTheme.bodyMedium?.copyWith(
-              color: ashGray,
-              height: 1.5,
-            ),
+            style: textTheme.bodyMedium?.copyWith(color: ashGray, height: 1.5),
           )
         ],
       ),

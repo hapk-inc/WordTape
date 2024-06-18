@@ -46,6 +46,14 @@ class WordAnalytics {
         parameters: {...event.copyWith(user: fUser?.uid ?? "unknown").toJson()},
       );
 
+  Future userError(String error) {
+    final String id = fUser?.uid ?? "Unknown";
+    return analytics.logEvent(
+      name: "user_error",
+      parameters: {"id": id, "error": error},
+    );
+  }
+
   // Future createUser(String id) => analytics.setUserId(id: id);
 }
 

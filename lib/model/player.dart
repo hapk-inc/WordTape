@@ -21,6 +21,7 @@ class Player extends Equatable with _$Player {
     //
     //String? appVersion,
     DateTime? nowTime,
+    DateTime? createdAt,
     String? id,
     String? source,
   }) = _Player;

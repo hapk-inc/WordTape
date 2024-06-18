@@ -27,6 +27,7 @@ mixin _$Player {
   String? get photoURL => throw _privateConstructorUsedError; //
 //String? appVersion,
   DateTime? get nowTime => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get id => throw _privateConstructorUsedError;
   String? get source => throw _privateConstructorUsedError;
 
@@ -47,6 +48,7 @@ abstract class $PlayerCopyWith<$Res> {
       String? email,
       String? photoURL,
       DateTime? nowTime,
+      DateTime? createdAt,
       String? id,
       String? source});
 }
@@ -70,6 +72,7 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
     Object? email = freezed,
     Object? photoURL = freezed,
     Object? nowTime = freezed,
+    Object? createdAt = freezed,
     Object? id = freezed,
     Object? source = freezed,
   }) {
@@ -98,6 +101,10 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
           ? _value.nowTime
           : nowTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -124,6 +131,7 @@ abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
       String? email,
       String? photoURL,
       DateTime? nowTime,
+      DateTime? createdAt,
       String? id,
       String? source});
 }
@@ -145,6 +153,7 @@ class __$$PlayerImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? photoURL = freezed,
     Object? nowTime = freezed,
+    Object? createdAt = freezed,
     Object? id = freezed,
     Object? source = freezed,
   }) {
@@ -173,6 +182,10 @@ class __$$PlayerImplCopyWithImpl<$Res>
           ? _value.nowTime
           : nowTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -196,6 +209,7 @@ class _$PlayerImpl extends _Player {
       this.email,
       this.photoURL,
       this.nowTime,
+      this.createdAt,
       this.id,
       this.source})
       : super._();
@@ -217,6 +231,8 @@ class _$PlayerImpl extends _Player {
 //String? appVersion,
   @override
   final DateTime? nowTime;
+  @override
+  final DateTime? createdAt;
   @override
   final String? id;
   @override
@@ -244,6 +260,7 @@ abstract class _Player extends Player {
       final String? email,
       final String? photoURL,
       final DateTime? nowTime,
+      final DateTime? createdAt,
       final String? id,
       final String? source}) = _$PlayerImpl;
   const _Player._() : super._();
@@ -263,6 +280,8 @@ abstract class _Player extends Player {
   @override //
 //String? appVersion,
   DateTime? get nowTime;
+  @override
+  DateTime? get createdAt;
   @override
   String? get id;
   @override

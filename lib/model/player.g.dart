@@ -15,6 +15,9 @@ _$PlayerImpl _$$PlayerImplFromJson(Map<String, dynamic> json) => _$PlayerImpl(
       nowTime: json['nowTime'] == null
           ? null
           : DateTime.parse(json['nowTime'] as String),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
       id: json['id'] as String?,
       source: json['source'] as String?,
     );
@@ -34,6 +37,7 @@ Map<String, dynamic> _$$PlayerImplToJson(_$PlayerImpl instance) {
   writeNotNull('email', instance.email);
   writeNotNull('photoURL', instance.photoURL);
   writeNotNull('nowTime', instance.nowTime?.toIso8601String());
+  writeNotNull('createdAt', instance.createdAt?.toIso8601String());
   writeNotNull('id', instance.id);
   writeNotNull('source', instance.source);
   return val;

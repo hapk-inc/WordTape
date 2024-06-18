@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wordtape/logic/puzzle/bloc.dart';
 
 import '../../firebase/firebase.dart';
 import '../../model/player.dart';
@@ -20,7 +21,11 @@ class UserDatastore {
   }
 
   Future get updateUser async {
-    DocumentReference docRef = userColl.doc(fUser?.uid ?? "unknown");
+    final String id = fUser?.uid ?? "unknown";
+    if (id == "unknown") {
+      return ref.read(wordAnalyticsProvider).userError("first_user");
+    }
+    DocumentReference docRef = userColl.doc(id);
     return firebaseFirestore.runTransaction(
       (transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);
@@ -31,7 +36,9 @@ class UserDatastore {
           final DateTime now = DateTime.now();
           Map<String, dynamic> json = Map<String, dynamic>.from(map);
           Player player = Player.fromJson(json);
-
+          if (player.createdAt != null) {
+            player = player.copyWith(createdAt: fUser?.metadata.creationTime);
+          }
           if (player.nowTime != null) {
             bool sameDay = (player.nowTime?.day ?? 0) != now.day;
             if (!sameDay) player = player.copyWith(nowTime: now);
