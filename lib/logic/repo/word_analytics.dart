@@ -47,7 +47,7 @@ class WordAnalytics {
       );
 
   Future userError(String error) {
-    final String id = fUser?.uid ?? "Unknown";
+    final String id = fUser?.uid ?? "unknown";
     return analytics.logEvent(
       name: "user_error",
       parameters: {"id": id, "error": error},

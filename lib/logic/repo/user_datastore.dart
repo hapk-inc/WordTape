@@ -36,7 +36,7 @@ class UserDatastore {
           final DateTime now = DateTime.now();
           Map<String, dynamic> json = Map<String, dynamic>.from(map);
           Player player = Player.fromJson(json);
-          if (player.createdAt != null) {
+          if (player.createdAt == null) {
             player = player.copyWith(createdAt: fUser?.metadata.creationTime);
           }
           if (player.nowTime != null) {

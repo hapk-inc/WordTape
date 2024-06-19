@@ -6,8 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../logic/app/bloc.dart';
-import '../logic/auth/bloc.dart';
-import '../model/player.dart';
 import '../theme/colors.dart';
 import 'dashboard/button_bar.dart';
 import 'dashboard/found_count_user.dart';
@@ -20,8 +18,8 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final Player? player = ref.watch(playerProvider).value;
-    debugPrint("24--$player");
+    //final Player? player = ref.watch(playerProvider).value;
+    //debugPrint("24--$player");
     return Stack(
       children: [
         SingleChildScrollView(
