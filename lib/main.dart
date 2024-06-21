@@ -83,8 +83,8 @@ Future<void> main() async {
   );
 }
 
-String retrieveDeviceName(String? appVersion) {
-  if (appVersion == null) return "";
+String? retrieveDeviceName(String? appVersion) {
+  if (appVersion == null) return null;
 
   // Regular expression to match content within the first set of parentheses
   RegExp pattern = RegExp(r'\(([^)]+)\)');
@@ -98,6 +98,6 @@ String retrieveDeviceName(String? appVersion) {
     debugPrint("96--$r");
     return r;
   } else {
-    return "";
+    return null;
   }
 }

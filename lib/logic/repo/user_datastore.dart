@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wordtape/logic/puzzle/bloc.dart';
 
 import '../../firebase/firebase.dart';
 import '../../model/player.dart';
+import '../puzzle/bloc.dart';
 
 class UserDatastore {
   final Ref<UserDatastore> ref;
@@ -17,21 +18,24 @@ class UserDatastore {
   UserDatastore(this.ref, {this.fUser}) {
     firebaseFirestore = ref.read(firebaseFirestoreProvider);
     userColl = firebaseFirestore.collection('user');
-    if (fUser != null) updateUser;
+    if (fUser != null) updateUser();
   }
 
-  Future get updateUser async {
+  Future updateUser() async {
+    debugPrint("Running updateUser");
     final String id = fUser?.uid ?? "unknown";
     if (id == "unknown") {
       return ref.read(wordAnalyticsProvider).userError("first_user");
     }
     DocumentReference docRef = userColl.doc(id);
-    return firebaseFirestore.runTransaction(
+    return await firebaseFirestore.runTransaction(
       (transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);
         if (!snapshot.exists) {
+          debugPrint("Running updateUser - New Player");
           transaction.set(docRef, Player.newUser().toJson());
         } else {
+          debugPrint("Running updateUser - Existing Player");
           Map map = snapshot.data() as Map;
           final DateTime now = DateTime.now();
           Map<String, dynamic> json = Map<String, dynamic>.from(map);

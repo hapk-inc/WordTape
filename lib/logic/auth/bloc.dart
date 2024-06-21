@@ -48,7 +48,9 @@ Future nameChange(NameChangeRef ref, {required String userName}) async {
 @Riverpod(keepAlive: true, dependencies: [authUser])
 UserDatastore userDatastore(UserDatastoreRef ref) {
   final User? user = ref.watch(authUserProvider).value;
-  return UserDatastore(ref, fUser: user);
+  final UserDatastore userDatastore = UserDatastore(ref, fUser: user);
+  //if (user != null) userDatastore.updateUser(user.uid);
+  return userDatastore;
 }
 
 @Riverpod(keepAlive: true, dependencies: [userDatastore])
