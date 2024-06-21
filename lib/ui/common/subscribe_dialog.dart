@@ -1,17 +1,3 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-
-import '../../logic/app/bloc.dart';
-import '../../logic/auth/bloc.dart';
-import '../../router/my_route.dart';
-import '../../theme/colors.dart';
-
 /*class SubscribeDialog extends ConsumerWidget {
   const SubscribeDialog({super.key});
 
@@ -31,6 +17,7 @@ import '../../theme/colors.dart';
   }
 }*/
 
+/*
 class SubscribeDialog extends ConsumerWidget {
   const SubscribeDialog({super.key});
 
@@ -69,7 +56,9 @@ class SubscribeDialog extends ConsumerWidget {
     );
   }
 }
+*/
 
+/*
 class LoginDialog extends ConsumerWidget {
   const LoginDialog({super.key});
 
@@ -121,3 +110,4 @@ class LoginDialog extends ConsumerWidget {
     );
   }
 }
+*/

@@ -1,14 +1,10 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
+//import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+//import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+//import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../firebase/firebase.dart';
 
@@ -42,7 +38,7 @@ class Auth {
   Future updateName(String name) => _auth.currentUser!
       .updateDisplayName(toBeginningOfSentenceCase(name) ?? "");
 
-  Future<UserCredential?> get googleLogin async {
+/*  Future<UserCredential?> get googleLogin async {
     final AuthCredential? credential = await AuthLoginOption.googleCredentials;
     if (credential == null) return null;
     if (_auth.currentUser == null) {
@@ -63,16 +59,17 @@ class Auth {
       },
     );
     //return _auth.signInWithCredential(credential);
-  }
+  }*/
 
-  Future<UserCredential?> get appleLogin async {
+/*  Future<UserCredential?> get appleLogin async {
     final AuthCredential credential = await AuthLoginOption.appleLogin;
     return _auth.signInWithCredential(credential);
-  }
+  }*/
 
   Future createUser(UserCredential credential) async {}
 }
 
+/*
 mixin AuthLoginOption {
   static Future<OAuthCredential> get appleLogin async {
     // To prevent replay attacks with the credential returned from Apple, we
@@ -128,3 +125,4 @@ mixin AuthLoginOption {
     }
   }
 }
+*/

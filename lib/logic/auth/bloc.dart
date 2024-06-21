@@ -31,13 +31,13 @@ Future deleteAccount(DeleteAccountRef ref) =>
 Future<UserCredential> anonymousLogin(AnonymousLoginRef ref) =>
     ref.read(authProvider).anonymousUser;
 
-@riverpod
+/*@riverpod
 Future<UserCredential?> googleLogin(GoogleLoginRef ref) =>
     ref.read(authProvider).googleLogin;
 
 @riverpod
 Future<UserCredential?> appleLogin(AppleLoginRef ref) =>
-    ref.read(authProvider).appleLogin;
+    ref.read(authProvider).appleLogin;*/
 
 @riverpod
 Future nameChange(NameChangeRef ref, {required String userName}) async {
