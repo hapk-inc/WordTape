@@ -76,17 +76,14 @@ listening(BuildContext context, WidgetRef ref) {
     (previous, next) {
       if (next != null) {
         //final double ratio = 900.h / 360.w;
-        bool isBottom = true;
+        //bool isBottom = true;
 
         Get.rawSnackbar(
-          snackPosition: isBottom ? SnackPosition.BOTTOM : SnackPosition.TOP,
-          snackStyle: isBottom ? SnackStyle.GROUNDED : SnackStyle.FLOATING,
+          snackPosition: SnackPosition.BOTTOM,
+          snackStyle: SnackStyle.GROUNDED,
           barBlur: 15,
           borderRadius: 15,
           messageText: const PuzzleSnack(),
-          margin: isBottom
-              ? EdgeInsets.zero
-              : const EdgeInsets.symmetric(horizontal: 7.5),
           mainButton: ref.read(foundNotifierProvider).hasHint
               ? ref.read(foundNotifierProvider).seeHint
                   ? const RevealButton()

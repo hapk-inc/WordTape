@@ -80,5 +80,33 @@ final firebaseAnalyticsProvider =
 );
 
 typedef FirebaseAnalyticsRef = AutoDisposeProviderRef<FirebaseAnalytics>;
+String _$remoteConfigHash() => r'b7694f0e1409fc77028f8cb10a8300be7fedcc0b';
+
+/// See also [remoteConfig].
+@ProviderFor(remoteConfig)
+final remoteConfigProvider = AutoDisposeProvider<FirebaseRemoteConfig>.internal(
+  remoteConfig,
+  name: r'remoteConfigProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$remoteConfigHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef RemoteConfigRef = AutoDisposeProviderRef<FirebaseRemoteConfig>;
+String _$crashlyticsHash() => r'636dcd13eef3929d60150332dfd1d3c2943ef629';
+
+/// See also [crashlytics].
+@ProviderFor(crashlytics)
+final crashlyticsProvider = AutoDisposeProvider<FirebaseCrashlytics>.internal(
+  crashlytics,
+  name: r'crashlyticsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$crashlyticsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CrashlyticsRef = AutoDisposeProviderRef<FirebaseCrashlytics>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
