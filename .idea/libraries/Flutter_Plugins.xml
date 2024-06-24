@@ -15,7 +15,9 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/share_plus-9.0.0" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher_linux-3.1.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore-5.0.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_crashlytics-4.0.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_remote_config-5.0.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_messaging-15.0.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/url_launcher_ios-6.3.0" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_analytics-11.0.1" />
@@ -31,11 +33,9 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.3.2" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.3.2" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_windows-2.2.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_remote_config_web-1.6.9" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_analytics_web-0.5.7+9" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/device_info_plus-10.1.0" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_crashlytics-4.0.1" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_remote_config-5.0.1" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_remote_config_web-1.6.9" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

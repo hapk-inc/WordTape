@@ -30,58 +30,8 @@
   <title>wordtape</title>
   <link rel="manifest" href="manifest.json">
 
-
-  <!-- Add Firebase SDKs here -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js"></script>
-
-
-  <!--validate firebase -->
-  <script>
-    // Firebase configurations
-    const firebaseConfigDev = {
-      apiKey: 'AIzaSyC_ofsbwaGd6G6VTPK42qp_Wj_1WeANwuc',
-      appId: '1:784902004586:web:ce926de5e5e9087576cf13',
-      messagingSenderId: '784902004586',
-      projectId: 'wordtape-demo',
-      authDomain: 'wordtape-demo.firebaseapp.com',
-      storageBucket: 'wordtape-demo.appspot.com',
-      measurementId: 'G-F89YXK6RWF',
-    };
-
-    const firebaseConfigProd = {
-      apiKey: "AIzaSyDqKEgP7ZRnJyN3BEhFrXEUbce5OX1g4oc",
-      authDomain: "wordtape-51.firebaseapp.com",
-      projectId: "wordtape-51",
-      storageBucket: "wordtape-51.appspot.com",
-      messagingSenderId: "15743304421",
-      appId: "1:15743304421:web:1fb1d8183e72b7352c4a0c",
-      measurementId: "G-NW90FRE1L6"
-    };
-
-    // Determine the current environment
-    const environment = window.location.hostname === 'wordtape-51.web.app' ? 'Prod' : 'Dev';
-    console.log(`Environment: ${environment}`);
-    // Select the appropriate Firebase configuration
-    const firebaseConfig = environment === 'Prod' ? firebaseConfigProd : firebaseConfigDev;
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-  </script>
-
-
-  <!-- This script adds the flutter initialization JS code -->
-  <!--<script src="flutter.js" defer=""></script>-->
-  
-  
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-  
-  
-  
-  
+
   
   <style id="splash-screen-style">
     html {
@@ -100,6 +50,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
+      max-width: 100%;max-height: 100%;
       -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
     }
@@ -183,4 +134,6 @@
   </script>
 
 
-</body></html>
+</body>
+
+</html>
