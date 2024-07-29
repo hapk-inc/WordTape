@@ -1,43 +1,33 @@
-import 'dart:io';
-
 import 'package:device_preview/device_preview.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'app.dart';
-import 'firebase/firebase.dart';
-import 'firebase/firebase_options_dev.dart';
-import 'firebase/firebase_options_prod.dart';
+import 'ui/home.dart';
+import 'ui/theme/text_theme.dart';
 
-import 'package:web/web.dart' as web;
+// m for mobile, t for tablet, p or pc
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async => runApp(const MyApp());
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
-  final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  String url = kIsWeb ? web.window.location.href : "";
-  //String url = "";
-  debugPrint(url);
+  @override
+  Widget build(BuildContext context) => DevicePreview(
+        builder: (_) => ScreenUtilInit(
+          designSize: const Size(360, 900),
+          builder: (_, __) {
+            String size = 360.w < 420.r
+                ? 'mobile'
+                : 360.w < 720.r
+                    ? 'tab'
+                    : 'pc';
 
-  final FirebaseApp app = await Firebase.initializeApp(
-    options: kDebugMode
-        ? dev
-        : kIsWeb && url.contains('demo')
-            ? dev
-            : prod,
-  );
-
-  runApp(ProviderScope(
-    overrides: await initFirebase(app),
-    child: DevicePreview(
-      enabled: kIsWeb ? false : Platform.isMacOS,
-      builder: (_) => const MyApp(),
-    ),
-  ));
+            return MaterialApp(
+              theme: ThemeData(textTheme: DefaultTextTheme()),
+              home: HomePage(size),
+            );
+          },
+        ),
+      );
 }
