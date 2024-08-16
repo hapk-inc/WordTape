@@ -20,7 +20,7 @@ class DashboardPage extends StatelessWidget {
         color: midnightGreen,
         borderRadius: BorderRadius.circular(15.r),
       ),
-      height: size == "mobile" ? 720.h : 810.h,
+      height: size == "mobile" ? 720.h : 750.h,
       margin: EdgeInsets.symmetric(horizontal: 7.5.r),
       padding: EdgeInsets.symmetric(horizontal: 7.5.r),
       child: LayoutBuilder(
@@ -55,7 +55,7 @@ class DashboardPage extends StatelessWidget {
                     style: textTheme.bodyLarge?.copyWith(color: seaWhite),
                   ),
                 ),
-                Gap(60.r),
+                Gap(30.r),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   alignment: Alignment.centerLeft,
