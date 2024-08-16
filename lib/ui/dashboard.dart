@@ -14,86 +14,100 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        final double maxWidth = constraints.maxWidth;
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Gap(size == 'mobile' ? 75.r : 120.r),
-              AnimatedPadding(
-                duration: const Duration(milliseconds: 300),
-                padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Uncover hidden words in this"
-                            "${size != "mobile" ? " fun and " : " "}"
-                            "engaging ",
-                        children: [
-                          TextSpan(
-                            text: "puzzle.",
-                            style: textTheme.titleMedium,
-                          )
-                        ],
-                      )
-                    ],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 750),
+      decoration: BoxDecoration(
+        color: midnightGreen,
+        borderRadius: BorderRadius.circular(15.r),
+      ),
+      height: size == "mobile" ? 720.h : 810.h,
+      margin: EdgeInsets.symmetric(horizontal: 7.5.r),
+      padding: EdgeInsets.symmetric(horizontal: 7.5.r),
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          final double maxWidth = constraints.maxWidth;
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gap(size == 'mobile' ? 60.r : 120.r),
+                AnimatedPadding(
+                  duration: const Duration(milliseconds: 300),
+                  padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Uncover hidden words in this"
+                              "${size != "mobile" ? " fun and " : " "}"
+                              "engaging ",
+                          children: [
+                            TextSpan(
+                              text: "puzzle.",
+                              style: textTheme.titleMedium?.copyWith(
+                                color: seaWhite,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    style: textTheme.bodyLarge?.copyWith(color: seaWhite),
                   ),
-                  style: textTheme.bodyLarge,
                 ),
-              ),
-              Gap(60.r),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: maxWidth * 0.03),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          debugPrint("PLAY NOW");
-                          switch (size) {
-                            case "mobile":
-                              {
-                                if (panelController.isPanelClosed) {
-                                  panelController.open();
+                Gap(60.r),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: maxWidth * 0.03),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: const ButtonStyle(
+                            backgroundColor:
+                                WidgetStatePropertyAll(raisinBlack),
+                          ),
+                          onPressed: () {
+                            debugPrint("PLAY NOW");
+                            switch (size) {
+                              case "mobile":
+                                {
+                                  if (panelController.isPanelClosed) {
+                                    panelController.open();
+                                  }
+                                  return;
                                 }
-                                return;
-                              }
-                            default:
-                              {}
-                          }
-                        },
-                        style: const ButtonStyle(
-                          backgroundColor:
-                              WidgetStatePropertyAll(midnightGreen),
+                              default:
+                                {}
+                            }
+                          },
+                          child: const Text("Play Now"),
                         ),
-                        child: const Text("Play Now"),
-                      ),
-                      SizedBox(width: maxWidth * 0.03),
-                      OutlinedButton(
-                        onPressed: () {},
-                        style: const ButtonStyle(
-                          foregroundColor:
-                              WidgetStatePropertyAll(midnightGreen),
+                        SizedBox(width: maxWidth * 0.03),
+                        OutlinedButton(
+                          onPressed: () {},
+                          style: const ButtonStyle(
+                            foregroundColor: WidgetStatePropertyAll(seaWhite),
+                            side: WidgetStatePropertyAll(
+                              BorderSide(color: slateGray),
+                            ),
+                          ),
+                          child: const Text("Share this puzzle"),
                         ),
-                        child: const Text("Share this puzzle"),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Gap(60.r),
-              const TodayCount(),
-            ],
-          ),
-        );
-      },
+                Gap(60.r),
+                const TodayCount(),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -109,7 +123,7 @@ class TodayCount extends StatelessWidget {
       builder: (_, constraint) {
         final double maxWidth = constraint.maxWidth;
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.045),
+          padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -117,7 +131,7 @@ class TodayCount extends StatelessWidget {
                 value: count,
                 wholeDigits: 2,
                 padding: EdgeInsets.zero,
-                textStyle: textTheme.labelLarge,
+                textStyle: textTheme.labelLarge?.copyWith(color: mint),
                 duration: const Duration(milliseconds: 1200),
               ),
               Gap(7.5.r),
@@ -125,7 +139,7 @@ class TodayCount extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.003),
                 child: Text(
                   "Users Played today",
-                  style: textTheme.labelMedium?.copyWith(color: midnightGreen),
+                  style: textTheme.labelMedium?.copyWith(color: mint),
                 ),
               ),
             ],

@@ -6,6 +6,7 @@ import 'package:mock_data/mock_data.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/logic/panel_controller.dart';
 
 import '../logic/size.dart';
 import 'theme/colors.dart';
@@ -76,7 +77,7 @@ class PuzzlePage extends StatelessWidget {
     return LayoutBuilder(
       builder: (_, constraint) {
         final double maxHeight = constraint.maxHeight;
-        final String randomText = mockString(mockInteger(60, 75), 'A');
+        final String randomText = mockString(mockInteger(60, 90), 'A');
         debugPrint("80==RandomText=${randomText.length}");
         return Stack(
           children: [
@@ -87,9 +88,28 @@ class PuzzlePage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Gap(maxHeight * 0.045),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      height: maxHeight * 0.054,
+                      padding: _commonPuzzlePadding(constraint) * 0.3,
+                      alignment: Alignment.centerLeft,
+                      child: InkWell(
+                        onTap: () {
+                          if (panelController.isPanelOpen) {
+                            panelController.close();
+                          }
+                        },
+                        child: Icon(
+                          Icons.close,
+                          color: englishViolet,
+                          size: 18.r,
+                        ),
+                      ),
+                    ),
                     Container(
                       //color: cerise,
+                      padding: _commonPuzzlePadding(constraint),
+
                       height: maxHeight * 0.135,
                       alignment: Alignment.topLeft,
                       child: AutoSizeText(

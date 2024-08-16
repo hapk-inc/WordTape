@@ -8,17 +8,22 @@ import 'ui/puzzle.dart';
 import 'ui/theme/colors.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+BorderRadius get _borderRadius30 =>
+    BorderRadius.vertical(top: Radius.circular(30.r));
+
 class OutlinePage extends StatelessWidget {
   const OutlinePage({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: raisinBlack,
+        backgroundColor: seaWhite,
         body: SafeArea(
           bottom: false,
-          minimum: size == "mobile"
+          top: true,
+          minimum: /*size == "mobile"
               ? EdgeInsets.symmetric(horizontal: 1.5.r)
-              : EdgeInsets.zero,
+              : */
+              EdgeInsets.zero,
           child: SizedBox(
             width: 360.w,
             child: LayoutBuilder(
@@ -27,18 +32,17 @@ class OutlinePage extends StatelessWidget {
                 final double maxHeight = constraint.maxHeight;
                 return size == "mobile"
                     ? SlidingUpPanel(
+                        backdropEnabled: true,
+                        backdropOpacity: 1,
+                        color: seaWhite,
                         controller: panelController,
                         minHeight: 0,
-                        maxHeight: maxHeight * 0.975,
+                        maxHeight: maxHeight * 0.96,
                         padding: EdgeInsets.zero,
-                        //EdgeInsets.symmetric(horizontal: maxWidth * 0.036),
-
-                        backdropColor: seaWhite,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(30.r)),
+                        backdropColor: midnightGreen,
+                        borderRadius: _borderRadius30,
                         panel: ClipRRect(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(30.r)),
+                          borderRadius: _borderRadius30,
                           child: const PuzzlePage(),
                         ),
                         body: OutlineState(maxWidth),
@@ -63,7 +67,7 @@ class OutlineState extends StatelessWidget {
         AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           constraints: BoxConstraints(maxWidth: mobileWidth),
-          color: aquaMarine,
+          //color: aquaMarine,
           alignment: Alignment.topLeft,
           child: const PuzzlePage(),
         ),
