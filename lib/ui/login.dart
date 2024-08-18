@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../logic/size.dart';
 import 'theme/colors.dart';
 
 class LoginPage extends StatelessWidget {
@@ -15,7 +14,6 @@ class LoginPage extends StatelessWidget {
       backgroundColor: midnightGreen,
       body: LayoutBuilder(
         builder: (_, constraints) {
-          final double maxWidth = constraints.maxWidth;
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 15.r),
             child: Column(
@@ -47,9 +45,6 @@ class LoginPage extends StatelessWidget {
                 ),
                 //Gap(30.r),
                 TextField(
-                  decoration: InputDecoration(
-                      //contentPadding: EdgeInsets.zero,
-                      ),
                   style: textTheme.titleMedium?.copyWith(color: aquaMarine),
                   showCursor: false,
                 ),

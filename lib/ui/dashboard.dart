@@ -14,7 +14,6 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     return LayoutBuilder(
       builder: (_, constraint) {
         //final double maxWidth = constraint.maxWidth;
@@ -29,14 +28,22 @@ class DashboardPage extends StatelessWidget {
                   color: midnightGreen,
                   borderRadius: BorderRadius.circular(15.r),
                 ),
-                height: size == "mobile" ? maxHeight * 0.675 : maxHeight * 0.75,
+                height: maxHeight * (size != "pc" ? 0.675 : 0.9),
                 margin: EdgeInsets.symmetric(horizontal: 7.5.r),
                 padding: EdgeInsets.symmetric(horizontal: 7.5.r),
-                child: PuzzleTile(),
+                child: const PuzzleTile(),
               ),
               if (size != "pc") ...[
                 Gap(15.r),
                 const MyCalendar(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.r),
+                  child: Divider(
+                    height: 60.r,
+                    color: slateGray,
+                    thickness: 0.75.r,
+                  ),
+                ),
               ]
             ],
           ),
