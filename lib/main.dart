@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
 
             return MaterialApp(
               theme: ThemeData(
+                iconTheme: IconThemeData(size: 21.r, color: raisinBlack),
                 textTheme: textTheme,
                 elevatedButtonTheme: ElevatedButtonThemeData(
                   style: ButtonStyle(
@@ -38,9 +39,9 @@ class MyApp extends StatelessWidget {
                       ),
                     ),
                     foregroundColor: const WidgetStatePropertyAll(seaWhite),
-                    backgroundColor: const WidgetStatePropertyAll(seaWhite),
-                    textStyle: WidgetStatePropertyAll(textTheme.bodyMedium),
-                    minimumSize: WidgetStatePropertyAll(Size.square(60.r)),
+                    backgroundColor: const WidgetStatePropertyAll(blackBean),
+                    textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
+                    minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
                     elevation: WidgetStatePropertyAll(4.5.r),
                     padding: WidgetStatePropertyAll(
                       EdgeInsets.symmetric(horizontal: 30.r),
@@ -59,8 +60,8 @@ class MyApp extends StatelessWidget {
                     ),
                     elevation: WidgetStatePropertyAll(4.5.r),
                     foregroundColor: const WidgetStatePropertyAll(seaWhite),
-                    textStyle: WidgetStatePropertyAll(textTheme.bodyMedium),
-                    minimumSize: WidgetStatePropertyAll(Size.square(60.r)),
+                    textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
+                    minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
                     padding: WidgetStatePropertyAll(
                       EdgeInsets.symmetric(horizontal: 30.r),
                     ),

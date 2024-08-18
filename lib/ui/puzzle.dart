@@ -72,76 +72,67 @@ class PuzzlePage extends StatelessWidget {
   const PuzzlePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    //final TextTheme textTheme = Theme.of(context).textTheme;
-    return LayoutBuilder(
-      builder: (_, constraint) {
-        final double maxHeight = constraint.maxHeight;
-        final String randomText = mockString(mockInteger(60, 90), 'A');
-        debugPrint("80==RandomText=${randomText.length}");
-        return Stack(
-          children: [
-            Container(
-              color: seaWhite,
-              height: maxHeight,
-              padding: _commonPuzzlePadding(constraint),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      height: maxHeight * 0.054,
-                      padding: _commonPuzzlePadding(constraint) * 0.3,
-                      alignment: Alignment.centerLeft,
-                      child: InkWell(
-                        onTap: () {
-                          if (panelController.isPanelOpen) {
-                            panelController.close();
-                          }
-                        },
-                        child: Icon(
-                          Icons.close,
-                          color: englishViolet,
-                          size: 18.r,
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (_, constraint) {
+          final double maxHeight = constraint.maxHeight;
+          return Stack(
+            children: [
+              Container(
+                color: seaWhite,
+                height: maxHeight,
+                padding: _commonPuzzlePadding(constraint),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        height: maxHeight * 0.06,
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            if (panelController.isPanelOpen) {
+                              panelController.close();
+                            }
+                          },
+                          child: const Icon(Icons.keyboard_arrow_down),
                         ),
                       ),
-                    ),
-                    Container(
-                      //color: cerise,
-                      padding: _commonPuzzlePadding(constraint),
-
-                      height: maxHeight * 0.135,
-                      alignment: Alignment.topLeft,
-                      child: AutoSizeText(
-                        randomText,
-                        style: GoogleFonts.poppins(
-                          fontSize: 18.r,
-                          color: englishViolet,
-                          letterSpacing: 0,
-                          height: 2.25,
-                          fontWeight: FontWeight.w200,
-                        ),
-                        maxLines: 3,
-                        //stepGranularity: 1,
-                        minFontSize: 12,
-                        maxFontSize: size != "mobile" ? 18 : 21,
+                      Container(
+                        padding: _commonPuzzlePadding(constraint),
+                        height: maxHeight * 0.135,
+                        alignment: Alignment.topLeft,
+                        child: const PuzzleHint(),
                       ),
-                    ),
-                    Gap(maxHeight * 0.015),
-                    AnimatedContainer(
-                      height: 390.h,
-                      duration: const Duration(milliseconds: 600),
-                      child: const PuzzleBoard(),
-                    ),
-                    Gap(maxHeight * 0.06),
-                    const MyKeyboard(),
-                  ],
+                      Gap(maxHeight * 0.015),
+                      AnimatedContainer(
+                        height: 400.h,
+                        duration: const Duration(milliseconds: 600),
+                        child: const PuzzleBoard(),
+                      ),
+                      Gap(maxHeight * 0.06),
+                      const MyKeyboard(),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        );
-      },
+              )
+            ],
+          );
+        },
+      );
+}
+
+class PuzzleHint extends StatelessWidget {
+  const PuzzleHint({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final String randomText = mockString(mockInteger(60, 90), 'A');
+    return AutoSizeText(
+      randomText,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: slateGray),
+      maxLines: 3,
+      minFontSize: 15,
+      maxFontSize: size != "mobile" ? 18 : 21,
     );
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wordtape/ui/dashboard.dart';
 
 import 'logic/panel_controller.dart';
 import 'logic/size.dart';
-import 'ui/dashboard.dart';
+import 'ui/login.dart';
 import 'ui/puzzle.dart';
 import 'ui/theme/colors.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -38,15 +39,9 @@ class OutlinePage extends StatelessWidget {
                         borderRadius: _borderRadius30,
                         child: const PuzzlePage(),
                       ),
-                      body: SafeArea(
-                        bottom: false,
-                        child: OutlineState(maxWidth),
-                      ),
+                      body: OutlineState(maxWidth),
                     )
-                  : SafeArea(
-                      bottom: false,
-                      child: OutlineState(maxWidth),
-                    );
+                  : OutlineState(maxWidth);
             },
           ),
         ),
@@ -77,7 +72,7 @@ class OutlineState extends StatelessWidget {
             child: AnimatedContainer(
               width: maxWidth - mobileWidth,
               duration: const Duration(milliseconds: 300),
-              color: raisinBlack,
+              color: blackBean,
               height: 900.h,
             ),
           )
