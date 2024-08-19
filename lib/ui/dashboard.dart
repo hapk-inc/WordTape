@@ -39,7 +39,7 @@ class DashboardPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.r),
                   child: Divider(
-                    height: 60.r,
+                    height: maxHeight * 0.075,
                     color: slateGray,
                     thickness: 0.75.r,
                   ),
@@ -250,3 +250,17 @@ class MyCalendar extends StatelessWidget {
     );
   }
 }
+
+/*
+Here are ten rephrased versions of your line, each concluding with the word "puzzle":
+"Discover concealed words in an entertaining and captivating puzzle."
+"Find secret words in an enjoyable and intriguing puzzle."
+"Reveal hidden words within a fun and engaging puzzle."
+"Unearth obscured words in an exciting and interactive puzzle."
+"Search for hidden words in a delightful and stimulating puzzle."
+"Explore masked words in a playful and fascinating puzzle."
+"Identify concealed words in a lively and enjoyable puzzle."
+"Hunt for hidden words in a charming and engaging puzzle."
+"Dig up secret words in a whimsical and captivating puzzle."
+"Locate hidden words in a fun-filled and challenging puzzle."
+* */
