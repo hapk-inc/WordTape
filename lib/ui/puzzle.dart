@@ -105,7 +105,7 @@ class PuzzlePage extends StatelessWidget {
                       ),
                       Gap(maxHeight * 0.015),
                       AnimatedContainer(
-                        height: 400.h,
+                        height: maxHeight * 0.48,
                         duration: const Duration(milliseconds: 600),
                         child: const PuzzleBoard(),
                       ),
@@ -131,8 +131,9 @@ class PuzzleHint extends StatelessWidget {
       randomText,
       style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: slateGray),
       maxLines: 3,
-      minFontSize: 15,
-      maxFontSize: size != "mobile" ? 18 : 21,
+      stepGranularity: 1.5,
+      minFontSize: 10.5,
+      maxFontSize: 21,
     );
   }
 }
