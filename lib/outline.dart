@@ -21,9 +21,7 @@ class OutlinePage extends ConsumerWidget {
     final String size = ref.watch(sizeProvider);
     return Scaffold(
       backgroundColor: seaWhite,
-      body: SizedBox(
-        width: 360.w,
-        height: 900.h,
+      body: SizedBox.expand(
         child: size == "mobile"
             ? SlidingUpPanel(
                 backdropEnabled: true,
@@ -37,7 +35,7 @@ class OutlinePage extends ConsumerWidget {
                 borderRadius: _borderRadius30,
                 panel: ClipRRect(
                   borderRadius: _borderRadius30,
-                  child: const PuzzlePage(),
+                  child: const PuzzlePage(id: ""),
                 ),
                 body: const OutlineState(),
               )

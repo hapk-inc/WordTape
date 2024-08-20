@@ -84,8 +84,6 @@ class PuzzleTile extends ConsumerWidget {
               Gap(maxHeight * (size == "mobile" ? 0.075 : 0.15)),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                //color: cerise,
-                //height: maxHeight * (size == "mobile" ? 0.36 : 0.33),
                 padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
                 child: FadeIn(
                   delay: const Duration(milliseconds: 750),
@@ -111,7 +109,7 @@ class PuzzleTile extends ConsumerWidget {
                               panelController.open();
                             }
                           } else {
-                            context.router.push(const PuzzleRoute());
+                            context.router.push(PuzzleRoute(id: ""));
                           }
                         },
                         child: const Text("Play Now"),

@@ -11,33 +11,13 @@ import 'package:pinput/pinput.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wordtape/logic/panel_controller.dart';
 
+import '../logic/puzzle/puzzle_notifier.dart';
 import '../logic/size.dart';
+import '../model/puzzle.dart';
 import 'theme/colors.dart';
 import 'theme/font_function.dart';
 
 final DefaultTextTheme textTheme = DefaultTextTheme();
-
-/*
-textStyle: GoogleFonts.play(
-      //textStyle: GoogleFonts.permanentMarker(
-      //textStyle: GoogleFonts.rowdies(
-      //textStyle: GoogleFonts.cinzel(
-      //textStyle: GoogleFonts.arsenal(
-      //textStyle: GoogleFonts.rubikMonoOne(
-      //textStyle: GoogleFonts.orbitron(
-      fontSize: 18.r,
-      fontWeight: FontWeight.w600,
-      //fontWeight: FontWeight.normal,
-      //fontWeight: FontWeight.normal,
-      //fontWeight: FontWeight.w600,
-      //fontWeight: FontWeight.w600,
-      //fontWeight: FontWeight.normal,
-      //fontWeight: FontWeight.w900,
-      letterSpacing: 0,
-      height: 0,
-      color: midnightGreen,
-    ),
-* */
 
 PinTheme _defaultPinTheme(BoxConstraints box,
     {required bool isMobile, Color color = raisinBlack}) {
@@ -74,64 +54,70 @@ EdgeInsets _commonPuzzlePadding(BoxConstraints constraint) {
 
 @RoutePage()
 class PuzzlePage extends ConsumerWidget {
-  const PuzzlePage({super.key});
+  final String id;
+  const PuzzlePage({@PathParam('id') required this.id, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Puzzle puzzle = ref.watch(puzzleNotifierProvider(id));
+
+    return LayoutBuilder(
+      builder: (_, constraint) {
+        final double maxHeight = constraint.maxHeight;
+        return Container(
+          color: seaWhite,
+          height: maxHeight,
+          padding: _commonPuzzlePadding(constraint),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  height: maxHeight * 0.06,
+                  alignment: Alignment.center,
+                  child: const _CloseButton(),
+                ),
+                Container(
+                  padding: _commonPuzzlePadding(constraint),
+                  height: maxHeight * 0.15,
+                  alignment: Alignment.topLeft,
+                  child: const PuzzleHint(),
+                ),
+                //Gap(maxHeight * 0.015),
+                AnimatedContainer(
+                  height: maxHeight * 0.48,
+                  duration: const Duration(milliseconds: 600),
+                  child: PuzzleBoard(puzzle),
+                ),
+                Gap(maxHeight * 0.06),
+                const MyKeyboard(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _CloseButton extends ConsumerWidget {
+  const _CloseButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String size = ref.watch(sizeProvider);
     final PanelController panelController = ref.read(panelControllerProvider);
-    return LayoutBuilder(
-      builder: (_, constraint) {
-        final double maxHeight = constraint.maxHeight;
-        return Stack(
-          children: [
-            Container(
-              color: seaWhite,
-              height: maxHeight,
-              padding: _commonPuzzlePadding(constraint),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      height: maxHeight * 0.06,
-                      alignment: Alignment.center,
-                      child: InkWell(
-                        onTap: () {
-                          if (panelController.isAttached) {
-                            if (panelController.isPanelOpen) {
-                              panelController.close();
-                            }
-                          } else {
-                            context.router.maybePop();
-                          }
-                        },
-                        child: size == "mobile"
-                            ? const Icon(Icons.keyboard_arrow_down)
-                            : const Icon(Icons.close),
-                      ),
-                    ),
-                    Container(
-                      padding: _commonPuzzlePadding(constraint),
-                      height: maxHeight * 0.135,
-                      alignment: Alignment.topLeft,
-                      child: const PuzzleHint(),
-                    ),
-                    Gap(maxHeight * 0.015),
-                    AnimatedContainer(
-                      height: maxHeight * 0.48,
-                      duration: const Duration(milliseconds: 600),
-                      child: const PuzzleBoard(),
-                    ),
-                    Gap(maxHeight * 0.06),
-                    const MyKeyboard(),
-                  ],
-                ),
-              ),
-            )
-          ],
-        );
+    return InkWell(
+      onTap: () {
+        if (panelController.isAttached) {
+          if (panelController.isPanelOpen) panelController.close();
+        } else {
+          context.router.maybePop();
+        }
       },
+      child: size == "mobile"
+          ? const Icon(Icons.keyboard_arrow_down)
+          : const Icon(Icons.close),
     );
   }
 }
@@ -154,25 +140,30 @@ class PuzzleHint extends StatelessWidget {
 }
 
 class PuzzleBoard extends StatelessWidget {
-  const PuzzleBoard({super.key});
+  final Puzzle puzzle;
+  const PuzzleBoard(this.puzzle, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<String> names =
-        List.generate(6, (_) => mockName().toUpperCase());
+    //final List<String> names =
+    //    List.generate(6, (_) => mockName().toUpperCase());
 
     return LayoutBuilder(
       builder: (_, constraint) {
         final double maxHeight = constraint.maxHeight;
 
         return ListView.builder(
-          itemCount: 6,
+          itemCount: puzzle.words.length,
           padding: _commonPuzzlePadding(constraint),
-          itemBuilder: (_, index) => Container(
-            height: maxHeight / 6,
-            alignment: Alignment.centerLeft,
-            child: PuzzleInput(names[index]),
-          ),
+          itemBuilder: (_, index) {
+            final String text = puzzle.words[index].value;
+            //log()
+            return Container(
+              height: maxHeight / 6,
+              alignment: Alignment.centerLeft,
+              child: PuzzleInput(text),
+            );
+          },
         );
       },
     );

@@ -15,12 +15,14 @@ class AppRouter extends RootStackRouter {
           children: [
             AutoRoute(page: LoginRoute.page),
             CustomRoute(
+              //path: '/',
               page: DashboardRoute.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
               initial: true,
             ),
             CustomRoute(
               page: PuzzleRoute.page,
+              path: ':id',
               transitionsBuilder: TransitionsBuilders.slideBottom,
               durationInMilliseconds: 150,
             ),
