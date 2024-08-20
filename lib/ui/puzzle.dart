@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,6 +8,7 @@ import 'package:mock_data/mock_data.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:pinput/pinput.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wordtape/logic/panel_controller.dart';
 
 import '../logic/size.dart';
@@ -36,12 +39,13 @@ textStyle: GoogleFonts.play(
     ),
 * */
 
-PinTheme _defaultPinTheme(BoxConstraints box, {Color color = raisinBlack}) {
+PinTheme _defaultPinTheme(BoxConstraints box,
+    {required bool isMobile, Color color = raisinBlack}) {
   final double maxWidth = box.maxWidth;
 
   final double boxWidth = maxWidth * 0.0975;
 
-  final isConstraintMeasurement = size == 'mobile';
+  final isConstraintMeasurement = isMobile;
 
   return PinTheme(
     constraints: BoxConstraints(
@@ -68,57 +72,68 @@ EdgeInsets _commonPuzzlePadding(BoxConstraints constraint) {
   return EdgeInsets.only(left: maxWidth * 0.03, right: maxWidth * 0.018);
 }
 
-class PuzzlePage extends StatelessWidget {
+@RoutePage()
+class PuzzlePage extends ConsumerWidget {
   const PuzzlePage({super.key});
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (_, constraint) {
-          final double maxHeight = constraint.maxHeight;
-          return Stack(
-            children: [
-              Container(
-                color: seaWhite,
-                height: maxHeight,
-                padding: _commonPuzzlePadding(constraint),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        height: maxHeight * 0.06,
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: () {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String size = ref.watch(sizeProvider);
+    final PanelController panelController = ref.read(panelControllerProvider);
+    return LayoutBuilder(
+      builder: (_, constraint) {
+        final double maxHeight = constraint.maxHeight;
+        return Stack(
+          children: [
+            Container(
+              color: seaWhite,
+              height: maxHeight,
+              padding: _commonPuzzlePadding(constraint),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      height: maxHeight * 0.06,
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {
+                          if (panelController.isAttached) {
                             if (panelController.isPanelOpen) {
                               panelController.close();
                             }
-                          },
-                          child: const Icon(Icons.keyboard_arrow_down),
-                        ),
+                          } else {
+                            context.router.maybePop();
+                          }
+                        },
+                        child: size == "mobile"
+                            ? const Icon(Icons.keyboard_arrow_down)
+                            : const Icon(Icons.close),
                       ),
-                      Container(
-                        padding: _commonPuzzlePadding(constraint),
-                        height: maxHeight * 0.135,
-                        alignment: Alignment.topLeft,
-                        child: const PuzzleHint(),
-                      ),
-                      Gap(maxHeight * 0.015),
-                      AnimatedContainer(
-                        height: maxHeight * 0.48,
-                        duration: const Duration(milliseconds: 600),
-                        child: const PuzzleBoard(),
-                      ),
-                      Gap(maxHeight * 0.06),
-                      const MyKeyboard(),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      padding: _commonPuzzlePadding(constraint),
+                      height: maxHeight * 0.135,
+                      alignment: Alignment.topLeft,
+                      child: const PuzzleHint(),
+                    ),
+                    Gap(maxHeight * 0.015),
+                    AnimatedContainer(
+                      height: maxHeight * 0.48,
+                      duration: const Duration(milliseconds: 600),
+                      child: const PuzzleBoard(),
+                    ),
+                    Gap(maxHeight * 0.06),
+                    const MyKeyboard(),
+                  ],
                 ),
-              )
-            ],
-          );
-        },
-      );
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
 }
 
 class PuzzleHint extends StatelessWidget {
@@ -151,7 +166,7 @@ class PuzzleBoard extends StatelessWidget {
         final double maxHeight = constraint.maxHeight;
 
         return ListView.builder(
-          itemCount: names.length,
+          itemCount: 6,
           padding: _commonPuzzlePadding(constraint),
           itemBuilder: (_, index) => Container(
             height: maxHeight / 6,
@@ -164,12 +179,13 @@ class PuzzleBoard extends StatelessWidget {
   }
 }
 
-class PuzzleInput extends StatelessWidget {
+class PuzzleInput extends ConsumerWidget {
   final String name;
   const PuzzleInput(this.name, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String size = ref.watch(sizeProvider);
     return LayoutBuilder(
       builder: (_, constraints) {
         return Pinput(
@@ -178,6 +194,7 @@ class PuzzleInput extends StatelessWidget {
           controller: TextEditingController(text: name),
           defaultPinTheme: _defaultPinTheme(
             constraints,
+            isMobile: size == 'mobile',
             color: midnightGreen,
           ),
 

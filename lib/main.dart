@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -15,7 +17,7 @@ import 'firebase/firebase.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'logic/size.dart';
-import 'outline.dart';
+import 'router/app_router.dart';
 import 'ui/theme/colors.dart';
 import 'ui/theme/font_function.dart';
 
@@ -74,7 +76,9 @@ Future<void> main() async {
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
     if (!kIsWeb) {
-      crashlytics.recordError(error, stack, fatal: true);
+      log("TAPE ERROR");
+
+      if (!kDebugMode) crashlytics.recordError(error, stack, fatal: true);
     } else {
       debugPrint("75--Error");
       debugPrintStack(stackTrace: stack);
@@ -98,14 +102,12 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: override,
-      child: DevicePreview(
-        enabled: false,
-        //enabled: kIsWeb ? false : defaultTargetPlatform == TargetPlatform.macOS,
-        builder: (_) => const MyApp(),
-      ),
+      child: DevicePreview(enabled: false, builder: (_) => const MyApp()),
     ),
   );
 }
+
+AppRouter _router = AppRouter();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -115,54 +117,61 @@ class MyApp extends StatelessWidget {
         builder: (_) => ScreenUtilInit(
           designSize: const Size(360, 900),
           builder: (_, __) {
-            size = 360.w < 420.r
+            final String size = 360.w < 420.r
                 ? 'mobile'
                 : 360.w < 720.r
                     ? 'tab'
                     : 'pc';
 
-            return MaterialApp(
-              theme: ThemeData(
-                iconTheme: IconThemeData(size: 21.r, color: raisinBlack),
-                textTheme: textTheme,
-                elevatedButtonTheme: ElevatedButtonThemeData(
-                  style: ButtonStyle(
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
+            return ProviderScope(
+              overrides: [sizeProvider.overrideWithValue(size)],
+              child: MaterialApp.router(
+                theme: ThemeData(
+                  iconTheme: IconThemeData(size: 18.r, color: slateGray),
+                  textTheme: textTheme,
+                  elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.r),
+                        ),
+                      ),
+                      foregroundColor: const WidgetStatePropertyAll(seaWhite),
+                      backgroundColor: const WidgetStatePropertyAll(blackBean),
+                      textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
+                      minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
+                      elevation: WidgetStatePropertyAll(4.5.r),
+                      padding: WidgetStatePropertyAll(
+                        EdgeInsets.symmetric(horizontal: 30.r),
                       ),
                     ),
-                    foregroundColor: const WidgetStatePropertyAll(seaWhite),
-                    backgroundColor: const WidgetStatePropertyAll(blackBean),
-                    textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
-                    minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
-                    elevation: WidgetStatePropertyAll(4.5.r),
-                    padding: WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(horizontal: 30.r),
+                  ),
+                  outlinedButtonTheme: OutlinedButtonThemeData(
+                    style: ButtonStyle(
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.r),
+                        ),
+                      ),
+                      side: WidgetStatePropertyAll(
+                        BorderSide(color: raisinBlack, width: 0.45.r),
+                      ),
+                      elevation: WidgetStatePropertyAll(4.5.r),
+                      foregroundColor: const WidgetStatePropertyAll(seaWhite),
+                      textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
+                      minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
+                      padding: WidgetStatePropertyAll(
+                        EdgeInsets.symmetric(horizontal: 30.r),
+                      ),
                     ),
                   ),
                 ),
-                outlinedButtonTheme: OutlinedButtonThemeData(
-                  style: ButtonStyle(
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                    ),
-                    side: WidgetStatePropertyAll(
-                      BorderSide(color: raisinBlack, width: 0.45.r),
-                    ),
-                    elevation: WidgetStatePropertyAll(4.5.r),
-                    foregroundColor: const WidgetStatePropertyAll(seaWhite),
-                    textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
-                    minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
-                    padding: WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(horizontal: 30.r),
-                    ),
-                  ),
-                ),
+                routeInformationParser: _router.defaultRouteParser(),
+                routerDelegate: _router.delegate(),
+                //color: Colors.red,
+                //builder: (_, child) => OutlinePage(),
+                //home: const OutlinePage(),
               ),
-              home: const OutlinePage(),
             );
           },
         ),

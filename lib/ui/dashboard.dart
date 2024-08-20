@@ -1,51 +1,64 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:mock_data/mock_data.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/logic/selected_date.dart';
+import 'package:wordtape/router/app_router.gr.dart';
 
 import '../logic/panel_controller.dart';
 import '../logic/size.dart';
+
+import '../logic/welcome_text.dart';
 import 'theme/colors.dart';
 
-class DashboardPage extends StatelessWidget {
+@RoutePage()
+class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String size = ref.watch(sizeProvider);
     return LayoutBuilder(
       builder: (_, constraint) {
-        //final double maxWidth = constraint.maxWidth;
         final double maxHeight = constraint.maxHeight;
+        final double maxWidth = constraint.maxWidth;
         return SafeArea(
-          child: ListView(
-            children: [
-              Gap(maxHeight * 0.015),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 750),
-                decoration: BoxDecoration(
-                  color: midnightGreen,
-                  borderRadius: BorderRadius.circular(15.r),
-                ),
-                height: maxHeight * (size != "pc" ? 0.675 : 0.9),
-                margin: EdgeInsets.symmetric(horizontal: 7.5.r),
-                padding: EdgeInsets.symmetric(horizontal: 7.5.r),
-                child: const PuzzleTile(),
-              ),
-              if (size != "pc") ...[
-                Gap(15.r),
-                const MyCalendar(),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.r),
-                  child: Divider(
-                    height: maxHeight * 0.075,
-                    color: slateGray,
-                    thickness: 0.75.r,
+          child: ColoredBox(
+            color: seaWhite,
+            child: ListView(
+              children: [
+                Gap(maxHeight * 0.015),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 750),
+                  decoration: BoxDecoration(
+                    color: midnightGreen,
+                    borderRadius: BorderRadius.circular(15.r),
                   ),
+                  height: maxHeight * (size != "pc" ? 0.675 : 0.9),
+                  margin: EdgeInsets.symmetric(horizontal: maxWidth * 0.015),
+                  padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.015),
+                  child: const PuzzleTile(),
                 ),
-              ]
-            ],
+                if (size != "pc") ...[
+                  Gap(maxHeight * 0.015),
+                  const MyCalendar(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.015),
+                    child: Divider(
+                      height: maxHeight * 0.06,
+                      color: slateGray,
+                      thickness: 0.45.r,
+                    ),
+                  ),
+                ]
+              ],
+            ),
           ),
         );
       },
@@ -53,12 +66,13 @@ class DashboardPage extends StatelessWidget {
   }
 }
 
-class PuzzleTile extends StatelessWidget {
+class PuzzleTile extends ConsumerWidget {
   const PuzzleTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String size = ref.watch(sizeProvider);
+    final PanelController panelController = ref.read(panelControllerProvider);
     return LayoutBuilder(
       builder: (_, constraints) {
         final double maxWidth = constraints.maxWidth;
@@ -67,29 +81,15 @@ class PuzzleTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Gap(maxHeight * (size == 'mobile' ? 0.075 : 0.12)),
-              AnimatedPadding(
+              Gap(maxHeight * (size == "mobile" ? 0.075 : 0.15)),
+              AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
+                //color: cerise,
+                //height: maxHeight * (size == "mobile" ? 0.36 : 0.33),
                 padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Uncover hidden words in this"
-                            "${size != "mobile" ? " fun and " : " "}"
-                            "engaging ",
-                        children: [
-                          TextSpan(
-                            text: "puzzle.",
-                            style: textTheme.titleMedium?.copyWith(
-                              color: aquaMarine,
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  style: textTheme.labelMedium?.copyWith(color: seaWhite),
+                child: FadeIn(
+                  delay: const Duration(milliseconds: 750),
+                  child: const Welcome(),
                 ),
               ),
               Gap(maxHeight * 0.075),
@@ -103,22 +103,15 @@ class PuzzleTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        style: const ButtonStyle(
-                            //backgroundColor:
-                            //    WidgetStatePropertyAll(raisinBlack),
-                            ),
+                        style: const ButtonStyle(),
                         onPressed: () {
                           debugPrint("PLAY NOW");
-                          switch (size) {
-                            case "mobile":
-                              {
-                                if (panelController.isPanelClosed) {
-                                  panelController.open();
-                                }
-                                return;
-                              }
-                            default:
-                              {}
+                          if (panelController.isAttached) {
+                            if (panelController.isPanelClosed) {
+                              panelController.open();
+                            }
+                          } else {
+                            context.router.push(const PuzzleRoute());
                           }
                         },
                         child: const Text("Play Now"),
@@ -139,7 +132,10 @@ class PuzzleTile extends StatelessWidget {
                 ),
               ),
               Gap(maxHeight * 0.075),
-              const TodayCount(),
+              FadeIn(
+                delay: const Duration(milliseconds: 1500),
+                child: const TodayCount(),
+              ),
               Gap(maxHeight * 0.15),
               /*Container(
                 padding: EdgeInsets.symmetric(
@@ -155,6 +151,36 @@ class PuzzleTile extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class Welcome extends ConsumerWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final String size = ref.watch(sizeProvider);
+    final WelcomeText welcomeText = ref.read(welcomeTextProvider);
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(
+            children: [
+              TextSpan(text: welcomeText.text),
+              if (size != "mobile") TextSpan(text: welcomeText.sub),
+              TextSpan(
+                text: "puzzle.",
+                style: textTheme.titleMedium?.copyWith(
+                  color: aquaMarine,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+      style: textTheme.labelMedium?.copyWith(color: seaWhite),
     );
   }
 }
@@ -182,7 +208,6 @@ class TodayCount extends StatelessWidget {
                 //textStyle: textTheme.labelLarge?.copyWith(color: mint),
                 duration: const Duration(milliseconds: 1200),
               ),
-              Gap(7.5.r),
               Text("Users Played today", style: textTheme.displaySmall),
             ],
           ),
@@ -192,15 +217,16 @@ class TodayCount extends StatelessWidget {
   }
 }
 
-class MyCalendar extends StatelessWidget {
+class MyCalendar extends ConsumerWidget {
   const MyCalendar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final DateTime now = DateTime.now();
-    final DateTime randomDate =
-        mockDate(now.subtract(Duration(days: mockInteger(1, 3))), now);
+    final DateTime selectedDate = ref.watch(selectedDateProvider);
+    //final DateTime now = DateTime.now();
+    //final DateTime randomDate =
+    //    mockDate(now.subtract(Duration(days: mockInteger(1, 3))), now);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: 105.h,
@@ -212,7 +238,7 @@ class MyCalendar extends StatelessWidget {
           (index) {
             final DateTime now = DateTime.now();
             final DateTime date = now.copyWith(day: now.day - index);
-            final bool isSelected = date.day == randomDate.day;
+            final bool isSelected = date.day == selectedDate.day;
             final String week = DateFormat('EEE').format(date);
             return AnimatedContainer(
               duration: const Duration(milliseconds: 150),
@@ -223,25 +249,30 @@ class MyCalendar extends StatelessWidget {
                 color: isSelected ? raisinBlack : null,
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    week.toUpperCase(),
-                    style: textTheme.displaySmall?.copyWith(
-                      color: isSelected ? seaWhite : slateGray,
+              child: InkWell(
+                onTap: () {
+                  ref.read(selectedDateProvider.notifier).state = date;
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      week.toUpperCase(),
+                      style: textTheme.displaySmall?.copyWith(
+                        color: isSelected ? seaWhite : slateGray,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Gap(3.r),
-                  Text(
-                    date.day.toString().padLeft(2, '0'),
-                    style: textTheme.displayMedium?.copyWith(
-                      color: isSelected ? seaWhite : slateGray,
+                    Gap(3.r),
+                    Text(
+                      date.day.toString().padLeft(2, '0'),
+                      style: textTheme.displayMedium?.copyWith(
+                        color: isSelected ? seaWhite : slateGray,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
@@ -250,17 +281,3 @@ class MyCalendar extends StatelessWidget {
     );
   }
 }
-
-/*
-Here are ten rephrased versions of your line, each concluding with the word "puzzle":
-"Discover concealed words in an entertaining and captivating puzzle."
-"Find secret words in an enjoyable and intriguing puzzle."
-"Reveal hidden words within a fun and engaging puzzle."
-"Unearth obscured words in an exciting and interactive puzzle."
-"Search for hidden words in a delightful and stimulating puzzle."
-"Explore masked words in a playful and fascinating puzzle."
-"Identify concealed words in a lively and enjoyable puzzle."
-"Hunt for hidden words in a charming and engaging puzzle."
-"Dig up secret words in a whimsical and captivating puzzle."
-"Locate hidden words in a fun-filled and challenging puzzle."
-* */

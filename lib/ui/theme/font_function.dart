@@ -82,8 +82,8 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get displayLarge => GoogleFonts.play(
-        fontSize: 72.r,
+  TextStyle get displayLarge => GoogleFonts.rowdies(
+        fontSize: 75.r,
         //fontWeight: FontWeight.normal,
         letterSpacing: 0,
         height: 0,
@@ -101,9 +101,9 @@ class DefaultTextTheme extends TextTheme {
   @override
   TextStyle get displaySmall => GoogleFonts.questrial(
         fontSize: 15.r,
-        //fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w100,
         letterSpacing: 0,
-        height: 0,
+        height: 1.5,
         color: seaWhite,
       );
 }
