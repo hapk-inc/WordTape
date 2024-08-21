@@ -1,6 +1,7 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -8,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/logic/dot_env.dart';
 import 'package:wordtape/logic/selected_date.dart';
 import 'package:wordtape/router/app_router.gr.dart';
 
@@ -73,6 +75,7 @@ class PuzzleTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final String size = ref.watch(sizeProvider);
     final PanelController panelController = ref.read(panelControllerProvider);
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return LayoutBuilder(
       builder: (_, constraints) {
         final double maxWidth = constraints.maxWidth;
@@ -134,8 +137,8 @@ class PuzzleTile extends ConsumerWidget {
                 delay: const Duration(milliseconds: 1500),
                 child: const TodayCount(),
               ),
-              Gap(maxHeight * 0.15),
-              /*Container(
+              Gap(maxHeight * 0.075),
+              Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: maxWidth * 0.045,
                 ),
@@ -144,7 +147,7 @@ class PuzzleTile extends ConsumerWidget {
                   "17 AUGUST 2024",
                   style: textTheme.displaySmall,
                 ),
-              )*/
+              )
             ],
           ),
         );
@@ -183,13 +186,16 @@ class Welcome extends ConsumerWidget {
   }
 }
 
-class TodayCount extends StatelessWidget {
+class TodayCount extends ConsumerWidget {
   const TodayCount({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final int count = mockInteger(1, 30);
+    final DotEnv env = ref.read(envProvider);
+    final String foo = env.get('FOO');
+    debugPrint(foo);
     return LayoutBuilder(
       builder: (_, constraint) {
         final double maxWidth = constraint.maxWidth;

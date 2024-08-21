@@ -99,7 +99,7 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get displaySmall => GoogleFonts.questrial(
+  TextStyle get displaySmall => GoogleFonts.poppins(
         fontSize: 15.r,
         fontWeight: FontWeight.w100,
         letterSpacing: 0,

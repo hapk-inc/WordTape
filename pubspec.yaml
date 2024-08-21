@@ -111,6 +111,9 @@ dependencies:
   carousel_slider: ^5.0.0
   geolocator: ^12.0.0
 
+  google_generative_ai: ^0.4.5
+  flutter_dotenv: ^5.1.0
+
   # web: ^0.5.1
 
 dev_dependencies:
@@ -150,6 +153,7 @@ flutter:
   assets:
     - images/
     - lottie/
+    - assets/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

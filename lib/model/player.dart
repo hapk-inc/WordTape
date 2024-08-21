@@ -13,7 +13,7 @@ class Player extends Equatable with _$Player {
   const factory Player({
     String? name,
     String? rName,
-    num? id,
+    @Default(0) num id,
     //String? email,
     //String? photoURL,
 
