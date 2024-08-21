@@ -19,5 +19,7 @@ class Found with _$Found {
 
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
 
+  //factory Found.initial() => const Found();
+
   bool isCompleted(int puzzleLength) => i == puzzleLength;
 }

@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../theme/colors.dart';
+
+const String backspace = "🔙";
+const String done = "✔️";
+
+const List<dynamic> row1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
+const List<dynamic> row2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
+const List<dynamic> row3 = [done, "Z", "X", "C", "V", "B", "N", "M", backspace];
+
+class MyKeyboard extends ConsumerWidget {
+  const MyKeyboard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      constraints: BoxConstraints(maxWidth: 375.r),
+      child: LayoutBuilder(
+        builder: (_, constraints) => Column(
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: row1.map(
+                  (str) {
+                    final bool isChar = str.length == 1;
+                    final double maxWidth = constraints.maxWidth;
+                    final double width = maxWidth * (isChar ? 0.084 : 0.09);
+                    return MyKeyboardTile(str, width);
+                  },
+                ).toList(),
+              ),
+            ),
+            Gap(7.5.r),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: row2.map(
+                  (str) {
+                    final bool isChar = str.length == 1;
+                    final double maxWidth = constraints.maxWidth;
+                    final double width = maxWidth * (isChar ? 0.084 : 0.09);
+                    return MyKeyboardTile(str, width);
+                  },
+                ).toList(),
+              ),
+            ),
+            Gap(7.5.r),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: row3.map(
+                  (str) {
+                    final bool isChar = str.length == 1;
+                    final double maxWidth = constraints.maxWidth;
+                    final double width = maxWidth * (isChar ? 0.084 : 0.15);
+                    return MyKeyboardTile(str, width);
+                  },
+                ).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyKeyboardTile extends StatelessWidget {
+  const MyKeyboardTile(this.str, this.width, {super.key});
+
+  final String str;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isChar = str.length == 1;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      width: width,
+      height: 43.2.h,
+      margin: EdgeInsets.symmetric(horizontal: width * 0.06),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: seaWhite,
+        borderRadius: BorderRadius.circular(4.5.r),
+        border: Border.all(width: 0.24.r),
+      ),
+      child: Text(
+        str,
+        style: GoogleFonts.play(
+          fontSize: isChar ? 15.r : 21.r,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0,
+          height: 0,
+          color: slateGray,
+        ),
+      ),
+    );
+  }
+}

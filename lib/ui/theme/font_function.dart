@@ -82,7 +82,7 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get displayLarge => GoogleFonts.rowdies(
+  TextStyle get displayLarge => GoogleFonts.lilitaOne(
         fontSize: 75.r,
         //fontWeight: FontWeight.normal,
         letterSpacing: 0,
