@@ -9,7 +9,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../logic/gemini_ai.dart';
 import '../logic/panel_controller.dart';
-import '../logic/puzzle/selected_puzzle.dart';
+import '../logic/puzzle/puzzle_notifier.dart';
 import '../logic/size.dart';
 import '../model/puzzle.dart';
 import 'puzzle/my_keyboard.dart';
@@ -24,16 +24,13 @@ EdgeInsets _commonPuzzlePadding(BoxConstraints constraint) {
   return EdgeInsets.only(left: maxWidth * 0.03, right: maxWidth * 0.018);
 }
 
-@RoutePage()
+/*@RoutePage()
 class PuzzlePage extends ConsumerWidget {
   final String id;
   const PuzzlePage({@PathParam('id') required this.id, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<Puzzle> puzzleAsync =
-        ref.watch(selectedPuzzleProvider(id));
-
     return LayoutBuilder(
       builder: (_, constraint) {
         final double maxHeight = constraint.maxHeight;
@@ -41,9 +38,64 @@ class PuzzlePage extends ConsumerWidget {
           color: seaWhite,
           height: maxHeight,
           padding: _commonPuzzlePadding(constraint),
-          child: puzzleAsync.maybeWhen(
-            orElse: () => const Placeholder(),
-            data: (puzzle) => SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  height: maxHeight * 0.06,
+                  alignment: Alignment.center,
+                  child: const _CloseButton(),
+                ),
+                Container(
+                  padding: _commonPuzzlePadding(constraint),
+                  height: maxHeight * 0.15,
+                  alignment: Alignment.topLeft,
+                  child: const PuzzleHint(),
+                ),
+                //Gap(maxHeight * 0.015),
+                AnimatedContainer(
+                  height: maxHeight * 0.48,
+                  duration: const Duration(milliseconds: 600),
+                  child: PuzzleBoard(id),
+                ),
+                Gap(maxHeight * 0.054),
+                const MyKeyboard(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}*/
+
+@RoutePage()
+class PuzzlePage extends ConsumerStatefulWidget {
+  final String id;
+  const PuzzlePage({@PathParam('id') required this.id, super.key});
+
+  @override
+  ConsumerState createState() => _PuzzlePageState();
+}
+
+class _PuzzlePageState extends ConsumerState<PuzzlePage> {
+  late String id;
+  @override
+  void initState() {
+    super.initState();
+    id = widget.id;
+  }
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (_, constraint) {
+          final double maxHeight = constraint.maxHeight;
+          return Container(
+            color: seaWhite,
+            height: maxHeight,
+            padding: _commonPuzzlePadding(constraint),
+            child: SingleChildScrollView(
               child: Column(
                 children: [
                   AnimatedContainer(
@@ -62,20 +114,19 @@ class PuzzlePage extends ConsumerWidget {
                   AnimatedContainer(
                     height: maxHeight * 0.48,
                     duration: const Duration(milliseconds: 600),
-                    child: PuzzleBoard(puzzle),
+                    child: PuzzleBoard(id),
                   ),
                   Gap(maxHeight * 0.054),
                   const MyKeyboard(),
                 ],
               ),
             ),
-          ),
-        );
-      },
-    );
-  }
+          );
+        },
+      );
 }
 
+////////////////////////////////
 class _CloseButton extends ConsumerWidget {
   const _CloseButton();
 
@@ -121,27 +172,30 @@ class PuzzleHint extends ConsumerWidget {
 }
 
 class PuzzleBoard extends ConsumerWidget {
-  final Puzzle puzzle;
-  const PuzzleBoard(this.puzzle, {super.key});
+  final String id;
+  const PuzzleBoard(this.id, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => LayoutBuilder(
-        builder: (_, constraint) {
-          final double maxHeight = constraint.maxHeight;
-
-          return ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: puzzle.words.length,
-            padding: _commonPuzzlePadding(constraint),
-            itemBuilder: (_, index) {
-              final String text = puzzle.words[index].value;
-              return Container(
-                height: maxHeight / 6,
-                alignment: Alignment.centerLeft,
-                child: PuzzleTextField(text),
-              );
-            },
-          );
-        },
-      );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final PuzzleNotifier puzzleNotifier = ref.watch(puzzleNotifierProvider(id));
+    final Puzzle puzzle = puzzleNotifier.puzzle;
+    return LayoutBuilder(
+      builder: (_, constraint) {
+        final double maxHeight = constraint.maxHeight;
+        return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: puzzle.words.length,
+          padding: _commonPuzzlePadding(constraint),
+          itemBuilder: (_, index) {
+            final String text = puzzle.words[index].value;
+            return Container(
+              height: maxHeight / 6,
+              alignment: Alignment.centerLeft,
+              child: PuzzleTextField(index, name: text),
+            );
+          },
+        );
+      },
+    );
+  }
 }

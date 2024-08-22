@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+import '../../logic/puzzle/key.dart';
+import '../../logic/puzzle/puzzle_notifier.dart';
 import '../theme/colors.dart';
 
 const String backspace = "🔙";
@@ -74,15 +75,17 @@ class MyKeyboard extends ConsumerWidget {
   }
 }
 
-class MyKeyboardTile extends StatelessWidget {
+class MyKeyboardTile extends ConsumerWidget {
   const MyKeyboardTile(this.str, this.width, {super.key});
 
   final String str;
   final double width;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final bool isChar = str.length == 1;
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final String id = ref.read(puzzleKeyProvider);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       width: width,
@@ -94,14 +97,25 @@ class MyKeyboardTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(4.5.r),
         border: Border.all(width: 0.24.r),
       ),
-      child: Text(
-        str,
-        style: GoogleFonts.play(
-          fontSize: isChar ? 15.r : 21.r,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0,
-          height: 0,
-          color: slateGray,
+      child: InkWell(
+        onTap: () {
+          debugPrint("99==$str");
+          switch (str) {
+            case backspace:
+              ref.read(puzzleNotifierProvider(id)).removeText();
+              break;
+            case done:
+              break;
+            default:
+              ref.read(puzzleNotifierProvider(id)).addText(str);
+          }
+        },
+        child: Text(
+          str,
+          style: textTheme.headlineMedium?.copyWith(
+            fontSize: isChar ? 15.r : 21.r,
+            color: slateGray,
+          ),
         ),
       ),
     );

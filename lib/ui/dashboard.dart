@@ -12,8 +12,11 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wordtape/logic/dot_env.dart';
 import 'package:wordtape/logic/selected_date.dart';
 import 'package:wordtape/router/app_router.gr.dart';
+import 'package:wordtape/ui/puzzle.dart';
 
 import '../logic/panel_controller.dart';
+import '../logic/puzzle/key.dart';
+import '../logic/puzzle/puzzle_panel.dart';
 import '../logic/size.dart';
 
 import '../logic/welcome_text.dart';
@@ -104,15 +107,18 @@ class PuzzleTile extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        style: const ButtonStyle(),
                         onPressed: () {
-                          debugPrint("PLAY NOW");
+                          const String id = "xyx";
+
                           if (panelController.isAttached) {
                             if (panelController.isPanelClosed) {
+                              ref.read(puzzleKeyProvider.notifier).state = id;
+                              ref.read(puzzlePanelProvider.notifier).state =
+                                  const PuzzlePage(id: id);
                               panelController.open();
                             }
                           } else {
-                            context.router.push(PuzzleRoute(id: ""));
+                            context.router.push(PuzzleRoute(id: id));
                           }
                         },
                         child: const Text("Play Now"),
@@ -209,10 +215,13 @@ class TodayCount extends ConsumerWidget {
                 wholeDigits: 2,
                 padding: EdgeInsets.zero,
                 textStyle: textTheme.displayLarge,
-                //textStyle: textTheme.labelLarge?.copyWith(color: mint),
                 duration: const Duration(milliseconds: 1200),
               ),
-              Text("Users Played today", style: textTheme.displaySmall),
+              Gap(4.5.r),
+              Text(
+                "Users Played today",
+                style: textTheme.labelSmall?.copyWith(color: seaWhite),
+              ),
             ],
           ),
         );

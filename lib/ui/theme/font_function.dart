@@ -74,7 +74,7 @@ class DefaultTextTheme extends TextTheme {
 
   @override
   TextStyle get labelSmall => GoogleFonts.questrial(
-        fontSize: 18.r,
+        fontSize: 13.5.r,
         fontWeight: FontWeight.normal,
         letterSpacing: 0,
         height: 0,
@@ -82,10 +82,9 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get displayLarge => GoogleFonts.lilitaOne(
-        fontSize: 75.r,
-        //fontWeight: FontWeight.normal,
-        letterSpacing: 0,
+  TextStyle get displayLarge => GoogleFonts.piedra(
+        fontSize: 60.r,
+        letterSpacing: 1.5,
         height: 0,
         color: seaWhite,
       );
@@ -99,11 +98,20 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get displaySmall => GoogleFonts.poppins(
+  TextStyle get displaySmall => GoogleFonts.play(
         fontSize: 15.r,
-        fontWeight: FontWeight.w100,
+        fontWeight: FontWeight.w300,
         letterSpacing: 0,
-        height: 1.5,
+        height: 0,
         color: seaWhite,
+      );
+
+  @override
+  TextStyle get headlineMedium => GoogleFonts.play(
+        fontSize: 15.r,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0,
+        height: 0,
+        color: midnightGreen,
       );
 }

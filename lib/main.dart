@@ -31,7 +31,9 @@ final DefaultTextTheme textTheme = DefaultTextTheme();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  WidgetsBinding.instance.addPostFrameCallback(
+    (_) => debugPrint("36=="),
+  );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
@@ -172,9 +174,6 @@ class MyApp extends StatelessWidget {
               ),
               routeInformationParser: _router.defaultRouteParser(),
               routerDelegate: _router.delegate(),
-              //color: Colors.red,
-              //builder: (_, child) => OutlinePage(),
-              //home: const OutlinePage(),
             ),
           );
         },
