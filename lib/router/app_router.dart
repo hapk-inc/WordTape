@@ -13,7 +13,12 @@ class AppRouter extends RootStackRouter {
           page: OutlineRoute.page,
           initial: true,
           children: [
-            AutoRoute(page: LoginRoute.page),
+            CustomRoute(
+              page: LoginRoute.page,
+              transitionsBuilder: TransitionsBuilders.noTransition,
+              //initial: true,
+              maintainState: false,
+            ),
             CustomRoute(
               //path: '/',
               page: DashboardRoute.page,

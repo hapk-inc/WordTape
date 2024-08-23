@@ -1,5 +1,6 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -109,16 +110,19 @@ class PuzzleTile extends ConsumerWidget {
                       ElevatedButton(
                         onPressed: () {
                           const String id = "xyx";
-
-                          if (panelController.isAttached) {
-                            if (panelController.isPanelClosed) {
-                              ref.read(puzzleKeyProvider.notifier).state = id;
-                              ref.read(puzzlePanelProvider.notifier).state =
-                                  const PuzzlePage(id: id);
-                              panelController.open();
-                            }
-                          } else {
+                          if (kIsWeb) {
                             context.router.push(PuzzleRoute(id: id));
+                          } else {
+                            if (panelController.isAttached) {
+                              if (panelController.isPanelClosed) {
+                                ref.read(puzzleKeyProvider.notifier).state = id;
+                                ref.read(puzzlePanelProvider.notifier).state =
+                                    const PuzzlePage(id: id);
+                                panelController.open();
+                              }
+                            } else {
+                              context.router.push(PuzzleRoute(id: id));
+                            }
                           }
                         },
                         child: const Text("Play Now"),
@@ -218,10 +222,8 @@ class TodayCount extends ConsumerWidget {
                 duration: const Duration(milliseconds: 1200),
               ),
               Text(
-                "Users Played today",
-                style: textTheme.headlineSmall?.copyWith(
-                  color: Colors.white54,
-                ),
+                "Users Played so far...",
+                style: textTheme.headlineSmall?.copyWith(color: Colors.white54),
               ),
             ],
           ),
