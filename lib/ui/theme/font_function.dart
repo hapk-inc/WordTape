@@ -82,7 +82,7 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get displayLarge => GoogleFonts.piedra(
+  TextStyle get displayLarge => GoogleFonts.paytoneOne(
         fontSize: 60.r,
         letterSpacing: 1.5,
         height: 0,

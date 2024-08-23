@@ -24,7 +24,7 @@ EdgeInsets _commonPuzzlePadding(BoxConstraints constraint) {
   return EdgeInsets.only(left: maxWidth * 0.03, right: maxWidth * 0.018);
 }
 
-/*@RoutePage()
+@RoutePage()
 class PuzzlePage extends ConsumerWidget {
   final String id;
   const PuzzlePage({@PathParam('id') required this.id, super.key});
@@ -68,62 +68,6 @@ class PuzzlePage extends ConsumerWidget {
       },
     );
   }
-}*/
-
-@RoutePage()
-class PuzzlePage extends ConsumerStatefulWidget {
-  final String id;
-  const PuzzlePage({@PathParam('id') required this.id, super.key});
-
-  @override
-  ConsumerState createState() => _PuzzlePageState();
-}
-
-class _PuzzlePageState extends ConsumerState<PuzzlePage> {
-  late String id;
-  @override
-  void initState() {
-    super.initState();
-    id = widget.id;
-  }
-
-  @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (_, constraint) {
-          final double maxHeight = constraint.maxHeight;
-          return Container(
-            color: seaWhite,
-            height: maxHeight,
-            padding: _commonPuzzlePadding(constraint),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    height: maxHeight * 0.06,
-                    alignment: Alignment.center,
-                    child: const _CloseButton(),
-                  ),
-                  Container(
-                    padding: _commonPuzzlePadding(constraint),
-                    height: maxHeight * 0.15,
-                    alignment: Alignment.topLeft,
-                    child: const PuzzleHint(),
-                  ),
-                  //Gap(maxHeight * 0.015),
-                  AnimatedContainer(
-                    height: maxHeight * 0.48,
-                    duration: const Duration(milliseconds: 600),
-                    child: PuzzleBoard(id),
-                  ),
-                  Gap(maxHeight * 0.054),
-                  const MyKeyboard(),
-                ],
-              ),
-            ),
-          );
-        },
-      );
 }
 
 ////////////////////////////////

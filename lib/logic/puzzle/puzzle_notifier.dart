@@ -64,12 +64,12 @@ class PuzzleNotifier extends ChangeNotifier {
   onTextChanged(String newText) {
     String exact = _puzzle.words[_found.i].value;
     if (!newText.startsWith(getFirstLetter(exact)) || newText.isEmpty) {
-      _list[_found.i].value = _list[_found.i].value.copyWith(
-            text: getFirstLetter(exact),
-            selection: TextSelection.fromPosition(
-              const TextPosition(offset: 1),
-            ),
-          );
+      _list[_found.i].value = activeController.value.copyWith(
+        text: getFirstLetter(exact),
+        selection: TextSelection.fromPosition(
+          const TextPosition(offset: 1),
+        ),
+      );
     }
   }
 
