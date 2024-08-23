@@ -219,7 +219,7 @@ class TodayCount extends ConsumerWidget {
               ),
               Text(
                 "Users Played today",
-                style: textTheme.headlineMedium?.copyWith(
+                style: textTheme.headlineSmall?.copyWith(
                   color: Colors.white54,
                 ),
               ),

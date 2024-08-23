@@ -34,11 +34,11 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get bodyMedium => GoogleFonts.poppins(
+  TextStyle get bodyMedium => GoogleFonts.rowdies(
         fontSize: 18.r,
         color: blackBean,
         letterSpacing: 0,
-        height: 2.25,
+        height: 2.1,
         fontWeight: FontWeight.w300,
       );
 
@@ -112,6 +112,15 @@ class DefaultTextTheme extends TextTheme {
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
         height: 0,
+        color: midnightGreen,
+      );
+
+  @override
+  TextStyle get headlineSmall => GoogleFonts.questrial(
+        fontSize: 15.r,
+        fontWeight: FontWeight.w300,
+        letterSpacing: 0,
+        height: 1.5,
         color: midnightGreen,
       );
 }

@@ -2,16 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:mock_data/mock_data.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../logic/gemini_ai.dart';
 import '../logic/panel_controller.dart';
 import '../logic/puzzle/puzzle_notifier.dart';
 import '../logic/size.dart';
+import '../model/found.dart';
 import '../model/puzzle.dart';
+import 'puzzle/hint.dart';
 import 'puzzle/my_keyboard.dart';
 import 'puzzle/puzzle_text_field.dart';
 import 'theme/colors.dart';
@@ -31,6 +30,18 @@ class PuzzlePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      puzzleNotifierProvider(id).select(
+        (value) {
+          final Found found = value.found;
+          return found.i;
+        },
+      ),
+      (previous, next) {
+        ref.read(puzzleNotifierProvider(id)).validateController();
+      },
+    );
+
     return LayoutBuilder(
       builder: (_, constraint) {
         final double maxHeight = constraint.maxHeight;
@@ -42,12 +53,13 @@ class PuzzlePage extends ConsumerWidget {
             child: Column(
               children: [
                 AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 150),
                   height: maxHeight * 0.06,
                   alignment: Alignment.center,
                   child: const _CloseButton(),
                 ),
-                Container(
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
                   padding: _commonPuzzlePadding(constraint),
                   height: maxHeight * 0.15,
                   alignment: Alignment.topLeft,
@@ -55,8 +67,8 @@ class PuzzlePage extends ConsumerWidget {
                 ),
                 //Gap(maxHeight * 0.015),
                 AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
                   height: maxHeight * 0.48,
-                  duration: const Duration(milliseconds: 600),
                   child: PuzzleBoard(id),
                 ),
                 Gap(maxHeight * 0.054),
@@ -90,28 +102,6 @@ class _CloseButton extends ConsumerWidget {
           ? const Icon(Icons.keyboard_arrow_down)
           : const Icon(Icons.close),
     );
-  }
-}
-
-class PuzzleHint extends ConsumerWidget {
-  const PuzzleHint({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return ref.watch(randomTextProvider(word: "")).maybeWhen(
-          orElse: () => Container(),
-          error: (error, stackTrace) => const Placeholder(),
-          data: (data) => AutoSizeText(
-            data.text ?? mockString(45),
-            style: textTheme.bodyMedium?.copyWith(color: slateGray),
-            maxLines: 3,
-            stepGranularity: 1.5,
-            minFontSize: 10.5,
-            maxFontSize: 21,
-          ),
-        );
   }
 }
 

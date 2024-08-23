@@ -21,27 +21,29 @@ class OutlinePage extends ConsumerWidget {
     final String size = ref.watch(sizeProvider);
     return Scaffold(
       backgroundColor: seaWhite,
-      body: SizedBox.expand(
-        child: size == "mobile"
-            ? SlidingUpPanel(
-                backdropEnabled: true,
-                backdropOpacity: 1,
-                isDraggable: false,
-                color: seaWhite,
-                controller: ref.watch(panelControllerProvider),
-                minHeight: 0,
-                maxHeight: 810.h,
-                padding: EdgeInsets.zero,
-                backdropColor: midnightGreen,
-                borderRadius: _borderRadius30,
-                renderPanelSheet: false,
-                panel: ClipRRect(
+      body: LayoutBuilder(
+        builder: (_, constraints) => SizedBox.expand(
+          child: size == "mobile"
+              ? SlidingUpPanel(
+                  backdropEnabled: true,
+                  backdropOpacity: 1,
+                  isDraggable: false,
+                  color: seaWhite,
+                  controller: ref.watch(panelControllerProvider),
+                  minHeight: 0,
+                  maxHeight: constraints.maxHeight * 0.9,
+                  padding: EdgeInsets.zero,
+                  backdropColor: midnightGreen,
                   borderRadius: _borderRadius30,
-                  child: ref.watch(puzzlePanelProvider),
-                ),
-                body: const OutlineState(),
-              )
-            : const OutlineState(),
+                  renderPanelSheet: false,
+                  panel: ClipRRect(
+                    borderRadius: _borderRadius30,
+                    child: ref.watch(puzzlePanelProvider),
+                  ),
+                  body: const OutlineState(),
+                )
+              : const OutlineState(),
+        ),
       ),
     );
   }

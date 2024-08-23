@@ -86,30 +86,37 @@ class MyKeyboardTile extends ConsumerWidget {
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final String id = ref.read(puzzleKeyProvider);
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      width: width,
-      height: 43.2.h,
-      margin: EdgeInsets.symmetric(horizontal: width * 0.06),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: seaWhite,
-        borderRadius: BorderRadius.circular(4.5.r),
-        border: Border.all(width: 0.24.r),
-      ),
-      child: InkWell(
-        onTap: () {
-          debugPrint("99==$str");
-          switch (str) {
-            case backspace:
-              ref.read(puzzleNotifierProvider(id)).removeText();
+    //final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(id));
+    return InkWell(
+      onTap: () async {
+        final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(id));
+        switch (str) {
+          case backspace:
+            notifier.removeText();
+            break;
+          case done:
+            {
+              if (!notifier.enableDone) return;
+              await notifier.validate();
               break;
-            case done:
-              break;
-            default:
-              ref.read(puzzleNotifierProvider(id)).addText(str);
-          }
-        },
+            }
+          default:
+            notifier.addText(str);
+        }
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: width,
+        height: 43.2.h,
+        margin: EdgeInsets.symmetric(horizontal: width * 0.06),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: str == done && ref.watch(puzzleNotifierProvider(id)).enableDone
+              ? aquaMarine
+              : null,
+          borderRadius: BorderRadius.circular(4.5.r),
+          border: Border.all(width: 0.24.r),
+        ),
         child: Text(
           str,
           style: textTheme.headlineMedium?.copyWith(

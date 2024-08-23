@@ -27,4 +27,6 @@ class Puzzle with _$Puzzle {
             List.generate(6, (index) => Word(value: mockName().toUpperCase())),
         id: mockString(8),
       );
+
+  bool isCompleted(int length) => words.length == length;
 }

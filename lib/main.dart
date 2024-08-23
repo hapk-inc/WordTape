@@ -27,13 +27,11 @@ import 'ui/theme/font_function.dart';
 
 // m for mobile, t for tablet, p or pc
 
-final DefaultTextTheme textTheme = DefaultTextTheme();
+//final DefaultTextTheme textTheme = DefaultTextTheme();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  WidgetsBinding.instance.addPostFrameCallback(
-    (_) => debugPrint("36=="),
-  );
+  WidgetsBinding.instance.addPostFrameCallback((_) => debugPrint("36=="));
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
@@ -84,7 +82,7 @@ Future<void> main() async {
 
       if (!kDebugMode) crashlytics.recordError(error, stack, fatal: true);
     } else {
-      debugPrint("75--Error");
+      log("ERROR==");
       debugPrintStack(stackTrace: stack);
     }
     return true;
@@ -114,7 +112,7 @@ Future<void> main() async {
 
 AppRouter _router = AppRouter();
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget with CustomThemeMixin {
   const MyApp({super.key});
 
   @override
@@ -133,42 +131,16 @@ class MyApp extends StatelessWidget {
             overrides: [sizeProvider.overrideWithValue(size)],
             child: MaterialApp.router(
               theme: ThemeData(
-                iconTheme: IconThemeData(size: 18.r, color: slateGray),
-                textTheme: textTheme,
+                iconTheme: iconThemeData,
+                textTheme: defaultTextTheme,
                 elevatedButtonTheme: ElevatedButtonThemeData(
-                  style: ButtonStyle(
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                    ),
-                    foregroundColor: const WidgetStatePropertyAll(seaWhite),
+                  style: defaultButtonStyle.copyWith(
                     backgroundColor: const WidgetStatePropertyAll(blackBean),
-                    textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
-                    minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
-                    elevation: WidgetStatePropertyAll(4.5.r),
-                    padding: WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(horizontal: 30.r),
-                    ),
                   ),
                 ),
                 outlinedButtonTheme: OutlinedButtonThemeData(
-                  style: ButtonStyle(
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                    ),
-                    side: WidgetStatePropertyAll(
-                      BorderSide(color: raisinBlack, width: 0.45.r),
-                    ),
-                    elevation: WidgetStatePropertyAll(4.5.r),
-                    foregroundColor: const WidgetStatePropertyAll(seaWhite),
-                    textStyle: WidgetStatePropertyAll(textTheme.bodySmall),
-                    minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
-                    padding: WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(horizontal: 30.r),
-                    ),
+                  style: defaultButtonStyle.copyWith(
+                    side: WidgetStatePropertyAll(outlineBorder),
                   ),
                 ),
               ),
@@ -180,4 +152,26 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+mixin CustomThemeMixin {
+  IconThemeData get iconThemeData => IconThemeData(
+        size: 18.r,
+        color: slateGray,
+      );
+
+  TextTheme get defaultTextTheme => DefaultTextTheme();
+
+  ButtonStyle get defaultButtonStyle => ButtonStyle(
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
+        ),
+        textStyle: WidgetStatePropertyAll(defaultTextTheme.bodySmall),
+        minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
+        elevation: WidgetStatePropertyAll(4.5.r),
+        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.r)),
+        foregroundColor: const WidgetStatePropertyAll(seaWhite),
+      );
+
+  BorderSide get outlineBorder => BorderSide(color: raisinBlack, width: 0.45.r);
 }

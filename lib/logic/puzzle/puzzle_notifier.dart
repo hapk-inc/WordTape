@@ -23,6 +23,10 @@ class PuzzleNotifier extends ChangeNotifier {
     log("Construct Puzzle");
     _puzzle = Puzzle.fromRandom();
     _found = const Found();
+    validateController();
+  }
+
+  validateController() {
     _list = List.generate(
       _puzzle.words.length,
       (index) {
@@ -38,6 +42,7 @@ class PuzzleNotifier extends ChangeNotifier {
         return controller;
       },
     );
+    if (_found.lastFound != null) notifyListeners();
   }
 
   Puzzle get puzzle => _puzzle;
@@ -47,10 +52,14 @@ class PuzzleNotifier extends ChangeNotifier {
   TextEditingController textController(int i) => _list[i];
 
   addText(String str) {
-    String newText = activeController.text + str;
-    _list[_found.i] = TextEditingController(text: newText);
-    onTextChanged(newText);
-    notifyListeners();
+    if (!enableDone) {
+      String newText = activeController.text + str;
+      _list[_found.i] = TextEditingController(text: newText);
+      onTextChanged(newText);
+      notifyListeners();
+    } else {
+      log("ALREADY FILLED");
+    }
   }
 
   removeText() {
@@ -66,12 +75,36 @@ class PuzzleNotifier extends ChangeNotifier {
     if (!newText.startsWith(getFirstLetter(exact)) || newText.isEmpty) {
       _list[_found.i].value = activeController.value.copyWith(
         text: getFirstLetter(exact),
-        selection: TextSelection.fromPosition(
-          const TextPosition(offset: 1),
-        ),
+        selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
       );
     }
   }
 
+  bool get enableDone =>
+      _puzzle.words[_found.i].value.length == activeController.text.length;
+
   String getFirstLetter(String str) => str.isEmpty ? '' : str.substring(0, 1);
+
+  Future<void> validate() async {
+    bool isValid = _puzzle.words[_found.i].value == activeController.text;
+    if (!isValid) {
+      log("CORRECT WORD = ${_puzzle.words[_found.i].value}");
+    } else {
+      incrementFound();
+    }
+  }
+
+  Future<void> incrementFound() async {
+    _found = _found.incrementFound();
+    log("${_found.toJson()}");
+
+    //
+    final bool everyFound = _puzzle.isCompleted(_found.i);
+    if (everyFound) {
+    } else {
+      notifyListeners();
+    }
+  }
+
+  Found get found => _found;
 }

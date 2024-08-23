@@ -21,5 +21,11 @@ class Found with _$Found {
 
   //factory Found.initial() => const Found();
 
-  bool isCompleted(int puzzleLength) => i == puzzleLength;
+  Found incrementFound() => Found(
+        i: i + 1,
+        lastFound: DateTime.now(),
+        id: id,
+        mistake: null,
+        revealed: revealed,
+      );
 }
