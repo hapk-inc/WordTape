@@ -15,7 +15,14 @@ class PuzzleHint extends ConsumerWidget {
 
     return ref.watch(randomTextProvider(word: "")).maybeWhen(
           orElse: () => Container(),
-          error: (error, stackTrace) => const Placeholder(),
+          error: (error, stackTrace) => AutoSizeText(
+            "Try to find the next word",
+            style: textTheme.bodyMedium?.copyWith(color: midnightGreen),
+            maxLines: 3,
+            stepGranularity: 1.5,
+            minFontSize: 12,
+            maxFontSize: 21,
+          ),
           data: (data) => AutoSizeText(
             data.text ?? mockString(45),
             style: textTheme.bodyMedium?.copyWith(color: midnightGreen),

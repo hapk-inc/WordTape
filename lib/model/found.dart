@@ -7,14 +7,13 @@ part 'found.g.dart';
 class Found with _$Found {
   const Found._();
 
-  //@JsonSerializable(includeIfNull: false)
+  @JsonSerializable(includeIfNull: false)
   const factory Found({
-    @Default(1) int i,
+    @Default(0) int i,
     String? mistake,
-    @JsonKey(includeIfNull: false) List<String>? revealed,
+    List<String>? revealed,
     DateTime? lastFound,
-    @JsonKey(includeToJson: false) //later need to include in database
-    String? id,
+    @JsonKey(includeToJson: false) String? id, //later include in database
   }) = _Found;
 
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);

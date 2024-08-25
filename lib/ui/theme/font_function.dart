@@ -34,9 +34,9 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get bodyMedium => GoogleFonts.rowdies(
+  TextStyle get bodyMedium => GoogleFonts.questrial(
         fontSize: 18.r,
-        color: blackBean,
+        color: slateGray,
         letterSpacing: 0,
         height: 2.1,
         fontWeight: FontWeight.w300,
@@ -82,9 +82,10 @@ class DefaultTextTheme extends TextTheme {
       );
 
   @override
-  TextStyle get displayLarge => GoogleFonts.paytoneOne(
+  TextStyle get displayLarge => GoogleFonts.openSans(
         fontSize: 60.r,
-        letterSpacing: 1.5,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 0,
         height: 0,
         color: seaWhite,
       );

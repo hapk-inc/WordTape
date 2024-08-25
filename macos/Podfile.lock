@@ -990,7 +990,7 @@ PODS:
   - firebase_core (3.3.0):
     - Firebase/CoreOnly (~> 10.29.0)
     - FlutterMacOS
-  - firebase_crashlytics (4.0.3):
+  - firebase_crashlytics (4.0.4):
     - Firebase/CoreOnly (~> 10.29.0)
     - Firebase/Crashlytics (~> 10.29.0)
     - firebase_core
@@ -1242,7 +1242,8 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - url_launcher_macos (0.0.1):
+  - sqflite (0.0.3):
+    - Flutter
     - FlutterMacOS
 
 DEPENDENCIES:
@@ -1259,7 +1260,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
-  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
+  - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -1319,8 +1320,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/share_plus/macos
   shared_preferences_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
-  url_launcher_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
+  sqflite:
+    :path: Flutter/ephemeral/.symlinks/plugins/sqflite/darwin
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
@@ -1331,7 +1332,7 @@ SPEC CHECKSUMS:
   firebase_analytics: e1236d621a5d62d16a706315d198f3cd7f0e2fcb
   firebase_auth: a1b0972e30634894e8b24bf618b9a5aeb1f86119
   firebase_core: 73185b844efc8a534e5744d68152e75e740922d2
-  firebase_crashlytics: 5c81aa3d8722e532f7fa1a4d4a2ad6cb9f336876
+  firebase_crashlytics: a7b94c09eb4df16cabb0cfae4831ff4624a3d5d6
   firebase_remote_config: 4e3fda88b5d4c1474d8260344009639f7f82ef07
   FirebaseABTesting: d87f56707159bae64e269757a6e963d490f2eebe
   FirebaseAnalytics: 23717de130b779aa506e757edb9713d24b6ffeda
@@ -1364,7 +1365,7 @@ SPEC CHECKSUMS:
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   share_plus: 36537c04ce0c3e3f5bd297ce4318b6d5ee5fd6cf
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  url_launcher_macos: 5f437abeda8c85500ceb03f5c1938a8c5a705399
+  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 

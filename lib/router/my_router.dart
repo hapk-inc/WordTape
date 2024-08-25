@@ -1,9 +1,15 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 
-import 'app_router.gr.dart';
+import '../outline.dart';
+import '../ui/dashboard.dart';
+import '../ui/login.dart';
+import '../ui/puzzle.dart';
+
+part 'my_router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
-class AppRouter extends RootStackRouter {
+class MyRouter extends RootStackRouter {
   @override
   RouteType get defaultRouteType => const RouteType.material();
 

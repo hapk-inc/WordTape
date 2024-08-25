@@ -16,7 +16,8 @@ class PuzzleNotifier extends ChangeNotifier {
   final String id;
   late Puzzle _puzzle;
   late Found _found;
-  late List<TextEditingController> _list;
+  late List<TextEditingController> _pinController;
+  late List<FocusNode> _nodes;
   PuzzleNotifier(this.ref, {required this.id});
 
   Future get construct async {
@@ -24,10 +25,11 @@ class PuzzleNotifier extends ChangeNotifier {
     _puzzle = Puzzle.fromRandom();
     _found = const Found();
     validateController();
+    constructNodes();
   }
 
   validateController() {
-    _list = List.generate(
+    _pinController = List.generate(
       _puzzle.words.length,
       (index) {
         late TextEditingController controller;
@@ -45,16 +47,23 @@ class PuzzleNotifier extends ChangeNotifier {
     if (_found.lastFound != null) notifyListeners();
   }
 
+  constructNodes() {
+    _nodes = List.generate(_puzzle.words.length, (_) => FocusNode());
+  }
+
   Puzzle get puzzle => _puzzle;
 
-  TextEditingController get activeController => _list[_found.i];
+  TextEditingController get activeController => _pinController[_found.i];
 
-  TextEditingController textController(int i) => _list[i];
+  FocusNode get activeNode => _nodes[_found.i];
+
+  TextEditingController textController(int i) => _pinController[i];
+  FocusNode focusNode(int i) => _nodes[i];
 
   addText(String str) {
     if (!enableDone) {
       String newText = activeController.text + str;
-      _list[_found.i] = TextEditingController(text: newText);
+      _pinController[_found.i] = TextEditingController(text: newText);
       onTextChanged(newText);
       notifyListeners();
     } else {
@@ -65,7 +74,7 @@ class PuzzleNotifier extends ChangeNotifier {
   removeText() {
     final String text = activeController.text;
     final String newText = text.substring(0, text.length - 1);
-    _list[_found.i] = TextEditingController(text: newText);
+    _pinController[_found.i] = TextEditingController(text: newText);
     onTextChanged(newText);
     notifyListeners();
   }
@@ -73,7 +82,7 @@ class PuzzleNotifier extends ChangeNotifier {
   onTextChanged(String newText) {
     String exact = _puzzle.words[_found.i].value;
     if (!newText.startsWith(getFirstLetter(exact)) || newText.isEmpty) {
-      _list[_found.i].value = activeController.value.copyWith(
+      _pinController[_found.i].value = activeController.value.copyWith(
         text: getFirstLetter(exact),
         selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
       );

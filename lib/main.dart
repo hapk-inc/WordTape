@@ -13,13 +13,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wordtape/logic/dot_env.dart';
 
 import 'firebase/firebase.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
+import 'logic/dot_env.dart';
 import 'logic/size.dart';
-import 'router/app_router.dart';
+import 'router/my_router.dart';
 import 'ui/theme/colors.dart';
 import 'ui/theme/font_function.dart';
 
@@ -79,6 +79,8 @@ Future<void> main() async {
   PlatformDispatcher.instance.onError = (error, stack) {
     if (!kIsWeb) {
       log("TAPE ERROR");
+      debugPrint(error.toString());
+      debugPrintStack(stackTrace: stack);
 
       if (!kDebugMode) crashlytics.recordError(error, stack, fatal: true);
     } else {
@@ -110,7 +112,7 @@ Future<void> main() async {
   );
 }
 
-AppRouter _router = AppRouter();
+MyRouter _router = MyRouter();
 
 class MyApp extends StatelessWidget with CustomThemeMixin {
   const MyApp({super.key});
