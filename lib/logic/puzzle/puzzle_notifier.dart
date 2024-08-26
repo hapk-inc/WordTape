@@ -2,9 +2,18 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wordtape/logic/database/local_found.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
+import '../database/local_puzzle.dart';
+import '../puzzle_date.dart';
+import '../selected_date.dart';
+
+final FutureProvider<void> deleteDatabaseProvider = FutureProvider<void>(
+  (_) async =>
+      await Future.wait([LocalFound().delete(), LocalPuzzle().delete()]),
+);
 
 final ChangeNotifierProviderFamily<PuzzleNotifier, String>
     puzzleNotifierProvider =
@@ -18,17 +27,25 @@ class PuzzleNotifier extends ChangeNotifier {
   late Found _found;
   late List<TextEditingController> _pinController;
   late List<FocusNode> _nodes;
+
+  //
+  final LocalFound localFound = LocalFound();
+
   PuzzleNotifier(this.ref, {required this.id});
 
   Future get construct async {
     log("Construct Puzzle");
-    _puzzle = Puzzle.fromRandom();
-    _found = const Found();
+    final DateTime date = ref.read(chosenDateProvider);
+    _puzzle =
+        ref.read(selectedPuzzleProvider(date)).value ?? Puzzle.fromRandom();
+    _found =
+        ref.read(selectedFoundProvider(date)).value ?? Found(id: _puzzle.id);
     validateController();
     constructNodes();
   }
 
   validateController() {
+    log("Running ValidateController");
     _pinController = List.generate(
       _puzzle.words.length,
       (index) {
@@ -104,8 +121,10 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   Future<void> incrementFound() async {
-    _found = _found.incrementFound();
-    log("${_found.toJson()}");
+    log("Increment Found");
+    _found = _found.copyWith(i: _found.i + 1, lastFound: DateTime.now());
+    log("$_found");
+    localFound.insert(_found);
 
     //
     final bool everyFound = _puzzle.isCompleted(_found.i);

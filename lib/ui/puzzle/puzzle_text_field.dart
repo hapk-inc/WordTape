@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../logic/puzzle/key.dart';
+import '../../logic/puzzle/puzzle_key.dart';
 import '../../logic/puzzle/puzzle_notifier.dart';
 import '../../logic/size.dart';
 import '../theme/colors.dart';

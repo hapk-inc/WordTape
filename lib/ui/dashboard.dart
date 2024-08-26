@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../logic/carousel_slider.dart';
+import '../logic/puzzle_date.dart';
 import '../logic/size.dart';
 
 import 'dashboard/my_calendar.dart';
@@ -18,10 +21,14 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String size = ref.watch(sizeProvider);
+    final CarouselSliderController carouselController =
+        ref.read(carouselProvider);
+    final int pCount = ref.read(puzzleCountProvider);
     return LayoutBuilder(
       builder: (_, constraint) {
         final double maxHeight = constraint.maxHeight;
         final double maxWidth = constraint.maxWidth;
+        final double mW_15 = maxWidth * 0.015;
         return SafeArea(
           child: ColoredBox(
             color: seaWhite,
@@ -29,25 +36,29 @@ class DashboardPage extends ConsumerWidget {
               children: [
                 Gap(maxHeight * 0.015),
                 CarouselSlider(
-                  //disableGesture: true,
+                  carouselController: carouselController,
                   items: List.generate(
-                    6,
-                    (index) => AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      decoration: BoxDecoration(
-                        color: midnightGreen,
-                        borderRadius: BorderRadius.circular(15.r),
-                      ),
-                      height: maxHeight * (size != "pc" ? 0.705 : 0.84),
-                      margin:
-                          EdgeInsets.symmetric(horizontal: maxWidth * 0.018),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: maxWidth * 0.015),
-                      child: const PuzzleTile(),
-                    ),
+                    pCount,
+                    (index) {
+                      final DateTime chosenDate =
+                          ref.read(puzzleDateProvider(index));
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        decoration: BoxDecoration(
+                          color: midnightGreen,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        height: maxHeight * (size != "pc" ? 0.7 : 0.84),
+                        margin: EdgeInsets.symmetric(horizontal: mW_15),
+                        padding: EdgeInsets.symmetric(horizontal: mW_15),
+                        child: PuzzleTile(chosenDate),
+                      );
+                    },
                   ),
                   options: CarouselOptions(
-                    initialPage: 0,
+                    initialPage: DateTime.now()
+                        .difference(ref.watch(chosenDateProvider))
+                        .inDays,
                     height: maxHeight * (size != "pc" ? 0.705 : 0.84),
                     viewportFraction: 1,
                     padEnds: false,
@@ -55,11 +66,11 @@ class DashboardPage extends ConsumerWidget {
                     scrollPhysics: const NeverScrollableScrollPhysics(),
                   ),
                 ),
-                if (size != "pc") ...[
+                if (size != "pc" && !kIsWeb) ...[
                   Gap(maxHeight * 0.015),
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    height: maxHeight * 0.12,
+                    height: maxHeight * 0.135,
                     child: const MyCalendar(),
                   ),
                   Padding(

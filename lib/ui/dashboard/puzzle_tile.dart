@@ -1,34 +1,27 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:animated_flip_counter/animated_flip_counter.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../logic/panel_controller.dart';
-import '../../logic/puzzle/key.dart';
-import '../../logic/puzzle/puzzle_panel.dart';
+import '../../logic/puzzle/puzzle_notifier.dart';
 import '../../logic/selected_date.dart';
 import '../../logic/size.dart';
 import '../../logic/welcome_text.dart';
 import '../../model/puzzle.dart';
-import '../../router/my_router.dart';
-import '../puzzle.dart';
 import '../theme/colors.dart';
+import 'play_button.dart';
 
 class PuzzleTile extends ConsumerWidget {
-  const PuzzleTile({super.key});
+  final DateTime date;
+  const PuzzleTile(this.date, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String size = ref.watch(sizeProvider);
-    final PanelController panelController = ref.read(panelControllerProvider);
-    final Puzzle puzzle = ref.watch(selectedDateNotifierProvider).puzzle;
-    String formattedDate =
-        DateFormat('d MMMM, y').format(puzzle.date).toUpperCase();
+    final Puzzle? puzzle = ref.watch(selectedPuzzleProvider(date)).value;
+    String formattedDate = DateFormat('d MMMM, y').format(date).toUpperCase();
     final TextTheme textTheme = Theme.of(context).textTheme;
     return LayoutBuilder(
       builder: (_, constraints) {
@@ -44,7 +37,7 @@ class PuzzleTile extends ConsumerWidget {
                 padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
                 child: FadeIn(
                   delay: const Duration(milliseconds: 750),
-                  child: const Welcome(),
+                  child: Welcome(puzzle),
                 ),
               ),
               Gap(maxHeight * 0.075),
@@ -57,31 +50,13 @@ class PuzzleTile extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          const String id = "xyx";
-                          if (kIsWeb) {
-                            context.router.push(PuzzleRoute(id: id));
-                          } else {
-                            if (panelController.isAttached) {
-                              if (panelController.isPanelClosed) {
-                                ref.read(puzzleKeyProvider.notifier).state = id;
-                                ref.read(puzzlePanelProvider.notifier).state =
-                                    const PuzzlePage(id: id);
-                                panelController.open();
-                              }
-                            } else {
-                              context.router.push(PuzzleRoute(id: id));
-                            }
-                          }
-                        },
-                        child: const Text("Play Now"),
-                      ),
+                      PlayButton(puzzle),
                       SizedBox(width: maxWidth * 0.03),
                       OutlinedButton(
-                        onPressed: () => ref
+                        /*onPressed: () => ref
                             .read(selectedDateNotifierProvider)
-                            .deleteDatabase(),
+                            .deleteDatabase(),*/
+                        onPressed: () => ref.read(deleteDatabaseProvider),
                         style: const ButtonStyle(
                           foregroundColor: WidgetStatePropertyAll(seaWhite),
                           side: WidgetStatePropertyAll(
@@ -114,7 +89,8 @@ class PuzzleTile extends ConsumerWidget {
 }
 
 class Welcome extends ConsumerWidget {
-  const Welcome({super.key});
+  final Puzzle? puzzle;
+  const Welcome(this.puzzle, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -126,8 +102,12 @@ class Welcome extends ConsumerWidget {
         children: [
           TextSpan(
             children: [
-              TextSpan(text: welcomeText.text),
-              if (size != "mobile") TextSpan(text: welcomeText.sub),
+              if (puzzle != null) ...[
+                TextSpan(text: welcomeText.text),
+                if (size != "mobile") TextSpan(text: welcomeText.sub),
+              ] else ...[
+                const TextSpan(text: "No ")
+              ],
               TextSpan(
                 text: "puzzle.",
                 style: textTheme.titleMedium?.copyWith(color: aquaMarine),
@@ -147,7 +127,8 @@ class TodayCount extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final int count = ref.watch(selectedDateNotifierProvider).puzzle.played;
+
+    //final int count = ref.watch(selectedDateNotifierProvider).puzzle.played;
 
     return LayoutBuilder(
       builder: (_, constraint) {
@@ -158,14 +139,14 @@ class TodayCount extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AnimatedFlipCounter(
-                value: count,
+                value: 0,
                 wholeDigits: 2,
                 padding: EdgeInsets.zero,
                 textStyle: textTheme.displayLarge?.copyWith(letterSpacing: 0.3),
                 duration: const Duration(milliseconds: 1200),
               ),
               Text(
-                count == 0
+                0 == 0
                     ? "Be the First Player to start"
                     : "Users Played so far...",
                 //mockString(),

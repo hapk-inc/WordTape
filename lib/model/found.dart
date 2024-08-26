@@ -9,22 +9,20 @@ class Found with _$Found {
 
   @JsonSerializable(includeIfNull: false)
   const factory Found({
-    @Default(0) int i,
+    @Default(1) int i,
     String? mistake,
     List<String>? revealed,
     DateTime? lastFound,
-    @JsonKey(includeToJson: false) String? id, //later include in database
+    @JsonKey(includeIfNull: false) String? id, //later include in database
   }) = _Found;
 
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
 
   //factory Found.initial() => const Found();
 
-  Found incrementFound() => Found(
-        i: i + 1,
-        lastFound: DateTime.now(),
-        id: id,
-        mistake: null,
-        revealed: revealed,
-      );
+  String get foundTrack => i == 1
+      ? "-"
+      : i == 6
+          ? "DONE"
+          : "PENDING";
 }

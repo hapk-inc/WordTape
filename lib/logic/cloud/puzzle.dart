@@ -33,7 +33,7 @@ class PuzzleCloud {
 
         final Puzzle puzzle =
             Puzzle.fromJson(Map<String, dynamic>.from(map)).copyWith(id: id);
-        log("36==$puzzle");
+        log("36==Puzzle==$puzzle");
         return puzzle;
       },
     );

@@ -1,67 +1,38 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../model/found.dart';
 import '../model/puzzle.dart';
+import '../model/found.dart';
 import 'cloud/puzzle.dart';
 import 'database/local_found.dart';
 import 'database/local_puzzle.dart';
 
-final ChangeNotifierProvider<SelectedDateNotifier>
-    selectedDateNotifierProvider = ChangeNotifierProvider<SelectedDateNotifier>(
-  (ref) => SelectedDateNotifier(ref)..constructPuzzle,
-);
+part 'selected_date.g.dart';
 
-class SelectedDateNotifier extends ChangeNotifier {
-  DateTime _date = DateTime.now();
-  Puzzle? _puzzle;
-  Found? _found;
-
-  //
-  final Ref ref;
-
+@Riverpod(keepAlive: true, dependencies: [])
+FutureOr<Puzzle?> selectedPuzzle(SelectedPuzzleRef ref, DateTime date) async {
+  log("Running selectedPuzzle for ${date.day} - ${date.month}");
   final LocalPuzzle localPuzzle = LocalPuzzle();
+  Puzzle? lPuzzle = await localPuzzle.fromDate(date);
+
+  if (lPuzzle == null) {
+    final PuzzleCloud puzzleCloud = PuzzleCloud(ref);
+    Puzzle? cPuzzle = await puzzleCloud.puzzle(date);
+
+    if (cPuzzle != null) await localPuzzle.insert(cPuzzle);
+    return cPuzzle;
+  }
+  return lPuzzle;
+}
+
+@Riverpod(keepAlive: true, dependencies: [selectedPuzzle])
+FutureOr<Found?> selectedFound(SelectedFoundRef ref, DateTime date) async {
+  log("Running selectedFound for ${date.day} - ${date.month}");
+  final Puzzle? puzzle = await ref.read(selectedPuzzleProvider(date).future);
+
+  if (puzzle == null) return null;
+  log("33==$puzzle");
   final LocalFound localFound = LocalFound();
-  late PuzzleCloud puzzleCloud;
-
-  SelectedDateNotifier(this.ref) {
-    puzzleCloud = PuzzleCloud(ref);
-  }
-
-  Future<void> get constructPuzzle async {
-    Puzzle? lPuzzle = await localPuzzle.fromDate(_date);
-    if (lPuzzle == null) {
-      Puzzle cPuzzle = await puzzleCloud.puzzle(_date) ?? Puzzle.fromRandom();
-      await localPuzzle.insert(cPuzzle);
-      _puzzle = cPuzzle;
-    } else {
-      _puzzle = lPuzzle;
-    }
-    _found = await localFound.found(_puzzle?.id) ?? const Found();
-  }
-
-  Puzzle get puzzle => _puzzle ?? Puzzle.fromRandom();
-
-  set date(DateTime value) {
-    if (_date == value) return;
-    _date = value;
-    notifyListeners();
-  }
-
-  DateTime get date => _date;
-
-  Future<void> deleteDatabase() async {
-    await localFound.delete();
-    return localPuzzle.delete();
-  }
-
-  Found get found => _found ?? const Found();
-
-  set found(Found value) {
-    if (_found == value) return;
-    _found = value;
-    notifyListeners();
-  }
+  return localFound.found(puzzle.id);
 }

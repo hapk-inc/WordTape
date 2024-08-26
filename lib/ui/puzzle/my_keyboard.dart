@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../logic/puzzle/key.dart';
+import '../../logic/puzzle/puzzle_key.dart';
 import '../../logic/puzzle/puzzle_notifier.dart';
 import '../theme/colors.dart';
 
@@ -86,7 +86,6 @@ class MyKeyboardTile extends ConsumerWidget {
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
     final String id = ref.read(puzzleKeyProvider);
-    //final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(id));
     return InkWell(
       onTap: () async {
         final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(id));
