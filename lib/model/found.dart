@@ -20,9 +20,9 @@ class Found with _$Found {
 
   //factory Found.initial() => const Found();
 
-  String get foundTrack => i == 1
+  String foundTrack(int count) => i == 1
       ? "-"
-      : i == 6
+      : i == count
           ? "DONE"
           : "PENDING";
 }
