@@ -72,7 +72,7 @@ class CalendarTile extends ConsumerWidget {
       child: InkWell(
         onTap: onTap,
         child: puzzle == null
-            ? Placeholder()
+            ? Placeholder(color: Colors.grey.shade300)
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'welcome_text.g.dart';
@@ -14,8 +13,8 @@ class WelcomeText with _$WelcomeText {
   }) = _WelcomeText;
 }
 
-@riverpod
-WelcomeText welcomeText(WelcomeTextRef ref) => const [
+@Riverpod(keepAlive: true)
+WelcomeText welcomeText(WelcomeTextRef ref, int index) => const [
       WelcomeText(
         text: "Discover concealed words in an entertaining ",
         sub: "and captivating ",
@@ -24,7 +23,39 @@ WelcomeText welcomeText(WelcomeTextRef ref) => const [
         text: "Find secret words in an enjoyable ",
         sub: "and intriguing ",
       ),
-    ][mockInteger(0, 1)];
+      WelcomeText(
+        text: "Reveal hidden words within a fun ",
+        sub: "and engaging ",
+      ),
+      /*WelcomeText(
+    text: "Unearth obscured words in an exciting ",
+    sub: "and interactive ",
+  ),*/
+      WelcomeText(
+        text: "Search for hidden words in a delightful ",
+        sub: "and stimulating ",
+      ),
+      WelcomeText(
+        text: "Explore masked words in a playful ",
+        sub: "and fascinating ",
+      ),
+      WelcomeText(
+        text: "Identify concealed words in a lively ",
+        sub: "and enjoyable ",
+      ),
+      WelcomeText(
+        text: "Hunt for hidden words in a charming ",
+        sub: "and engaging ",
+      ),
+      WelcomeText(
+        text: "Dig up secret words in a whimsical ",
+        sub: "and captivating ",
+      ),
+      WelcomeText(
+        text: "Locate hidden words in a fun-filled ",
+        sub: "and challenging ",
+      ),
+    ][index % 9];
 
 /*
 Here are ten rephrased versions of your line, each concluding with the word "puzzle":

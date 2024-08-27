@@ -32,8 +32,8 @@ class Puzzle with _$Puzzle {
 
   bool isCompleted(int length) => words.length == length;
 
-/*  static String toDateTimeStr(DateTime value) {
-    final String dateStr = DateFormat('yyyy-MM-dd').format(value);
-    return dateStr;
-  }*/
+  int get puzzleNo {
+    final DateTime jun10 = DateTime(2024, 6, 10);
+    return date.difference(jun10).inDays;
+  }
 }

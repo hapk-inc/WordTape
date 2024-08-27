@@ -10,6 +10,7 @@ import '../logic/carousel_slider.dart';
 import '../logic/puzzle_date.dart';
 import '../logic/size.dart';
 
+import 'dashboard/leaderboard.dart';
 import 'dashboard/my_calendar.dart';
 import 'dashboard/puzzle_tile.dart';
 import 'theme/colors.dart';
@@ -29,12 +30,13 @@ class DashboardPage extends ConsumerWidget {
         final double maxHeight = constraint.maxHeight;
         final double maxWidth = constraint.maxWidth;
         final double mW_15 = maxWidth * 0.015;
+        final double mH_15 = maxHeight * 0.015;
         return SafeArea(
           child: ColoredBox(
             color: seaWhite,
             child: ListView(
               children: [
-                Gap(maxHeight * 0.015),
+                Gap(mH_15),
                 CarouselSlider(
                   carouselController: carouselController,
                   items: List.generate(
@@ -67,21 +69,33 @@ class DashboardPage extends ConsumerWidget {
                   ),
                 ),
                 if (size != "pc" && !kIsWeb) ...[
-                  Gap(maxHeight * 0.015),
+                  Gap(mH_15),
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     height: maxHeight * 0.135,
                     child: const MyCalendar(),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.015),
+                    padding: EdgeInsets.symmetric(horizontal: mW_15),
                     child: Divider(
                       height: maxHeight * 0.06,
                       color: slateGray,
                       thickness: 0.45.r,
                     ),
                   ),
-                  Gap(maxHeight * 0.015),
+                  Gap(mH_15),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(15.r),
+                    ),
+                    height: maxHeight * 0.24,
+                    margin: EdgeInsets.symmetric(horizontal: mW_15),
+                    padding: EdgeInsets.symmetric(horizontal: mW_15),
+                    child: const LeaderBoard(),
+                  ),
+                  Gap(mH_15),
                 ]
               ],
             ),

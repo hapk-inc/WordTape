@@ -8,10 +8,10 @@ import 'package:intl/intl.dart';
 import '../../logic/puzzle/puzzle_notifier.dart';
 import '../../logic/selected_date.dart';
 import '../../logic/size.dart';
-import '../../logic/welcome_text.dart';
 import '../../model/puzzle.dart';
 import '../theme/colors.dart';
 import 'play_button.dart';
+import 'welcome.dart';
 
 class PuzzleTile extends ConsumerWidget {
   final DateTime date;
@@ -36,7 +36,7 @@ class PuzzleTile extends ConsumerWidget {
                 duration: const Duration(milliseconds: 300),
                 padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
                 child: FadeIn(
-                  delay: const Duration(milliseconds: 750),
+                  delay: const Duration(milliseconds: 150),
                   child: Welcome(puzzle),
                 ),
               ),
@@ -84,39 +84,6 @@ class PuzzleTile extends ConsumerWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class Welcome extends ConsumerWidget {
-  final Puzzle? puzzle;
-  const Welcome(this.puzzle, {super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    final String size = ref.watch(sizeProvider);
-    final WelcomeText welcomeText = ref.read(welcomeTextProvider);
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            children: [
-              if (puzzle != null) ...[
-                TextSpan(text: welcomeText.text),
-                if (size != "mobile") TextSpan(text: welcomeText.sub),
-              ] else ...[
-                const TextSpan(text: "No ")
-              ],
-              TextSpan(
-                text: "puzzle.",
-                style: textTheme.titleMedium?.copyWith(color: aquaMarine),
-              )
-            ],
-          )
-        ],
-      ),
-      style: textTheme.labelMedium?.copyWith(color: seaWhite),
     );
   }
 }
