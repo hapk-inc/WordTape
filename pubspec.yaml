@@ -100,6 +100,7 @@ dependencies:
   # get: ^4.6.6
 
   timezone: ^0.9.4
+  games_services: ^4.0.2
 
   #
   # flutter_staggered_grid_view: ^0.7.0
@@ -131,7 +132,7 @@ dev_dependencies:
 
   # riverpod dev
   riverpod_generator: ^2.4.3
-  build_runner: ^2.4.9
+  build_runner: ^2.4.12
   custom_lint: ^0.6.4
   riverpod_lint: ^2.3.13
 
