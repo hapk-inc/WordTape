@@ -16,7 +16,7 @@ class DefaultTextTheme extends TextTheme {
 
   @override
   TextStyle get titleSmall => GoogleFonts.carterOne(
-        fontSize: 24.r,
+        fontSize: 30.r,
         color: raisinBlack,
         wordSpacing: 0,
         letterSpacing: 0,
@@ -64,7 +64,7 @@ class DefaultTextTheme extends TextTheme {
 
   @override
   TextStyle get labelMedium => GoogleFonts.questrial(
-        fontSize: 30.r,
+        fontSize: 24.r,
         fontWeight: FontWeight.normal,
         color: midnightGreen,
         letterSpacing: 0,

@@ -112,22 +112,19 @@ Future<void> main() async {
   );
 }
 
-MyRouter _router = MyRouter();
+//MyRouter _router = MyRouter();
 
-class MyApp extends StatelessWidget with CustomThemeMixin {
+class MyApp extends ConsumerWidget with CustomThemeMixin {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final MyRouter router = ref.read(routerProvider);
     return DevicePreview(
       builder: (_) => ScreenUtilInit(
         designSize: const Size(360, 900),
         builder: (_, __) {
-          final String size = 360.w < 420.r
-              ? 'mobile'
-              : 360.w < 720.r
-                  ? 'tab'
-                  : 'pc';
+          final String size = validateSize();
 
           return ProviderScope(
             overrides: [sizeProvider.overrideWithValue(size)],
@@ -146,13 +143,19 @@ class MyApp extends StatelessWidget with CustomThemeMixin {
                   ),
                 ),
               ),
-              routeInformationParser: _router.defaultRouteParser(),
-              routerDelegate: _router.delegate(),
+              routeInformationParser: router.defaultRouteParser(),
+              routerDelegate: router.delegate(),
             ),
           );
         },
       ),
     );
+  }
+
+  String validateSize() {
+    final double mW = 360.w;
+    if (mW < 420.r) return 'mobile';
+    return mW < 720.r ? 'tab' : 'pc';
   }
 }
 

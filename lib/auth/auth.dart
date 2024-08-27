@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:games_services/games_services.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -35,7 +34,7 @@ class Auth {
   Future updateName(String name) => _auth.currentUser!
       .updateDisplayName(toBeginningOfSentenceCase(name) ?? "");
 
-  Future gameCenterAuth() async {
+  /*Future gameCenterAuth() async {
     final a = await GamesServices.signIn();
-  }
+  }*/
 }

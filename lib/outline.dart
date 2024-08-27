@@ -20,7 +20,7 @@ class OutlinePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final String size = ref.watch(sizeProvider);
     return Scaffold(
-      backgroundColor: seaWhite,
+      backgroundColor: midnightGreen,
       body: LayoutBuilder(
         builder: (_, constraints) => SizedBox.expand(
           child: size == "mobile"
@@ -72,7 +72,9 @@ class _OutlineStateState extends ConsumerState<OutlineState> {
               //color: aquaMarine,
               alignment: Alignment.topLeft,
               //child: const DashboardPage(),
-              child: const AutoRouter(),
+              child: AutoRouter(
+                placeholder: (context) => const Center(child: Text("Loading")),
+              ),
             ),
             if (maxWidth > mobileWidth)
               AnimatedPositioned(
