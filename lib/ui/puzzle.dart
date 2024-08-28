@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,35 +47,44 @@ class PuzzlePage extends ConsumerWidget {
     return LayoutBuilder(
       builder: (_, constraint) {
         final double maxHeight = constraint.maxHeight;
-        return Container(
-          color: seaWhite,
-          height: maxHeight,
-          padding: _commonPuzzlePadding(constraint),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
-                  height: maxHeight * 0.06,
-                  alignment: Alignment.center,
-                  child: const _CloseButton(),
-                ),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
-                  padding: _commonPuzzlePadding(constraint),
-                  height: maxHeight * 0.15,
-                  alignment: Alignment.topLeft,
-                  child: PuzzleHint(id),
-                ),
-                //Gap(maxHeight * 0.015),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
-                  height: maxHeight * 0.48,
-                  child: PuzzleBoard(id),
-                ),
-                Gap(maxHeight * 0.054),
-                const MyKeyboard(),
-              ],
+        log(DateTime.now().timeZoneName);
+        return KeyboardListener(
+          onKeyEvent: (KeyEvent event) {
+            //log("onKeyEvent==$event");
+
+            //add notifier and filter with keyLabel so that same keyEvent no raising
+          },
+          focusNode: FocusNode(),
+          child: Container(
+            color: seaWhite,
+            height: maxHeight,
+            padding: _commonPuzzlePadding(constraint),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    height: maxHeight * 0.06,
+                    alignment: Alignment.center,
+                    child: const _CloseButton(),
+                  ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    padding: _commonPuzzlePadding(constraint),
+                    height: maxHeight * 0.15,
+                    alignment: Alignment.topLeft,
+                    child: PuzzleHint(id),
+                  ),
+                  //Gap(maxHeight * 0.015),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    height: maxHeight * 0.48,
+                    child: PuzzleBoard(id),
+                  ),
+                  Gap(maxHeight * 0.054),
+                  const MyKeyboard(),
+                ],
+              ),
             ),
           ),
         );

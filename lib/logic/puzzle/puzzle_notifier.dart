@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wordtape/auth/bloc.dart';
 import 'package:wordtape/logic/database/local_found.dart';
 
 import '../../model/found.dart';
@@ -12,8 +13,13 @@ import '../puzzle_date.dart';
 import '../selected_date.dart';
 
 final FutureProvider<void> deleteDatabaseProvider = FutureProvider<void>(
-  (_) async =>
-      await Future.wait([LocalFound().delete(), LocalPuzzle().delete()]),
+  (ref) async => await Future.wait(
+    [
+      LocalFound().delete(),
+      LocalPuzzle().delete(),
+      ref.read(authProvider).signOut,
+    ],
+  ),
 );
 
 final ChangeNotifierProviderFamily<PuzzleNotifier, String>
