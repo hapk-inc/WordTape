@@ -50,7 +50,7 @@ class DashboardPage extends ConsumerWidget {
                           color: midnightGreen,
                           borderRadius: BorderRadius.circular(15.r),
                         ),
-                        height: maxHeight * (size != "pc" ? 0.7 : 0.84),
+                        // height: maxHeight * (size != "pc" ? 0.7 : 0.84),
                         margin: EdgeInsets.symmetric(horizontal: mW_15),
                         padding: EdgeInsets.symmetric(horizontal: mW_15),
                         child: PuzzleTile(chosenDate),
@@ -61,7 +61,7 @@ class DashboardPage extends ConsumerWidget {
                     initialPage: DateTime.now()
                         .difference(ref.watch(chosenDateProvider))
                         .inDays,
-                    height: maxHeight * (size != "pc" ? 0.705 : 0.84),
+                    height: maxHeight * (size != "pc" ? 0.6 : 0.8),
                     viewportFraction: 1,
                     padEnds: false,
                     enableInfiniteScroll: false,

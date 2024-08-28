@@ -45,14 +45,14 @@ class MyRouter extends RootStackRouter {
               page: DashboardRoute.page,
               transitionsBuilder: TransitionsBuilders.noTransition,
 
-              maintainState: false,
+              //maintainState: false,
             ),
             CustomRoute(
               page: PuzzleRoute.page,
               path: ':id',
               transitionsBuilder: TransitionsBuilders.slideBottom,
               durationInMilliseconds: 150,
-              maintainState: false,
+              //maintainState: false,
             ),
           ],
         ),
