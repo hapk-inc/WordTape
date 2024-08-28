@@ -85,7 +85,7 @@ class MyKeyboardTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final String id = ref.read(puzzleKeyProvider);
+    final String id = ref.watch(puzzleKeyProvider);
     return InkWell(
       onTap: () async {
         final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(id));

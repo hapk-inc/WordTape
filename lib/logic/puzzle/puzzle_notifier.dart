@@ -6,6 +6,7 @@ import 'package:wordtape/logic/database/local_found.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
+import '../../model/word.dart';
 import '../database/local_puzzle.dart';
 import '../puzzle_date.dart';
 import '../selected_date.dart';
@@ -84,7 +85,7 @@ class PuzzleNotifier extends ChangeNotifier {
       onTextChanged(newText);
       notifyListeners();
     } else {
-      log("ALREADY FILLED");
+      log("ALREADY FILLED = ${activeController.text}");
     }
   }
 
@@ -135,4 +136,13 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   Found get found => _found;
+
+  String get nextWord {
+    final int currentTrack = _found.i;
+    List<Word> list = _puzzle.words;
+    final String str =
+        "${list[currentTrack - 1].value} ${list[currentTrack].value}";
+    log("Next-Word $str");
+    return str;
+  }
 }

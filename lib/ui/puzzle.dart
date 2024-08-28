@@ -10,7 +10,7 @@ import '../logic/puzzle/puzzle_notifier.dart';
 import '../logic/size.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
-import 'puzzle/hint.dart';
+import 'puzzle/puzzle_hint.dart';
 import 'puzzle/my_keyboard.dart';
 import 'puzzle/puzzle_text_field.dart';
 import 'theme/colors.dart';
@@ -63,7 +63,7 @@ class PuzzlePage extends ConsumerWidget {
                   padding: _commonPuzzlePadding(constraint),
                   height: maxHeight * 0.15,
                   alignment: Alignment.topLeft,
-                  child: const PuzzleHint(),
+                  child: PuzzleHint(id),
                 ),
                 //Gap(maxHeight * 0.015),
                 AnimatedContainer(
