@@ -6,7 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-import '../remote/config.dart';
+import '../logic/remote/pod.dart';
+
 import 'theme/colors.dart';
 
 class RenovationPage extends ConsumerWidget {
@@ -22,7 +23,7 @@ class RenovationPage extends ConsumerWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Gap(120.h),
+            Gap(150.r),
             FadeIn(
               delay: const Duration(milliseconds: 300),
               child: SizedBox.square(
@@ -37,7 +38,7 @@ class RenovationPage extends ConsumerWidget {
                 padding: EdgeInsets.symmetric(horizontal: 15.r),
                 child: AutoSizeText(
                   renovation.isEmpty ? "We will be back soon" : renovation,
-                  style: textTheme.bodyLarge?.copyWith(color: Colors.grey),
+                  style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                 ),

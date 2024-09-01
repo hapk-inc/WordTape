@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import 'enums/screen_size.dart';
-import 'router/router.dart';
+import 'enum/pod.dart';
+import 'router/pod.dart';
 import 'ui/theme/colors.dart';
 import 'ui/theme/font.dart';
 

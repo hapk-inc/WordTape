@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../enums/screen_size.dart';
-import '../logic/controller/panel_controller.dart';
-import '../logic/puzzle/panel.dart';
+import '../enum/pod.dart';
+import '../logic/controller/pod.dart';
 import 'theme/colors.dart';
 
 BorderRadius get _borderRadius30 =>

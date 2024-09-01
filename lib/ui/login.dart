@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../auth/running_user.dart';
+import '../logic/auth/pod.dart';
 import 'theme/colors.dart';
 
 class LoginPage extends ConsumerWidget {
@@ -54,7 +54,7 @@ class NameTextField extends ConsumerWidget {
       autofocus: true,
       style: textTheme.titleLarge?.copyWith(
         color: seaWhite,
-        letterSpacing: 0.3,
+        height: 2.1,
       ), // Text color
       onSubmitted: (value) => ref.read(userLoginProvider),
     );
@@ -87,7 +87,7 @@ class EnterName extends StatelessWidget {
             ],
           )
         ],
-        style: textTheme.labelMedium?.copyWith(color: Colors.white70),
+        style: textTheme.bodyMedium?.copyWith(color: Colors.white70),
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'firebase.g.dart';
+part 'pod.g.dart';
 
 @Riverpod(keepAlive: true)
 FirebaseApp firebaseApp(FirebaseAppRef ref) => throw UnimplementedError();

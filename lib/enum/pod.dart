@@ -1,9 +1,15 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'screen_size.g.dart';
+part 'pod.g.dart';
 
 enum ScreenSize { mobile, tab, pc }
+
+enum ValidateAuth { notLogged, guest, inGame }
+
+enum ValidateRemote { yes, no, failed }
+
+//////////////////////////////////////////////////
 
 ScreenSize validateSize() {
   final double mW = 360.w;
@@ -13,3 +19,9 @@ ScreenSize validateSize() {
 
 @Riverpod(keepAlive: true, dependencies: [])
 ScreenSize size(SizeRef ref) => ScreenSize.mobile;
+
+@Riverpod(keepAlive: true)
+class RemoteNotifier extends _$RemoteNotifier {
+  @override
+  ValidateRemote build() => ValidateRemote.no;
+}

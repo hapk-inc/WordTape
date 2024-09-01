@@ -12,12 +12,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
-import 'env/env.dart';
-import 'firebase/firebase.dart';
+import 'env/pod.dart';
+import 'firebase/pod.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
-import 'log/logger.dart';
+import 'log/pod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

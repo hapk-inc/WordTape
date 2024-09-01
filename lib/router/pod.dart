@@ -1,14 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../remote/config.dart';
+import '../logic/remote/pod.dart';
+import '../ui/dashboard.dart';
 import '../ui/login.dart';
 import '../ui/outline.dart';
 import '../ui/renovation.dart';
 import '../ui/splash.dart';
 
-part 'router.g.dart';
+part 'pod.g.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -16,21 +19,26 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
+      log("Redirection");
       final String str = ref.read(renovationProvider).value ?? "";
       if (str.isNotEmpty) return '/renovation';
-      return '/';
+      return state.matchedLocation;
     },
     routes: <RouteBase>[
       ShellRoute(
         navigatorKey: navigatorKey,
         builder: (_, __, child) => OutlinePage(child),
         routes: [
-          GoRoute(path: '/', builder: (_, state) => const SplashPage()),
-          GoRoute(path: '/login', builder: (_, state) => const LoginPage()),
+          GoRoute(path: '/', builder: (_, __) => const SplashPage()),
+          GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
           GoRoute(
             path: '/renovation',
-            builder: (_, state) => const RenovationPage(),
+            builder: (_, __) => const RenovationPage(),
           ),
+          GoRoute(
+            path: '/home',
+            builder: (_, __) => const DashboardPage(),
+          )
         ],
       ),
     ],

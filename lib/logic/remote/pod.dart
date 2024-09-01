@@ -1,9 +1,9 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../firebase/firebase.dart';
+import '../../firebase/pod.dart';
 
-part 'config.g.dart';
+part 'pod.g.dart';
 
 @Riverpod(dependencies: [remoteConfig])
 Future<String?> renovation(RenovationRef ref) async {
