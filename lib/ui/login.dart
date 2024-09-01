@@ -1,28 +1,24 @@
-import 'dart:developer';
-
 import 'package:animate_do/animate_do.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
+import '../auth/running_user.dart';
 import 'theme/colors.dart';
 
-@RoutePage()
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    final TextEditingController controller = TextEditingController();
-    return Scaffold(
-      backgroundColor: midnightGreen,
-      body: LayoutBuilder(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      color: midnightGreen,
+      child: LayoutBuilder(
         builder: (_, constraints) {
           final double mW = constraints.maxWidth;
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 15.r),
+            padding: EdgeInsets.symmetric(horizontal: mW * 0.03),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -34,52 +30,64 @@ class LoginPage extends StatelessWidget {
                   child: FadeIn(
                     duration: const Duration(milliseconds: 150),
                     delay: const Duration(milliseconds: 300),
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "First, let us know your ",
-                            children: [
-                              WidgetSpan(
-                                alignment: PlaceholderAlignment.middle,
-                                child: FadeIn(
-                                  duration: const Duration(milliseconds: 150),
-                                  delay: const Duration(milliseconds: 1200),
-                                  child: Text(
-                                    "name.",
-                                    style: textTheme.titleSmall?.copyWith(
-                                      color: aquaMarine,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      style: textTheme.labelMedium?.copyWith(
-                        color: Colors.white70,
-                      ),
-                    ),
+                    child: const EnterName(),
                   ),
                 ),
-                FadeIn(
-                  delay: const Duration(milliseconds: 2400),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: mW * 0.015),
-                    child: TextField(
-                      controller: controller,
-                      style: textTheme.titleMedium?.copyWith(color: aquaMarine),
-                      showCursor: false,
-                      autofocus: true,
-                      onSubmitted: (value) => log(value),
-                    ),
-                  ),
-                ),
+                const NameTextField(),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class NameTextField extends ConsumerWidget {
+  const NameTextField({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return TextField(
+      showCursor: false,
+      autofocus: true,
+      style: textTheme.titleLarge?.copyWith(
+        color: seaWhite,
+        letterSpacing: 0.3,
+      ), // Text color
+      onSubmitted: (value) => ref.read(userLoginProvider),
+    );
+  }
+}
+
+class EnterName extends StatelessWidget {
+  const EnterName({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: "First, let us know your ",
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: FadeIn(
+                  duration: const Duration(milliseconds: 150),
+                  delay: const Duration(milliseconds: 1200),
+                  child: Text(
+                    "name.",
+                    style: textTheme.titleMedium?.copyWith(color: aquaMarine),
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
+        style: textTheme.labelMedium?.copyWith(color: Colors.white70),
       ),
     );
   }

@@ -1,5 +1,5 @@
 name: wordtape
-description: 'A Word-Puzzle Game'
+description: "A Word-Puzzle Game"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -31,39 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.6
-
-  # firebase
-  firebase_core: ^3.3.0
-  firebase_ui_firestore: ^1.6.3
-  firebase_auth: ^5.1.4
-  # firebase_messaging: ^15.0.3
+  # Firebase
+  firebase_core: ^3.4.0
+  firebase_auth: ^5.2.0
+  firebase_analytics: ^11.3.0
+  firebase_crashlytics: ^4.1.0
+  firebase_remote_config: ^5.1.0
   cloud_firestore: ^5.2.1
-  firebase_analytics: ^11.2.1
-  firebase_crashlytics: ^4.0.4
-  firebase_remote_config: ^5.0.4
-
-  # auth
-  rxdart: ^0.28.0
-  games_services: ^4.0.2
- # crypto: ^3.0.3
- # google_sign_in: ^6.2.1
- # sign_in_with_apple: ^6.1.0
-
-  # riverpod
-  flutter_riverpod: ^2.5.1
-
-  # Annotation
-  riverpod_annotation: ^2.3.5
-  freezed_annotation: ^2.4.1
-  json_annotation: ^4.9.0
-
-  auto_route: ^9.2.0
-  # url_launcher: ^6.3.0
-  # logger: ^2.3.0
 
   # App Check
   device_preview: ^1.2.0
@@ -73,11 +47,29 @@ dependencies:
   in_app_update: ^4.2.1
   flutter_screenutil: 5.9.0
 
-  mock_data: ^2.0.1
+  # riverpod
+  flutter_riverpod: ^2.5.1
+
+  # Annotation
+  riverpod_annotation: ^2.3.5
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+  # Backend
+  google_generative_ai: ^0.4.5
+  flutter_dotenv: ^5.1.0
+  logger: ^2.4.0
   intl: ^0.19.0
   equatable: ^2.0.5
+  collection: ^1.18.0
+  connectivity_plus: ^6.0.5
 
   google_fonts: ^6.2.1
+
+  #auth
+  rxdart: ^0.28.0
+  # game_services_firebase_auth: ^1.1.0
+  games_services: ^4.0.2
 
   #ui
   flutter_native_splash: ^2.4.1
@@ -87,38 +79,21 @@ dependencies:
   animate_do: ^3.3.4
   # animated_text_kit: ^4.2.2
   pinput: ^5.0.0
+  lottie: ^3.1.2
 
-  # salomon_bottom_bar: ^3.3.2
 
-  # ticket_widget: ^1.0.2
+  mock_data: ^2.0.1
 
-  # timelines: ^0.1.0
-
+  # Local Database
   sqflite: ^2.3.3+1
   path: ^1.9.0
-  # lottie: ^3.1.2
-  share_plus: ^10.0.0
-  # get: ^4.6.6
 
-  timezone: ^0.9.4
+  # Navigation
+  go_router: ^14.2.7
 
-
-  #
-  # flutter_staggered_grid_view: ^0.7.0
-  # card_actions: ^0.0.1
-  # fading_edge_scrollview: 3.0.0
-  # animated_emoji: ^3.1.0
-  animated_flip_counter: ^0.3.4
-  # introduction_screen: ^3.1.14
-  dotted_border: ^2.1.0
-
-  carousel_slider: ^5.0.0
-  geolocator: ^12.0.0
-
-  google_generative_ai: ^0.4.5
-  flutter_dotenv: ^5.1.0
-
-  # web: ^0.5.1
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
 
 dev_dependencies:
   flutter_test:
@@ -131,14 +106,13 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
 
-  # riverpod dev
+  # Riverpod dev
   riverpod_generator: ^2.4.3
   build_runner: ^2.4.12
   custom_lint: ^0.6.4
   riverpod_lint: ^2.3.13
 
-  # auto_route:
-  auto_route_generator: ^9.0.0
+  # Freezed:
   freezed: ^2.5.7
   json_serializable: ^6.8.0
 
@@ -160,69 +134,27 @@ flutter:
     - assets/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
+  # https://flutter.dev/to/resolution-aware-images
 
   # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
+  # https://flutter.dev/to/asset-from-package
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-     - family: Poppins
-       fonts:
-         - asset: fonts/Poppins-Regular.ttf
-         - asset: fonts/Poppins-Light.ttf
-           weight: 300
-         - asset: fonts/Poppins-ExtraLight.ttf
-           weight: 200
-     - family: Questrial
-       fonts:
-         - asset: fonts/Questrial-Regular.ttf
-     - family: Gugi
-       fonts:
-         - asset: fonts/Gugi-Regular.ttf
-     - family: Nunito
-       fonts:
-         - asset: fonts/Nunito-Regular.ttf
-         - asset: fonts/Nunito-Light.ttf
-           weight: 300
-     - family: Montserrat
-       fonts:
-         - asset: fonts/Montserrat-Regular.ttf
-         - asset: fonts/Montserrat-SemiBold.ttf
-           weight: 600
-         - asset: fonts/Montserrat-Bold.ttf
-           weight: 700
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
   #
   # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
-
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
-
-  # Key password -  Kababa2005
-
-  # flutter build appbundle --flavor prod --no-tree-shake-icons
-
-  # ./gradlew signingReport
-
-  # dart run flutter_native_splash:create --flavors Dev,Prod
-
-  #  flutter build ipa --no-tree-shake-icons
-  #  flutter build web --no-tree-shake-icons
-  #  firebase deploy --no-tree-shake-icons
-  # pod update "Firebase/CoreOnly"
-
-  # dart run build_runner watch
-  # dart run flutter_native_splash:create
-
-  # flutter build web --web-renderer canvaskit
-
-  # console check : firebase_auth.getAuth().currentUser.uid
-  # #/privacy-policy-route
-
-  # https://github.com/rrousselGit/riverpod/tree/master/packages/riverpod_lint#provider_dependencies-riverpod_generator-only
+  # see https://flutter.dev/to/font-from-package
