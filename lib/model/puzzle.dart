@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mock_data/mock_data.dart';
 
 import 'date_converter.dart';
+import 'found.dart';
 import 'word.dart';
 
 part 'puzzle.freezed.dart';
@@ -32,8 +33,8 @@ class Puzzle with _$Puzzle {
 
   bool isCompleted(int length) => words.length == length;
 
-  int get puzzleNo {
-    final DateTime jun10 = DateTime(2024, 6, 10);
-    return date.difference(jun10).inDays;
+  List<Word> guess(Found found) {
+    if (isCompleted(found.i)) return [];
+    return [words[found.i], words[found.i - 1]];
   }
 }

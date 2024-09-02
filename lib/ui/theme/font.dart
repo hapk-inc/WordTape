@@ -4,6 +4,16 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
+// title
+// questrial - body for Normal; carterOne for Highlighter (title)
+
+// payOne - Logo
+
+// puzzle
+// play for wordText; and button text (in headline)
+
+//
+
 class DefaultTextTheme extends TextTheme with FontMixin {
   //Title==============
   @override
@@ -17,9 +27,9 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   @override
   TextStyle? get titleMedium => GoogleFonts.carterOne(
-        fontSize: 30.r,
+        fontSize: 24.r,
         letterSpacing: 0,
-        height: 0,
+        height: 1.8,
         wordSpacing: 0,
         color: raisinBlack,
       );
@@ -36,11 +46,11 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   @override
   TextStyle? get bodyMedium => GoogleFonts.questrial(
-        fontSize: 24.r,
-        letterSpacing: 0,
-        height: 0,
+        fontSize: 21.r,
+        letterSpacing: 0.03,
+        height: 1.8,
         wordSpacing: 0,
-        color: raisinBlack,
+        color: slateGray,
       );
 
   @override
@@ -52,26 +62,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         wordSpacing: 0,
       );
 
-  //Headline==============
-  @override
-  TextStyle? get headlineMedium => GoogleFonts.cabin(
-        fontSize: 24.r,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0,
-        height: 0,
-        wordSpacing: 0,
-        color: raisinBlack,
-      );
-
-  @override
-  TextStyle? get headlineSmall => GoogleFonts.cabin(
-        fontSize: 18.r,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 0,
-        height: 0,
-        wordSpacing: 0,
-      );
-
+//=============
   @override
   TextStyle? get displayLarge => GoogleFonts.paytoneOne(
         fontSize: 72.r,
@@ -81,22 +72,24 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         color: seaWhite,
       );
 
+  //==============
+
   @override
-  TextStyle? get labelLarge => GoogleFonts.rowdies(
-        fontSize: 45.r,
-        color: raisinBlack,
+  TextStyle? get headlineLarge => GoogleFonts.play(
+        fontSize: 24.r,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0,
         height: 0,
-        wordSpacing: 0,
+        color: midnightGreen,
       );
 
   @override
-  TextStyle? get labelMedium => GoogleFonts.rowdies(
+  TextStyle? get headlineMedium => GoogleFonts.play(
         fontSize: 18.r,
-        color: raisinBlack,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0,
         height: 0,
-        wordSpacing: 0,
+        color: midnightGreen,
       );
 }
 

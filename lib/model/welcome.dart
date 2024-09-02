@@ -8,65 +8,53 @@ part 'welcome.freezed.dart';
 class Welcome with _$Welcome {
   const factory Welcome({
     required String text,
-    required String sub,
-    @Default("puzzle") String end,
+    @Default("?") String end,
+    String? highlight,
   }) = _Welcome;
 }
 
-@Riverpod(keepAlive: true)
-Welcome welcome(WelcomeRef ref, int index) => const [
-      Welcome(
-        text: "Discover concealed words in an entertaining ",
-        sub: "and captivating ",
-      ),
-      Welcome(
-        text: "Find secret words in an enjoyable ",
-        sub: "and intriguing ",
-      ),
-      Welcome(
-        text: "Reveal hidden words 🔎  within a fun ",
-        sub: "and engaging ",
-      ),
-      Welcome(
-        text: "Unearth obscured words in an exciting ",
-        sub: "and interactive ",
-      ),
-      Welcome(
-        text: "Search for hidden words in a delightful ",
-        sub: "and stimulating ",
-      ),
-      Welcome(
-        text: "Explore masked words in a playful ",
-        sub: "and fascinating ",
-      ),
-      Welcome(
-        text: "Identify concealed words in a lively ",
-        sub: "and enjoyable ",
-      ),
-      Welcome(
-        text: "Hunt for hidden words in a charming ",
-        sub: "and engaging ",
-      ),
-      Welcome(
-        text: "Dig up secret words in a whimsical ",
-        sub: "and captivating ",
-      ),
-      Welcome(
-        text: "Locate hidden words in a fun-filled ",
-        sub: "and challenging ",
-      ),
-    ][index % 9];
+const List<Welcome> _list = const [
+  Welcome(
+    text: "What word do you think comes next after this one?",
+    highlight: "comes next",
+  ),
+  Welcome(
+    text: "Can you guess what the next word will be",
+    highlight: "next word",
+  ),
+  Welcome(
+    text: "What word follows this one in the sequence",
+    highlight: "this one",
+  ),
+  Welcome(text: "Which word do you think is next", highlight: "is next"),
+  Welcome(
+    text: "What do you think the next word is",
+    highlight: "next word",
+  ),
+  Welcome(text: "Can you tell me the next word", highlight: "next word"),
+  Welcome(
+    text: "What word comes after this one, in your opinion",
+    highlight: "comes after",
+  ),
+  Welcome(text: "What do you believe is the next word", highlight: "next word"),
+  Welcome(
+      text: "Which word do you think will come next", highlight: "come next"),
+  Welcome(text: "What’s your guess for the next word", highlight: "next word"),
+];
 
-/*
-Here are ten rephrased versions of your line, each concluding with the word "puzzle":
-"Discover concealed words in an entertaining and captivating puzzle."
-"Find secret words in an enjoyable and intriguing puzzle."
-"Reveal hidden words within a fun and engaging puzzle."
-"Unearth obscured words in an exciting and interactive puzzle."
-"Search for hidden words in a delightful and stimulating puzzle."
-"Explore masked words in a playful and fascinating puzzle."
-"Identify concealed words in a lively and enjoyable puzzle."
-"Hunt for hidden words in a charming and engaging puzzle."
-"Dig up secret words in a whimsical and captivating puzzle."
-"Locate hidden words in a fun-filled and challenging puzzle."
-* */
+@Riverpod(keepAlive: true)
+Welcome welcome(WelcomeRef ref) {
+  final DateTime now = DateTime.now();
+  return _list[now.day % _list.length];
+}
+
+/*You're almost done! Keep going to finish the rest of the sequence.
+You're halfway through! Now, finish the remaining part of the sequence.
+Great job! Now try to complete the rest of the sequence.
+You're doing well! Finish the rest of the sequence now.
+You're partway there! Keep going to complete the sequence.
+You're halfway! Now, see if you can finish the sequence.
+You're nearly there! Try to finish the rest of the sequence.
+You're halfway complete! Keep going to finish the sequence.
+Good work! Now, try to complete the rest of the sequence.
+You're almost finished! See if you can complete the rest of the sequence.*/

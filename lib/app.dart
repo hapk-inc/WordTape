@@ -58,13 +58,12 @@ mixin CustomThemeMixin {
   TextTheme get defaultTextTheme => DefaultTextTheme();
 
   ButtonStyle get defaultButtonStyle => ButtonStyle(
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r)),
-        ),
-        textStyle: WidgetStatePropertyAll(defaultTextTheme.bodySmall),
-        minimumSize: WidgetStatePropertyAll(Size(60.r, 54.r)),
         elevation: WidgetStatePropertyAll(4.5.r),
-        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.r)),
+        textStyle: WidgetStatePropertyAll(
+          defaultTextTheme.bodyMedium?.copyWith(height: 0),
+        ),
+        minimumSize: WidgetStatePropertyAll(Size(150.r, 67.5.r)),
+        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 45.r)),
         foregroundColor: const WidgetStatePropertyAll(seaWhite),
       );
 

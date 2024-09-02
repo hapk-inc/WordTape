@@ -23,6 +23,7 @@ GoRouter router(RouterRef ref) {
       final String str = ref.read(renovationProvider).value ?? "";
       if (str.isNotEmpty) return '/renovation';
       return state.matchedLocation;
+      //return '/renovation';
     },
     routes: <RouteBase>[
       ShellRoute(

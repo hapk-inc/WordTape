@@ -1,8 +1,8 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../enum/pod.dart';
 import '../../model/welcome.dart';
 import '../theme/colors.dart';
 
@@ -11,29 +11,35 @@ class WelcomeText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime now = DateTime.now();
-    final Welcome text = ref.read(welcomeProvider(now.day));
+    final Welcome sentence = ref.read(welcomeProvider);
+    List<String> words = sentence.text.split(' ');
+    List<String> highlighter = (sentence.highlight ?? "").split(' ');
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final ScreenSize size = ref.watch(sizeProvider);
 
-    return AutoSizeText.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            children: [
-              TextSpan(text: text.text),
-              if (size != ScreenSize.mobile) TextSpan(text: text.sub),
+    return FadeInUp(
+      delay: const Duration(milliseconds: 600),
+      child: AutoSizeText.rich(
+        TextSpan(
+          children: [
+            for (String word in words)
               TextSpan(
-                text: text.end,
-                style: textTheme.titleLarge?.copyWith(color: aquaMarine),
-              )
-            ],
-          )
-        ],
+                text: word + (word != words.last ? " " : ""),
+                style: highlighter.contains(word)
+                    ? textTheme.titleLarge?.copyWith(color: aquaMarine)
+                    : null,
+              ),
+            TextSpan(
+              text: sentence.end,
+              style: words.last == highlighter.last
+                  ? textTheme.titleLarge?.copyWith(color: aquaMarine)
+                  : null,
+            )
+          ],
+        ),
+        maxLines: 2,
+        style: textTheme.bodyLarge?.copyWith(color: seaWhite, height: 1.8),
+        textAlign: TextAlign.center,
       ),
-      maxLines: 2,
-      style: textTheme.bodyLarge?.copyWith(color: seaWhite, height: 1.8),
-      textAlign: TextAlign.center,
     );
   }
 }
