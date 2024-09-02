@@ -8,6 +8,7 @@ import '../logic/remote/pod.dart';
 import '../ui/dashboard.dart';
 import '../ui/login.dart';
 import '../ui/outline.dart';
+import '../ui/puzzle.dart';
 import '../ui/renovation.dart';
 import '../ui/splash.dart';
 
@@ -36,10 +37,8 @@ GoRouter router(RouterRef ref) {
             path: '/renovation',
             builder: (_, __) => const RenovationPage(),
           ),
-          GoRoute(
-            path: '/home',
-            builder: (_, __) => const DashboardPage(),
-          )
+          GoRoute(path: '/home', builder: (_, __) => const DashboardPage()),
+          GoRoute(path: '/puzzle', builder: (_, __) => const PuzzlePage()),
         ],
       ),
     ],

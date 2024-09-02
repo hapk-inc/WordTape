@@ -13,7 +13,7 @@ class Welcome with _$Welcome {
   }) = _Welcome;
 }
 
-const List<Welcome> _list = const [
+const List<Welcome> _list = [
   Welcome(
     text: "What word do you think comes next after this one?",
     highlight: "comes next",

@@ -45,6 +45,6 @@ PinTheme pinTheme(PinThemeRef ref,
         bottom: BorderSide(color: color, width: 0.54.r),
       ),
     ),
-    textStyle: textTheme.headlineLarge?.copyWith(color: color),
+    textStyle: textTheme.headlineMedium?.copyWith(color: color),
   );
 }

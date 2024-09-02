@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/model/found.dart';
 
 import '../logic/puzzle/pod.dart';
 import '../model/puzzle.dart';
@@ -21,6 +22,7 @@ class DashboardPage extends ConsumerWidget {
           final double mH = constraints.maxHeight;
           final double mW = constraints.maxWidth;
           final Puzzle puzzle = Puzzle.fromRandom();
+          final Found found = Found(date: DateTime.now());
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -30,17 +32,17 @@ class DashboardPage extends ConsumerWidget {
                     color: midnightGreen,
                     constraints: BoxConstraints.expand(height: mH * 0.75),
                     padding: EdgeInsets.symmetric(horizontal: mW * 0.045),
-                    child: const SafeArea(
+                    child: SafeArea(
                       child: Stack(
                         children: [
-                          PuzzleNo(),
+                          const PuzzleNo(),
                           Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                WelcomeText(),
-                                Gap(60),
-                                TwoWords(),
+                                const WelcomeText(),
+                                const Gap(60),
+                                TwoWords(puzzle.guess(found)),
                               ],
                             ),
                           ),
@@ -59,7 +61,8 @@ class DashboardPage extends ConsumerWidget {
 }
 
 class TwoWords extends StatelessWidget {
-  const TwoWords({super.key});
+  final List<Word> twoWords;
+  const TwoWords(this.twoWords, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +70,7 @@ class TwoWords extends StatelessWidget {
       delay: const Duration(milliseconds: 2400),
       child: Wrap(
         spacing: 60.r,
-        children: [
-          WordTextField(Word(value: "SCIENCE")),
-          WordTextField(Word(value: "FAIR")),
-        ],
+        children: List.from(twoWords.map((w) => WordTextField(w))),
       ),
     );
   }
@@ -84,7 +84,7 @@ class WordTextField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 600),
-      constraints: BoxConstraints(maxWidth: 450.r, minHeight: 90.h),
+      constraints: BoxConstraints(maxWidth: 450.r, minHeight: 75.h),
       //alignment: Alignment.center,
 
       child: LayoutBuilder(
