@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../firebase/pod.dart';
-import '../../log/pod.dart';
+import '../logger/pod.dart';
 
 class Auth {
   final Ref ref;

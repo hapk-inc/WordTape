@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wordtape/function/puzzle/pod.dart';
 
-import '../theme/colors.dart';
+import '../../function/puzzle/notifier.dart';
 
 const String backspace = "🔙";
 const String done = "✔️";
@@ -85,8 +87,12 @@ class MyKeyboardTile extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     //final String id = ref.watch(puzzleKeyProvider);
     return InkWell(
+      onDoubleTap: () {
+        if (str == backspace) context.pop();
+      },
       onTap: () async {
-        /*  final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(id));
+        final DateTime date = ref.read(selectedDateProvider);
+        final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
         switch (str) {
           case backspace:
             notifier.removeText();
@@ -99,7 +105,7 @@ class MyKeyboardTile extends ConsumerWidget {
             }
           default:
             notifier.addText(str);
-        }*/
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
@@ -108,18 +114,15 @@ class MyKeyboardTile extends ConsumerWidget {
         margin: EdgeInsets.symmetric(horizontal: width * 0.06),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: /*str == done && ref.watch(puzzleNotifierProvider(id)).enableDone
-              ? aquaMarine
-              : */
-              null,
+          color: isChar ? null : Colors.amber,
           borderRadius: BorderRadius.circular(4.5.r),
-          border: Border.all(width: 0.24.r),
+          border: Border.all(width: 0.24.r, color: Colors.white70),
         ),
         child: Text(
           str,
           style: textTheme.headlineMedium?.copyWith(
             fontSize: isChar ? 15.r : 21.r,
-            color: slateGray,
+            color: isChar ? Colors.white54 : Colors.black,
           ),
         ),
       ),

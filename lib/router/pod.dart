@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../logic/remote/pod.dart';
+import '../function/remote/pod.dart';
 import '../ui/dashboard.dart';
 import '../ui/login.dart';
 import '../ui/outline.dart';
@@ -38,7 +39,17 @@ GoRouter router(RouterRef ref) {
             builder: (_, __) => const RenovationPage(),
           ),
           GoRoute(path: '/home', builder: (_, __) => const DashboardPage()),
-          GoRoute(path: '/puzzle', builder: (_, __) => const PuzzlePage()),
+          GoRoute(
+            path: '/puzzle',
+            builder: (_, GoRouterState state) {
+              final DateTime args =
+                  (state.extra as DateTime?) ?? DateTime.now();
+              DateFormat formatter = DateFormat('yyyy-MM-dd');
+              final String dateStr = formatter.format(args);
+              DateTime formatted = formatter.parse(dateStr);
+              return PuzzlePage(formatted);
+            },
+          ),
         ],
       ),
     ],

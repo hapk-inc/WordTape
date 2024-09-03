@@ -9,6 +9,8 @@ enum ValidateAuth { notLogged, guest, inGame }
 
 enum ValidateRemote { yes, no, failed }
 
+enum NeedToDo { plain, onClick, find }
+
 //////////////////////////////////////////////////
 
 ScreenSize validateSize() {

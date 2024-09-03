@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../logic/puzzle/pod.dart';
+import '../../function/puzzle/pod.dart';
 import '../theme/colors.dart';
 
 class Calendar extends ConsumerWidget {

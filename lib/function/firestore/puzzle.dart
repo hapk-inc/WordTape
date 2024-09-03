@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import '../../firebase/pod.dart';
 import '../../model/puzzle.dart';
 
-class PuzzleCloud {
+class RemotePuzzle {
   final Ref ref;
 
   late FirebaseFirestore firebaseFirestore;
@@ -14,7 +14,7 @@ class PuzzleCloud {
 
   User? fUser;
 
-  PuzzleCloud(this.ref, {this.fUser}) {
+  RemotePuzzle(this.ref, {this.fUser}) {
     firebaseFirestore = ref.read(firestoreProvider);
     puzzleColl = firebaseFirestore.collection('puzzle');
   }

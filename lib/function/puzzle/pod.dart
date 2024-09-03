@@ -1,11 +1,20 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../enum/pod.dart';
+import '../../model/found.dart';
+import '../../model/puzzle.dart';
 import '../../ui/theme/colors.dart';
 import '../../ui/theme/font.dart';
+import '../firestore/found.dart';
+import '../firestore/puzzle.dart';
+import '../local/found.dart';
+import '../local/puzzle.dart';
 part 'pod.g.dart';
 
 @riverpod
@@ -47,4 +56,33 @@ PinTheme pinTheme(PinThemeRef ref,
     ),
     textStyle: textTheme.headlineMedium?.copyWith(color: color),
   );
+}
+
+@Riverpod(keepAlive: true, dependencies: [])
+Future<Puzzle?> puzzleFromDate(PuzzleFromDateRef ref, DateTime date) async {
+  log("Running selectedPuzzle for ${date.day} - ${date.month}");
+  final LocalPuzzle localPuzzle = LocalPuzzle();
+  Puzzle? lPuzzle = await localPuzzle.fromDate(date);
+  log("From LocalPuzzle $lPuzzle");
+  if (lPuzzle == null) {
+    final RemotePuzzle cloud = RemotePuzzle(ref);
+    Puzzle? cPuzzle = await cloud.puzzle(date);
+
+    if (cPuzzle != null) await localPuzzle.insert(cPuzzle);
+    return cPuzzle;
+  }
+  return lPuzzle;
+}
+
+@Riverpod(dependencies: [])
+Future<Found?> foundFromPuzzle(FoundFromPuzzleRef ref, Puzzle p) async {
+  final DateTime date = p.date;
+  log("Running selectedFound for ${date.day}-${date.month}--${p.id}");
+  if (kIsWeb) {
+    RemoteFound remoteFound = RemoteFound(ref);
+    return remoteFound.found(p.id);
+  }
+
+  final LocalFound localFound = LocalFound();
+  return localFound.found(p.id);
 }

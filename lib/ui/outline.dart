@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../enum/pod.dart';
-import '../logic/controller/pod.dart';
+import '../function/controller/pod.dart';
 import 'theme/colors.dart';
 
 BorderRadius get _borderRadius30 =>

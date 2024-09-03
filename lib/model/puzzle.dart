@@ -35,6 +35,6 @@ class Puzzle with _$Puzzle {
 
   List<Word> guess(Found found) {
     if (isCompleted(found.i)) return [];
-    return [words[found.i], words[found.i - 1]];
+    return [words[found.i - 1], words[found.i]];
   }
 }

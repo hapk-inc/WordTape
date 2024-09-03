@@ -48,7 +48,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   TextStyle? get bodyMedium => GoogleFonts.questrial(
         fontSize: 21.r,
         letterSpacing: 0.03,
-        height: 1.8,
+        height: 2.1,
         wordSpacing: 0,
         color: slateGray,
       );
@@ -85,7 +85,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   @override
   TextStyle? get headlineMedium => GoogleFonts.play(
-        fontSize: 18.r,
+        fontSize: 16.r,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
         height: 0,

@@ -13,4 +13,10 @@ class Word with _$Word {
   }) = _Word;
 
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! Word) return false;
+    return value == other.value;
+  }
 }

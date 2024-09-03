@@ -48,6 +48,20 @@ Welcome welcome(WelcomeRef ref) {
   return _list[now.day % _list.length];
 }
 
+@riverpod
+Welcome resume(ResumeRef ref) {
+  final DateTime now = DateTime.now();
+  return _resume[now.day % _resume.length];
+}
+
+List<Welcome> _resume = [
+  Welcome(
+    text: "You're almost done! Keep going",
+    highlight: "Keep going",
+    end: "",
+  )
+];
+
 /*You're almost done! Keep going to finish the rest of the sequence.
 You're halfway through! Now, finish the remaining part of the sequence.
 Great job! Now try to complete the rest of the sequence.

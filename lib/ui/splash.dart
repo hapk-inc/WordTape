@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:wordtape/logic/auth/pod.dart';
 
 import '../enum/pod.dart';
+import '../function/auth/pod.dart';
 import 'theme/colors.dart';
 
 const Duration _m1500 = Duration(milliseconds: 1500);

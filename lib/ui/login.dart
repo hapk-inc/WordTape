@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../logic/auth/pod.dart';
+import '../function/auth/pod.dart';
 import 'theme/colors.dart';
 
 class LoginPage extends ConsumerWidget {

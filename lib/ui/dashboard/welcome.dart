@@ -7,11 +7,12 @@ import '../../model/welcome.dart';
 import '../theme/colors.dart';
 
 class WelcomeText extends ConsumerWidget {
-  const WelcomeText({super.key});
+  final Welcome sentence;
+  const WelcomeText(this.sentence, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Welcome sentence = ref.read(welcomeProvider);
+    //final Welcome sentence = ref.read(welcomeProvider);
     List<String> words = sentence.text.split(' ');
     List<String> highlighter = (sentence.highlight ?? "").split(' ');
     final TextTheme textTheme = Theme.of(context).textTheme;

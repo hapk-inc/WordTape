@@ -17,7 +17,7 @@ import 'firebase/pod.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
-import 'log/pod.dart';
+import 'function/logger/pod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
