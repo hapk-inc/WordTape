@@ -19,6 +19,7 @@ class WelcomeText extends ConsumerWidget {
 
     return FadeInUp(
       delay: const Duration(milliseconds: 600),
+      key: ValueKey(sentence),
       child: AutoSizeText.rich(
         TextSpan(
           children: [

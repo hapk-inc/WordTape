@@ -10,7 +10,9 @@ import 'colors.dart';
 // payOne - Logo
 
 // puzzle
-// play for wordText; and button text (in headline)
+// play for wordText;(in headline)
+
+//  and button text - bodySmall
 
 //
 
@@ -18,7 +20,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   //Title==============
   @override
   TextStyle? get titleLarge => GoogleFonts.carterOne(
-        fontSize: 45.r,
+        fontSize: 40.r,
         letterSpacing: 0,
         height: 0,
         wordSpacing: 0,
@@ -37,7 +39,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   //Body==============
   @override
   TextStyle? get bodyLarge => GoogleFonts.questrial(
-        fontSize: 36.r,
+        fontSize: 30.r,
         letterSpacing: 0,
         height: 0,
         wordSpacing: 0,
@@ -55,9 +57,9 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   @override
   TextStyle? get bodySmall => GoogleFonts.questrial(
-        fontSize: 15.r,
+        fontSize: 18.r,
         color: raisinBlack,
-        letterSpacing: 0,
+        letterSpacing: 0.03,
         height: 0,
         wordSpacing: 0,
       );

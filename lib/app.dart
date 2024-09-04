@@ -37,8 +37,8 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
               ),
               outlinedButtonTheme: OutlinedButtonThemeData(
                 style: defaultButtonStyle.copyWith(
-                  side: WidgetStatePropertyAll(outlineBorder),
-                ),
+                    side: WidgetStatePropertyAll(outlineBorder),
+                    foregroundColor: const WidgetStatePropertyAll(raisinBlack)),
               ),
             ),
             routerConfig: router,
@@ -58,16 +58,14 @@ mixin CustomThemeMixin {
   TextTheme get defaultTextTheme => DefaultTextTheme();
 
   ButtonStyle get defaultButtonStyle => ButtonStyle(
-        elevation: WidgetStatePropertyAll(4.5.r),
-        textStyle: WidgetStatePropertyAll(
-          defaultTextTheme.bodyMedium?.copyWith(height: 0),
-        ),
-        minimumSize: WidgetStatePropertyAll(Size(150.r, 67.5.r)),
-        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 45.r)),
+        elevation: WidgetStatePropertyAll(1.5.r),
+        textStyle: WidgetStatePropertyAll(defaultTextTheme.bodySmall),
+        minimumSize: WidgetStatePropertyAll(Size(150.r, 60.r)),
+        padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.r)),
         foregroundColor: const WidgetStatePropertyAll(seaWhite),
       );
 
-  BorderSide get outlineBorder => BorderSide(color: raisinBlack, width: 0.45.r);
+  BorderSide get outlineBorder => BorderSide(color: raisinBlack, width: 0.3.r);
 
   UnderlineInputBorder underlineInputBorder(Color color) =>
       UnderlineInputBorder(borderSide: BorderSide(color: color, width: 0.9.r));

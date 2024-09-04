@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:wordtape/function/local/found.dart';
-import 'package:wordtape/model/welcome.dart';
 
 import '../enum/pod.dart';
+import '../function/local/found.dart';
 import '../function/puzzle/pod.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
+import '../model/welcome.dart';
 import '../model/word.dart';
 import 'dashboard/play_button.dart';
 import 'dashboard/welcome.dart';
@@ -27,8 +27,10 @@ class DashboardPage extends ConsumerWidget {
           final DateTime date = ref.watch(selectedDateProvider);
           final Puzzle? puzzle = ref.watch(puzzleFromDateProvider(date)).value;
           if (puzzle == null) return Container();
-          final Found? found = ref.watch(foundFromPuzzleProvider(puzzle)).value;
-          final Welcome welcome = found == null || found.i == 1
+          final Found found =
+              ref.watch(foundFromPuzzleProvider(puzzle)).value ??
+                  Found(date: date, id: puzzle.id);
+          final Welcome welcome = found.i == 1
               ? ref.read(welcomeProvider)
               : ref.read(resumeProvider);
           return SingleChildScrollView(
@@ -50,11 +52,7 @@ class DashboardPage extends ConsumerWidget {
                               children: [
                                 WelcomeText(welcome),
                                 const Gap(60),
-                                if (found != null)
-                                  TwoWords(
-                                    date,
-                                    puzzle.guess(found),
-                                  ),
+                                TwoWords(date, puzzle.guess(found)),
                               ],
                             ),
                           ),
@@ -63,8 +61,22 @@ class DashboardPage extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Gap(mH * 0.015),
-                OverflowBar(children: [PlayButton(puzzle)]),
+                Gap(mH * 0.03),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.r),
+                  child: OverflowBar(
+                    overflowAlignment: OverflowBarAlignment.center,
+                    spacing: 15.r,
+                    overflowSpacing: 15.r,
+                    children: [
+                      PlayButton(puzzle),
+                      OutlinedButton(
+                        onPressed: () {},
+                        child: const Text("Share with Your Circle"),
+                      )
+                    ],
+                  ),
+                ),
               ],
             ),
           );
@@ -81,12 +93,15 @@ class TwoWords extends StatelessWidget {
   Widget build(BuildContext context) {
     return FadeIn(
       delay: const Duration(milliseconds: 2400),
+      key: ValueKey(date),
       child: Wrap(
         spacing: 15.r,
-        children: List.from(twoWords.map((w) => WordTextField(
-              w,
-              needToDo: twoWords.last == w ? NeedToDo.onClick : NeedToDo.plain,
-            ))),
+        children: List.from(twoWords.map(
+          (w) => WordTextField(
+            w,
+            needToDo: twoWords.last == w ? NeedToDo.onClick : NeedToDo.plain,
+          ),
+        )),
       ),
     );
   }
@@ -108,6 +123,9 @@ class PuzzleCount extends ConsumerWidget {
       child: InkWell(
         onDoubleTap: () async {
           await LocalFound().delete();
+          final DateTime date = ref.read(selectedDateProvider);
+          final Puzzle? puzzle = ref.read(puzzleFromDateProvider(date)).value;
+          ref.invalidate(foundFromPuzzleProvider(puzzle!));
         },
         child: Text(
           "NO. $difference",
@@ -117,3 +135,14 @@ class PuzzleCount extends ConsumerWidget {
     );
   }
 }
+
+/*Spread the Word
+Tell Your Friends
+Pass It On
+Invite Your Friends
+Send to Friends
+Let Friends Know
+Share with Others
+Connect with Friends
+Spread the Love
+Share with Your Circle*/

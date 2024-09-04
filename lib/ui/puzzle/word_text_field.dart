@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../enum/pod.dart';
@@ -33,6 +34,12 @@ class WordTextField extends ConsumerWidget {
       child: LayoutBuilder(
         builder: (_, constraints) {
           return Pinput(
+            onTap: needToDo == NeedToDo.onClick
+                ? () => context.push(
+                      '/puzzle',
+                      extra: ref.read(selectedDateProvider),
+                    )
+                : null,
             length: word.value.length,
             defaultPinTheme: ref.read(
               pinThemeProvider(constraints: constraints, color: seaWhite),

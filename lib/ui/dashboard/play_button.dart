@@ -12,7 +12,7 @@ class PlayButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => FadeIn(
-        delay: const Duration(milliseconds: 4500),
+        delay: const Duration(milliseconds: 3600),
         child: ElevatedButton(
           onPressed: puzzle == null
               ? null

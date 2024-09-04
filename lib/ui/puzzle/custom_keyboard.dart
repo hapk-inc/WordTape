@@ -87,10 +87,10 @@ class MyKeyboardTile extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     //final String id = ref.watch(puzzleKeyProvider);
     return InkWell(
-      onDoubleTap: () {
+      onLongPress: () {
         if (str == backspace) context.pop();
       },
-      onTap: () async {
+      onTap: () {
         final DateTime date = ref.read(selectedDateProvider);
         final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
         switch (str) {
@@ -100,7 +100,7 @@ class MyKeyboardTile extends ConsumerWidget {
           case done:
             {
               if (!notifier.enableDone) return;
-              await notifier.validate();
+              notifier.validate();
               break;
             }
           default:

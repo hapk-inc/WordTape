@@ -54,10 +54,57 @@ Welcome resume(ResumeRef ref) {
   return _resume[now.day % _resume.length];
 }
 
-List<Welcome> _resume = [
+const List<Welcome> _resume = [
   Welcome(
-    text: "You're almost done! Keep going",
+    text: "You're almost done! Keep going to finish the rest of the sequence",
+    highlight: "almost",
+    end: "",
+  ),
+  Welcome(
+    text: "You're halfway through! Now, "
+        "Finish the remaining part of the sequence.",
+    highlight: "Finish ",
+    end: "",
+  ),
+  Welcome(
+    text: "Great job! Now try to  complete  the rest of the sequence.",
+    highlight: "complete",
+    end: "",
+  ),
+  Welcome(
+    text: "You're doing well!  Finish  the rest of the sequence now.",
+    highlight: "Finish",
+    end: "",
+  ),
+  Welcome(
+    text: "You're partway there!  Keep going  to complete the sequence.",
     highlight: "Keep going",
+    end: "",
+  ),
+  Welcome(
+    text: "You're halfway! Now, see if you can  finish  the sequence.",
+    highlight: "finish",
+    end: "",
+  ),
+  Welcome(
+    text: "You're nearly there! Try to  finish  the rest of the sequence.",
+    highlight: "finish",
+    end: "",
+  ),
+  Welcome(
+    text: "You're halfway complete! Keep going to  finish  the sequence.",
+    highlight: "finish",
+    end: "",
+  ),
+  Welcome(
+    text: "Good work! Now, try to  complete  the rest of the sequence.",
+    highlight: "complete",
+    end: "",
+  ),
+  Welcome(
+    text: "You're almost finished! See if you can  complete  the "
+        "rest of the sequence.",
+    highlight: "complete",
     end: "",
   )
 ];
