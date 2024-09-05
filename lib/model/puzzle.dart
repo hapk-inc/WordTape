@@ -37,4 +37,12 @@ class Puzzle with _$Puzzle {
     if (isCompleted(found.i)) return [];
     return [words[found.i - 1], words[found.i]];
   }
+
+  String guessWord(Found found) {
+    final List<Word> words = guess(found);
+    if (words.isEmpty) return "";
+    return words
+        .fold("", (previousValue, element) => "$previousValue $element")
+        .trim();
+  }
 }

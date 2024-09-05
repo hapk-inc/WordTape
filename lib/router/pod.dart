@@ -7,7 +7,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../function/remote/pod.dart';
 import '../ui/dashboard.dart';
-import '../ui/login.dart';
 import '../ui/outline.dart';
 import '../ui/puzzle.dart';
 import '../ui/renovation.dart';
@@ -33,7 +32,7 @@ GoRouter router(RouterRef ref) {
         builder: (_, __, child) => OutlinePage(child),
         routes: [
           GoRoute(path: '/', builder: (_, __) => const SplashPage()),
-          GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+          //GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
           GoRoute(
             path: '/renovation',
             builder: (_, __) => const RenovationPage(),

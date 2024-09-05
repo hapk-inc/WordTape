@@ -9,6 +9,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../enum/pod.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
+import '../../router/pod.dart';
 import '../../ui/theme/colors.dart';
 import '../../ui/theme/font.dart';
 import '../firestore/found.dart';
@@ -58,7 +59,7 @@ PinTheme pinTheme(PinThemeRef ref,
   );
 }
 
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true, dependencies: [router])
 Future<Puzzle?> puzzleFromDate(PuzzleFromDateRef ref, DateTime date) async {
   log("Running selectedPuzzle for ${date.day} - ${date.month}");
   final LocalPuzzle localPuzzle = LocalPuzzle();
@@ -68,7 +69,11 @@ Future<Puzzle?> puzzleFromDate(PuzzleFromDateRef ref, DateTime date) async {
     final RemotePuzzle cloud = RemotePuzzle(ref);
     Puzzle? cPuzzle = await cloud.puzzle(date);
 
-    if (cPuzzle != null) await localPuzzle.insert(cPuzzle);
+    if (cPuzzle != null) {
+      await localPuzzle.insert(cPuzzle);
+      return cPuzzle;
+    }
+    ref.read(routerProvider).replace('/renovation');
     return cPuzzle;
   }
   return lPuzzle;

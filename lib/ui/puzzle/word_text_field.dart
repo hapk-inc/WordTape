@@ -42,7 +42,9 @@ class WordTextField extends ConsumerWidget {
                 : null,
             length: word.value.length,
             defaultPinTheme: ref.read(
-              pinThemeProvider(constraints: constraints, color: seaWhite),
+              pinThemeProvider(
+                  constraints: constraints,
+                  color: needToDo == NeedToDo.onClick ? aquaMarine : seaWhite),
             ),
             controller: needToDo == NeedToDo.find
                 ? notifier.textController(word)

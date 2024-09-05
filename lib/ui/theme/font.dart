@@ -20,7 +20,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   //Title==============
   @override
   TextStyle? get titleLarge => GoogleFonts.carterOne(
-        fontSize: 40.r,
+        fontSize: 36.r,
         letterSpacing: 0,
         height: 0,
         wordSpacing: 0,

@@ -82,8 +82,8 @@ const List<Welcome> _resume = [
     end: "",
   ),
   Welcome(
-    text: "You're halfway! Now, see if you can  finish  the sequence.",
-    highlight: "finish",
+    text: "You're halfway ! Now, see if you can finish the sequence.",
+    highlight: "finish the sequence.",
     end: "",
   ),
   Welcome(
@@ -107,6 +107,25 @@ const List<Welcome> _resume = [
     highlight: "complete",
     end: "",
   )
+];
+
+@Riverpod(keepAlive: true)
+String passText(PassTextRef ref) {
+  final DateTime now = DateTime.now();
+  return _pass[now.day % _pass.length];
+}
+
+List<String> _pass = [
+  "Spread the Word",
+  "Tell Your Friends",
+  "Pass It On",
+  "Invite Your Friends",
+  "Send to Friends",
+  "Let Friends Know",
+  "Share with Others",
+  "Connect with Friends",
+  "Spread the Love",
+  "Share with Your Circle",
 ];
 
 /*You're almost done! Keep going to finish the rest of the sequence.

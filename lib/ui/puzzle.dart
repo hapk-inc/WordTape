@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:wordtape/function/puzzle/pod.dart';
 
 import '../function/puzzle/notifier.dart';
-import '../model/found.dart';
 import '../model/puzzle.dart';
 import '../model/word.dart';
 import 'puzzle/custom_keyboard.dart';
@@ -44,12 +43,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
     final Puzzle puzzle = notifier.puzzle;
 
     ref.listen(
-      puzzleNotifierProvider(date).select(
-        (value) {
-          final Found found = value.found;
-          return found.i;
-        },
-      ),
+      puzzleNotifierProvider(date).select((value) => value.found.i),
       (previous, next) {
         ref.read(puzzleNotifierProvider(date)).validateController();
       },

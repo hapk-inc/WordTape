@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:wordtape/function/gen_ai/pod.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
@@ -22,6 +23,7 @@ class PuzzleNotifier extends ChangeNotifier {
   List<TextEditingController> _pinController = [];
   late List<FocusNode> _nodes;
   late Logger logger;
+  String? _hint;
 
   //
   // final LocalFound localFound = LocalFound();
@@ -33,22 +35,24 @@ class PuzzleNotifier extends ChangeNotifier {
   Future get construct async {
     logger = ref.read(logProvider);
     logger.i("Construct Puzzle");
-    //final DateTime date = ref.read(chosenDateProvider);
     _puzzle = await ref.read(puzzleFromDateProvider(date).future) ??
         Puzzle.fromRandom();
     logger.i(_puzzle);
     if (_puzzle != null) {
       _found = await ref.read(foundFromPuzzleProvider(_puzzle!).future) ??
           Found(id: _puzzle!.id, date: _puzzle!.date);
+      await setHint();
+      logger.i("Hint-> $_hint");
     }
 
     validateController();
-    constructNodes();
+    _nodes = List.generate(_puzzle?.words.length ?? 0, (_) => FocusNode());
     notifyListeners();
   }
 
-  validateController() {
+  validateController() async {
     logger.i("Running ValidateController $_found");
+    await setHint();
     _pinController = List.generate(
       _puzzle?.words.length ?? 0,
       (index) {
@@ -71,20 +75,25 @@ class PuzzleNotifier extends ChangeNotifier {
     }
   }
 
-  constructNodes() {
-    _nodes = List.generate(_puzzle?.words.length ?? 0, (_) => FocusNode());
+  Future<void> setHint() async {
+    _hint = _puzzle!.words[_found.i].hint ??
+        await ref
+            .read(createHintProvider(word: _puzzle!.guessWord(_found)).future);
   }
 
   Puzzle get puzzle => _puzzle ?? Puzzle.fromRandom();
 
-  TextEditingController get activeController => _pinController.isEmpty
-      ? TextEditingController()
-      : _pinController[_found.i];
+  TextEditingController get activeController =>
+      _pinController.isEmpty || (_puzzle?.isCompleted(_found.i) ?? false)
+          ? TextEditingController()
+          : _pinController[_found.i];
 
   FocusNode get activeNode => _nodes[_found.i];
 
+  String? get hint => _hint;
+
   TextEditingController? textController(Word word) {
-    if (_puzzle == null) return null;
+    if (_puzzle == null || _pinController.isEmpty) return null;
     final int index = _puzzle!.words.indexOf(word);
     if (index.isNegative) return null;
     return _pinController[index];
@@ -166,3 +175,5 @@ class PuzzleNotifier extends ChangeNotifier {
     return str;
   }
 }
+
+//eextension add pannu datetime

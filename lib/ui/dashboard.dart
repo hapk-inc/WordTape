@@ -4,16 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../enum/pod.dart';
-import '../function/local/found.dart';
 import '../function/puzzle/pod.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
 import '../model/welcome.dart';
-import '../model/word.dart';
+import 'dashboard/p_count.dart';
+import 'dashboard/pass_button.dart';
 import 'dashboard/play_button.dart';
+import 'dashboard/two_word.dart';
 import 'dashboard/welcome.dart';
-import 'puzzle/word_text_field.dart';
 import 'theme/colors.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -45,14 +44,14 @@ class DashboardPage extends ConsumerWidget {
                     child: SafeArea(
                       child: Stack(
                         children: [
-                          const PuzzleCount(),
+                          const PCount(),
                           Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 WelcomeText(welcome),
                                 const Gap(60),
-                                TwoWords(date, puzzle.guess(found)),
+                                TwoWord(date, puzzle.guess(found)),
                               ],
                             ),
                           ),
@@ -68,13 +67,7 @@ class DashboardPage extends ConsumerWidget {
                     overflowAlignment: OverflowBarAlignment.center,
                     spacing: 15.r,
                     overflowSpacing: 15.r,
-                    children: [
-                      PlayButton(puzzle),
-                      OutlinedButton(
-                        onPressed: () {},
-                        child: const Text("Share with Your Circle"),
-                      )
-                    ],
+                    children: [PlayButton(puzzle), const PassButton()],
                   ),
                 ),
               ],
@@ -83,66 +76,3 @@ class DashboardPage extends ConsumerWidget {
         },
       );
 }
-
-class TwoWords extends StatelessWidget {
-  final DateTime date;
-  final List<Word> twoWords;
-  const TwoWords(this.date, this.twoWords, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeIn(
-      delay: const Duration(milliseconds: 2400),
-      key: ValueKey(date),
-      child: Wrap(
-        spacing: 15.r,
-        children: List.from(twoWords.map(
-          (w) => WordTextField(
-            w,
-            needToDo: twoWords.last == w ? NeedToDo.onClick : NeedToDo.plain,
-          ),
-        )),
-      ),
-    );
-  }
-}
-
-class PuzzleCount extends ConsumerWidget {
-  const PuzzleCount({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime now = DateTime.now();
-    final DateTime jun10 = ref.read(jun10Provider);
-    final int difference = now.difference(jun10).inDays;
-
-    final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return Positioned(
-      top: 30.r,
-      child: InkWell(
-        onDoubleTap: () async {
-          await LocalFound().delete();
-          final DateTime date = ref.read(selectedDateProvider);
-          final Puzzle? puzzle = ref.read(puzzleFromDateProvider(date)).value;
-          ref.invalidate(foundFromPuzzleProvider(puzzle!));
-        },
-        child: Text(
-          "NO. $difference",
-          style: textTheme.headlineLarge?.copyWith(color: lightCyan),
-        ),
-      ),
-    );
-  }
-}
-
-/*Spread the Word
-Tell Your Friends
-Pass It On
-Invite Your Friends
-Send to Friends
-Let Friends Know
-Share with Others
-Connect with Friends
-Spread the Love
-Share with Your Circle*/
