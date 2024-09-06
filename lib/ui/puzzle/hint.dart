@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mock_data/mock_data.dart';
 
 import '../../enum/pod.dart';
 import '../../function/gen_ai/pod.dart';
@@ -19,21 +21,23 @@ class PuzzleHint extends ConsumerWidget {
 
     final DateTime date = ref.read(selectedDateProvider);
     final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(date));
-    final String hint = notifier.hint ?? ref.read(recallNextProvider);
+
+    final String hint = notifier.hint;
 
     return AnimatedSwitcher(
       duration: Duration.zero,
       transitionBuilder: (child, _) => child,
       child: FadeInUp(
+        from: 15.h,
         delay: const Duration(milliseconds: 600),
         key: ValueKey(hint),
         child: AutoSizeText(
-          hint ?? "",
+          hint,
           style: textTheme.bodyMedium?.copyWith(color: Colors.amber),
-          maxLines: 3,
+          maxLines: 2,
           stepGranularity: 3,
-          minFontSize: 15,
-          maxFontSize: isTab ? 30 : 21,
+          minFontSize: 12,
+          maxFontSize: isTab ? 24 : 21,
           textAlign: TextAlign.center,
         ),
       ),

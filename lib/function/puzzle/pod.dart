@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,12 +7,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../enum/pod.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
+import '../../model/date_ext.dart';
 import '../../router/pod.dart';
-import '../../ui/theme/colors.dart';
+import '../../ui/theme/color.dart';
 import '../../ui/theme/font.dart';
 import '../firestore/found.dart';
+import '../firestore/pod.dart';
 import '../firestore/puzzle.dart';
 import '../local/found.dart';
+import '../local/pod.dart';
 import '../local/puzzle.dart';
 part 'pod.g.dart';
 
@@ -24,13 +25,15 @@ DateTime jun10(Jun10Ref ref) => DateTime(2024, 6, 9);
 @Riverpod(keepAlive: true, dependencies: [])
 class SelectedDate extends _$SelectedDate {
   @override
-  DateTime build() => DateTime.now();
+  DateTime build() {
+    final DateTime now = DateTime.now();
+    return now.convert();
+  }
 
   @override
   set state(DateTime value) {
     if (super.state == value) return;
-
-    super.state = value;
+    super.state = value.convert();
   }
 }
 
@@ -59,6 +62,54 @@ PinTheme pinTheme(PinThemeRef ref,
   );
 }
 
+@Riverpod(keepAlive: true, dependencies: [
+  sqPuzzle,
+  remotePuzzle,
+  router,
+])
+class PuzzleDateArg extends _$PuzzleDateArg {
+  @override
+  FutureOr<Puzzle?> build({required DateTime date}) async {
+    final LocalPuzzle pLocal = ref.read(sqPuzzleProvider);
+    Puzzle? puzzle = await pLocal.fromDate(date);
+    if (puzzle == null) {
+      final RemotePuzzle cloud = ref.read(remotePuzzleProvider);
+      Puzzle? cPuzzle = await cloud.puzzle(date);
+      if (cPuzzle != null) {
+        await pLocal.insert(cPuzzle);
+        return cPuzzle;
+      }
+      ref.read(routerProvider).replace('/renovation');
+      return null;
+    }
+    return puzzle;
+  }
+}
+
+@Riverpod(
+  keepAlive: true,
+  dependencies: [PuzzleDateArg, remoteFound, sqFound],
+)
+class FoundDateArg extends _$FoundDateArg {
+  @override
+  Future<Found> build({required DateTime date}) async {
+    final Puzzle? puzzle = ref.read(puzzleDateArgProvider(date: date)).value;
+    if (puzzle == null) return Found(date: date);
+    final Found nullFound = Found(date: date, id: puzzle.id);
+
+    if (kIsWeb) {
+      RemoteFound remoteFound = ref.read(remoteFoundProvider);
+      final Found? f = await remoteFound.found(puzzle.id);
+      return f ?? nullFound;
+    }
+
+    final LocalFound localFound = ref.read(sqFoundProvider);
+    final Found? f = await localFound.found(puzzle.id);
+    return f ?? nullFound;
+  }
+}
+
+/*
 @Riverpod(keepAlive: true, dependencies: [router])
 Future<Puzzle?> puzzleFromDate(PuzzleFromDateRef ref, DateTime date) async {
   log("Running selectedPuzzle for ${date.day} - ${date.month}");
@@ -91,3 +142,4 @@ Future<Found?> foundFromPuzzle(FoundFromPuzzleRef ref, Puzzle p) async {
   final LocalFound localFound = LocalFound();
   return localFound.found(p.id);
 }
+*/

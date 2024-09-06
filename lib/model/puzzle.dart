@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mock_data/mock_data.dart';
 
 import 'date_converter.dart';
+import 'date_ext.dart';
 import 'found.dart';
 import 'word.dart';
 
@@ -25,7 +26,7 @@ class Puzzle with _$Puzzle {
   factory Puzzle.fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);
 
   factory Puzzle.fromRandom() => Puzzle(
-        date: DateTime.now(),
+        date: DateTime.now().convert(),
         words:
             List.generate(6, (index) => Word(value: mockName().toUpperCase())),
         id: mockString(8),
@@ -38,11 +39,11 @@ class Puzzle with _$Puzzle {
     return [words[found.i - 1], words[found.i]];
   }
 
-  String guessWord(Found found) {
+  String nextWord(Found found) {
     final List<Word> words = guess(found);
     if (words.isEmpty) return "";
     return words
-        .fold("", (previousValue, element) => "$previousValue $element")
+        .fold("", (previousValue, element) => "$previousValue ${element.value}")
         .trim();
   }
 }

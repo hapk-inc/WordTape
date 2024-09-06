@@ -11,7 +11,7 @@ import '../model/word.dart';
 import 'puzzle/custom_keyboard.dart';
 import 'puzzle/hint.dart';
 import 'puzzle/word_text_field.dart';
-import 'theme/colors.dart';
+import 'theme/color.dart';
 
 class PuzzlePage extends ConsumerStatefulWidget {
   final DateTime date;
@@ -52,29 +52,48 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
     return ColoredBox(
       color: midnightGreen,
       child: SafeArea(
+        top: false,
+        bottom: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
             final double maxHeight = constraints.maxHeight;
             final double maxWidth = constraints.maxWidth;
             return Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.r),
+              //padding: EdgeInsets.symmetric(horizontal: 15.r),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      height: maxHeight * 0.21,
-                      alignment: Alignment.center,
+                    Gap(maxHeight * 0.03),
+                    Container(
+                      height: maxHeight * 0.045,
                       padding:
                           EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
+                      alignment: Alignment.center,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [BackButton(color: seaWhite)],
+                      ),
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      height: maxHeight * 0.15,
+                      alignment: Alignment.center,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: maxWidth * 0.045),
                       child: const PuzzleHint(),
                     ),
-                    for (Word word in puzzle.words)
-                      WordTextField(
-                        word,
-                        height: maxHeight * 0.09,
-                      ),
+                    ...List.generate(
+                      puzzle.words.length,
+                      (index) {
+                        final Word word = puzzle.words[index];
+                        return WordTextField(
+                          index,
+                          word,
+                          height: maxHeight * 0.09,
+                        );
+                      },
+                    ),
                     Gap(maxHeight * 0.045),
                     const CustomKeyboard(),
                   ],

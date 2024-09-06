@@ -7,7 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../model/welcome.dart';
-import 'theme/colors.dart';
+import 'theme/color.dart';
 
 const Welcome _construction = Welcome(
   text: "We will be back soon.\nMeanwhile, try to decode above",

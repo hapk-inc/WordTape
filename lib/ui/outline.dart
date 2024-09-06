@@ -5,7 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../enum/pod.dart';
 import '../function/controller/pod.dart';
-import 'theme/colors.dart';
+import 'theme/color.dart';
 
 BorderRadius get _borderRadius30 =>
     BorderRadius.vertical(top: Radius.circular(30.r));

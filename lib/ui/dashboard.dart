@@ -13,7 +13,7 @@ import 'dashboard/pass_button.dart';
 import 'dashboard/play_button.dart';
 import 'dashboard/two_word.dart';
 import 'dashboard/welcome.dart';
-import 'theme/colors.dart';
+import 'theme/color.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -24,11 +24,25 @@ class DashboardPage extends ConsumerWidget {
           final double mH = constraints.maxHeight;
           final double mW = constraints.maxWidth;
           final DateTime date = ref.watch(selectedDateProvider);
-          final Puzzle? puzzle = ref.watch(puzzleFromDateProvider(date)).value;
-          if (puzzle == null) return Container();
-          final Found found =
-              ref.watch(foundFromPuzzleProvider(puzzle)).value ??
-                  Found(date: date, id: puzzle.id);
+          final Puzzle? puzzle =
+              ref.watch(puzzleDateArgProvider(date: date)).when(
+                    loading: () => null,
+                    error: (error, stackTrace) {
+                      debugPrintStack(stackTrace: stackTrace);
+                      return null;
+                    },
+                    data: (data) => data,
+                  );
+
+          //
+          if (puzzle == null) return Container(color: midnightGreen);
+
+          //
+          final Found? found =
+              ref.watch(foundDateArgProvider(date: date)).value;
+          if (found == null) return Container(color: midnightGreen);
+
+          //
           final Welcome welcome = found.i == 1
               ? ref.read(welcomeProvider)
               : ref.read(resumeProvider);

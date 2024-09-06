@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -9,7 +11,7 @@ import '../../env/pod.dart';
 
 part 'pod.g.dart';
 
-@Riverpod(dependencies: [GeminiAi])
+@Riverpod(keepAlive: true, dependencies: [GeminiAi])
 Future<String> createHint(CreateHintRef ref, {required String word}) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
   return ai.generateHint(word);
@@ -41,11 +43,20 @@ class GeminiAi extends _$GeminiAi {
     final List<String> splitter = word.split(' ');
     debugPrint(splitter.toString());
     final String prompt =
-        'Give me short hint for word "$word" less than 15 words. '
-        'Use simple english. '
-        'Make sure that in the hint, do not include the words like ${splitter.join(", ")}';
+        'This is a Puzzle. User need to find the word "$word".'
+        ' Give me short hint for word "$word" less than 15 words. '
+        'Use simple english. ';
+    //'Make sure that in the hint, do not include the words like ${splitter.join(", ")}';
+    log(prompt);
     final List<Content> content = [Content.text(prompt)];
-    final GenerateContentResponse model = await state.generateContent(content);
+    final GenerateContentResponse model = await state.generateContent(
+      content,
+      safetySettings: [
+        /*...HarmCategory.values.map(
+          (e) => SafetySetting(e, HarmBlockThreshold.none),
+        )*/
+      ],
+    );
     return model.text ?? "Think";
   }
 }

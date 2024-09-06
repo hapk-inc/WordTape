@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../function/remote/pod.dart';
+import '../function/remote_config/pod.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
 import '../ui/puzzle.dart';

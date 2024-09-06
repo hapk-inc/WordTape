@@ -1,105 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:wordtape/function/gen_ai/pod.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
-import '../../model/word.dart';
-import '../local/found.dart';
+import '../gen_ai/pod.dart';
+import '../local/pod.dart';
 import '../logger/pod.dart';
 import 'pod.dart';
 
 final ChangeNotifierProviderFamily<PuzzleNotifier, DateTime>
     puzzleNotifierProvider =
     ChangeNotifierProvider.family<PuzzleNotifier, DateTime>(
-        (ref, date) => PuzzleNotifier(ref, date: date)..construct);
+  (ref, date) => PuzzleNotifier(ref, date: date)..construct,
+);
 
 class PuzzleNotifier extends ChangeNotifier {
   final Ref<PuzzleNotifier> ref;
   final DateTime date;
-  Puzzle? _puzzle;
+  //
+  late Puzzle _puzzle;
   late Found _found;
   List<TextEditingController> _pinController = [];
   late List<FocusNode> _nodes;
   late Logger logger;
-  String? _hint;
-
-  //
-  // final LocalFound localFound = LocalFound();
+  late String _hint;
 
   PuzzleNotifier(this.ref, {required this.date}) {
-    debugPrint("29==$date");
-  }
-
-  Future get construct async {
     logger = ref.read(logProvider);
-    logger.i("Construct Puzzle");
-    _puzzle = await ref.read(puzzleFromDateProvider(date).future) ??
+    _puzzle = ref.read(puzzleDateArgProvider(date: date)).value ??
         Puzzle.fromRandom();
-    logger.i(_puzzle);
-    if (_puzzle != null) {
-      _found = await ref.read(foundFromPuzzleProvider(_puzzle!).future) ??
-          Found(id: _puzzle!.id, date: _puzzle!.date);
-      await setHint();
-      logger.i("Hint-> $_hint");
-    }
-
+    _found =
+        ref.read(foundDateArgProvider(date: date)).value ?? Found(date: date);
     validateController();
-    _nodes = List.generate(_puzzle?.words.length ?? 0, (_) => FocusNode());
-    notifyListeners();
+
+    _nodes = List.generate(_puzzle.words.length, (_) => FocusNode());
   }
 
   validateController() async {
     logger.i("Running ValidateController $_found");
-    await setHint();
+    _hint = ref.read(recallNextProvider);
+    if (!_puzzle.isCompleted(_found.i)) generateNewHint();
+    //setHint();
     _pinController = List.generate(
-      _puzzle?.words.length ?? 0,
+      _puzzle.words.length,
       (index) {
-        late TextEditingController controller;
-        final String text = _puzzle!.words[index].value;
+        final String text = _puzzle.words[index].value;
         if (index < _found.i) {
-          controller = TextEditingController(text: text);
+          return TextEditingController(text: text);
         } else if (index == _found.i) {
-          controller = TextEditingController(text: getFirstLetter(text));
-        } else {
-          controller = TextEditingController(text: '');
+          return TextEditingController(text: firstLetter(text));
         }
-        return controller;
+        return TextEditingController();
       },
     );
     if (_found.lastFound != null) {
-      LocalFound().insert(_found);
-      ref.invalidate(foundFromPuzzleProvider(_puzzle!));
+      ref.read(sqFoundProvider).insert(_found);
+      ref.invalidate(foundDateArgProvider(date: date));
       notifyListeners();
     }
   }
 
-  Future<void> setHint() async {
-    _hint = _puzzle!.words[_found.i].hint ??
-        await ref
-            .read(createHintProvider(word: _puzzle!.guessWord(_found)).future);
-  }
+  /* setHint() async {
+    if (_puzzle.words[_found.i].hint != null) {
+      final String h = _puzzle.words[_found.i].hint!;
+      _hint = AsyncData(h);
+    } else {
+      _hint = ref.read(createHintProvider(word: _puzzle.nextWord(_found)));
+    }
+    notifyListeners();
+  }*/
 
-  Puzzle get puzzle => _puzzle ?? Puzzle.fromRandom();
-
-  TextEditingController get activeController =>
-      _pinController.isEmpty || (_puzzle?.isCompleted(_found.i) ?? false)
-          ? TextEditingController()
-          : _pinController[_found.i];
-
-  FocusNode get activeNode => _nodes[_found.i];
-
-  String? get hint => _hint;
-
-  TextEditingController? textController(Word word) {
-    if (_puzzle == null || _pinController.isEmpty) return null;
-    final int index = _puzzle!.words.indexOf(word);
-    if (index.isNegative) return null;
-    return _pinController[index];
-  }
-
-  FocusNode focusNode(int i) => _nodes[i];
+  bool get enableDone =>
+      _puzzle.words[_found.i].value.length == activeController.text.length;
 
   addText(String str) {
     if (!enableDone) {
@@ -121,59 +94,74 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   onTextChanged(String newText) {
-    if (_puzzle == null) return;
-    String exact = _puzzle!.words[_found.i].value;
-    if (!newText.startsWith(getFirstLetter(exact)) || newText.isEmpty) {
+    String exact = _puzzle.words[_found.i].value;
+    if (!newText.startsWith(firstLetter(exact)) || newText.isEmpty) {
       _pinController[_found.i].value = activeController.value.copyWith(
-        text: getFirstLetter(exact),
+        text: firstLetter(exact),
         selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
       );
     }
   }
 
-  bool get enableDone {
-    if (_puzzle == null) return false;
-    return _puzzle!.words[_found.i].value.length ==
-        activeController.text.length;
-  }
-
-  String getFirstLetter(String str) => str.isEmpty ? '' : str.substring(0, 1);
-
   Future<void> validate() async {
-    if (_puzzle == null) return;
-    bool isValid = _puzzle!.words[_found.i].value == activeController.text;
+    bool isValid = _puzzle.words[_found.i].value == activeController.text;
     if (!isValid) {
-      logger.i("CORRECT WORD = ${_puzzle!.words[_found.i].value}");
+      logger.i("CORRECT WORD = ${_puzzle.words[_found.i].value}");
     } else {
       incrementFound();
     }
   }
 
   Future<void> incrementFound() async {
-    logger.d("Increment Found");
     _found = _found.copyWith(i: _found.i + 1, lastFound: DateTime.now());
-    logger.d("$_found");
-    //localFound.insert(_found);
 
-    //
-    final bool everyFound = _puzzle?.isCompleted(_found.i) ?? false;
+    final bool everyFound = _puzzle.isCompleted(_found.i);
+
     if (everyFound) {
     } else {
+      generateNewHint();
       notifyListeners();
     }
   }
 
-  Found get found => _found;
+  String firstLetter(String str) => str.isEmpty ? '' : str.substring(0, 1);
 
-  String get nextWord {
-    if (_puzzle == null) return "";
-    final int currentTrack = _found.i;
-    List<Word> list = _puzzle!.words;
-    final String str =
-        "${list[currentTrack - 1].value} ${list[currentTrack].value}";
-    logger.d("Next-Word $str");
-    return str;
+  TextEditingController get activeController =>
+      _pinController.isEmpty || _puzzle.isCompleted(_found.i)
+          ? TextEditingController()
+          : _pinController[_found.i];
+
+  FocusNode get activeNode => _nodes[_found.i];
+
+  String get hint => _hint;
+
+  generateNewHint() {
+    bool hasHint = _puzzle.words[_found.i].hint != null;
+    if (hasHint) {
+      final String h = _puzzle.words[_found.i].hint!;
+      _hint = h;
+    } else {
+      final String recall = ref.read(recallNextProvider);
+      _hint = ref
+          .watch(createHintProvider(word: _puzzle.nextWord(_found)))
+          .maybeWhen(
+            data: (data) => data,
+            orElse: () => recall,
+            error: (error, stackTrace) {
+              logger.e("GEMINI ERROR", error: error, stackTrace: stackTrace);
+              return recall;
+            },
+          );
+    }
   }
-}
 
-//eextension add pannu datetime
+  TextEditingController? textController(int index) => _pinController[index];
+
+  FocusNode focusNode(int i) => _nodes[i];
+
+  Puzzle get puzzle => _puzzle;
+
+  Future get construct async {}
+
+  Found get found => _found;
+}

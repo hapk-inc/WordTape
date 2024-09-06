@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'enum/pod.dart';
 import 'router/pod.dart';
-import 'ui/theme/colors.dart';
+import 'ui/theme/color.dart';
 import 'ui/theme/font.dart';
 
 class MyApp extends ConsumerWidget with CustomThemeMixin {

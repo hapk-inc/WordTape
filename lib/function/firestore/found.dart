@@ -19,7 +19,7 @@ class RemoteFound {
   }
 
   Future<Found?> found(String? id) async {
-    if (id == null || fUser == null) return null;
+    if (id == null) return null;
     final CollectionReference foundColl =
         puzzleColl.doc(id).collection('found');
     //

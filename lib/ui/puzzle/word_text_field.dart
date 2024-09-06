@@ -8,13 +8,15 @@ import '../../enum/pod.dart';
 import '../../function/puzzle/notifier.dart';
 import '../../function/puzzle/pod.dart';
 import '../../model/word.dart';
-import '../theme/colors.dart';
+import '../theme/color.dart';
 
 class WordTextField extends ConsumerWidget {
+  final int index;
   final Word word;
   final double? height;
   final NeedToDo needToDo;
   const WordTextField(
+    this.index,
     this.word, {
     this.height,
     this.needToDo = NeedToDo.find,
@@ -47,7 +49,7 @@ class WordTextField extends ConsumerWidget {
                   color: needToDo == NeedToDo.onClick ? aquaMarine : seaWhite),
             ),
             controller: needToDo == NeedToDo.find
-                ? notifier.textController(word)
+                ? notifier.textController(index)
                 : TextEditingController(
                     text: needToDo == NeedToDo.plain
                         ? word.value
@@ -64,14 +66,15 @@ class WordTextField extends ConsumerWidget {
             readOnly: true,
             showCursor: false,
             enabled: needToDo == NeedToDo.find
-                ? notifier.textController(word) == notifier.activeController
+                ? notifier.textController(index) == notifier.activeController
                 : false,
             animationCurve: Curves.easeOut,
 
             textCapitalization: TextCapitalization.characters,
-            separatorBuilder: (_) => SizedBox(
-              width: word.value.length > 8 ? 4.5.r : 7.5.r,
-            ),
+            separatorBuilder: (_) {
+              final int len = word.value.length;
+              return SizedBox(width: len > 8 ? 4.5.r : 7.5.r);
+            },
             //
           );
         },

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/welcome.dart';
-import '../theme/colors.dart';
+import '../theme/color.dart';
 
 class WelcomeText extends ConsumerWidget {
   final Welcome sentence;

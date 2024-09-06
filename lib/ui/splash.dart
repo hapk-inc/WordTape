@@ -8,7 +8,7 @@ import 'package:lottie/lottie.dart';
 
 import '../enum/pod.dart';
 import '../function/auth/pod.dart';
-import 'theme/colors.dart';
+import 'theme/color.dart';
 
 const Duration _m1500 = Duration(milliseconds: 1500);
 

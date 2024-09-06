@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../function/local/found.dart';
 import '../../function/puzzle/pod.dart';
-import '../../model/puzzle.dart';
-import '../theme/colors.dart';
+import '../theme/color.dart';
 
 class PCount extends ConsumerWidget {
   const PCount({super.key});
@@ -22,10 +20,10 @@ class PCount extends ConsumerWidget {
       top: 30.r,
       child: InkWell(
         onDoubleTap: () async {
-          await LocalFound().delete();
-          final DateTime date = ref.read(selectedDateProvider);
-          final Puzzle? puzzle = ref.read(puzzleFromDateProvider(date)).value;
-          ref.invalidate(foundFromPuzzleProvider(puzzle!));
+          //await LocalFound().delete();
+          //final DateTime date = ref.read(selectedDateProvider);
+          //final Puzzle? puzzle = ref.read(puzzleFromDateProvider(date)).value;
+          //ref.invalidate(foundFromPuzzleProvider(puzzle!));
         },
         child: Text(
           "NO. $difference",

@@ -122,7 +122,7 @@ List<String> _pass = [
   "Invite Your Friends",
   "Send to Friends",
   "Let Friends Know",
-  "Share with Others",
+  "Share with others",
   "Connect with Friends",
   "Spread the Love",
   "Share with Your Circle",

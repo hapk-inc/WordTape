@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wordtape/function/puzzle/pod.dart';
 
 import '../../function/puzzle/notifier.dart';
+import '../../function/puzzle/pod.dart';
 
 const String backspace = "🔙";
 const String done = "✔️";
@@ -20,7 +20,7 @@ class CustomKeyboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 375.r),
+      constraints: BoxConstraints(maxWidth: 390.r),
       child: LayoutBuilder(
         builder: (_, constraints) => Column(
           children: [
@@ -85,7 +85,6 @@ class MyKeyboardTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    //final String id = ref.watch(puzzleKeyProvider);
     return InkWell(
       onLongPress: () {
         if (str == backspace) context.pop();
