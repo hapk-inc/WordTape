@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wordtape/function/puzzle/pod.dart';
 
 import '../local/found.dart';
 import '../local/pod.dart';
@@ -60,10 +61,13 @@ Future<User?> fUser(FUserRef ref) async {
   return auth.fUser;
 }
 
-@Riverpod(dependencies: [sqPuzzle, sqFound, auth])
+@Riverpod(dependencies: [sqPuzzle, sqFound, auth, SelectedDate])
 Future<dynamic> logOff(LogOffRef ref) async {
   final LocalPuzzle localPuzzle = ref.read(sqPuzzleProvider);
   final LocalFound localFound = ref.read(sqFoundProvider);
   final Auth auth = ref.read(authProvider);
+  final DateTime date = ref.read(selectedDateProvider);
+  ref.invalidate(puzzleDateArgProvider(date: date));
+  ref.invalidate(selectedDateProvider);
   return Future.wait([localPuzzle.delete(), localFound.delete(), auth.logOff]);
 }

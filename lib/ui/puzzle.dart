@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../function/puzzle/notifier.dart';
 import '../function/puzzle/pod.dart';
@@ -63,12 +65,18 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                 children: [
                   Gap(maxHeight * 0.03),
                   Container(
-                    height: maxHeight * 0.045,
+                    height: maxHeight * 0.06,
                     padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
                     alignment: Alignment.center,
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [BackButton(color: seaWhite)],
+                      children: [
+                        const BackButton(color: seaWhite),
+                        SizedBox.square(
+                          dimension: maxHeight * 0.06,
+                          child: Lottie.asset('lottie/bulb.json'),
+                        )
+                      ],
                     ),
                   ),
                   AnimatedContainer(
@@ -89,7 +97,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                       );
                     },
                   ),
-                  Gap(maxHeight * 0.03),
+                  Gap(maxHeight * 0.018),
                   const CustomKeyboard(),
                 ],
               ),

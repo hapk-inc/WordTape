@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../enum/pod.dart';
 import '../../function/puzzle/notifier.dart';
 import '../../function/puzzle/pod.dart';
 
@@ -19,54 +20,46 @@ class CustomKeyboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      constraints: BoxConstraints(maxWidth: 390.r),
+    final ScreenSize size = ref.watch(sizeProvider);
+    final bool isMobile = size == ScreenSize.mobile;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      constraints: BoxConstraints(maxWidth: isMobile ? 360.r : 375.r),
       child: LayoutBuilder(
         builder: (_, constraints) => Column(
           children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: row1.map(
-                  (str) {
-                    final bool isChar = str.length == 1;
-                    final double maxWidth = constraints.maxWidth;
-                    final double width = maxWidth * (isChar ? 0.084 : 0.09);
-                    return MyKeyboardTile(str, width);
-                  },
-                ).toList(),
-              ),
+            SingleChildScrollRow(
+              children: row1.map(
+                (str) {
+                  final bool isChar = str.length == 1;
+                  final double maxWidth = constraints.maxWidth;
+                  final double width = maxWidth * (isChar ? 0.084 : 0.09);
+                  return MyKeyboardTile(str, width);
+                },
+              ).toList(),
             ),
             Gap(7.5.r),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: row2.map(
-                  (str) {
-                    final bool isChar = str.length == 1;
-                    final double maxWidth = constraints.maxWidth;
-                    final double width = maxWidth * (isChar ? 0.084 : 0.09);
-                    return MyKeyboardTile(str, width);
-                  },
-                ).toList(),
-              ),
+            SingleChildScrollRow(
+              children: row2.map(
+                (str) {
+                  final bool isChar = str.length == 1;
+                  final double maxWidth = constraints.maxWidth;
+                  final double width = maxWidth * (isChar ? 0.084 : 0.09);
+                  return MyKeyboardTile(str, width);
+                },
+              ).toList(),
             ),
             Gap(7.5.r),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: row3.map(
-                  (str) {
-                    final bool isChar = str.length == 1;
-                    final double maxWidth = constraints.maxWidth;
-                    final double width = maxWidth * (isChar ? 0.084 : 0.15);
-                    return MyKeyboardTile(str, width);
-                  },
-                ).toList(),
-              ),
+            SingleChildScrollRow(
+              children: row3.map(
+                (str) {
+                  final bool isChar = str.length == 1;
+                  final double maxWidth = constraints.maxWidth;
+                  final double width = maxWidth * (isChar ? 0.084 : 0.15);
+                  return MyKeyboardTile(str, width);
+                },
+              ).toList(),
             ),
           ],
         ),
@@ -86,9 +79,6 @@ class MyKeyboardTile extends ConsumerWidget {
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
-      onLongPress: () {
-        if (str == backspace) context.pop();
-      },
       onTap: () {
         final DateTime date = ref.read(selectedDateProvider);
         final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
@@ -109,7 +99,7 @@ class MyKeyboardTile extends ConsumerWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: width,
-        height: 43.2.h,
+        height: 43.5.h,
         margin: EdgeInsets.symmetric(horizontal: width * 0.06),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -127,4 +117,18 @@ class MyKeyboardTile extends ConsumerWidget {
       ),
     );
   }
+}
+
+class SingleChildScrollRow extends StatelessWidget {
+  final List<Widget> children;
+  const SingleChildScrollRow({required this.children, super.key});
+
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: children,
+        ),
+      );
 }

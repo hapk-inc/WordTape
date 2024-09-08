@@ -10,31 +10,12 @@ import 'theme/color.dart';
 BorderRadius get _borderRadius30 =>
     BorderRadius.vertical(top: Radius.circular(30.r));
 
-class OutlinePage extends ConsumerStatefulWidget {
+class OutlinePage extends ConsumerWidget {
   final Widget child;
   const OutlinePage(this.child, {super.key});
 
   @override
-  ConsumerState<OutlinePage> createState() => _OutlinePageState();
-}
-
-class _OutlinePageState extends ConsumerState<OutlinePage> {
-  @override
-  void initState() {
-    super.initState();
-    /*ref.listenManual(
-      authNotifierProvider.select((value) => value.path),
-      (previous, next) {
-        log("ListenManual $next");
-        if (mounted && ((previous?.path ?? "/") != "/")) {
-          context.replace(next.path, extra: next.arg);
-        }
-      },
-    );*/
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isMobile = size == ScreenSize.mobile;
 
@@ -59,9 +40,9 @@ class _OutlinePageState extends ConsumerState<OutlinePage> {
                     borderRadius: _borderRadius30,
                     child: ref.watch(puzzlePanelProvider),
                   ),
-                  body: OutlineState(child: widget.child),
+                  body: OutlineState(child: child),
                 )
-              : OutlineState(child: widget.child),
+              : OutlineState(child: child),
         ),
       ),
     );
