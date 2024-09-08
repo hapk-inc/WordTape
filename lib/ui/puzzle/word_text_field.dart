@@ -23,6 +23,7 @@ class WordTextField extends ConsumerWidget {
     late Color color;
     late bool isEnabled;
     late TextEditingController controller;
+    bool autoFocus = false;
 
     if (needToDo != NeedToDo.find) {
       isEnabled = false;
@@ -42,7 +43,9 @@ class WordTextField extends ConsumerWidget {
           ? seaWhite
           : notifier.isPrevious(word)
               ? aquaMarine
-              : Colors.white30;
+              : Colors.white24;
+
+      autoFocus = isEnabled;
     }
 
     return AnimatedContainer(
@@ -51,18 +54,13 @@ class WordTextField extends ConsumerWidget {
       child: LayoutBuilder(
         builder: (_, constraints) {
           return Pinput(
-            /*onTap: needToDo == NeedToDo.onClick
-                ? () => context.push(
-                      '/puzzle',
-                      extra: ref.read(selectedDateProvider),
-                    )
-                : null,*/
             length: word.value.length,
             defaultPinTheme: ref.read(
               pinThemeProvider(constraints: constraints, color: color),
             ),
 
             controller: controller,
+            // focusNode: focusNode,
 
             //
             isCursorAnimationEnabled: false,
@@ -75,11 +73,12 @@ class WordTextField extends ConsumerWidget {
             showCursor: false,
             enabled: isEnabled,
             animationCurve: Curves.easeOut,
+            autofocus: autoFocus,
 
             textCapitalization: TextCapitalization.characters,
             separatorBuilder: (_) {
               final int len = word.value.length;
-              return SizedBox(width: len > 8 ? 4.5.r : 7.5.r);
+              return SizedBox(width: len > 8 ? 4.5.r : 9.r);
             },
             //
           );

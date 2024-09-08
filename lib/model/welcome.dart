@@ -101,8 +101,7 @@ const List<Welcome> _resume = [
     end: "",
   ),
   Welcome(
-    "You're almost finished! See if you can  complete  the "
-    "rest of the sequence.",
+    "You're almost finished! See if you can complete the sequence.",
     highlight: "complete",
     end: "",
   )
@@ -133,10 +132,11 @@ const List<String> _pass = [
 
 const List<Welcome> _archive = [
   Welcome(
-    "Want to check out \n archives and play?",
+    "Want to check out\n archives and play?",
     highlight: "archives and play?",
   ),
-  Welcome("Would you like to visit the archives?"),
+  Welcome("Would you like to\n visit the archives?",
+      highlight: "visit the archives?"),
   Welcome("How about looking at the archives and playing?"),
   Welcome("Interested in seeing the archives and playing?"),
   Welcome("Want to explore the archives and have fun?"),

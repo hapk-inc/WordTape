@@ -41,7 +41,7 @@ class PuzzleNotifier extends ChangeNotifier {
   validateController() async {
     logger.i("Running ValidateController $_found");
     _hint = ref.read(recallNextProvider);
-    if (!_puzzle.isCompleted(_found.i)) generateNewHint();
+    if (!_puzzle.isCompleted(_found.i)) generateHint();
     //setHint();
     _pinController = List.generate(
       _puzzle.words.length,
@@ -105,12 +105,12 @@ class PuzzleNotifier extends ChangeNotifier {
 
   Future<void> incrementFound() async {
     _found = _found.copyWith(i: _found.i + 1, lastFound: DateTime.now());
-
+    logger.i("$_found");
     final bool everyFound = _puzzle.isCompleted(_found.i);
 
     if (everyFound) {
     } else {
-      generateNewHint();
+      generateHint();
       notifyListeners();
     }
   }
@@ -126,7 +126,7 @@ class PuzzleNotifier extends ChangeNotifier {
 
   String get hint => _hint;
 
-  generateNewHint() {
+  generateHint() {
     bool hasHint = _puzzle.words[_found.i].hint != null;
     if (hasHint) {
       final String h = _puzzle.words[_found.i].hint!;

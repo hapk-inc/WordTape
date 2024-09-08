@@ -4,18 +4,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../enum/pod.dart';
+import '../function/auth/pod.dart';
 import '../function/controller/pod.dart';
 import 'theme/color.dart';
 
 BorderRadius get _borderRadius30 =>
     BorderRadius.vertical(top: Radius.circular(30.r));
 
-class OutlinePage extends ConsumerWidget {
+const Duration _m3600 = Duration(milliseconds: 3600);
+
+class OutlinePage extends ConsumerStatefulWidget {
   final Widget child;
   const OutlinePage(this.child, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OutlinePage> createState() => _OutlinePageState();
+}
+
+class _OutlinePageState extends ConsumerState<OutlinePage> {
+  @override
+  void initState() {
+    Future.delayed(_m3600, () => ref.read(listenAuthProvider));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isMobile = size == ScreenSize.mobile;
 
@@ -40,9 +54,9 @@ class OutlinePage extends ConsumerWidget {
                     borderRadius: _borderRadius30,
                     child: ref.watch(puzzlePanelProvider),
                   ),
-                  body: OutlineState(child: child),
+                  body: OutlineState(child: widget.child),
                 )
-              : OutlineState(child: child),
+              : OutlineState(child: widget.child),
         ),
       ),
     );

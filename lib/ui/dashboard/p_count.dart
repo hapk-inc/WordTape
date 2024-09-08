@@ -21,7 +21,7 @@ class PCount extends ConsumerWidget {
     return Positioned(
       top: 30.r,
       child: InkWell(
-        onLongPress: () => ref.read(logOffProvider.future).whenComplete(
+        onLongPress: () => ref.read(signingOffProvider.future).whenComplete(
               () => ref.read(routerProvider).replace("/"),
             ),
         child: Text(

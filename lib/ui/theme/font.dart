@@ -93,6 +93,14 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         height: 0,
         color: midnightGreen,
       );
+
+  // Exception - only for "PRESS START"
+  @override
+  TextStyle? get displayMedium => GoogleFonts.pressStart2p(
+        color: mint,
+        fontSize: 15.r,
+        height: 0,
+      );
 }
 
 mixin FontMixin {

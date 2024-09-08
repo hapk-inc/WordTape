@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
@@ -34,78 +36,80 @@ class DashboardPage extends ConsumerWidget {
                       debugPrintStack(stackTrace: stackTrace);
                       return null;
                     },
-                    data: (data) => data,
+                    data: (d) => d,
                   );
 
-          //
-          //if (puzzle == null) return Container(color: midnightGreen);
-
-          //
           final Found? found =
               ref.watch(foundDateArgProvider(date: date)).value;
+
           if (found == null) return Container(color: midnightGreen);
+          log("40==$found");
+          //
+
+          final Welcome w = ref.read(welcomeProvider);
+          final Welcome r = ref.read(resumeProvider);
+          final Welcome welcome = found.i == 1 ? w : r;
 
           //
-          final Welcome welcome = found.i == 1
-              ? ref.read(welcomeProvider)
-              : ref.read(resumeProvider);
-          return ListView(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                color: midnightGreen,
-                constraints: BoxConstraints.expand(height: mH * 0.72),
-                padding: EdgeInsets.symmetric(horizontal: mW * 0.045),
-                child: SafeArea(
-                  child: Stack(
-                    children: [
-                      const PCount(),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Gap(15),
-                            WelcomeText(welcome),
-                            const Gap(60),
-                            if (puzzle != null)
-                              TwoWord(date, puzzle.guess(found)),
-                          ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  color: midnightGreen,
+                  constraints: BoxConstraints.expand(height: mH * 0.72),
+                  padding: EdgeInsets.symmetric(horizontal: mW * 0.045),
+                  child: SafeArea(
+                    child: Stack(
+                      children: [
+                        const PCount(),
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Gap(15),
+                              WelcomeText(welcome),
+                              const Gap(60),
+                              if (puzzle != null)
+                                TwoWord(date, puzzle.guess(found)),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
+                    ),
+                  ),
+                ),
+                Gap(mH * 0.03),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.r),
+                  child: OverflowBar(
+                    alignment: MainAxisAlignment.center,
+                    overflowAlignment: OverflowBarAlignment.center,
+                    spacing: 15.r,
+                    overflowSpacing: 15.r,
+                    children: [
+                      if (puzzle != null) const PlayBtn(),
+                      const PassBtn(),
                     ],
                   ),
                 ),
-              ),
-              Gap(mH * 0.03),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.r),
-                child: OverflowBar(
-                  alignment: MainAxisAlignment.center,
-                  overflowAlignment: OverflowBarAlignment.center,
-                  spacing: 15.r,
-                  overflowSpacing: 15.r,
-                  children: [
-                    if (puzzle != null) const PlayBtn(),
-                    const PassBtn(),
-                  ],
-                ),
-              ),
-              Gap(mH * 0.045),
-              SizedBox(
-                width: 450.r,
-                child: FadeIn(
-                  delay: const Duration(milliseconds: 3600),
-                  child: Lottie.asset('lottie/calendar.json', repeat: false),
-                ),
-              ),
-              if (!kIsWeb) ...[
-                Gap(mH * 0.015),
-                const SeeArchive(),
                 Gap(mH * 0.045),
-                const StoreBtn(),
+                SizedBox(
+                  width: 450.r,
+                  child: FadeIn(
+                    delay: const Duration(milliseconds: 3600),
+                    child: Lottie.asset('lottie/calendar.json', repeat: false),
+                  ),
+                ),
+                if (!kIsWeb) ...[
+                  Gap(mH * 0.015),
+                  const SeeArchive(),
+                  Gap(mH * 0.045),
+                  const StoreBtn(),
+                ],
+                Gap(mH * 0.3),
               ],
-              Gap(mH * 0.3),
-            ],
+            ),
           );
         },
       );

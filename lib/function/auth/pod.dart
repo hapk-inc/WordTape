@@ -1,47 +1,21 @@
+import 'dart:developer';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wordtape/function/puzzle/pod.dart';
 
-import '../local/found.dart';
+import '../../firebase/pod.dart';
+import '../../model/route_path.dart';
+import '../../router/pod.dart';
+import '../connectivity/pod.dart';
 import '../local/pod.dart';
-import '../local/puzzle.dart';
+import '../remote_config/pod.dart';
 import 'auth.dart';
 
 part 'pod.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [])
 Auth auth(AuthRef ref) => Auth(ref);
-
-/*@Riverpod(keepAlive: true, dependencies: [runningUser, router])
-void listenAuth(ListenAuthRef ref) {
-  ref.listen<User?>(
-    runningUserProvider.select((auth) => auth.value),
-    (_, next) async {
-      final GoRouter router = ref.read(routerProvider);
-      if (next == null) {
-        ref.read(authNotifierProvider.notifier).state = ValidateAuth.notLogged;
-        router.replace('/login');
-      } else {
-        log("$next");
-        ref.read(authNotifierProvider.notifier).state =
-            next.isAnonymous ? ValidateAuth.guest : ValidateAuth.inGame;
-        router.replace('/home');
-      }
-    },
-  );
-}
-
-@Riverpod(keepAlive: true, dependencies: [])
-class AuthNotifier extends _$AuthNotifier {
-  @override
-  ValidateAuth build() => ValidateAuth.notLogged;
-
-  @override
-  set state(ValidateAuth value) {
-    if (super.state == value) return;
-    super.state = value;
-  }
-}*/
 
 @Riverpod(keepAlive: true, dependencies: [auth])
 Stream<User?> runningUser(RunningUserRef ref) {
@@ -61,13 +35,74 @@ Future<User?> fUser(FUserRef ref) async {
   return auth.fUser;
 }
 
-@Riverpod(dependencies: [sqPuzzle, sqFound, auth, SelectedDate])
-Future<dynamic> logOff(LogOffRef ref) async {
-  final LocalPuzzle localPuzzle = ref.read(sqPuzzleProvider);
-  final LocalFound localFound = ref.read(sqFoundProvider);
+@Riverpod(dependencies: [auth])
+Future<void> signingOff(SigningOffRef ref) {
   final Auth auth = ref.read(authProvider);
-  final DateTime date = ref.read(selectedDateProvider);
-  ref.invalidate(puzzleDateArgProvider(date: date));
-  ref.invalidate(selectedDateProvider);
-  return Future.wait([localPuzzle.delete(), localFound.delete(), auth.logOff]);
+  return auth.logOff;
+}
+
+@Riverpod(keepAlive: true, dependencies: [
+  runningUser,
+  internetConnection,
+  sqFound,
+  sqPuzzle,
+  remoteConfig
+])
+void listenAuth(ListenAuthRef ref) {
+  ref.listen<User?>(
+    runningUserProvider.select((value) => value.value),
+    (previous, next) {
+      if (previous != null && next == null) {
+        log("Deleting");
+        ref.read(sqFoundProvider).delete();
+        ref.read(sqPuzzleProvider).delete();
+      }
+      ref.read(authNotifierProvider.notifier).validateAuth(next == null);
+    },
+  );
+
+  ref.listen<ConnectivityResult>(
+    internetConnectionProvider
+        .select((x) => x.value?.last ?? ConnectivityResult.none),
+    (_, next) async {
+      final bool validConnection =
+          next == ConnectivityResult.wifi || next == ConnectivityResult.mobile;
+      ref.read(validateConnectionProvider.notifier).state =
+          validConnection ? await validateConnection(ref) : -1;
+    },
+  );
+}
+
+Future<int> validateConnection(ListenAuthRef ref) => ref
+        .refresh(remoteConfigProvider)
+        .fetchAndActivate()
+        .then((value) => value ? 1 : 0)
+        .onError(
+      (e, __) {
+        log("RemoteConnection $e");
+        return -1;
+      },
+    );
+
+@Riverpod(keepAlive: true, dependencies: [renovation, router])
+class AuthNotifier extends _$AuthNotifier {
+  @override
+  RoutePath build() {
+    final String renovation = ref.read(renovationProvider).value ?? "";
+    final bool inMaintenance = renovation.isNotEmpty;
+    if (inMaintenance) return const RoutePath(path: "/renovation");
+    return const RoutePath();
+  }
+
+  @override
+  set state(RoutePath value) {
+    if (super.state == value) return;
+    super.state = value;
+    ref.read(routerProvider).replace(value.path, extra: value.arg);
+  }
+
+  validateAuth(bool isNull) {
+    log("ValidateAuth--");
+    return state = isNull ? const RoutePath() : const RoutePath(path: "/home");
+  }
 }

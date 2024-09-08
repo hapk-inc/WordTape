@@ -38,6 +38,7 @@ dependencies:
   firebase_crashlytics: ^4.1.0
   firebase_remote_config: ^5.1.0
   cloud_firestore: ^5.4.0
+  firebase_messaging: ^15.1.0
 
   # App Check
   device_preview: ^1.2.0
@@ -111,7 +112,7 @@ dev_dependencies:
   # Riverpod dev
   riverpod_generator: ^2.4.3
   build_runner: ^2.4.12
-  custom_lint: ^0.6.4
+  custom_lint: ^0.6.7
   riverpod_lint: ^2.3.13
 
   # Freezed:

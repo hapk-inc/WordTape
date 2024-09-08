@@ -24,9 +24,10 @@ class Auth {
     subject = BehaviorSubject<User?>(
       onListen: () => _auth.authStateChanges().listen(
         (event) {
-          logger.d("$event");
-          // if (!subject.hasValue || subject.value != event) subject.add(event);
-          subject.add(event);
+          if (!subject.hasValue || subject.value != event) {
+            logger.d("$event");
+            subject.add(event);
+          }
         },
       ),
     );
@@ -36,7 +37,6 @@ class Auth {
   Future<User?> get fUser async => _auth.currentUser;
 
   Future<bool> get userLogin async {
-    logger.i("UserLogin");
     if (!await GamesServices.isSignedIn) {
       final String? str = await GamesServices.signIn();
       logger.d(str);
