@@ -36,6 +36,7 @@ class SelectedDate extends _$SelectedDate {
   @override
   set state(DateTime value) {
     if (super.state == value) return;
+    debugPrint("38===");
     super.state = value.convert();
   }
 }
@@ -109,21 +110,38 @@ class FoundDateArg extends _$FoundDateArg {
 }
 
 @Riverpod(keepAlive: true)
-class KeyNotifier extends _$KeyNotifier {
+class KeyEventNotifier extends _$KeyEventNotifier {
   @override
-  LogicalKeyboardKey build() => const LogicalKeyboardKey(0);
+  KeyEvent? build() => null;
 
   @override
-  set state(LogicalKeyboardKey value) {
-    if (state == value) return;
-    super.state = value;
+  set state(KeyEvent? value) {
+    if (value == null) return;
+    if (state == null) {
+      super.state = value;
+      validateKey(value);
+    } else if (state!.timeStamp.inSeconds != value.timeStamp.inSeconds) {
+      super.state = value;
+      validateKey(value);
+    }
+  }
+
+  validateKey(KeyEvent event) {
     final DateTime date = ref.read(selectedDateProvider);
-    final String str = value.keyLabel.trim();
-    if (str.length == 1) {
-      log("$str==");
-      ref.read(puzzleNotifierProvider(date)).addText(str);
+    final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
+
+    if (event.character != null) {
+      final String str = event.character ?? "";
+      if (str.isNotEmpty) notifier.addText(str);
     } else {
-      log("Extra==$str");
+      LogicalKeyboardKey logicalKeyboardKey = event.logicalKey;
+      switch (logicalKeyboardKey.keyLabel) {
+        case "Backspace":
+          {
+            notifier.removeText();
+            break;
+          }
+      }
     }
   }
 }

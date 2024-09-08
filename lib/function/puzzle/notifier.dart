@@ -13,7 +13,7 @@ import 'pod.dart';
 final ChangeNotifierProviderFamily<PuzzleNotifier, DateTime>
     puzzleNotifierProvider =
     ChangeNotifierProvider.family<PuzzleNotifier, DateTime>(
-  (ref, date) => PuzzleNotifier(ref, date: date)..construct,
+  (ref, date) => PuzzleNotifier(ref, date: date),
 );
 
 class PuzzleNotifier extends ChangeNotifier {
@@ -25,7 +25,7 @@ class PuzzleNotifier extends ChangeNotifier {
   List<TextEditingController> _pinController = [];
   late List<FocusNode> _nodes;
   late Logger logger;
-  late String _hint;
+  String _hint = "Wait";
 
   PuzzleNotifier(this.ref, {required this.date}) {
     logger = ref.read(logProvider);
@@ -41,8 +41,8 @@ class PuzzleNotifier extends ChangeNotifier {
   validateController() async {
     logger.i("Running ValidateController $_found");
     _hint = ref.read(recallNextProvider);
-    if (!_puzzle.isCompleted(_found.i)) generateHint();
-    //setHint();
+    // if (!_puzzle.isCompleted(_found.i)) generateHint();
+    // setHint();
     _pinController = List.generate(
       _puzzle.words.length,
       (index) {
@@ -55,11 +55,11 @@ class PuzzleNotifier extends ChangeNotifier {
         return TextEditingController();
       },
     );
-    if (_found.lastFound != null) {
-      ref.read(sqFoundProvider).insert(_found);
-      ref.invalidate(foundDateArgProvider(date: date));
-      notifyListeners();
-    }
+  }
+
+  updateLocally() {
+    ref.read(sqFoundProvider).insert(_found);
+    ref.invalidate(foundDateArgProvider(date: date));
   }
 
   bool get enableDone =>
@@ -110,7 +110,7 @@ class PuzzleNotifier extends ChangeNotifier {
 
     if (everyFound) {
     } else {
-      generateHint();
+      //generateHint();
       notifyListeners();
     }
   }
@@ -126,13 +126,16 @@ class PuzzleNotifier extends ChangeNotifier {
 
   String get hint => _hint;
 
-  generateHint() {
+  /*generateHint() {
     bool hasHint = _puzzle.words[_found.i].hint != null;
     if (hasHint) {
       final String h = _puzzle.words[_found.i].hint!;
       _hint = h;
     } else {
+
       final String recall = ref.read(recallNextProvider);
+
+      //AI HINT create separate provider and set it in puzzle hint, so it wont disturb the notifier
       _hint = ref
           .watch(createHintProvider(word: _puzzle.nextWord(_found)))
           .maybeWhen(
@@ -144,15 +147,13 @@ class PuzzleNotifier extends ChangeNotifier {
             },
           );
     }
-  }
+  }*/
 
   TextEditingController textController(int index) => _pinController[index];
 
   FocusNode focusNode(int i) => _nodes[i];
 
   Puzzle get puzzle => _puzzle;
-
-  Future get construct async {}
 
   Found get found => _found;
 

@@ -28,6 +28,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
 
   @override
   void initState() {
+    debugPrint("Init in PuzzlePage");
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String dateStr = formatter.format(widget.date);
     date = formatter.parse(dateStr);
@@ -36,21 +37,23 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
       () => ref.read(selectedDateProvider.notifier).state = date,
     );
 
+    ref.listenManual<int>(
+      puzzleNotifierProvider(date).select<int>((value) => value.found.i),
+      (previous, next) {
+        log("Listen Found $next");
+        ref.read(puzzleNotifierProvider(date))
+          ..validateController()
+          ..updateLocally();
+      },
+    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(date));
+    final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
     final Puzzle puzzle = notifier.puzzle;
-
-    ref.listen<int>(
-      puzzleNotifierProvider(date).select<int>((value) => value.found.i),
-      (previous, next) {
-        log("Listen Found $next");
-        ref.read(puzzleNotifierProvider(date)).validateController();
-      },
-    );
 
     return ColoredBox(
       color: midnightGreen,
@@ -61,26 +64,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
           focusNode: notifier.activeNode,
           autofocus: true,
           onKeyEvent: (value) {
-            log("onKeyEvent");
-            ref.read(keyNotifierProvider.notifier).state = value.logicalKey;
-            /*log("30==$value");
-
-            final String str = value.character ?? "";
-            final PuzzleNotifier notifierRead =
-                ref.read(puzzleNotifierProvider(date));
-            if (str.isNotEmpty && str.length == 1) {
-              log("STR=$str==");
-              notifierRead.addText(str.toUpperCase());
-            } else {
-              log("${value.physicalKey.debugName}==");
-              switch (value.physicalKey.debugName) {
-                case "Backspace":
-                  {
-                    notifierRead.removeText();
-                    break;
-                  }
-              }
-            }*/
+            ref.read(keyEventNotifierProvider.notifier).state = value;
           },
           child: LayoutBuilder(
             builder: (context, constraints) {
