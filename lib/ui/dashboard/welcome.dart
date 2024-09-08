@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../model/welcome.dart';
 import '../theme/color.dart';
@@ -19,6 +20,7 @@ class WelcomeText extends ConsumerWidget {
 
     return FadeInUp(
       delay: const Duration(milliseconds: 600),
+      from: 45.h,
       key: ValueKey(sentence),
       child: AutoSizeText.rich(
         TextSpan(

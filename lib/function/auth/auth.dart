@@ -25,7 +25,8 @@ class Auth {
       onListen: () => _auth.authStateChanges().listen(
         (event) {
           logger.d("$event");
-          if (!subject.hasValue || subject.value != event) subject.add(event);
+          // if (!subject.hasValue || subject.value != event) subject.add(event);
+          subject.add(event);
         },
       ),
     );
@@ -49,7 +50,7 @@ class Auth {
     } else {
       return false;
     }
-    _auth.signInWithCredential(credential);
+    await _auth.signInWithCredential(credential);
     return true;
   }
 

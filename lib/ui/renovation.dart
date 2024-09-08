@@ -10,7 +10,7 @@ import '../model/welcome.dart';
 import 'theme/color.dart';
 
 const Welcome _construction = Welcome(
-  text: "We will be back soon.\nMeanwhile, try to decode above",
+  "We will be back soon.\nMeanwhile, try to decode above",
   highlight: "decode above",
 );
 

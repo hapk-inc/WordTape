@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -40,7 +38,6 @@ class LocalFound {
     final Database db = await database;
     final List<Map<String, dynamic>> maps =
         await db.query(_tableName, where: 'id = ?', whereArgs: [id]);
-    log("40==$maps");
     if (maps.isNotEmpty) return Found.fromJson(maps.first);
     return null;
   }

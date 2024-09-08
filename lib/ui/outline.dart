@@ -10,12 +10,31 @@ import 'theme/color.dart';
 BorderRadius get _borderRadius30 =>
     BorderRadius.vertical(top: Radius.circular(30.r));
 
-class OutlinePage extends ConsumerWidget {
+class OutlinePage extends ConsumerStatefulWidget {
   final Widget child;
   const OutlinePage(this.child, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OutlinePage> createState() => _OutlinePageState();
+}
+
+class _OutlinePageState extends ConsumerState<OutlinePage> {
+  @override
+  void initState() {
+    super.initState();
+    /*ref.listenManual(
+      authNotifierProvider.select((value) => value.path),
+      (previous, next) {
+        log("ListenManual $next");
+        if (mounted && ((previous?.path ?? "/") != "/")) {
+          context.replace(next.path, extra: next.arg);
+        }
+      },
+    );*/
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isMobile = size == ScreenSize.mobile;
 
@@ -40,9 +59,9 @@ class OutlinePage extends ConsumerWidget {
                     borderRadius: _borderRadius30,
                     child: ref.watch(puzzlePanelProvider),
                   ),
-                  body: OutlineState(child: child),
+                  body: OutlineState(child: widget.child),
                 )
-              : OutlineState(child: child),
+              : OutlineState(child: widget.child),
         ),
       ),
     );
@@ -55,7 +74,7 @@ class OutlineState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double mobileWidth = 720.r;
+    double mobileWidth = 750.r;
     return LayoutBuilder(
       builder: (context, constraints) {
         final double maxWidth = constraints.maxWidth;

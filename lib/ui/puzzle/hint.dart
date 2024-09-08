@@ -3,10 +3,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mock_data/mock_data.dart';
 
 import '../../enum/pod.dart';
-import '../../function/gen_ai/pod.dart';
 import '../../function/puzzle/notifier.dart';
 import '../../function/puzzle/pod.dart';
 

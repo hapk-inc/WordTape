@@ -1,8 +1,11 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:lottie/lottie.dart';
 
 import '../function/puzzle/pod.dart';
 import '../model/found.dart';
@@ -49,28 +52,27 @@ class DashboardPage extends ConsumerWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-                FadeIn(
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    color: midnightGreen,
-                    constraints: BoxConstraints.expand(height: mH * 0.75),
-                    padding: EdgeInsets.symmetric(horizontal: mW * 0.045),
-                    child: SafeArea(
-                      child: Stack(
-                        children: [
-                          const PCount(),
-                          Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                WelcomeText(welcome),
-                                const Gap(60),
-                                TwoWord(date, puzzle.guess(found)),
-                              ],
-                            ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  color: midnightGreen,
+                  constraints: BoxConstraints.expand(height: mH * 0.72),
+                  padding: EdgeInsets.symmetric(horizontal: mW * 0.045),
+                  child: SafeArea(
+                    child: Stack(
+                      children: [
+                        const PCount(),
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Gap(15),
+                              WelcomeText(welcome),
+                              const Gap(60),
+                              TwoWord(date, puzzle.guess(found)),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -84,9 +86,86 @@ class DashboardPage extends ConsumerWidget {
                     children: [PlayButton(puzzle), const PassButton()],
                   ),
                 ),
+                Gap(mH * 0.045),
+                SizedBox(
+                  width: 450.r,
+                  child: FadeIn(
+                    delay: const Duration(milliseconds: 3600),
+                    child: Lottie.asset('lottie/calendar.json', repeat: false),
+                  ),
+                ),
+                if (!kIsWeb) ...[
+                  Gap(mH * 0.015),
+                  const SeeArchive(),
+                  Gap(mH * 0.045),
+                  const StoreBtn(),
+                ],
+                Gap(mH * 0.3),
               ],
             ),
           );
         },
       );
+}
+
+class StoreBtn extends StatelessWidget {
+  const StoreBtn({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 30.r,
+      runSpacing: 15.r,
+      children: [
+        SizedBox(
+          width: 240.r,
+          child: Lottie.asset('lottie/app_store.json', fit: BoxFit.fitWidth),
+        ),
+        SizedBox(
+          width: 240.r,
+          child: Image.asset('images/play-store.png', fit: BoxFit.fitWidth),
+        ),
+      ],
+    );
+  }
+}
+
+class SeeArchive extends ConsumerWidget {
+  const SeeArchive({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Welcome sentence = ref.read(archiveTextProvider);
+    List<String> words = sentence.text.split(' ');
+    List<String> highlighter = (sentence.highlight ?? "").split(' ');
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.r),
+      child: FadeInUp(
+        delay: const Duration(milliseconds: 600),
+        from: 45.h,
+        key: ValueKey(sentence),
+        child: AutoSizeText.rich(
+          TextSpan(
+            children: [
+              for (String word in words)
+                TextSpan(
+                  text: word + (word != words.last ? " " : ""),
+                  style: highlighter.contains(word)
+                      ? textTheme.titleLarge?.copyWith(color: slateGray)
+                      : null,
+                ),
+            ],
+          ),
+          maxLines: 2,
+          style: textTheme.bodyMedium?.copyWith(
+            color: Colors.grey,
+            height: 1.8,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 }

@@ -57,11 +57,6 @@ Future<void> main() async {
 
   final Logger logger = Logger();
 
-  //final ValidateRemote validateRemote = await rc
-  //    .fetchAndActivate()
-  //    .then((flag) => flag ? ValidateRemote.yes : ValidateRemote.no)
-  //    .onError((_, s) => ValidateRemote.failed);
-
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
     logger.e("APP CRASH", error: error, stackTrace: stack);

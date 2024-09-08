@@ -7,7 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 import '../enum/pod.dart';
+import '../function/auth/notifier.dart';
 import '../function/auth/pod.dart';
+import '../router/pod.dart';
 import 'theme/color.dart';
 
 const Duration _m1500 = Duration(milliseconds: 1500);
@@ -22,6 +24,8 @@ class SplashPage extends ConsumerStatefulWidget {
 class _SplashPageState extends ConsumerState<SplashPage> {
   bool _lottie = false;
   bool _logo = false;
+  late AuthNotifier notifier;
+  late Duration _lottieDuration;
 
   @override
   void initState() {
@@ -29,30 +33,45 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     super.initState();
   }
 
-  void onLoaded(LottieComposition p0) {
+  onLoaded(LottieComposition p0) async {
     log("onLoaded");
+    _lottieDuration = p0.duration;
+    if (notifier.fUser == null) await ref.read(userLoginProvider.future);
     setState(() => _logo = true);
   }
 
   @override
-  Widget build(BuildContext context) => AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        color: midnightGreen,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox.square(
-              dimension: 540.r,
-              child: Stack(
-                children: [
-                  if (_logo) const Logo(),
-                  if (_lottie) StampLottie(onLoaded: onLoaded)
-                ],
-              ),
+  Widget build(BuildContext context) {
+    notifier = ref.watch(authNotifierProvider);
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      color: midnightGreen,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox.square(
+            dimension: 540.r,
+            child: Stack(
+              children: [
+                if (_logo)
+                  Logo(
+                    onFinish: (AnimateDoDirection direction) async {
+                      await Future.delayed(
+                        _lottieDuration * 0.75,
+                        () => ref
+                            .read(routerProvider)
+                            .replace(notifier.path.path),
+                      );
+                    },
+                  ),
+                if (_lottie) StampLottie(onLoaded: onLoaded)
+              ],
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class StampLottie extends StatelessWidget {
@@ -73,7 +92,8 @@ class StampLottie extends StatelessWidget {
 }
 
 class Logo extends ConsumerWidget {
-  const Logo({super.key});
+  final void Function(AnimateDoDirection)? onFinish;
+  const Logo({this.onFinish, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -82,10 +102,7 @@ class Logo extends ConsumerWidget {
       child: FadeIn(
         duration: const Duration(milliseconds: 300),
         delay: const Duration(milliseconds: 750),
-        onFinish: (direction) {
-          log("OnFinish");
-          Future.delayed(_m1500, () => ref.read(listenAuthProvider));
-        },
+        onFinish: onFinish,
         child: Text(
           size == ScreenSize.mobile ? "WORD\nTAPE" : "WORDTAPE",
           textAlign: TextAlign.center,

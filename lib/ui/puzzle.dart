@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:wordtape/function/puzzle/pod.dart';
@@ -58,46 +57,41 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
           builder: (context, constraints) {
             final double maxHeight = constraints.maxHeight;
             final double maxWidth = constraints.maxWidth;
-            return Container(
-              //padding: EdgeInsets.symmetric(horizontal: 15.r),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Gap(maxHeight * 0.03),
-                    Container(
-                      height: maxHeight * 0.045,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
-                      alignment: Alignment.center,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [BackButton(color: seaWhite)],
-                      ),
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Gap(maxHeight * 0.03),
+                  Container(
+                    height: maxHeight * 0.045,
+                    padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.03),
+                    alignment: Alignment.center,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [BackButton(color: seaWhite)],
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      height: maxHeight * 0.15,
-                      alignment: Alignment.center,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: maxWidth * 0.045),
-                      child: const PuzzleHint(),
-                    ),
-                    ...List.generate(
-                      puzzle.words.length,
-                      (index) {
-                        final Word word = puzzle.words[index];
-                        return WordTextField(
-                          index,
-                          word,
-                          height: maxHeight * 0.09,
-                        );
-                      },
-                    ),
-                    Gap(maxHeight * 0.045),
-                    const CustomKeyboard(),
-                  ],
-                ),
+                  ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    height: maxHeight * 0.15,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.045),
+                    child: const PuzzleHint(),
+                  ),
+                  ...List.generate(
+                    puzzle.words.length,
+                    (index) {
+                      final Word word = puzzle.words[index];
+                      return WordTextField(
+                        index,
+                        word,
+                        height: maxHeight * 0.09,
+                      );
+                    },
+                  ),
+                  Gap(maxHeight * 0.036),
+                  const CustomKeyboard(),
+                ],
               ),
             );
           },

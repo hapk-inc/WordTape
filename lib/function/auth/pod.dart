@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../enum/pod.dart';
-import '../../router/pod.dart';
+import '../local/found.dart';
+import '../local/pod.dart';
+import '../local/puzzle.dart';
 import 'auth.dart';
 
 part 'pod.g.dart';
@@ -13,7 +11,7 @@ part 'pod.g.dart';
 @Riverpod(keepAlive: true, dependencies: [])
 Auth auth(AuthRef ref) => Auth(ref);
 
-@Riverpod(keepAlive: true, dependencies: [runningUser, router])
+/*@Riverpod(keepAlive: true, dependencies: [runningUser, router])
 void listenAuth(ListenAuthRef ref) {
   ref.listen<User?>(
     runningUserProvider.select((auth) => auth.value),
@@ -42,7 +40,7 @@ class AuthNotifier extends _$AuthNotifier {
     if (super.state == value) return;
     super.state = value;
   }
-}
+}*/
 
 @Riverpod(keepAlive: true, dependencies: [auth])
 Stream<User?> runningUser(RunningUserRef ref) {
@@ -62,8 +60,10 @@ Future<User?> fUser(FUserRef ref) async {
   return auth.fUser;
 }
 
-@Riverpod(dependencies: [auth])
-Future<void> logOff(LogOffRef ref) async {
+@Riverpod(dependencies: [sqPuzzle, sqFound, auth])
+Future<dynamic> logOff(LogOffRef ref) async {
+  final LocalPuzzle localPuzzle = ref.read(sqPuzzleProvider);
+  final LocalFound localFound = ref.read(sqFoundProvider);
   final Auth auth = ref.read(authProvider);
-  return auth.logOff;
+  return Future.wait([localPuzzle.delete(), localFound.delete(), auth.logOff]);
 }

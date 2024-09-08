@@ -14,7 +14,7 @@ class TwoWord extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FadeIn(
-      delay: const Duration(milliseconds: 2400),
+      delay: const Duration(milliseconds: 1500),
       key: ValueKey(date),
       child: Wrap(
         spacing: 15.r,

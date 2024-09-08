@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../function/remote_config/pod.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
 import '../ui/puzzle.dart';
@@ -16,15 +13,11 @@ part 'pod.g.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-@Riverpod(keepAlive: true, dependencies: [renovation])
+@Riverpod(keepAlive: true, dependencies: [])
 GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
-      log("Redirection");
-      final String str = ref.read(renovationProvider).value ?? "";
-      if (str.isNotEmpty) return '/renovation';
       return state.matchedLocation;
-      //return '/renovation';
     },
     routes: <RouteBase>[
       ShellRoute(
