@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:wordtape/function/puzzle/pod.dart';
 
 import '../function/puzzle/notifier.dart';
+import '../function/puzzle/pod.dart';
 import '../model/puzzle.dart';
 import '../model/word.dart';
 import 'puzzle/custom_keyboard.dart';
@@ -89,7 +89,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                       );
                     },
                   ),
-                  Gap(maxHeight * 0.036),
+                  Gap(maxHeight * 0.03),
                   const CustomKeyboard(),
                 ],
               ),

@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/welcome.dart';
 
-class PassButton extends ConsumerWidget {
-  const PassButton({super.key});
+class PassBtn extends ConsumerWidget {
+  const PassBtn({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:wordtape/model/word.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
@@ -60,16 +61,6 @@ class PuzzleNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  /* setHint() async {
-    if (_puzzle.words[_found.i].hint != null) {
-      final String h = _puzzle.words[_found.i].hint!;
-      _hint = AsyncData(h);
-    } else {
-      _hint = ref.read(createHintProvider(word: _puzzle.nextWord(_found)));
-    }
-    notifyListeners();
-  }*/
 
   bool get enableDone =>
       _puzzle.words[_found.i].value.length == activeController.text.length;
@@ -155,7 +146,7 @@ class PuzzleNotifier extends ChangeNotifier {
     }
   }
 
-  TextEditingController? textController(int index) => _pinController[index];
+  TextEditingController textController(int index) => _pinController[index];
 
   FocusNode focusNode(int i) => _nodes[i];
 
@@ -164,4 +155,8 @@ class PuzzleNotifier extends ChangeNotifier {
   Future get construct async {}
 
   Found get found => _found;
+
+  bool get isStarted => _found.i != 1;
+
+  bool isPrevious(Word word) => _puzzle.words[_found.i - 1] == word;
 }
