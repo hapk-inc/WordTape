@@ -4,6 +4,8 @@ const Color raisinBlack = Color(0xff3A2E39);
 const Color midnightGreen = Color(0xff1E555C);
 const Color aquaMarine = Color(0xff56E38F);
 const Color mint = Color(0xff59c9a5);
+const Color mintGreen = Color(0xffC0E7DD);
+const Color azureGreen = Color(0xffDFF2ED);
 
 const Color cerise = Color(0xffDD2663);
 //const Color chestnut = Color(0xffA44A3F);

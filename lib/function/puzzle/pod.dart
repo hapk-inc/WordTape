@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wordtape/function/puzzle/notifier.dart';
 
 import '../../enum/pod.dart';
 import '../../model/found.dart';
@@ -20,6 +16,7 @@ import '../firestore/puzzle.dart';
 import '../local/found.dart';
 import '../local/pod.dart';
 import '../local/puzzle.dart';
+
 part 'pod.g.dart';
 
 @riverpod
@@ -36,7 +33,6 @@ class SelectedDate extends _$SelectedDate {
   @override
   set state(DateTime value) {
     if (super.state == value) return;
-    debugPrint("38===");
     super.state = value.convert();
   }
 }
@@ -106,42 +102,5 @@ class FoundDateArg extends _$FoundDateArg {
     final Found? f = await localFound.found(puzzle.id);
 
     return f ?? Found(date: date, id: puzzle.id);
-  }
-}
-
-@Riverpod(keepAlive: true)
-class KeyEventNotifier extends _$KeyEventNotifier {
-  @override
-  KeyEvent? build() => null;
-
-  @override
-  set state(KeyEvent? value) {
-    if (value == null) return;
-    if (state == null) {
-      super.state = value;
-      validateKey(value);
-    } else if (state!.timeStamp.inSeconds != value.timeStamp.inSeconds) {
-      super.state = value;
-      validateKey(value);
-    }
-  }
-
-  validateKey(KeyEvent event) {
-    final DateTime date = ref.read(selectedDateProvider);
-    final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
-
-    if (event.character != null) {
-      final String str = event.character ?? "";
-      if (str.isNotEmpty) notifier.addText(str);
-    } else {
-      LogicalKeyboardKey logicalKeyboardKey = event.logicalKey;
-      switch (logicalKeyboardKey.keyLabel) {
-        case "Backspace":
-          {
-            notifier.removeText();
-            break;
-          }
-      }
-    }
   }
 }

@@ -80,7 +80,7 @@ Future<void> main() async {
     if (!kIsWeb) crashlyticsProvider.overrideWithValue(crashlytics),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/.env")),
     //
-    logProvider.overrideWithValue(logger),
+    loggerProvider.overrideWithValue(logger),
   ];
   runApp(
     ProviderScope(

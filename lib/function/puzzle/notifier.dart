@@ -28,7 +28,7 @@ class PuzzleNotifier extends ChangeNotifier {
   String _hint = "Wait";
 
   PuzzleNotifier(this.ref, {required this.date}) {
-    logger = ref.read(logProvider);
+    logger = ref.read(loggerProvider);
     _puzzle = ref.read(puzzleDateArgProvider(date: date)).value ??
         Puzzle.fromRandom();
     _found =

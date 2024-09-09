@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:animate_do/animate_do.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,13 +6,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 
+import '../enum/pod.dart';
 import '../function/puzzle/pod.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
 import '../model/welcome.dart';
+import 'dashboard/leaderboard_tile.dart';
 import 'dashboard/p_count.dart';
 import 'dashboard/pass_btn.dart';
 import 'dashboard/play_btn.dart';
+import 'dashboard/see_archive.dart';
+import 'dashboard/store_btn.dart';
 import 'dashboard/two_word.dart';
 import 'dashboard/welcome.dart';
 import 'theme/color.dart';
@@ -28,6 +29,7 @@ class DashboardPage extends ConsumerWidget {
         builder: (_, constraints) {
           final double mH = constraints.maxHeight;
           final double mW = constraints.maxWidth;
+          final ScreenSize size = ref.watch(sizeProvider);
           final DateTime date = ref.watch(selectedDateProvider);
           final Puzzle? puzzle =
               ref.watch(puzzleDateArgProvider(date: date)).when(
@@ -43,12 +45,14 @@ class DashboardPage extends ConsumerWidget {
               ref.watch(foundDateArgProvider(date: date)).value;
 
           if (found == null) return Container(color: midnightGreen);
-          log("40==$found");
+
           //
 
           final Welcome w = ref.read(welcomeProvider);
           final Welcome r = ref.read(resumeProvider);
           final Welcome welcome = found.i == 1 ? w : r;
+
+          final TextTheme textTheme = Theme.of(context).textTheme;
 
           //
           return SingleChildScrollView(
@@ -94,18 +98,36 @@ class DashboardPage extends ConsumerWidget {
                   ),
                 ),
                 Gap(mH * 0.045),
-                SizedBox(
-                  width: 450.r,
-                  child: FadeIn(
-                    delay: const Duration(milliseconds: 3600),
-                    child: Lottie.asset('lottie/calendar.json', repeat: false),
+                if (kIsWeb) ...[
+                  SizedBox(
+                    width: 450.r,
+                    child: FadeIn(
+                      delay: const Duration(milliseconds: 3600),
+                      child:
+                          Lottie.asset('lottie/calendar.json', repeat: false),
+                    ),
                   ),
-                ),
-                if (!kIsWeb) ...[
                   Gap(mH * 0.015),
                   const SeeArchive(),
                   Gap(mH * 0.045),
                   const StoreBtn(),
+                ] else ...[
+                  Gap(mH * 0.015),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    alignment: size == ScreenSize.mobile
+                        ? Alignment.centerLeft
+                        : Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: 15.r),
+                    child: Text(
+                      "Leaderboard",
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: blackBean,
+                      ),
+                    ),
+                  ),
+                  Gap(mH * 0.03),
+                  const LeaderBoardTile(),
                 ],
                 Gap(mH * 0.3),
               ],
@@ -113,68 +135,4 @@ class DashboardPage extends ConsumerWidget {
           );
         },
       );
-}
-
-class StoreBtn extends StatelessWidget {
-  const StoreBtn({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 30.r,
-      runSpacing: 15.r,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      alignment: WrapAlignment.center,
-      children: [
-        SizedBox(
-          width: 210.r,
-          child: Lottie.asset('lottie/app_store.json', fit: BoxFit.fitWidth),
-        ),
-        SizedBox(
-          width: 210.r,
-          child: Image.asset('images/play-store.png', fit: BoxFit.fitWidth),
-        ),
-      ],
-    );
-  }
-}
-
-class SeeArchive extends ConsumerWidget {
-  const SeeArchive({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Welcome sentence = ref.read(archiveTextProvider);
-    List<String> words = sentence.text.split(' ');
-    List<String> highlighter = (sentence.highlight ?? "").split(' ');
-    final TextTheme textTheme = Theme.of(context).textTheme;
-
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.r),
-      child: FadeInUp(
-        delay: const Duration(milliseconds: 600),
-        from: 45.h,
-        key: ValueKey(sentence),
-        child: AutoSizeText.rich(
-          TextSpan(
-            children: [
-              for (String word in words)
-                TextSpan(
-                  text: word + (word != words.last ? " " : ""),
-                  style: highlighter.contains(word)
-                      ? textTheme.titleLarge?.copyWith(color: slateGray)
-                      : null,
-                ),
-            ],
-          ),
-          maxLines: 2,
-          style: textTheme.bodyMedium?.copyWith(
-            color: Colors.grey,
-            height: 1.8,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
 }

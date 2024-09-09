@@ -26,7 +26,7 @@ class PCount extends ConsumerWidget {
             ),
         child: Text(
           "NO. $difference",
-          style: textTheme.headlineLarge?.copyWith(color: lightCyan),
+          style: textTheme.headlineLarge?.copyWith(color: lightCyan, height: 0),
         ),
       ),
     );

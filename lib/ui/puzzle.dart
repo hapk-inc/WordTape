@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+import '../function/keyboard/pod.dart';
 import '../function/puzzle/notifier.dart';
 import '../function/puzzle/pod.dart';
 import '../model/puzzle.dart';
@@ -63,8 +65,10 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
         child: KeyboardListener(
           focusNode: notifier.activeNode,
           autofocus: true,
-          onKeyEvent: (value) {
-            ref.read(keyEventNotifierProvider.notifier).state = value;
+          onKeyEvent: (KeyEvent? value) {
+            if (value is KeyDownEvent) {
+              ref.read(keyEventNotifierProvider.notifier).state = value;
+            }
           },
           child: LayoutBuilder(
             builder: (context, constraints) {

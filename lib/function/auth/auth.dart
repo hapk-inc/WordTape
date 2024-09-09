@@ -16,7 +16,7 @@ class Auth {
 
   Auth(this.ref) {
     _auth = ref.read(firebaseAuthProvider);
-    logger = ref.read(logProvider);
+    logger = ref.read(loggerProvider);
   }
 
   Stream<User?> get authUser {
