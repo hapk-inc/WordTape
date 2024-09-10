@@ -60,8 +60,7 @@ const List<Welcome> _resume = [
     end: "",
   ),
   Welcome(
-    "You're halfway through! Now, "
-    "Finish the remaining part of the sequence.",
+    "You're halfway through! Now, Finish the remaining sequence.",
     highlight: "Finish ",
     end: "",
   ),

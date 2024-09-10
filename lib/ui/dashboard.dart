@@ -113,7 +113,7 @@ class DashboardPage extends ConsumerWidget {
                   const StoreBtn(),
                 ] else ...[
                   Gap(mH * 0.015),
-                  AnimatedContainer(
+                  /* AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     alignment: size == ScreenSize.mobile
                         ? Alignment.centerLeft
@@ -126,7 +126,7 @@ class DashboardPage extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  Gap(mH * 0.03),
+                  Gap(mH * 0.03),*/
                   const LeaderBoardTile(),
                 ],
                 Gap(mH * 0.3),

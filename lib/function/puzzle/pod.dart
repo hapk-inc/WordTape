@@ -75,8 +75,8 @@ class PuzzleDateArg extends _$PuzzleDateArg {
         await pLocal.insert(cPuzzle);
         return cPuzzle;
       }
-
-      return null;
+      final Puzzle puzzle = await pLocal.latest;
+      return puzzle;
     }
     return puzzle;
   }

@@ -33,6 +33,17 @@ class LocalPuzzle {
     );
   }
 
+  Future<Puzzle> get latest async {
+    if (kIsWeb) return Puzzle.fromRandom();
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query(_tableName, orderBy: 'date DESC');
+    if (maps.isEmpty) return Puzzle.fromRandom();
+    final Map<String, dynamic> map = Map<String, dynamic>.from(maps.first);
+    map['words'] = jsonDecode(map['words']);
+    return Puzzle.fromJson(map);
+  }
+
   Future<Puzzle?> fromDate(DateTime dateTime) async {
     if (kIsWeb) return null;
     final Database db = await database;

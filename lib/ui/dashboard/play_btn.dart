@@ -19,7 +19,7 @@ class PlayBtn extends ConsumerWidget {
       delay: const Duration(milliseconds: 2400),
       child: ElevatedButton(
         onPressed: () => context.push('/puzzle', extra: date),
-        child: Text(isStarted ? "Continue" : "Try it out"),
+        child: Text(isStarted ? "Continue" : "TRY IT OUT"),
       ),
     );
   }
