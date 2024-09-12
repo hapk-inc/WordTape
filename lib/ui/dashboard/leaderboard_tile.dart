@@ -52,42 +52,38 @@ class PlayerTile extends StatelessWidget {
       height: 75.h,
       alignment: Alignment.center,
       width: double.maxFinite,
-      child: LayoutBuilder(builder: (_, constraint) {
-        final double mW = constraint.maxWidth;
-        return Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(radius: 27.r, backgroundColor: aquaMarine),
-                  Gap(18.r),
-                  Expanded(
-                    child: Text(
-                      mockString(mockInteger(6, 18)),
-                      style: textTheme.bodySmall,
-                    ),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Row(
+              children: [
+                CircleAvatar(radius: 27.r, backgroundColor: aquaMarine),
+                Gap(18.r),
+                Expanded(
+                  child: Text(
+                    mockString(mockInteger(6, 18)),
+                    style: textTheme.bodySmall,
                   ),
-                  Text(
-                    "${mockInteger(1, 5000)}",
-                    style: textTheme.headlineLarge?.copyWith(
-                      fontSize: 21.r,
-                      height: 0,
-                    ),
+                ),
+                Text(
+                  "${mockInteger(1, 5000)}",
+                  style: textTheme.headlineLarge?.copyWith(
+                    fontSize: 21.r,
+                    height: 0,
                   ),
-                  Gap(15.r),
-                ],
-              ),
+                ),
+                Gap(15.r),
+              ],
             ),
-            if (border)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Divider(thickness: 0.3.r, color: slateGray),
-              )
-          ],
-        );
-      }),
+          ),
+          if (border)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Divider(thickness: 0.3.r, color: slateGray),
+            )
+        ],
+      ),
     );
   }
 }

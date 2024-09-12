@@ -34,13 +34,13 @@ class Puzzle with _$Puzzle {
 
   bool isCompleted(int length) => words.length == length;
 
-  List<Word> guess(Found found) {
+  List<Word> correctWord(Found found) {
     if (isCompleted(found.i)) return [];
     return [words[found.i - 1], words[found.i]];
   }
 
   String nextWord(Found found) {
-    final List<Word> words = guess(found);
+    final List<Word> words = correctWord(found);
     if (words.isEmpty) return "";
     return words
         .fold("", (previousValue, element) => "$previousValue ${element.value}")

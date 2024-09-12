@@ -30,7 +30,10 @@ class KeyEventNotifier extends _$KeyEventNotifier {
             break;
           }
         case "Enter":
-          {}
+          {
+            log("35==");
+            notifier.formKey.currentState!.validate();
+          }
         default:
           {
             log(str);

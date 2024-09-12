@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +8,7 @@ import 'package:pinput/pinput.dart';
 import '../../enum/pod.dart';
 import '../../function/puzzle/notifier.dart';
 import '../../function/puzzle/pod.dart';
+import '../../model/welcome.dart';
 import '../../model/word.dart';
 import '../theme/color.dart';
 
@@ -23,6 +26,7 @@ class WordTextField extends ConsumerWidget {
     late Color color;
     late bool isEnabled;
     late TextEditingController controller;
+
     bool autoFocus = false;
 
     if (needToDo != NeedToDo.find) {
@@ -58,7 +62,6 @@ class WordTextField extends ConsumerWidget {
             defaultPinTheme: ref.read(
               pinThemeProvider(constraints: constraints, color: color),
             ),
-
             controller: controller,
             // focusNode: focusNode,
 
@@ -66,7 +69,22 @@ class WordTextField extends ConsumerWidget {
             isCursorAnimationEnabled: false,
             animationDuration: const Duration(milliseconds: 150),
             pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-            //validator: (value) {},
+            validator: !isEnabled
+                ? null
+                : (value) {
+                    final int l = value?.length ?? 0;
+                    bool fillText = l == word.value.length;
+                    final DateTime date = ref.read(selectedDateProvider);
+                    final notifierRead = ref.read(puzzleNotifierProvider(date));
+                    if (fillText) {
+                      notifierRead
+                        ..hint = null
+                        ..validate();
+                    } else {
+                      notifierRead.hint = ref.read(fillTextProvider);
+                    }
+                    return null;
+                  },
             //
             keyboardType: TextInputType.none,
             readOnly: true,

@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 
-import '../enum/pod.dart';
 import '../function/puzzle/pod.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
@@ -29,30 +28,23 @@ class DashboardPage extends ConsumerWidget {
         builder: (_, constraints) {
           final double mH = constraints.maxHeight;
           final double mW = constraints.maxWidth;
-          final ScreenSize size = ref.watch(sizeProvider);
-          final DateTime date = ref.watch(selectedDateProvider);
+          final DateTime date = ref.read(selectedDateProvider);
           final Puzzle? puzzle =
-              ref.watch(puzzleDateArgProvider(date: date)).when(
-                    loading: () => null,
-                    error: (error, stackTrace) {
-                      debugPrintStack(stackTrace: stackTrace);
-                      return null;
-                    },
+              ref.watch(puzzleDateArgProvider(date: date)).maybeWhen(
+                    orElse: () => null,
                     data: (d) => d,
                   );
 
           final Found? found =
               ref.watch(foundDateArgProvider(date: date)).value;
 
-          if (found == null) return Container(color: midnightGreen);
+          if (found == null) return const CircularLoader();
 
           //
 
           final Welcome w = ref.read(welcomeProvider);
           final Welcome r = ref.read(resumeProvider);
           final Welcome welcome = found.i == 1 ? w : r;
-
-          final TextTheme textTheme = Theme.of(context).textTheme;
 
           //
           return SingleChildScrollView(
@@ -68,15 +60,17 @@ class DashboardPage extends ConsumerWidget {
                       children: [
                         const PCount(),
                         Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Gap(15),
-                              WelcomeText(welcome),
-                              const Gap(60),
-                              if (puzzle != null)
-                                TwoWord(date, puzzle.guess(found)),
-                            ],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Gap(15),
+                                WelcomeText(welcome),
+                                const Gap(60),
+                                if (puzzle != null)
+                                  TwoWord(date, puzzle.correctWord(found)),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -135,4 +129,22 @@ class DashboardPage extends ConsumerWidget {
           );
         },
       );
+}
+
+class CircularLoader extends StatelessWidget {
+  const CircularLoader({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: midnightGreen,
+      alignment: Alignment.center,
+      child: const CircularProgressIndicator(
+        backgroundColor: seaWhite,
+        color: aquaMarine,
+      ),
+    );
+  }
 }

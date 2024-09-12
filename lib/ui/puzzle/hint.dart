@@ -1,12 +1,18 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:logger/logger.dart';
 
 import '../../enum/pod.dart';
+import '../../function/gen_ai/pod.dart';
+import '../../function/logger/pod.dart';
 import '../../function/puzzle/notifier.dart';
 import '../../function/puzzle/pod.dart';
+import '../../model/found.dart';
 
 class PuzzleHint extends ConsumerWidget {
   const PuzzleHint({super.key});
@@ -17,10 +23,33 @@ class PuzzleHint extends ConsumerWidget {
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isTab = size == ScreenSize.tab;
 
+    final String recall = ref.read(recallNextProvider);
+
     final DateTime date = ref.read(selectedDateProvider);
     final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(date));
 
-    final String hint = notifier.hint;
+    final Found found = notifier.found;
+
+    //final String hint = notifier.hint;
+
+    final String hint = notifier.hint ??
+        (found.mistake == null
+            ? ref.watch(createHintProvider(word: notifier.next)).maybeWhen(
+                  data: (data) => data,
+                  orElse: () => recall,
+                  error: (error, _) {
+                    return notifier.localHint ??
+                        "Looks like you're own. $recall";
+                  },
+                )
+            : ref
+                .watch(helpUserProvider(
+                    word: notifier.next, mistake: notifier.mistakeCombination))
+                .maybeWhen(
+                  data: (data) => data,
+                  orElse: () => "Let me think",
+                  error: (e, _) => "That's not correct. Use Hint button",
+                ));
 
     return AnimatedSwitcher(
       duration: Duration.zero,

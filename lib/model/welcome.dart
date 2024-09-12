@@ -65,12 +65,12 @@ const List<Welcome> _resume = [
     end: "",
   ),
   Welcome(
-    "Great job! Now try to  complete  the rest of the sequence.",
+    "Great job! Now try to complete the rest of the sequence.",
     highlight: "complete",
     end: "",
   ),
   Welcome(
-    "You're doing well!  Finish  the rest of the sequence now.",
+    "You're doing well! Finish the rest of the sequence now.",
     highlight: "Finish",
     end: "",
   ),
@@ -142,4 +142,18 @@ const List<Welcome> _archive = [
   Welcome("Shall we check the archives and play?"),
   Welcome("Do you want to see and play?"),
   Welcome("Care to look at the archives and play?"),
+];
+
+@riverpod
+String fillText(FillTextRef ref) {
+  final DateTime now = DateTime.now();
+  return _fillText[now.day % _fillText.length];
+}
+
+const _fillText = [
+  "Complete the full text",
+  "Provide all the required text",
+  "Enter the complete text",
+  "Fill in the entire content",
+  "Write out the complete text"
 ];

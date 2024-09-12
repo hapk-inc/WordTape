@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -5,7 +7,6 @@ import 'package:wordtape/model/word.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
-import '../gen_ai/pod.dart';
 import '../local/pod.dart';
 import '../logger/pod.dart';
 import 'pod.dart';
@@ -25,7 +26,8 @@ class PuzzleNotifier extends ChangeNotifier {
   List<TextEditingController> _pinController = [];
   late List<FocusNode> _nodes;
   late Logger logger;
-  String _hint = "Wait";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? _hint;
 
   PuzzleNotifier(this.ref, {required this.date}) {
     logger = ref.read(loggerProvider);
@@ -40,9 +42,6 @@ class PuzzleNotifier extends ChangeNotifier {
 
   validateController() async {
     logger.i("Running ValidateController $_found");
-    _hint = ref.read(recallNextProvider);
-    // if (!_puzzle.isCompleted(_found.i)) generateHint();
-    // setHint();
     _pinController = List.generate(
       _puzzle.words.length,
       (index) {
@@ -97,20 +96,30 @@ class PuzzleNotifier extends ChangeNotifier {
   Future<void> validate() async {
     bool isValid = _puzzle.words[_found.i].value == activeController.text;
     if (!isValid) {
-      logger.i("CORRECT WORD = ${_puzzle.words[_found.i].value}");
+      updateMistake(activeController.text);
     } else {
       incrementFound();
     }
   }
 
+  updateMistake(String text) {
+    _found = _found.copyWith(lastFound: DateTime.now(), mistake: text);
+    notifyListeners();
+  }
+
+  GlobalKey<FormState> get formKey => _formKey;
+
   Future<void> incrementFound() async {
-    _found = _found.copyWith(i: _found.i + 1, lastFound: DateTime.now());
+    _found = _found.copyWith(
+      i: _found.i + 1,
+      lastFound: DateTime.now(),
+      mistake: null,
+    );
     logger.i("$_found");
     final bool everyFound = _puzzle.isCompleted(_found.i);
 
     if (everyFound) {
     } else {
-      //generateHint();
       notifyListeners();
     }
   }
@@ -124,30 +133,13 @@ class PuzzleNotifier extends ChangeNotifier {
 
   FocusNode get activeNode => _nodes[_found.i];
 
-  String get hint => _hint;
+  String? get hint => _hint;
 
-  /*generateHint() {
-    bool hasHint = _puzzle.words[_found.i].hint != null;
-    if (hasHint) {
-      final String h = _puzzle.words[_found.i].hint!;
-      _hint = h;
-    } else {
-
-      final String recall = ref.read(recallNextProvider);
-
-      //AI HINT create separate provider and set it in puzzle hint, so it wont disturb the notifier
-      _hint = ref
-          .watch(createHintProvider(word: _puzzle.nextWord(_found)))
-          .maybeWhen(
-            data: (data) => data,
-            orElse: () => recall,
-            error: (error, stackTrace) {
-              logger.e("GEMINI ERROR", error: error, stackTrace: stackTrace);
-              return recall;
-            },
-          );
-    }
-  }*/
+  set hint(String? value) {
+    if (_hint == value) return;
+    _hint = value;
+    notifyListeners();
+  }
 
   TextEditingController textController(int index) => _pinController[index];
 
@@ -160,4 +152,15 @@ class PuzzleNotifier extends ChangeNotifier {
   bool get isStarted => _found.i != 1;
 
   bool isPrevious(Word word) => _puzzle.words[_found.i - 1] == word;
+
+  String get next => _puzzle.nextWord(_found);
+
+  String get mistakeCombination {
+    final String result =
+        "${_puzzle.words[_found.i - 1].value} ${_found.mistake}";
+    log(result);
+    return result;
+  }
+
+  String? get localHint => _puzzle.words[_found.i].hint;
 }
