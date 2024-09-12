@@ -107,23 +107,10 @@ class DashboardPage extends ConsumerWidget {
                   const StoreBtn(),
                 ] else ...[
                   Gap(mH * 0.015),
-                  /* AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    alignment: size == ScreenSize.mobile
-                        ? Alignment.centerLeft
-                        : Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 15.r),
-                    child: Text(
-                      "Leaderboard",
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: blackBean,
-                      ),
-                    ),
-                  ),
-                  Gap(mH * 0.03),*/
                   const LeaderBoardTile(),
+                  Gap(mH * 0.015),
                 ],
-                Gap(mH * 0.3),
+                Gap(mH * 0.15),
               ],
             ),
           );

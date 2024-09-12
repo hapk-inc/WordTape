@@ -1,12 +1,16 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
 part 'route_path.freezed.dart';
 
 @freezed
-class RoutePath with _$RoutePath {
+class RoutePath extends Equatable with _$RoutePath {
+  const RoutePath._();
+
   const factory RoutePath({@Default("/") String path, Object? arg}) =
       _RoutePath;
 
   @override
-  bool operator ==(Object other) => other is RoutePath && other.path == path;
+  // TODO: implement props
+  List<Object?> get props => [path, arg];
 }

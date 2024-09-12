@@ -1,10 +1,13 @@
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'word.freezed.dart';
 part 'word.g.dart';
 
 @freezed
-class Word with _$Word {
+class Word extends Equatable with _$Word {
+  const Word._();
+
   @JsonSerializable(includeIfNull: false)
   const factory Word({
     required String value,
@@ -15,5 +18,5 @@ class Word with _$Word {
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
   @override
-  bool operator ==(Object other) => other is Word && other.value == value;
+  List<Object?> get props => [value];
 }

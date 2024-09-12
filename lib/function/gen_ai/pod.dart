@@ -49,13 +49,21 @@ class GeminiAi extends _$GeminiAi {
   }
 
   FutureOr<String> helpUser(String correct, String mistake) async {
+    final List<String> splitter = correct.split(' ');
+    final String mistakeWord = mistake.split(' ').last;
     final String prompt =
-        'This is a Puzzle. User need to enter the word "$correct",'
-        'but entered "$mistake". '
-        'If only text correction, ask user to correct the word, '
-        'Else, ask them to click on Hint icon. '
-        "When you're helping, never mention about the correct word i.e., $correct "
+        'This is puzzle game where user has to find out the second part '
+        'of the word. We have given a word "$correct", '
+        'where user has to find the second part of the word. '
+        'ie., user has to fill the word "${splitter.last}". '
+        'But user has entered "$mistakeWord". '
+        'If only typo correction, help the user to correct the spelling. '
+        'Else, help user to use the hint icon. '
+        'When you are helping, never mention '
+        "about the correct word i.e., ${splitter.last}. "
+        'And do not ask questions like "Did you mean by". '
         'Use simple english and also use less than 12 words.';
+
     log(prompt);
     final List<Content> contents = [Content.text(prompt)];
     return await callResponse(contents);
