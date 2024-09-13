@@ -8,6 +8,7 @@ import '../../firebase/pod.dart';
 import '../../model/route_path.dart';
 import '../../router/pod.dart';
 import '../connectivity/pod.dart';
+import '../firestore/pod.dart';
 import '../local/pod.dart';
 import '../remote_config/pod.dart';
 import 'auth.dart';
@@ -46,7 +47,8 @@ Future<void> signingOff(SigningOffRef ref) {
   internetConnection,
   sqFound,
   sqPuzzle,
-  remoteConfig
+  remoteConfig,
+  remotePlayer,
 ])
 void listenAuth(ListenAuthRef ref) {
   ref.listen<User?>(
@@ -56,6 +58,9 @@ void listenAuth(ListenAuthRef ref) {
         log("Deleting");
         ref.read(sqFoundProvider).delete();
         ref.read(sqPuzzleProvider).delete();
+      }
+      if (next != null) {
+        ref.read(remotePlayerProvider).updateMe();
       }
       ref.read(authNotifierProvider.notifier).validateAuth(next == null);
     },

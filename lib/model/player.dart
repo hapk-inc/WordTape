@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:equatable/equatable.dart';
+import 'package:mock_data/mock_data.dart';
 
 part 'player.freezed.dart';
 part 'player.g.dart';
@@ -20,9 +24,24 @@ class Player extends Equatable with _$Player {
     String? source,
 
     //
-    String? id,
+    @JsonKey(includeFromJson: false, includeToJson: false) String? id,
   }) = _Player;
 
   @override
   List<Object?> get props => [rollNo, id];
+
+  factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
+
+  factory Player.fromFirestore(Map<String, dynamic> json, {String? id}) =>
+      _$PlayerFromJson(json).copyWith(id: id);
+
+  factory Player.newUser(User fUser) => Player(
+        nickName: fUser.displayName,
+        rollNo: mockInteger(100000, 99999999),
+        nowTime: fUser.metadata.lastSignInTime,
+        created: fUser.metadata.creationTime,
+        source: fUser.providerData[0].providerId == "gc.apple.com"
+            ? "iOS"
+            : "Android",
+      );
 }
