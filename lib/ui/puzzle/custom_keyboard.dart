@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:wordtape/ui/theme/color.dart';
 
 import '../../enum/pod.dart';
 import '../../function/puzzle/notifier.dart';
@@ -88,7 +89,6 @@ class MyKeyboardTile extends ConsumerWidget {
           case done:
             {
               if (!notifier.enableDone) return;
-              //notifier.validate();
               notifier.formKey.currentState!.validate();
               break;
             }
@@ -105,13 +105,13 @@ class MyKeyboardTile extends ConsumerWidget {
         decoration: BoxDecoration(
           color: isChar ? null : Colors.amber,
           borderRadius: BorderRadius.circular(4.5.r),
-          border: Border.all(width: 0.24.r, color: Colors.white70),
+          border: Border.all(width: 0.24.r, color: seaWhite),
         ),
         child: Text(
           str,
           style: textTheme.headlineMedium?.copyWith(
             fontSize: isChar ? 15.r : 21.r,
-            color: isChar ? Colors.white54 : Colors.black,
+            color: isChar ? Colors.white60 : Colors.black,
           ),
         ),
       ),
