@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../enum/pod.dart';
 import '../../model/word.dart';
@@ -17,7 +16,6 @@ class TwoWord extends StatelessWidget {
       delay: const Duration(milliseconds: 1500),
       key: ValueKey(date),
       child: Wrap(
-        spacing: 15.r,
         children: List.generate(
           words.length,
           (index) {

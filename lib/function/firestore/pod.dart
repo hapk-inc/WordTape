@@ -11,8 +11,11 @@ part 'pod.g.dart';
 @Riverpod(keepAlive: true, dependencies: [])
 RemotePuzzle remotePuzzle(RemotePuzzleRef ref) => RemotePuzzle(ref);
 
-@Riverpod(keepAlive: true, dependencies: [])
-RemoteFound remoteFound(RemoteFoundRef ref) => RemoteFound(ref);
+@Riverpod(keepAlive: true, dependencies: [runningUser])
+RemoteFound remoteFound(RemoteFoundRef ref) {
+  final User? user = ref.watch(runningUserProvider).value;
+  return RemoteFound(ref, fUser: user);
+}
 
 @Riverpod(keepAlive: true, dependencies: [runningUser])
 RemotePlayer remotePlayer(RemotePlayerRef ref) {

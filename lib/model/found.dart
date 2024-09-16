@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'found.freezed.dart';
 part 'found.g.dart';
 
 @Freezed(makeCollectionsUnmodifiable: false)
-class Found with _$Found {
+class Found extends Equatable with _$Found {
   const Found._();
 
   @JsonSerializable(includeIfNull: false)
@@ -19,6 +20,14 @@ class Found with _$Found {
 
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
 
+  Map<String, dynamic> toFirestore() {
+    final Map<String, dynamic> map = toJson();
+    map
+      ..remove('id')
+      ..remove('date');
+    return map;
+  }
+
   //factory Found.initial() => const Found();
 
   String foundTrack(int count) => i == 1
@@ -26,4 +35,8 @@ class Found with _$Found {
       : i == count
           ? "DONE"
           : "PENDING";
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id, i, mistake];
 }

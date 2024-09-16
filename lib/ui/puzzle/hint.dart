@@ -5,47 +5,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../enum/pod.dart';
-import '../../function/gen_ai/pod.dart';
-import '../../function/puzzle/notifier.dart';
+import '../../function/puzzle/hint.dart';
 import '../../function/puzzle/pod.dart';
-import '../../model/found.dart';
 
-class PuzzleHint extends ConsumerWidget {
+class PuzzleHint extends ConsumerStatefulWidget {
   const PuzzleHint({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _PuzzleHintState();
+}
+
+class _PuzzleHintState extends ConsumerState<PuzzleHint> {
+  late DateTime date;
+  late String hint;
+
+  @override
+  void initState() {
+    date = ref.read(selectedDateProvider);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isTab = size == ScreenSize.tab;
-
-    final String recall = ref.read(recallNextProvider);
-
-    final DateTime date = ref.read(selectedDateProvider);
-    final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(date));
-
-    final Found found = notifier.found;
-
-    //final String hint = notifier.hint;
-
-    final String hint = notifier.hint ??
-        (found.mistake == null
-            ? ref.watch(createHintProvider(word: notifier.next)).maybeWhen(
-                  data: (data) => data,
-                  orElse: () => recall,
-                  error: (error, _) {
-                    return notifier.localHint ??
-                        "Looks like you're own. $recall";
-                  },
-                )
-            : ref
-                .watch(helpUserProvider(
-                    word: notifier.next, mistake: notifier.mistakeCombination))
-                .maybeWhen(
-                  data: (data) => data,
-                  orElse: () => "Let me think",
-                  error: (e, _) => "That's not correct. Use Hint button",
-                ));
+    hint = ref.watch(hintNotifierProvider(date));
 
     return AnimatedSwitcher(
       duration: Duration.zero,

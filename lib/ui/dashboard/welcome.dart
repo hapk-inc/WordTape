@@ -41,7 +41,7 @@ class WelcomeText extends ConsumerWidget {
           ],
         ),
         maxLines: 2,
-        style: textTheme.bodyLarge?.copyWith(color: seaWhite, height: 2.1),
+        style: textTheme.bodyLarge?.copyWith(color: seaWhite),
         textAlign: TextAlign.center,
       ),
     );

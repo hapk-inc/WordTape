@@ -9,19 +9,18 @@ class RemoteFound {
   final Ref ref;
 
   late FirebaseFirestore firebaseFirestore;
-  late CollectionReference puzzleColl;
+  late CollectionReference pColl;
 
   User? fUser;
 
   RemoteFound(this.ref, {this.fUser}) {
     firebaseFirestore = ref.read(firestoreProvider);
-    puzzleColl = firebaseFirestore.collection('puzzle');
+    pColl = firebaseFirestore.collection('puzzle');
   }
 
   Future<Found?> found(String? id) async {
     if (id == null) return null;
-    final CollectionReference foundColl =
-        puzzleColl.doc(id).collection('found');
+    final CollectionReference foundColl = pColl.doc(id).collection('found');
     //
     return foundColl.doc(fUser?.uid).get().then(
           (DocumentSnapshot snapshot) => !snapshot.exists
@@ -30,4 +29,23 @@ class RemoteFound {
                   .copyWith(id: id),
         );
   }
+
+  Future update(Found found) async {
+    final CollectionReference coll = pColl.doc(found.id).collection('found');
+    final DocumentReference doc = coll.doc(fUser?.uid);
+    return firebaseFirestore.runTransaction(
+      (transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(doc);
+        if (!snapshot.exists) {
+          transaction.set(doc, found.toFirestore());
+        } else {
+          transaction.update(doc, found.toFirestore());
+        }
+      },
+    );
+  }
 }
+
+/*if (found.isCompleted && found.fullScore && found.id != null) {
+            updatePuzzle(found.id!);
+          }*/

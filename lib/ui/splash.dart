@@ -78,10 +78,7 @@ class Loader extends ConsumerWidget {
     return FadeIn(
       child: TextButton(
         onPressed: () => ref.read(userLoginProvider),
-        child: Text(
-          "PRESS TO START",
-          style: textTheme.displayMedium,
-        ),
+        child: Text("PRESS TO START", style: textTheme.displaySmall),
       ),
     );
   }

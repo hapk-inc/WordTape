@@ -57,8 +57,10 @@ class GeminiAi extends _$GeminiAi {
         'where user has to find the second part of the word. '
         'ie., user has to fill the word "${splitter.last}". '
         'But user has entered "$mistakeWord". '
-        'If only typo correction, help the user to correct the spelling. '
-        'Else, help user to use the hint icon. '
+        'First If only typo correction, help the user to correct the spelling. '
+        'Then, check if user has entered an invalid word. If yes, ask the user'
+        ' do not type something randomly '
+        'and help user to use the hint icon. '
         'When you are helping, never mention '
         "about the correct word i.e., ${splitter.last}. "
         'And do not ask questions like "Did you mean by". '

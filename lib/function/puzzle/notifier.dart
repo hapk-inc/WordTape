@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:wordtape/model/word.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
+import '../../model/word.dart';
 import '../local/pod.dart';
 import '../logger/pod.dart';
 import 'pod.dart';
@@ -30,6 +30,7 @@ class PuzzleNotifier extends ChangeNotifier {
   String? _hint;
 
   PuzzleNotifier(this.ref, {required this.date}) {
+    log("Initiating Notifier", name: "puzzle");
     logger = ref.read(loggerProvider);
     _puzzle = ref.read(puzzleDateArgProvider(date: date)).value ??
         Puzzle.fromRandom();
@@ -56,9 +57,10 @@ class PuzzleNotifier extends ChangeNotifier {
     );
   }
 
-  updateLocally() {
-    ref.read(sqFoundProvider).insert(_found);
-    ref.invalidate(foundDateArgProvider(date: date));
+  updateLocally({bool inLocal = false}) async {
+    if (inLocal) await ref.read(sqFoundProvider).insert(_found);
+    ref.read(foundDateArgProvider(date: date).notifier).state =
+        AsyncValue.data(_found);
   }
 
   bool get enableDone =>

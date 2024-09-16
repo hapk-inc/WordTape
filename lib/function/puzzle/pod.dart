@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,5 +104,15 @@ class FoundDateArg extends _$FoundDateArg {
     final Found? f = await localFound.found(puzzle.id);
 
     return f ?? Found(date: date, id: puzzle.id);
+  }
+
+  @override
+  set state(AsyncValue<Found?> newState) {
+    log("Setting Found", name: "FoundDateArg");
+    if (super.state.value == newState.value) return;
+    ref
+        .read(remoteFoundProvider)
+        .update(newState.value ?? Found(date: date, id: newState.value?.id));
+    super.state = newState;
   }
 }

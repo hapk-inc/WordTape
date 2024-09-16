@@ -24,6 +24,13 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
             theme: ThemeData(
               iconTheme: iconThemeData,
               textTheme: defaultTextTheme,
+              appBarTheme: AppBarTheme(
+                toolbarHeight: 72.h,
+                backgroundColor: midnightGreen,
+                iconTheme: IconThemeData(color: seaWhite, size: 18.r),
+                centerTitle: size == ScreenSize.mobile,
+                titleSpacing: 0,
+              ),
               inputDecorationTheme: InputDecorationTheme(
                 enabledBorder: underlineInputBorder(mint),
                 focusedBorder: underlineInputBorder(seaWhite),

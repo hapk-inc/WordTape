@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../function/keyboard/pod.dart';
 import '../function/puzzle/notifier.dart';
 import '../function/puzzle/pod.dart';
+import '../model/found.dart';
 import '../model/puzzle.dart';
 import '../model/word.dart';
 import 'puzzle/custom_keyboard.dart';
@@ -30,7 +30,6 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
 
   @override
   void initState() {
-    debugPrint("Init in PuzzlePage");
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String dateStr = formatter.format(widget.date);
     date = formatter.parse(dateStr);
@@ -39,13 +38,12 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
       () => ref.read(selectedDateProvider.notifier).state = date,
     );
 
-    ref.listenManual<int>(
-      puzzleNotifierProvider(date).select<int>((value) => value.found.i),
-      (previous, next) {
-        log("Listen Found $next");
-        ref.read(puzzleNotifierProvider(date))
-          ..validateController()
-          ..updateLocally();
+    ref.listenManual<Found>(
+      puzzleNotifierProvider(date).select<Found>((value) => value.found),
+      (previous, next) async {
+        final notifier = ref.read(puzzleNotifierProvider(date));
+        if ((previous?.i ?? 1) != next.i) notifier.validateController();
+        await notifier.updateLocally(inLocal: next.mistake == null);
       },
     );
 
@@ -56,11 +54,11 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
   Widget build(BuildContext context) {
     final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
     final Puzzle puzzle = notifier.puzzle;
+    final TextTheme textTheme = Theme.of(context).textTheme;
 
     return ColoredBox(
       color: midnightGreen,
       child: SafeArea(
-        top: false,
         bottom: false,
         child: KeyboardListener(
           focusNode: notifier.activeNode,
@@ -82,18 +80,11 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Gap(h_03),
-                      Container(
-                        height: h_03 * 2,
-                        padding: EdgeInsets.symmetric(horizontal: w_03),
-                        alignment: Alignment.center,
-                        child: const Row(
-                          children: [
-                            BackButton(color: seaWhite),
-                            Spacer(),
-                            LightBtn()
-                          ],
-                        ),
+                      AppBar(
+                        toolbarHeight: h_03 * 3,
+                        actions: const [LightBtn()],
+                        titleTextStyle: textTheme.displayMedium,
+                        title: const Text("WORDTAPE"),
                       ),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 150),

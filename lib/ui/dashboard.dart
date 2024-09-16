@@ -1,11 +1,14 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
+import '../function/package_info/pod.dart';
 import '../function/puzzle/pod.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
@@ -40,11 +43,12 @@ class DashboardPage extends ConsumerWidget {
 
           if (found == null) return const CircularLoader();
 
-          //
-
           final Welcome w = ref.read(welcomeProvider);
           final Welcome r = ref.read(resumeProvider);
           final Welcome welcome = found.i == 1 ? w : r;
+          final TextTheme textTheme = Theme.of(context).textTheme;
+
+          final PackageInfo? packageInfo = ref.watch(packageProvider).value;
 
           //
           return SingleChildScrollView(
@@ -77,7 +81,7 @@ class DashboardPage extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Gap(mH * 0.03),
+                const _MySpacer(fraction: 2),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.r),
                   child: OverflowBar(
@@ -91,26 +95,54 @@ class DashboardPage extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Gap(mH * 0.045),
+                const _MySpacer(fraction: 3),
                 if (kIsWeb) ...[
                   SizedBox(
                     width: 450.r,
                     child: FadeIn(
                       delay: const Duration(milliseconds: 3600),
-                      child:
-                          Lottie.asset('lottie/calendar.json', repeat: false),
+                      child: Lottie.asset(
+                        'lottie/calendar.json',
+                        repeat: false,
+                      ),
                     ),
                   ),
-                  Gap(mH * 0.015),
+                  const _MySpacer(),
                   const SeeArchive(),
-                  Gap(mH * 0.045),
+                  const _MySpacer(fraction: 3),
                   const StoreBtn(),
                 ] else ...[
-                  Gap(mH * 0.015),
+                  const _MySpacer(),
                   const LeaderBoardTile(),
-                  Gap(mH * 0.015),
+                  const _MySpacer(),
                 ],
-                Gap(mH * 0.15),
+                const _MySpacer(fraction: 10),
+                if (packageInfo != null)
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.symmetric(horizontal: 15.r),
+                    child: Text(
+                      "Version ${packageInfo.version}",
+                      style: textTheme.bodySmall?.copyWith(
+                        height: 0,
+                        fontSize: 18.r,
+                        color: Colors.black26,
+                      ),
+                    ),
+                  ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15.r),
+                  alignment: Alignment.centerLeft,
+                  child: AutoSizeText(
+                    "WORDTAPE",
+                    style: textTheme.displayLarge?.copyWith(
+                      color: Colors.black12,
+                      letterSpacing: 0,
+                    ),
+                    maxLines: 1,
+                  ),
+                ),
+                const _MySpacer(fraction: 2),
               ],
             ),
           );
@@ -119,19 +151,26 @@ class DashboardPage extends ConsumerWidget {
 }
 
 class CircularLoader extends StatelessWidget {
-  const CircularLoader({
-    super.key,
-  });
+  const CircularLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        color: midnightGreen,
+        alignment: Alignment.center,
+        child: const CircularProgressIndicator(
+          backgroundColor: seaWhite,
+          color: aquaMarine,
+        ),
+      );
+}
+
+class _MySpacer extends StatelessWidget {
+  final double fraction;
+  const _MySpacer({this.fraction = 1});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: midnightGreen,
-      alignment: Alignment.center,
-      child: const CircularProgressIndicator(
-        backgroundColor: seaWhite,
-        color: aquaMarine,
-      ),
-    );
+    final double height = MediaQuery.of(context).size.height;
+    return Gap(height * 0.015 * fraction);
   }
 }

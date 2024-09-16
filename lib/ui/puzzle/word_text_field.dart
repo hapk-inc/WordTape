@@ -51,6 +51,7 @@ class WordTextField extends ConsumerWidget {
     }
 
     return AnimatedContainer(
+      padding: EdgeInsets.symmetric(horizontal: 7.5.r),
       duration: const Duration(milliseconds: 600),
       constraints: BoxConstraints(maxWidth: 450.r, minHeight: height ?? 75.h),
       child: LayoutBuilder(
