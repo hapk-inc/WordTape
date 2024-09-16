@@ -19,7 +19,7 @@ class LeaderBoardTile extends StatelessWidget {
         child: ClipRRect(
           borderRadius: _borderRadius(7.5.r),
           child: SizedBox(
-            height: 480.h,
+            height: 480.r,
             width: 510.r,
             child: Column(
               children: [

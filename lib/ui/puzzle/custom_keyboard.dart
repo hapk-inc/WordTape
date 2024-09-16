@@ -88,7 +88,6 @@ class MyKeyboardTile extends ConsumerWidget {
             break;
           case done:
             {
-              if (!notifier.enableDone) return;
               notifier.formKey.currentState!.validate();
               break;
             }

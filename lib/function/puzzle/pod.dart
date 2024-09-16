@@ -109,10 +109,10 @@ class FoundDateArg extends _$FoundDateArg {
   @override
   set state(AsyncValue<Found?> newState) {
     log("Setting Found", name: "FoundDateArg");
-    if (super.state.value == newState.value) return;
-    ref
-        .read(remoteFoundProvider)
-        .update(newState.value ?? Found(date: date, id: newState.value?.id));
+    if (newState.value == null || super.state.value == newState.value) return;
+    final Found f = newState.value!;
+    if (f.mistake == null) ref.read(sqFoundProvider).insert(newState.value!);
+    ref.read(remoteFoundProvider).update(f);
     super.state = newState;
   }
 }

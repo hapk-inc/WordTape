@@ -1,4 +1,4 @@
-
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +11,7 @@ import '../function/puzzle/pod.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
 import '../model/word.dart';
+import '../router/pod.dart';
 import 'puzzle/custom_keyboard.dart';
 import 'puzzle/hint.dart';
 import 'puzzle/light_btn.dart';
@@ -43,7 +44,15 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
       (previous, next) async {
         final notifier = ref.read(puzzleNotifierProvider(date));
         if ((previous?.i ?? 1) != next.i) notifier.validateController();
-        await notifier.updateLocally(inLocal: next.mistake == null);
+        final AsyncData<Found> data = AsyncData(next);
+        ref.read(foundDateArgProvider(date: date).notifier).state = data;
+      },
+    );
+
+    ref.listenManual<bool>(
+      puzzleNotifierProvider(date).select<bool>((value) => value.isCompleted),
+      (_, next) async {
+        if (next) ref.read(routerProvider).pop();
       },
     );
 
@@ -83,8 +92,13 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                       AppBar(
                         toolbarHeight: h_03 * 3,
                         actions: const [LightBtn()],
-                        titleTextStyle: textTheme.displayMedium,
-                        title: const Text("WORDTAPE"),
+                        titleTextStyle: textTheme.displayMedium?.copyWith(
+                          color: seaWhite,
+                        ),
+                        title: FadeIn(
+                          delay: const Duration(milliseconds: 750),
+                          child: const Text("WORDTAPE"),
+                        ),
                       ),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 150),

@@ -7,7 +7,6 @@ import 'package:logger/logger.dart';
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
 import '../../model/word.dart';
-import '../local/pod.dart';
 import '../logger/pod.dart';
 import 'pod.dart';
 
@@ -26,8 +25,8 @@ class PuzzleNotifier extends ChangeNotifier {
   List<TextEditingController> _pinController = [];
   late List<FocusNode> _nodes;
   late Logger logger;
+  late bool _isCompleted = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? _hint;
 
   PuzzleNotifier(this.ref, {required this.date}) {
     log("Initiating Notifier", name: "puzzle");
@@ -39,6 +38,8 @@ class PuzzleNotifier extends ChangeNotifier {
     validateController();
 
     _nodes = List.generate(_puzzle.words.length, (_) => FocusNode());
+    final bool everyFound = _puzzle.isCompleted(_found.i);
+    _isCompleted = everyFound;
   }
 
   validateController() async {
@@ -50,24 +51,18 @@ class PuzzleNotifier extends ChangeNotifier {
         if (index < _found.i) {
           return TextEditingController(text: text);
         } else if (index == _found.i) {
-          return TextEditingController(text: firstLetter(text));
+          return TextEditingController(text: _firstLetter(text));
         }
         return TextEditingController();
       },
     );
   }
 
-  updateLocally({bool inLocal = false}) async {
-    if (inLocal) await ref.read(sqFoundProvider).insert(_found);
-    ref.read(foundDateArgProvider(date: date).notifier).state =
-        AsyncValue.data(_found);
-  }
-
-  bool get enableDone =>
+  bool get _enableDone =>
       _puzzle.words[_found.i].value.length == activeController.text.length;
 
   addText(String str) {
-    if (!enableDone) {
+    if (!_enableDone) {
       String newText = activeController.text + str;
       _pinController[_found.i] = TextEditingController(text: newText);
       onTextChanged(newText);
@@ -87,9 +82,9 @@ class PuzzleNotifier extends ChangeNotifier {
 
   onTextChanged(String newText) {
     String exact = _puzzle.words[_found.i].value;
-    if (!newText.startsWith(firstLetter(exact)) || newText.isEmpty) {
+    if (!newText.startsWith(_firstLetter(exact)) || newText.isEmpty) {
       _pinController[_found.i].value = activeController.value.copyWith(
-        text: firstLetter(exact),
+        text: _firstLetter(exact),
         selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
       );
     }
@@ -98,20 +93,20 @@ class PuzzleNotifier extends ChangeNotifier {
   Future<void> validate() async {
     bool isValid = _puzzle.words[_found.i].value == activeController.text;
     if (!isValid) {
-      updateMistake(activeController.text);
+      _updateMistake(activeController.text);
     } else {
-      incrementFound();
+      _incrementFound();
     }
   }
 
-  updateMistake(String text) {
+  _updateMistake(String text) {
     _found = _found.copyWith(lastFound: DateTime.now(), mistake: text);
     notifyListeners();
   }
 
   GlobalKey<FormState> get formKey => _formKey;
 
-  Future<void> incrementFound() async {
+  Future<void> _incrementFound() async {
     _found = _found.copyWith(
       i: _found.i + 1,
       lastFound: DateTime.now(),
@@ -119,33 +114,22 @@ class PuzzleNotifier extends ChangeNotifier {
     );
     logger.i("$_found");
     final bool everyFound = _puzzle.isCompleted(_found.i);
-
-    if (everyFound) {
-    } else {
-      notifyListeners();
-    }
+    isCompleted = everyFound;
+    notifyListeners();
   }
 
-  String firstLetter(String str) => str.isEmpty ? '' : str.substring(0, 1);
+  String _firstLetter(String str) => str.isEmpty ? '' : str.substring(0, 1);
 
   TextEditingController get activeController =>
       _pinController.isEmpty || _puzzle.isCompleted(_found.i)
           ? TextEditingController()
           : _pinController[_found.i];
 
-  FocusNode get activeNode => _nodes[_found.i];
-
-  String? get hint => _hint;
-
-  set hint(String? value) {
-    if (_hint == value) return;
-    _hint = value;
-    notifyListeners();
-  }
+  FocusNode get activeNode => _isCompleted ? FocusNode() : _nodes[_found.i];
 
   TextEditingController textController(int index) => _pinController[index];
 
-  FocusNode focusNode(int i) => _nodes[i];
+  //FocusNode focusNode(int i) => _nodes[i];
 
   Puzzle get puzzle => _puzzle;
 
@@ -165,4 +149,12 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   String? get localHint => _puzzle.words[_found.i].hint;
+
+  bool get isCompleted => _isCompleted;
+
+  set isCompleted(bool value) {
+    if (_isCompleted == value) return;
+    _isCompleted = value;
+    notifyListeners();
+  }
 }

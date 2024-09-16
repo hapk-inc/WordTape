@@ -38,5 +38,5 @@ class Found extends Equatable with _$Found {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [id, i, mistake];
+  List<Object?> get props => [id, i, mistake, date];
 }

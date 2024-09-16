@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/function/puzzle/hint.dart';
 
 import '../../enum/pod.dart';
 import '../../function/puzzle/notifier.dart';
@@ -74,13 +75,11 @@ class WordTextField extends ConsumerWidget {
                     final int l = value?.length ?? 0;
                     bool fillText = l == word.value.length;
                     final DateTime date = ref.read(selectedDateProvider);
-                    final notifierRead = ref.read(puzzleNotifierProvider(date));
                     if (fillText) {
-                      notifierRead
-                        ..hint = null
-                        ..validate();
+                      ref.read(puzzleNotifierProvider(date)).validate();
                     } else {
-                      notifierRead.hint = ref.read(fillTextProvider);
+                      ref.read(hintNotifierProvider(date).notifier).state =
+                          ref.read(fillTextProvider);
                     }
                     return null;
                   },

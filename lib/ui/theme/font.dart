@@ -76,7 +76,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   @override
   TextStyle? get displayMedium => GoogleFonts.paytoneOne(
-        fontSize: 36.r,
+        fontSize: 30.r,
         letterSpacing: 0,
         height: 0,
         wordSpacing: 0,

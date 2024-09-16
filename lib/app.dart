@@ -14,6 +14,7 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GoRouter router = ref.read(routerProvider);
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return ScreenUtilInit(
       designSize: const Size(360, 900),
       builder: (context, child) {
@@ -27,8 +28,12 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
               appBarTheme: AppBarTheme(
                 toolbarHeight: 72.h,
                 backgroundColor: midnightGreen,
-                iconTheme: IconThemeData(color: seaWhite, size: 18.r),
-                centerTitle: size == ScreenSize.mobile,
+                iconTheme: IconThemeData(color: seaWhite, size: 15.r),
+                titleTextStyle: textTheme.displayMedium?.copyWith(
+                  color: aquaMarine,
+                ),
+                //centerTitle: size == ScreenSize.mobile,
+                centerTitle: false,
                 titleSpacing: 0,
               ),
               inputDecorationTheme: InputDecorationTheme(
