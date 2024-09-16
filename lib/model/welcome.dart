@@ -157,3 +157,22 @@ const _fillText = [
   "Fill in the entire content",
   "Write out the complete text"
 ];
+
+@riverpod
+String completePuzzle(CompletePuzzleRef ref) {
+  final DateTime now = DateTime.now();
+  return _completeText[now.day % _completeText.length];
+}
+
+const List<String> _completeText = [
+  "Great job! You finished today’s puzzle.",
+  "Well done! You solved the puzzle for today.",
+  "Awesome! You did today’s puzzle.",
+  "Nice work! You completed the puzzle today.",
+  "Good job! You figured out today’s puzzle.",
+  "Way to go! You finished the puzzle for today.",
+  "You did it! You solved today’s challenge.",
+  "Hooray! You completed the puzzle today.",
+  "Fantastic! You finished the puzzle for today.",
+  "Cheers! You solved today’s puzzle"
+];

@@ -111,7 +111,11 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                         puzzle.words.length,
                         (index) {
                           final Word word = puzzle.words[index];
-                          return WordTextField(index, word, height: h_03 * 3);
+                          return WordTextField(
+                            index,
+                            word,
+                            height: h_03 * 2.88,
+                          );
                         },
                       ),
                       Gap(h_03 * 0.6),

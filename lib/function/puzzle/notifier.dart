@@ -44,18 +44,26 @@ class PuzzleNotifier extends ChangeNotifier {
 
   validateController() async {
     logger.i("Running ValidateController $_found");
-    _pinController = List.generate(
-      _puzzle.words.length,
-      (index) {
-        final String text = _puzzle.words[index].value;
-        if (index < _found.i) {
-          return TextEditingController(text: text);
-        } else if (index == _found.i) {
-          return TextEditingController(text: _firstLetter(text));
-        }
-        return TextEditingController();
-      },
-    );
+    _pinController = _isCompleted
+        ? List.generate(
+            _puzzle.words.length,
+            (i) {
+              final String text = _puzzle.words[i].value;
+              return TextEditingController(text: text);
+            },
+          )
+        : List.generate(
+            _puzzle.words.length,
+            (index) {
+              final String text = _puzzle.words[index].value;
+              if (index < _found.i) {
+                return TextEditingController(text: text);
+              } else if (index == _found.i) {
+                return TextEditingController(text: _firstLetter(text));
+              }
+              return TextEditingController();
+            },
+          );
   }
 
   bool get _enableDone =>
@@ -129,13 +137,9 @@ class PuzzleNotifier extends ChangeNotifier {
 
   TextEditingController textController(int index) => _pinController[index];
 
-  //FocusNode focusNode(int i) => _nodes[i];
-
   Puzzle get puzzle => _puzzle;
 
   Found get found => _found;
-
-  bool get isStarted => _found.i != 1;
 
   bool isPrevious(Word word) => _puzzle.words[_found.i - 1] == word;
 

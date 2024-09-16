@@ -40,13 +40,17 @@ class WordTextField extends ConsumerWidget {
       final DateTime date = ref.read(selectedDateProvider);
       notifier = ref.watch(puzzleNotifierProvider(date));
 
-      isEnabled = notifier.textController(index) == notifier.activeController;
+      isEnabled = notifier.isCompleted
+          ? false
+          : notifier.textController(index) == notifier.activeController;
       controller = notifier.textController(index);
-      color = isEnabled
-          ? seaWhite
-          : notifier.isPrevious(word)
-              ? aquaMarine
-              : Colors.white24;
+      color = notifier.isCompleted
+          ? aquaMarine
+          : isEnabled
+              ? seaWhite
+              : notifier.isPrevious(word)
+                  ? aquaMarine
+                  : Colors.white24;
 
       autoFocus = isEnabled;
     }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wordtape/model/welcome.dart';
 
 import '../gen_ai/pod.dart';
 import 'notifier.dart';
@@ -48,6 +49,8 @@ class HintNotifier extends _$HintNotifier {
     log("Initiating", name: "Hint Notifier");
     final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(date));
     final String recall = ref.read(recallNextProvider);
+
+    if (notifier.isCompleted) return ref.read(completePuzzleProvider);
 
     if (notifier.found.mistake == null) {
       return ref.watch(createHintProvider(word: notifier.next)).maybeWhen(
