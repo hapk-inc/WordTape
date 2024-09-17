@@ -46,7 +46,8 @@ class DashboardPage extends ConsumerWidget {
           final Welcome w = ref.read(welcomeProvider);
           final Welcome r = ref.read(resumeProvider);
           final Welcome done = ref.read(completeWelcomeProvider);
-          final Welcome welcome = puzzle?.isCompleted(found.i) ?? false
+          final bool isCompleted = puzzle?.isCompleted(found.i) ?? false;
+          final Welcome welcome = isCompleted
               ? done
               : found.i == 1
                   ? w
@@ -77,7 +78,13 @@ class DashboardPage extends ConsumerWidget {
                                 WelcomeText(welcome),
                                 const Gap(60),
                                 if (puzzle != null)
-                                  TwoWord(date, puzzle.correctWord(found)),
+                                  if (isCompleted)
+                                    Text(
+                                      "👍👍👍👍👍",
+                                      style: textTheme.displayLarge,
+                                    )
+                                  else
+                                    TwoWord(date, puzzle.correctWord(found)),
                               ],
                             ),
                           ),
@@ -117,11 +124,11 @@ class DashboardPage extends ConsumerWidget {
                   const _MySpacer(fraction: 3),
                   const StoreBtn(),
                 ] else ...[
-                  const _MySpacer(),
-                  const LeaderBoardTile(),
-                  const _MySpacer(),
+                  //const _MySpacer(),
+                  //const LeaderBoardTile(),
+                  //const _MySpacer(),
                 ],
-                const _MySpacer(fraction: 10),
+                const _MySpacer(fraction: 3),
                 if (packageInfo != null)
                   Container(
                     alignment: Alignment.centerLeft,

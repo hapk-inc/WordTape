@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../firebase/pod.dart';
 import '../../model/player.dart';
-import '../logger/pod.dart';
 
 class RemotePlayer {
   final Ref<RemotePlayer> ref;
@@ -19,7 +18,6 @@ class RemotePlayer {
   RemotePlayer(this.ref, {this.fUser}) {
     firebaseFirestore = ref.read(firestoreProvider);
     userColl = firebaseFirestore.collection('user');
-    //if (fUser != null) updateMe();
   }
 
   Future<void> updateMe() async {

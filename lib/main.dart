@@ -18,6 +18,7 @@ import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
 import 'function/logger/pod.dart';
+import 'package:web/web.dart' as web;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +27,8 @@ Future<void> main() async {
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
-  //String url = kIsWeb ? web.window.location.href : "";
-  String url = "";
+  String url = kIsWeb ? web.window.location.href : "";
+  //String url = "";
   final FirebaseApp app = await Firebase.initializeApp(
     options: kDebugMode
         ? dev
@@ -85,7 +86,10 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: override,
-      child: DevicePreview(builder: (_) => const MyApp()),
+      child: DevicePreview(
+        enabled: kDebugMode,
+        builder: (_) => const MyApp(),
+      ),
     ),
   );
 }

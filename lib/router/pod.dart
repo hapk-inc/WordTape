@@ -47,3 +47,36 @@ GoRouter router(RouterRef ref) {
     ],
   );
 }
+
+//flutter packages pub run build_runner build --delete-conflicting-outputs
+
+//dart run build_runner build --delete-conflicting-outputs
+
+//for freezed
+//flutter pub run build_runner build --delete-conflicting-outputs
+
+//flutter pub run flutter_native_splash:create
+
+//gradle signingreport
+
+//flutter build appbundle --flavor prod --no-tree-shake-icons
+
+//dart run build_runner build
+
+//dart run build_runner build --delete-conflicting-outputs
+/*  # dart run flutter_native_splash:create --flavors Dev,Prod
+
+  #  flutter build ipa --no-tree-shake-icons
+  #  flutter build web --no-tree-shake-icons
+  #  firebase deploy --no-tree-shake-icons
+  # pod update "Firebase/CoreOnly"
+
+  # dart run build_runner watch
+  # dart run flutter_native_splash:create
+
+  # flutter build web --web-renderer canvaskit
+
+  # console check : firebase_auth.getAuth().currentUser.uid
+  # #/privacy-policy-route
+
+  # https://github.com/rrousselGit/riverpod/tree/master/packages/riverpod_lint#provider_dependencies-riverpod_generator-only*/

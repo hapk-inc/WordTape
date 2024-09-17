@@ -44,6 +44,7 @@ class GeminiAi extends _$GeminiAi {
     final DotEnv dotEnv = ref.read(envProvider);
     return GenerativeModel(
       model: 'gemini-1.5-flash-latest',
+      //TODO: Change API Key
       apiKey: kDebugMode ? dotEnv.get('GEMINI_DEV') : "",
     );
   }

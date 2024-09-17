@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'welcome.g.dart';
@@ -124,7 +123,10 @@ const List<Welcome> _archive = [
   ),
   Welcome("Would you like to\n visit the archives?",
       highlight: "visit the archives?"),
-  Welcome("How about looking at the archives and playing?"),
+  Welcome(
+    "How about looking at the\n archives and playing?",
+    highlight: "archives and playing?",
+  ),
   Welcome("Interested in seeing the archives and playing?"),
   Welcome("Want to explore the archives and have fun?"),
   Welcome("Shall we check the archives and play?"),
