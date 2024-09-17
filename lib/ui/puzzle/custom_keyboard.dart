@@ -82,17 +82,19 @@ class MyKeyboardTile extends ConsumerWidget {
       onTap: () {
         final DateTime date = ref.read(selectedDateProvider);
         final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
-        switch (str) {
-          case backspace:
-            notifier.removeText();
-            break;
-          case done:
-            {
-              notifier.formKey.currentState!.validate();
+        if (!notifier.isCompleted) {
+          switch (str) {
+            case backspace:
+              notifier.removeText();
               break;
-            }
-          default:
-            notifier.addText(str);
+            case done:
+              {
+                notifier.formKey.currentState!.validate();
+                break;
+              }
+            default:
+              notifier.addText(str);
+          }
         }
       },
       child: AnimatedContainer(

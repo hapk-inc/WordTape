@@ -13,7 +13,6 @@ class WelcomeText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final Welcome sentence = ref.read(welcomeProvider);
     List<String> words = sentence.text.split(' ');
     List<String> highlighter = (sentence.highlight ?? "").split(' ');
     final TextTheme textTheme = Theme.of(context).textTheme;

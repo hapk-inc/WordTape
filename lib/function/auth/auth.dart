@@ -37,21 +37,46 @@ class Auth {
   Future<User?> get fUser async => _auth.currentUser;
 
   Future<bool> get userLogin async {
-    if (!await GamesServices.isSignedIn) {
-      final String? str = await GamesServices.signIn();
-      logger.d(str);
-    }
-    late OAuthCredential credential;
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
-      credential = GameCenterAuthProvider.credential();
-    } else if (defaultTargetPlatform == TargetPlatform.android) {
-      credential = PlayGamesAuthProvider.credential(serverAuthCode: '');
+    if (kIsWeb) {
+      await _auth.signInAnonymously();
+      return true;
     } else {
-      return false;
+      if (!await GamesServices.isSignedIn && !kIsWeb) {
+        final String? str = await GamesServices.signIn();
+        logger.d(str);
+      }
+
+      switch (defaultTargetPlatform) {
+        case TargetPlatform.android:
+          {
+            final OAuthCredential credential =
+                PlayGamesAuthProvider.credential(serverAuthCode: '');
+            await _auth.signInWithCredential(credential);
+            return true;
+          }
+
+        case TargetPlatform.iOS:
+          {
+            final OAuthCredential credential =
+                GameCenterAuthProvider.credential();
+            await _auth.signInWithCredential(credential);
+            return true;
+          }
+
+        case TargetPlatform.macOS:
+          {
+            final OAuthCredential credential =
+                GameCenterAuthProvider.credential();
+            await _auth.signInWithCredential(credential);
+            return true;
+          }
+        default:
+          {
+            await _auth.signInAnonymously();
+            return true;
+          }
+      }
     }
-    await _auth.signInWithCredential(credential);
-    return true;
   }
 
   Future get logOff => _auth.signOut();

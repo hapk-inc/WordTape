@@ -45,7 +45,12 @@ class DashboardPage extends ConsumerWidget {
 
           final Welcome w = ref.read(welcomeProvider);
           final Welcome r = ref.read(resumeProvider);
-          final Welcome welcome = found.i == 1 ? w : r;
+          final Welcome done = ref.read(completeWelcomeProvider);
+          final Welcome welcome = puzzle?.isCompleted(found.i) ?? false
+              ? done
+              : found.i == 1
+                  ? w
+                  : r;
           final TextTheme textTheme = Theme.of(context).textTheme;
 
           final PackageInfo? packageInfo = ref.watch(packageProvider).value;

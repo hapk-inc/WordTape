@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'welcome.g.dart';
@@ -6,11 +7,8 @@ part 'welcome.freezed.dart';
 
 @Freezed()
 class Welcome with _$Welcome {
-  const factory Welcome(
-    String text, {
-    @Default("?") String end,
-    String? highlight,
-  }) = _Welcome;
+  const factory Welcome(String text,
+      {@Default("") String end, String? highlight}) = _Welcome;
 }
 
 const List<Welcome> _list = [
@@ -57,52 +55,42 @@ const List<Welcome> _resume = [
   Welcome(
     "You're almost done! Keep going to finish the rest of the sequence",
     highlight: "almost",
-    end: "",
   ),
   Welcome(
     "You're halfway through! Now, Finish the remaining sequence.",
     highlight: "Finish ",
-    end: "",
   ),
   Welcome(
     "Great job! Now try to complete the rest of the sequence.",
     highlight: "complete",
-    end: "",
   ),
   Welcome(
     "You're doing well! Finish the rest of the sequence now.",
     highlight: "Finish",
-    end: "",
   ),
   Welcome(
     "You're partway there!  Keep going  to complete the sequence.",
     highlight: "Keep going",
-    end: "",
   ),
   Welcome(
     "You're halfway ! Now, see if you can finish the sequence.",
     highlight: "finish the sequence.",
-    end: "",
   ),
   Welcome(
     "You're nearly there! Try to finish the rest of the sequence.",
     highlight: "finish sequence.",
-    end: "",
   ),
   Welcome(
     "You're halfway complete! Keep going to finish the sequence",
     highlight: "finish the sequence",
-    end: ".",
   ),
   Welcome(
     "Good work! Now, try to complete the rest of the sequence.",
     highlight: "complete",
-    end: "",
   ),
   Welcome(
     "You're almost finished! See if you can complete the sequence.",
     highlight: "complete",
-    end: "",
   )
 ];
 
@@ -175,4 +163,41 @@ const List<String> _completeText = [
   "Hooray! You completed the puzzle today.",
   "Fantastic! You finished the puzzle for today.",
   "Cheers! You solved today’s puzzle"
+];
+
+@riverpod
+Welcome completeWelcome(CompleteWelcomeRef ref) {
+  final DateTime now = DateTime.now();
+  return _completeWelcome[now.day % _completeWelcome.length];
+}
+
+const List<Welcome> _completeWelcome = [
+  Welcome("Great job! \nYou finished today’s puzzle.", highlight: "Great job!"),
+  Welcome(
+    "Well done! \nYou solved the puzzle for today.",
+    highlight: "Well done!",
+  ),
+  Welcome("Awesome! \nYou did today’s puzzle.", highlight: "Awesome!"),
+  Welcome(
+    "Nice work! \nYou completed the puzzle today.",
+    highlight: "Nice work!",
+  ),
+  Welcome(
+    "Good job! \nYou figured out today’s puzzle.",
+    highlight: "Good job!",
+  ),
+  Welcome(
+    "Way to go! \nYou finished the puzzle for today.",
+    highlight: "Way to go!",
+  ),
+  Welcome(
+    "You did it! \nYou solved today’s challenge.",
+    highlight: "You did it!",
+  ),
+  Welcome("Hooray! \nYou completed the puzzle today.", highlight: "Hooray!"),
+  Welcome(
+    "Fantastic! \nYou finished the puzzle for today.",
+    highlight: "Fantastic!",
+  ),
+  Welcome("Cheers! \nYou solved today’s puzzle", highlight: "Cheers!"),
 ];

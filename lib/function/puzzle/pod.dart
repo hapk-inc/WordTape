@@ -97,7 +97,7 @@ class FoundDateArg extends _$FoundDateArg {
     if (kIsWeb) {
       RemoteFound remoteFound = ref.read(remoteFoundProvider);
       final Found? f = await remoteFound.found(puzzle.id);
-      return f;
+      return f ?? Found(date: date, id: puzzle.id);
     }
 
     final LocalFound localFound = ref.read(sqFoundProvider);
