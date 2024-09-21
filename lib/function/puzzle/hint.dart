@@ -53,7 +53,12 @@ class HintNotifier extends _$HintNotifier {
     if (notifier.isCompleted) return ref.read(completePuzzleProvider);
 
     if (notifier.found.mistake == null) {
-      return ref.watch(createHintProvider(word: notifier.next)).maybeWhen(
+      return ref
+          .watch(createHintProvider(
+            word: notifier.currentWord,
+            answer: notifier.next,
+          ))
+          .maybeWhen(
             data: (data) => data,
             orElse: () => recall,
             error: (__, _) {

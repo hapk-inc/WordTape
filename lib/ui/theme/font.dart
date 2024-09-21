@@ -41,7 +41,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   TextStyle? get bodyLarge => GoogleFonts.questrial(
         fontSize: 27.r,
         letterSpacing: 0,
-        height: 2.4,
+        height: 2.1,
         wordSpacing: 0,
         color: raisinBlack,
       );

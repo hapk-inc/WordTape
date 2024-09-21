@@ -9,6 +9,9 @@ class PassBtn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String str = ref.read(passTextProvider);
-    return OutlinedButton(onPressed: () {}, child: Text(str));
+    return OutlinedButton(
+      onPressed: () {},
+      child: Text(str),
+    );
   }
 }

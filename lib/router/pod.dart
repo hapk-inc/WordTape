@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../ui/dashboard.dart';
@@ -8,6 +7,7 @@ import '../ui/outline.dart';
 import '../ui/puzzle.dart';
 import '../ui/renovation.dart';
 import '../ui/splash.dart';
+import '../model/date_ext.dart';
 
 part 'pod.g.dart';
 
@@ -36,10 +36,8 @@ GoRouter router(RouterRef ref) {
             builder: (_, GoRouterState state) {
               final DateTime args =
                   (state.extra as DateTime?) ?? DateTime.now();
-              DateFormat formatter = DateFormat('yyyy-MM-dd');
-              final String dateStr = formatter.format(args);
-              DateTime formatted = formatter.parse(dateStr);
-              return PuzzlePage(formatted);
+
+              return PuzzlePage(args.convert());
             },
           ),
         ],

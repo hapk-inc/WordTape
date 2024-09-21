@@ -84,15 +84,10 @@ class OutlineState extends StatelessWidget {
             ),
             if (maxWidth > mobileWidth)
               AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 150),
                 right: 0,
                 width: maxWidth - mobileWidth,
-                child: AnimatedContainer(
-                  width: maxWidth - mobileWidth,
-                  duration: const Duration(milliseconds: 300),
-                  color: blackBean,
-                  height: 900.h,
-                ),
+                child: Container(color: blackBean, height: 900.h),
               )
           ],
         );

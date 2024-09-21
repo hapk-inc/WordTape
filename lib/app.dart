@@ -72,7 +72,7 @@ mixin CustomThemeMixin {
   ButtonStyle get defaultButtonStyle => ButtonStyle(
         elevation: WidgetStatePropertyAll(1.5.r),
         textStyle: WidgetStatePropertyAll(defaultTextTheme.bodySmall),
-        minimumSize: WidgetStatePropertyAll(Size(150.r, 60.r)),
+        minimumSize: WidgetStatePropertyAll(Size(150.r, 54.r)),
         padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.r)),
         foregroundColor: const WidgetStatePropertyAll(seaWhite),
       );

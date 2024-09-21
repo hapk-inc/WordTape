@@ -13,7 +13,6 @@ import '../function/puzzle/pod.dart';
 import '../model/found.dart';
 import '../model/puzzle.dart';
 import '../model/welcome.dart';
-import 'dashboard/leaderboard_tile.dart';
 import 'dashboard/p_count.dart';
 import 'dashboard/pass_btn.dart';
 import 'dashboard/play_btn.dart';

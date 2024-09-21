@@ -89,7 +89,7 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   onTextChanged(String newText) {
-    String exact = _puzzle.words[_found.i].value;
+    String exact = currentWord.value;
     if (!newText.startsWith(_firstLetter(exact)) || newText.isEmpty) {
       _pinController[_found.i].value = activeController.value.copyWith(
         text: _firstLetter(exact),
@@ -99,7 +99,7 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   Future<void> validate() async {
-    bool isValid = _puzzle.words[_found.i].value == activeController.text;
+    bool isValid = currentWord.value == activeController.text;
     if (!isValid) {
       _updateMistake(activeController.text);
     } else {
@@ -152,9 +152,11 @@ class PuzzleNotifier extends ChangeNotifier {
     return result;
   }
 
-  String? get localHint => _puzzle.words[_found.i].hint;
+  String? get localHint => currentWord.hint;
 
   bool get isCompleted => _isCompleted;
+
+  Word get currentWord => _puzzle.words[_found.i];
 
   set isCompleted(bool value) {
     if (_isCompleted == value) return;

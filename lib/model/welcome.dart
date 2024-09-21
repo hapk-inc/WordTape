@@ -128,7 +128,10 @@ const List<Welcome> _archive = [
     highlight: "archives and playing?",
   ),
   Welcome("Interested in seeing the archives and playing?"),
-  Welcome("Want to explore the archives and have fun?"),
+  Welcome(
+    "Want to explore the archives and have fun?",
+    highlight: "archives and have fun?",
+  ),
   Welcome("Shall we check the archives and play?"),
   Welcome("Do you want to see and play?"),
   Welcome("Care to look at the archives and play?"),

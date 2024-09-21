@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,6 +10,8 @@ enum ValidateAuth { renovation, notLogged, guest, loggedIn, inGame }
 
 enum NeedToDo { plain, onClick, find }
 
+enum AppEnv { dev, prod }
+
 //////////////////////////////////////////////////
 
 ScreenSize validateSize() {
@@ -19,3 +22,6 @@ ScreenSize validateSize() {
 
 @Riverpod(keepAlive: true, dependencies: [])
 ScreenSize size(SizeRef ref) => ScreenSize.mobile;
+
+@Riverpod(keepAlive: true, dependencies: [])
+AppEnv appEnv(AppEnvRef ref) => kDebugMode ? AppEnv.dev : AppEnv.prod;

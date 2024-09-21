@@ -12,13 +12,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
+import 'enum/pod.dart';
 import 'env/pod.dart';
 import 'firebase/pod.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
 import 'function/logger/pod.dart';
-import 'package:web/web.dart' as web;
+// import 'package:web/web.dart' as web;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,14 +28,17 @@ Future<void> main() async {
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
-  String url = kIsWeb ? web.window.location.href : "";
-  //String url = "";
+  //final String url = kIsWeb ? web.window.location.href : "";
+  const String url = "";
+
+  final AppEnv appEnv = kDebugMode
+      ? AppEnv.dev
+      : kIsWeb && url.contains('demo')
+          ? AppEnv.dev
+          : AppEnv.prod;
+
   final FirebaseApp app = await Firebase.initializeApp(
-    options: kDebugMode
-        ? dev
-        : kIsWeb && url.contains('demo')
-            ? dev
-            : prod,
+    options: appEnv == AppEnv.dev ? dev : prod,
   );
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);
@@ -82,14 +86,13 @@ Future<void> main() async {
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/.env")),
     //
     loggerProvider.overrideWithValue(logger),
+
+    appEnvProvider.overrideWithValue(appEnv)
   ];
   runApp(
     ProviderScope(
       overrides: override,
-      child: DevicePreview(
-        enabled: kDebugMode,
-        builder: (_) => const MyApp(),
-      ),
+      child: DevicePreview(enabled: kDebugMode, builder: (_) => const MyApp()),
     ),
   );
 }
