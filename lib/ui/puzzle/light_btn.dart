@@ -19,7 +19,11 @@ class LightBtn extends ConsumerWidget {
           duration: const Duration(milliseconds: 300),
           child: notifier.found.mistake == null
               ? null
-              : Lottie.asset('lottie/bulb.json'),
+              : InkWell(
+                  onTap: () =>
+                      ref.read(puzzleNotifierProvider(date)).generateTip(),
+                  child: Lottie.asset('lottie/bulb.json'),
+                ),
         ),
       );
     });

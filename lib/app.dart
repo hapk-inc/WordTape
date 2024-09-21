@@ -28,11 +28,10 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
               appBarTheme: AppBarTheme(
                 toolbarHeight: 72.h,
                 backgroundColor: midnightGreen,
-                iconTheme: IconThemeData(color: seaWhite, size: 15.r),
-                titleTextStyle: textTheme.displayMedium?.copyWith(
+                iconTheme: IconThemeData(color: seaWhite, size: 18.r),
+                titleTextStyle: textTheme.displaySmall?.copyWith(
                   color: aquaMarine,
                 ),
-                //centerTitle: size == ScreenSize.mobile,
                 centerTitle: false,
                 titleSpacing: 0,
               ),
@@ -49,8 +48,9 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
               ),
               outlinedButtonTheme: OutlinedButtonThemeData(
                 style: defaultButtonStyle.copyWith(
-                    side: WidgetStatePropertyAll(outlineBorder),
-                    foregroundColor: const WidgetStatePropertyAll(raisinBlack)),
+                  side: WidgetStatePropertyAll(outlineBorder),
+                  foregroundColor: const WidgetStatePropertyAll(slateGray),
+                ),
               ),
             ),
             routerConfig: router,
@@ -71,8 +71,10 @@ mixin CustomThemeMixin {
 
   ButtonStyle get defaultButtonStyle => ButtonStyle(
         elevation: WidgetStatePropertyAll(1.5.r),
-        textStyle: WidgetStatePropertyAll(defaultTextTheme.bodySmall),
-        minimumSize: WidgetStatePropertyAll(Size(150.r, 54.r)),
+        textStyle: WidgetStatePropertyAll(
+          defaultTextTheme.bodySmall?.copyWith(height: 0),
+        ),
+        minimumSize: WidgetStatePropertyAll(Size(150.r, 55.5.r)),
         padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.r)),
         foregroundColor: const WidgetStatePropertyAll(seaWhite),
       );

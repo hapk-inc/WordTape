@@ -92,7 +92,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                       AppBar(
                         toolbarHeight: h_03 * 3,
                         actions: const [LightBtn()],
-                        titleTextStyle: textTheme.displayMedium?.copyWith(
+                        titleTextStyle: textTheme.displaySmall?.copyWith(
                           color: seaWhite,
                         ),
                         title: FadeIn(

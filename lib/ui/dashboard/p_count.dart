@@ -25,7 +25,7 @@ class PCount extends ConsumerWidget {
               () => ref.read(routerProvider).replace("/"),
             ),
         child: Text(
-          "NO. $difference",
+          "TODAY: $difference",
           style: textTheme.headlineLarge?.copyWith(color: lightCyan, height: 0),
         ),
       ),

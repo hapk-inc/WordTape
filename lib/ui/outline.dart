@@ -25,6 +25,18 @@ class _OutlinePageState extends ConsumerState<OutlinePage> {
   @override
   void initState() {
     Future.delayed(_m3600, () => ref.read(listenAuthProvider));
+    ref.listenManual(
+      sizeProvider,
+      (prev, __) {
+        debugPrint("Size changes");
+        if (prev == ScreenSize.mobile) {
+          final PanelController panel = ref.read(panelControllerProvider);
+          if (panel.isAttached && panel.isPanelOpen) panel.close();
+        }
+
+        ref.invalidate(panelControllerProvider);
+      },
+    );
     super.initState();
   }
 
@@ -45,16 +57,19 @@ class _OutlinePageState extends ConsumerState<OutlinePage> {
                   color: seaWhite,
                   controller: ref.watch(panelControllerProvider),
                   minHeight: 0,
-                  maxHeight: constraints.maxHeight * 0.9,
+                  maxHeight: 375.h,
                   padding: EdgeInsets.zero,
                   backdropColor: midnightGreen,
                   borderRadius: _borderRadius30,
                   renderPanelSheet: false,
                   panel: ClipRRect(
                     borderRadius: _borderRadius30,
-                    child: ref.watch(puzzlePanelProvider),
+                    child: ref.watch(widgetPanelProvider),
                   ),
                   body: OutlineState(child: widget.child),
+                  onPanelClosed: () => ref
+                      .read(widgetPanelProvider.notifier)
+                      .state = const SizedBox(),
                 )
               : OutlineState(child: widget.child),
         ),

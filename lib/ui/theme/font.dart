@@ -50,7 +50,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   TextStyle? get bodyMedium => GoogleFonts.questrial(
         fontSize: 21.r,
         letterSpacing: 0,
-        height: 2.1,
+        height: 1.8,
         wordSpacing: 0,
         color: slateGray,
       );
@@ -58,9 +58,9 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   @override
   TextStyle? get bodySmall => GoogleFonts.questrial(
         fontSize: 18.r,
-        color: raisinBlack,
+        color: Colors.black45,
         letterSpacing: 0,
-        height: 0,
+        height: 1.8,
         wordSpacing: 0,
       );
 
@@ -76,7 +76,16 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   @override
   TextStyle? get displayMedium => GoogleFonts.paytoneOne(
-        fontSize: 30.r,
+        fontSize: 45.r,
+        letterSpacing: 0,
+        height: 0,
+        wordSpacing: 0,
+        color: Colors.white54,
+      );
+
+  @override
+  TextStyle? get displaySmall => GoogleFonts.paytoneOne(
+        fontSize: 36.r,
         letterSpacing: 0,
         height: 0,
         wordSpacing: 0,
@@ -114,7 +123,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   // Exception - only for "PRESS START"
   @override
-  TextStyle? get displaySmall => GoogleFonts.pressStart2p(
+  TextStyle? get labelSmall => GoogleFonts.pressStart2p(
         color: mint,
         fontSize: 15.r,
         height: 0,

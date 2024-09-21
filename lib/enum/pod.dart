@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,7 +23,14 @@ ScreenSize validateSize() {
 }
 
 @Riverpod(keepAlive: true, dependencies: [])
-ScreenSize size(SizeRef ref) => ScreenSize.mobile;
+ScreenSize size(SizeRef ref) {
+  ref.listenSelf(
+    (previous, next) {
+      log("ListenSelf $next");
+    },
+  );
+  return ScreenSize.mobile;
+}
 
 @Riverpod(keepAlive: true, dependencies: [])
 AppEnv appEnv(AppEnvRef ref) => kDebugMode ? AppEnv.dev : AppEnv.prod;

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -9,6 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../enum/pod.dart';
 import '../../env/pod.dart';
+import '../../model/tip.dart';
 import '../../model/word.dart';
 import '../connectivity/pod.dart';
 
@@ -26,6 +28,13 @@ Future<String> helpUser(HelpUserRef ref,
     {required String word, required String mistake}) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
   return ai.helpUser(word, mistake);
+}
+
+@Riverpod(dependencies: [GeminiAi])
+Future<Tip?> generateTip(GenerateTipRef ref,
+    {required String str, List<String> soFar = const []}) async {
+  final GeminiAi ai = ref.read(geminiAiProvider.notifier);
+  return ai.generateTip(str, soFar);
 }
 
 @Riverpod(keepAlive: true)
@@ -83,24 +92,13 @@ class GeminiAi extends _$GeminiAi {
         ? 'Create a sentence using a phrase $replaceQuestion less than 15 words'
             'Make sure that the word "$find" replace with underscores.'
             'Do not highlight the word. Use simple english'
-        /*'Give fill-in-the-blanks question with "$find" as the only '
-            'missing word, where user needs to find out in the sentence '
-            'Make sure that missing word must completes the phrase "out of ...".'*/
-        /*  ? 'This is a Word-Puzzle. Give a fill in the blanks question '
-            'which has a words "$replaceQuestion" '
-            'where "${splitter.last.toLowerCase()}" is the only dashed word, which user has to find out. '
-            'Make sure that question has less than 15 words. Use simple english'
-        */ /*? "This is a Word-Puzzle. User need to find out the word $replaceQuestion. "
-            'Give me short hint for word "$replaceQuestion" less than 15 words. '
-            'Use simple english.'*/
         : null;
     final String prompt =
         'This is a Word-Puzzle. User need to find the word "$ans".'
         'Give me short hint for word "$ans" less than 15 words. '
         'Use simple english.';
-    log(word.toString());
-    log(withNote ?? "note null");
-    log(prompt);
+
+    log(withNote ?? prompt);
     final List<Content> contents = [Content.text(withNote ?? prompt)];
     return await callResponse(contents);
   }
@@ -116,4 +114,36 @@ class GeminiAi extends _$GeminiAi {
           throw e;
         },
       );
+
+  FutureOr<Tip?> generateTip(String str, List<String> soFar) async {
+    final String prompt =
+        "This is a word puzzle, and the user has to find the word '$str'. "
+        "Please provide one character randomly from that word "
+        "(except for the first letter)."
+        "${soFar.isNotEmpty ? "Already revealed words are $soFar" : ""}"
+        " I have a class model called 'Tip,' which contains a variable 't' "
+        "that holds one character, 'position' int variable "
+        "for position of the letter"
+        "and another variable 'text' that indicates the position of the letter "
+        "you are providing along with the letter itself in one line. "
+        "Do not highlight it or enclose it in any format. "
+        "Please give this in toJson() format in one line so I can decode it "
+        "and convert it to my class model.";
+    log(prompt);
+    final List<Content> contents = [Content.text(prompt)];
+    final String x = await callResponse(contents);
+    log(x);
+
+    int startIndex = x.indexOf('{');
+    int endIndex = x.indexOf('}', startIndex);
+
+    if (startIndex != -1 && endIndex != -1) {
+      // Extract the substring
+      String result = x.substring(startIndex, endIndex + 1); // Include '}'
+      final map = jsonDecode(result);
+      return Tip.fromJson(map);
+    } else {
+      return null;
+    }
+  }
 }

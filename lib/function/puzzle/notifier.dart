@@ -6,7 +6,9 @@ import 'package:logger/logger.dart';
 
 import '../../model/found.dart';
 import '../../model/puzzle.dart';
+import '../../model/tip.dart';
 import '../../model/word.dart';
+import '../gen_ai/pod.dart';
 import '../logger/pod.dart';
 import 'pod.dart';
 
@@ -26,6 +28,7 @@ class PuzzleNotifier extends ChangeNotifier {
   late List<FocusNode> _nodes;
   late Logger logger;
   late bool _isCompleted = false;
+  Tip? tip;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   PuzzleNotifier(this.ref, {required this.date}) {
@@ -161,6 +164,38 @@ class PuzzleNotifier extends ChangeNotifier {
   set isCompleted(bool value) {
     if (_isCompleted == value) return;
     _isCompleted = value;
+    notifyListeners();
+  }
+
+  generateTip() async {
+    if (_found.soFar.containsKey(_found.i)) {
+      final Map m = _found.soFar[_found.i];
+      log(_found.soFar.toString(), name: "soFar");
+      log(m.toString(), name: "soFar");
+
+      tip = await ref.read(generateTipProvider(
+              str: currentWord.value, soFar: List.castFrom(m.values.toList()))
+          .future);
+      updateSoFar(tip);
+    } else {
+      tip = await ref.read(generateTipProvider(str: currentWord.value).future);
+      updateSoFar(tip);
+      log(tip?.text ?? "");
+    }
+  }
+
+  updateSoFar(Tip? tip) {
+    Map<int, dynamic> map = Map<int, dynamic>.from(_found.soFar);
+    map.update(
+      _found.i,
+      (value) {
+        Map m = value;
+        m[tip?.position] = tip?.t;
+        return m;
+      },
+      ifAbsent: () => {tip?.position: tip?.t},
+    );
+    _found = _found.copyWith(soFar: map);
     notifyListeners();
   }
 }

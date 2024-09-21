@@ -51,13 +51,12 @@ class HintNotifier extends _$HintNotifier {
     final String recall = ref.read(recallNextProvider);
 
     if (notifier.isCompleted) return ref.read(completePuzzleProvider);
-
-    if (notifier.found.mistake == null) {
+    if (notifier.tip != null) {
+      return notifier.tip?.text ?? "";
+    } else if (notifier.found.mistake == null) {
       return ref
           .watch(createHintProvider(
-            word: notifier.currentWord,
-            answer: notifier.next,
-          ))
+              word: notifier.currentWord, answer: notifier.next))
           .maybeWhen(
             data: (data) => data,
             orElse: () => recall,

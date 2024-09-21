@@ -146,14 +146,14 @@ class DashboardPage extends ConsumerWidget {
                   alignment: Alignment.centerLeft,
                   child: AutoSizeText(
                     "WORDTAPE",
-                    style: textTheme.displayLarge?.copyWith(
+                    style: textTheme.displayMedium?.copyWith(
                       color: Colors.black12,
                       letterSpacing: 0,
                     ),
                     maxLines: 1,
                   ),
                 ),
-                const _MySpacer(fraction: 2),
+                const _MySpacer(fraction: 5),
               ],
             ),
           );

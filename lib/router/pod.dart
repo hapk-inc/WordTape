@@ -72,6 +72,8 @@ GoRouter router(RouterRef ref) {
   # dart run build_runner watch
   # dart run flutter_native_splash:create
 
+  # flutter build apk --release --target=lib/main_dev.dart
+
   # flutter build web --web-renderer canvaskit
 
   # console check : firebase_auth.getAuth().currentUser.uid

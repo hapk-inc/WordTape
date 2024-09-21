@@ -15,19 +15,10 @@ const List<Welcome> _list = [
     "What word do you think comes next after this one?",
     highlight: "comes next",
   ),
-  Welcome(
-    "Can you guess what the next word will be",
-    highlight: "next word",
-  ),
-  Welcome(
-    "What word follows this one in the sequence",
-    highlight: "this one",
-  ),
+  Welcome("Can you guess what the next word will be?", highlight: "next word"),
+  Welcome("What word follows this one in the sequence", highlight: "this one"),
   Welcome("Which word do you think is next", highlight: "is next"),
-  Welcome(
-    "What do you think the next word is",
-    highlight: "next word",
-  ),
+  Welcome("What do you think the next word is?", highlight: "next word"),
   Welcome("Can you tell me the next word", highlight: "next word"),
   Welcome(
     "What word comes after this one, in your opinion",
@@ -121,20 +112,28 @@ const List<Welcome> _archive = [
     "Want to check out\n archives and play?",
     highlight: "archives and play?",
   ),
-  Welcome("Would you like to\n visit the archives?",
-      highlight: "visit the archives?"),
+  Welcome(
+    "Would you like to\n visit the archives?",
+    highlight: "visit the archives?",
+  ),
   Welcome(
     "How about looking at the\n archives and playing?",
     highlight: "archives and playing?",
   ),
-  Welcome("Interested in seeing the archives and playing?"),
   Welcome(
-    "Want to explore the archives and have fun?",
+    "Interested in seeing the\n archives and playing?",
+    highlight: "archives and playing?",
+  ),
+  Welcome(
+    "Want to explore the\n archives and have fun?",
     highlight: "archives and have fun?",
   ),
-  Welcome("Shall we check the archives and play?"),
-  Welcome("Do you want to see and play?"),
-  Welcome("Care to look at the archives and play?"),
+  Welcome(
+    "Shall we check the\n archives and play?",
+    highlight: "archives and play?",
+  ),
+  Welcome("Care to look at the\n archives and play?",
+      highlight: "archives and play?"),
 ];
 
 @riverpod
@@ -205,4 +204,23 @@ const List<Welcome> _completeWelcome = [
     highlight: "Fantastic!",
   ),
   Welcome("Cheers! \nYou solved today’s puzzle", highlight: "Cheers!"),
+];
+
+@riverpod
+String passDetail(PassDetailRef ref) {
+  final DateTime now = DateTime.now();
+  return _passDetail[now.day % _passDetail.length];
+}
+
+List<String> _passDetail = [
+  "Ask your friends to join the puzzle and see if they can solve it.",
+  "Tell your friends to come play the puzzle and find out if they can get it.",
+  "Invite your friends to play the puzzle and check if they can find it.",
+  "Bring your friends to the puzzle and see if they can figure it out.",
+  "Have your friends join the puzzle and see if they can spot it.",
+  "Get your friends to take part in the puzzle and see if they can discover it.",
+  "Invite your pals to the puzzle and see if they can find the answer.",
+  "Ask your buddies to join in the puzzle and see if they can solve it.",
+  "Encourage your friends to join the puzzle and find out if they can get it right.",
+  "Invite your friends to try the puzzle and see if they can figure it out."
 ];
