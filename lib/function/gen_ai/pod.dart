@@ -119,11 +119,12 @@ class GeminiAi extends _$GeminiAi {
     final String prompt =
         "This is a word puzzle, and the user has to find the word '$str'."
         " Please provide one character randomly from that word"
-        " (except for the first letter). "
-        "${soFar.isNotEmpty ? "Already revealed words are $soFar" : ""}"
+        " (except for the first letter)."
+        " ${soFar.isNotEmpty ? "Already revealed words are $soFar" : ""}"
         " I have a class model called 'Tip,' which contains a variable 't'"
-        " that holds one character, 'position' int variable"
-        " for position of the letter (from left to right)"
+        " that holds one character,"
+        //"'position' int variable"
+        //" for position of the letter (from left to right)"
         " and another variable 'text' that indicates the which letter is there"
         " you are providing along with the letter itself in one line."
         " Do not highlight it or enclose it in any format."
@@ -134,11 +135,11 @@ class GeminiAi extends _$GeminiAi {
     final String x = await callResponse(contents);
     log(x);
 
-    int startIndex = x.indexOf('{');
-    int endIndex = x.indexOf('}', startIndex);
+    int start = x.indexOf('{');
+    int end = x.indexOf('}', start);
 
-    if (startIndex != -1 && endIndex != -1) {
-      String result = x.substring(startIndex, endIndex + 1); // Include '}'
+    if (start != -1 && end != -1) {
+      String result = x.substring(start, end + 1);
       final map = jsonDecode(result);
       return Tip.fromJson(map);
     } else {

@@ -15,9 +15,9 @@ import '../../ui/theme/font.dart';
 import '../firestore/found.dart';
 import '../firestore/pod.dart';
 import '../firestore/puzzle.dart';
-import '../local/found.dart';
-import '../local/pod.dart';
-import '../local/puzzle.dart';
+import '../sqlite/found.dart';
+import '../sqlite/pod.dart';
+import '../sqlite/puzzle.dart';
 
 part 'pod.g.dart';
 

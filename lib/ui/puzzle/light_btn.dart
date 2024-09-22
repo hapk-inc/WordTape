@@ -17,7 +17,7 @@ class LightBtn extends ConsumerWidget {
         dimension: constraint.maxHeight,
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
-          child: notifier.found.mistake == null
+          child: notifier.found.mistake == null || notifier.tip != null
               ? null
               : InkWell(
                   onTap: () =>

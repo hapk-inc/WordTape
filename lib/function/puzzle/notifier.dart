@@ -78,9 +78,7 @@ class PuzzleNotifier extends ChangeNotifier {
       _pinController[_found.i] = TextEditingController(text: newText);
       onTextChanged(newText);
       notifyListeners();
-    } else {
-      logger.i("ALREADY FILLED = ${activeController.text}");
-    }
+    } else {}
   }
 
   removeText() {
@@ -170,13 +168,11 @@ class PuzzleNotifier extends ChangeNotifier {
 
   generateTip() async {
     if (_found.soFar.containsKey(_found.i)) {
-      final Map m = _found.soFar[_found.i];
+      final List<String> soFar = _found.soFar[_found.i];
       log(_found.soFar.toString(), name: "soFar");
-      log(m.toString(), name: "soFar");
 
-      tip = await ref.read(generateTipProvider(
-              str: currentWord.value, soFar: List.castFrom(m.values.toList()))
-          .future);
+      tip = await ref.read(
+          generateTipProvider(str: currentWord.value, soFar: soFar).future);
       updateSoFar(tip);
     } else {
       tip = await ref.read(generateTipProvider(str: currentWord.value).future);
@@ -186,17 +182,24 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   updateSoFar(Tip? tip) {
+    if (tip == null) return;
     Map<int, dynamic> map = Map<int, dynamic>.from(_found.soFar);
     map.update(
       _found.i,
       (value) {
-        Map m = value;
-        m[tip?.position] = tip?.t;
-        return m;
+        List<String> l = value;
+        l.add(tip.t);
+        return l;
       },
-      ifAbsent: () => {tip?.position: tip?.t},
+      ifAbsent: () => [tip.t],
     );
     _found = _found.copyWith(soFar: map);
     notifyListeners();
+  }
+
+  List<String> get highlightedChar {
+    if (!_found.soFar.containsKey(_found.i)) return [];
+    List<String> map = _found.soFar[_found.i];
+    return map;
   }
 }

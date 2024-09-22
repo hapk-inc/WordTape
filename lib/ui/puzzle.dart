@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,9 +11,9 @@ import '../model/found.dart';
 import '../model/puzzle.dart';
 import '../model/word.dart';
 import '../router/pod.dart';
+import 'puzzle/app_bar.dart';
 import 'puzzle/custom_keyboard.dart';
 import 'puzzle/hint.dart';
-import 'puzzle/light_btn.dart';
 import 'puzzle/word_text_field.dart';
 import 'theme/color.dart';
 
@@ -63,7 +62,6 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
   Widget build(BuildContext context) {
     final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
     final Puzzle puzzle = notifier.puzzle;
-    final TextTheme textTheme = Theme.of(context).textTheme;
 
     return ColoredBox(
       color: midnightGreen,
@@ -78,7 +76,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
             }
           },
           child: LayoutBuilder(
-            builder: (context, constraints) {
+            builder: (_, constraints) {
               final double maxHeight = constraints.maxHeight;
               final double maxWidth = constraints.maxWidth;
               final double h_03 = maxHeight * 0.03;
@@ -89,20 +87,11 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AppBar(
-                        toolbarHeight: h_03 * 3,
-                        actions: const [LightBtn()],
-                        titleTextStyle: textTheme.displaySmall?.copyWith(
-                          color: seaWhite,
-                        ),
-                        title: FadeIn(
-                          delay: const Duration(milliseconds: 750),
-                          child: const Text("WORDTAPE"),
-                        ),
-                      ),
+                      Gap(h_03 * 0.045),
+                      PuzzleAppBar(height: h_03 * 3),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
-                        height: h_03 * 5,
+                        height: h_03 * 5.4,
                         alignment: Alignment.center,
                         padding: EdgeInsets.symmetric(horizontal: w_03 * 1.5),
                         child: const PuzzleHint(),
@@ -114,11 +103,11 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                           return WordTextField(
                             index,
                             word,
-                            height: h_03 * 2.88,
+                            height: h_03 * 2.85,
                           );
                         },
                       ),
-                      Gap(h_03 * 0.6),
+                      Gap(h_03 * 0.75),
                       const CustomKeyboard(),
                     ],
                   ),

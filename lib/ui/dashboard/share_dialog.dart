@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../model/welcome.dart';
 import '../theme/color.dart';
@@ -15,8 +16,9 @@ class ShareDialog extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final String str = ref.read(passTextProvider);
     final String sub = ref.read(passDetailProvider);
-    return ColoredBox(
+    return Container(
       color: seaWhite,
+      constraints: BoxConstraints(maxWidth: 540.r),
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.all(15.r),
@@ -36,7 +38,7 @@ class ShareDialog extends ConsumerWidget {
               child: SizedBox.square(
                 dimension: 240.r,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () => Share.share("xyz"),
                   child: Lottie.asset('lottie/share.json'),
                 ),
               ),

@@ -29,9 +29,6 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
                 toolbarHeight: 72.h,
                 backgroundColor: midnightGreen,
                 iconTheme: IconThemeData(color: seaWhite, size: 18.r),
-                titleTextStyle: textTheme.displaySmall?.copyWith(
-                  color: aquaMarine,
-                ),
                 centerTitle: false,
                 titleSpacing: 0,
               ),

@@ -25,7 +25,7 @@ class LocalFound {
               'date TEXT,' // date variable
               'i INTEGER,'
               'mistake TEXT,'
-              'revealed TEXT'
+              'soFar TEXT'
               ')');
         },
         version: 1,
@@ -46,7 +46,7 @@ class LocalFound {
     if (kIsWeb) return;
     final Database db = await database;
     final Map<String, dynamic> map = found.toJson();
-    debugPrint("51==$map");
+
     return await db.insert(
       _tableName,
       map,

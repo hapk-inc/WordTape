@@ -227,3 +227,16 @@ List<String> _passDetail = [
   "Encourage your friends to join the puzzle and find out if they can get it right.",
   "Invite your friends to try the puzzle and see if they can figure it out."
 ];
+
+List<String> charExist(String t) => [
+      "The letter $t can also be found in the word.",
+      "The word contains the letter $t.",
+      "You can find the letter $t in the word too.",
+      "The letter $t appears in the word.",
+      "Additionally, the letter $t is present in the word.",
+      "The word includes the letter $t too.",
+      "The letter $t is part of the word.",
+      "The word also features the letter $t.",
+      "You’ll also see the letter $t in the word.",
+      "The letter $t is included in the word.",
+    ];

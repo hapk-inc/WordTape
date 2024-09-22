@@ -9,7 +9,7 @@ import '../../model/route_path.dart';
 import '../../router/pod.dart';
 import '../connectivity/pod.dart';
 import '../firestore/pod.dart';
-import '../local/pod.dart';
+import '../sqlite/pod.dart';
 import '../remote_config/pod.dart';
 import 'auth.dart';
 

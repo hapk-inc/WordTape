@@ -76,11 +76,13 @@ class MyKeyboardTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final DateTime date = ref.read(selectedDateProvider);
+    final PuzzleNotifier notifier = ref.watch(puzzleNotifierProvider(date));
+    final List<String> highlightedChar = notifier.highlightedChar;
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: () {
-        final DateTime date = ref.read(selectedDateProvider);
         final PuzzleNotifier notifier = ref.read(puzzleNotifierProvider(date));
         if (!notifier.isCompleted) {
           switch (str) {
@@ -104,7 +106,11 @@ class MyKeyboardTile extends ConsumerWidget {
         margin: EdgeInsets.symmetric(horizontal: width * 0.06),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isChar ? null : Colors.amber,
+          color: highlightedChar.contains(str)
+              ? aquaMarine
+              : isChar
+                  ? null
+                  : Colors.amber,
           borderRadius: BorderRadius.circular(4.5.r),
           border: Border.all(width: 0.24.r, color: seaWhite),
         ),
@@ -112,7 +118,9 @@ class MyKeyboardTile extends ConsumerWidget {
           str,
           style: textTheme.headlineMedium?.copyWith(
             fontSize: isChar ? 15.r : 21.r,
-            color: isChar ? Colors.white60 : Colors.black,
+            color: !highlightedChar.contains(str) && isChar
+                ? Colors.white60
+                : Colors.black,
           ),
         ),
       ),

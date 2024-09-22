@@ -5,11 +5,7 @@ part 'tip.g.dart';
 
 @freezed
 class Tip with _$Tip {
-  const factory Tip({
-    required String text,
-    required String t,
-    @Default(0) int position,
-  }) = _Tip;
+  const factory Tip({required String text, required String t}) = _Tip;
 
   factory Tip.fromJson(Map<String, dynamic> json) => _$TipFromJson(json);
 }

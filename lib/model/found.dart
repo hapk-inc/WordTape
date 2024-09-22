@@ -13,7 +13,7 @@ class Found extends Equatable with _$Found {
     @Default(1) int i,
     String? mistake,
     List<String>? revealed,
-    @JsonKey(includeToJson: false) @Default({}) Map<int, dynamic> soFar,
+    @Default({}) Map<int, dynamic> soFar,
     DateTime? lastFound,
     required DateTime date,
     @JsonKey(includeIfNull: false) String? id, //later include in database
