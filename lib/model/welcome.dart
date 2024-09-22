@@ -16,7 +16,10 @@ const List<Welcome> _list = [
     highlight: "comes next",
   ),
   Welcome("Can you guess what the next word will be?", highlight: "next word"),
-  Welcome("What word follows this one in the sequence", highlight: "this one"),
+  Welcome(
+    "What word follows this one in the sequence?",
+    highlight: "this one",
+  ),
   Welcome("Which word do you think is next", highlight: "is next"),
   Welcome("What do you think the next word is?", highlight: "next word"),
   Welcome("Can you tell me the next word", highlight: "next word"),

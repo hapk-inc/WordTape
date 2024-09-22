@@ -102,6 +102,7 @@ class PuzzleNotifier extends ChangeNotifier {
   }
 
   Future<void> validate() async {
+    tip = null;
     bool isValid = currentWord.value == activeController.text;
     if (!isValid) {
       _updateMistake(activeController.text);
