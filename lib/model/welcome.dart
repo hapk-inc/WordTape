@@ -20,7 +20,7 @@ const List<Welcome> _list = [
     "What word follows this one in the sequence?",
     highlight: "this one",
   ),
-  Welcome("Which word do you think is next", highlight: "is next"),
+  Welcome("Which word do you think is next?", highlight: "is next?"),
   Welcome("What do you think the next word is?", highlight: "next word"),
   Welcome("Can you tell me the next word", highlight: "next word"),
   Welcome(

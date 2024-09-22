@@ -79,4 +79,6 @@ GoRouter router(RouterRef ref) {
   # console check : firebase_auth.getAuth().currentUser.uid
   # #/privacy-policy-route
 
+  # flutter build web --web-renderer canvaskit --target=lib/main_web.dart
+
   # https://github.com/rrousselGit/riverpod/tree/master/packages/riverpod_lint#provider_dependencies-riverpod_generator-only*/

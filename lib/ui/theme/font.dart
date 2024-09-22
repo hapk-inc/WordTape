@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'color.dart';
 
@@ -19,7 +18,7 @@ import 'color.dart';
 class DefaultTextTheme extends TextTheme with FontMixin {
   //Title==============
   @override
-  TextStyle? get titleLarge => GoogleFonts.carterOne(
+  TextStyle? get titleLarge => carterTheme.copyWith(
         fontSize: 36.r,
         letterSpacing: 0,
         height: 0,
@@ -28,7 +27,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   @override
-  TextStyle? get titleMedium => GoogleFonts.carterOne(
+  TextStyle? get titleMedium => carterTheme.copyWith(
         fontSize: 24.r,
         letterSpacing: 0,
         height: 1.8,
@@ -38,7 +37,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   //Body==============
   @override
-  TextStyle? get bodyLarge => GoogleFonts.questrial(
+  TextStyle? get bodyLarge => questrialTheme.copyWith(
         fontSize: 27.r,
         letterSpacing: 0,
         height: 2.1,
@@ -47,7 +46,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   @override
-  TextStyle? get bodyMedium => GoogleFonts.questrial(
+  TextStyle? get bodyMedium => questrialTheme.copyWith(
         fontSize: 21.r,
         letterSpacing: 0,
         height: 1.8,
@@ -56,7 +55,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   @override
-  TextStyle? get bodySmall => GoogleFonts.questrial(
+  TextStyle? get bodySmall => questrialTheme.copyWith(
         fontSize: 18.r,
         color: Colors.black45,
         letterSpacing: 0,
@@ -66,7 +65,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
 //=============
   @override
-  TextStyle? get displayLarge => GoogleFonts.paytoneOne(
+  TextStyle? get displayLarge => paytoneTheme.copyWith(
         fontSize: 72.r,
         letterSpacing: 0,
         height: 0,
@@ -75,7 +74,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   @override
-  TextStyle? get displayMedium => GoogleFonts.paytoneOne(
+  TextStyle? get displayMedium => paytoneTheme.copyWith(
         fontSize: 45.r,
         letterSpacing: 0,
         height: 0,
@@ -84,7 +83,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   @override
-  TextStyle? get displaySmall => GoogleFonts.paytoneOne(
+  TextStyle? get displaySmall => paytoneTheme.copyWith(
         fontSize: 36.r,
         letterSpacing: 0,
         height: 0,
@@ -95,7 +94,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   //==============
 
   @override
-  TextStyle? get headlineLarge => GoogleFonts.play(
+  TextStyle? get headlineLarge => playTheme.copyWith(
         fontSize: 24.r,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
@@ -104,7 +103,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   @override
-  TextStyle? get headlineMedium => GoogleFonts.play(
+  TextStyle? get headlineMedium => playTheme.copyWith(
         fontSize: 16.r,
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
@@ -113,9 +112,8 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   @override
-  TextStyle? get headlineSmall => GoogleFonts.play(
+  TextStyle? get headlineSmall => playTheme.copyWith(
         fontSize: 14.r,
-        fontWeight: FontWeight.w300,
         letterSpacing: 0,
         height: 0,
         color: midnightGreen,
@@ -123,7 +121,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   // Exception - only for "PRESS START"
   @override
-  TextStyle? get labelSmall => GoogleFonts.pressStart2p(
+  TextStyle? get labelSmall => press2pTheme.copyWith(
         color: mint,
         fontSize: 15.r,
         height: 0,
@@ -131,5 +129,9 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 }
 
 mixin FontMixin {
-  //TextStyle get kanit => GoogleFonts.kanit();
+  TextStyle get carterTheme => const TextStyle(fontFamily: 'CarterOne');
+  TextStyle get paytoneTheme => const TextStyle(fontFamily: 'PaytoneOne');
+  TextStyle get playTheme => const TextStyle(fontFamily: 'Play');
+  TextStyle get press2pTheme => const TextStyle(fontFamily: 'PressStart2P');
+  TextStyle get questrialTheme => const TextStyle(fontFamily: 'Questrial');
 }

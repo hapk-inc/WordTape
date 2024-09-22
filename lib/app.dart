@@ -14,7 +14,6 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GoRouter router = ref.read(routerProvider);
-    final TextTheme textTheme = Theme.of(context).textTheme;
     return ScreenUtilInit(
       designSize: const Size(360, 900),
       builder: (context, child) {

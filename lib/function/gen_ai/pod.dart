@@ -108,6 +108,7 @@ class GeminiAi extends _$GeminiAi {
           .then((value) => value.text ?? "Think")
           .catchError(
         (e, _) {
+          print(e);
           if (e is SocketException) {
             ref.read(validateConnectionProvider.notifier).state = -1;
           }
