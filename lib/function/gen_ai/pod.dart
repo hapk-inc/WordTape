@@ -52,12 +52,18 @@ String recallNext(RecallNextRef ref) {
 class GeminiAi extends _$GeminiAi {
   @override
   GenerativeModel build() {
-    final DotEnv dotEnv = ref.read(envProvider);
-    final AppEnv appEnv = ref.read(appEnvProvider);
-    return GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
-      apiKey: dotEnv.get(appEnv == AppEnv.dev ? 'GEMINI_DEV' : 'GEMINI_PROD'),
-    );
+    final DotEnv dotEnv = ref.watch(envProvider);
+    final AppEnv appEnv = ref.watch(appEnvProvider);
+    String api;
+    try {
+      api = dotEnv.get(appEnv == AppEnv.dev ? 'GEMINI_DEV' : 'GEMINI_PROD');
+    } catch (e) {
+      api = appEnv == AppEnv.dev
+          ? 'AIzaSyCjo-RFa6QEqKS12DL_FakB4hM_xkNmmO8'
+          : 'AIzaSyB-vDZSYM_yZwFccuHIo3zTRzmd6FVIgBc';
+    }
+    print(api);
+    return GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: api);
   }
 
   FutureOr<String> helpUser(String correct, String mistake) async {
