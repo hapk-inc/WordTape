@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -29,3 +30,6 @@ FirebaseRemoteConfig remoteConfig(RemoteConfigRef ref) =>
 @Riverpod(keepAlive: true)
 FirebaseCrashlytics crashlytics(CrashlyticsRef ref) =>
     throw UnimplementedError();
+
+@Riverpod(keepAlive: true, dependencies: [])
+DotEnv env(EnvRef ref) => throw UnimplementedError();

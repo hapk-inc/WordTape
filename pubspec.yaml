@@ -120,6 +120,7 @@ dev_dependencies:
   # Freezed:
   freezed: ^2.5.7
   json_serializable: ^6.8.0
+  analyzer: ^6.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -136,7 +137,7 @@ flutter:
   assets:
     - images/
     - lottie/
-    - assets/.env
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

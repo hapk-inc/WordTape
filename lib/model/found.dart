@@ -12,7 +12,6 @@ class Found extends Equatable with _$Found {
   const factory Found({
     @Default(1) int i,
     String? mistake,
-    List<String>? revealed,
     @Default({}) Map<int, dynamic> soFar,
     DateTime? lastFound,
     required DateTime date,

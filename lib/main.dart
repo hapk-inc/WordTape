@@ -12,14 +12,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
-import 'enum/pod.dart';
-import 'env/pod.dart';
+import 'enum/enum.dart';
 import 'firebase/pod.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
-import 'function/logger/pod.dart';
-// import 'package:web/web.dart' as web;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -85,7 +82,7 @@ Future<void> main() async {
     if (!kIsWeb) crashlyticsProvider.overrideWithValue(crashlytics),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/.env")),
     //
-    loggerProvider.overrideWithValue(logger),
+    // loggerProvider.overrideWithValue(logger),
 
     appEnvProvider.overrideWithValue(appEnv)
   ];

@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-
-import 'enum/pod.dart';
-import 'router/pod.dart';
-import 'ui/theme/color.dart';
-import 'ui/theme/font.dart';
+import 'enum/enum.dart';
+import 'router/router.dart';
+import 'theme/color.dart';
+import 'theme/font.dart';
 
 class MyApp extends ConsumerWidget with CustomThemeMixin {
   const MyApp({super.key});
@@ -17,7 +16,8 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
     return ScreenUtilInit(
       designSize: const Size(360, 900),
       builder: (context, child) {
-        final ScreenSize size = validateSize();
+        final double mW = 360.w;
+        ScreenSize size = _validateSize(mW);
         return ProviderScope(
           overrides: [sizeProvider.overrideWithValue(size)],
           child: MaterialApp.router(
@@ -25,7 +25,7 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
               iconTheme: iconThemeData,
               textTheme: defaultTextTheme,
               appBarTheme: AppBarTheme(
-                toolbarHeight: 72.h,
+                toolbarHeight: 90.h,
                 backgroundColor: midnightGreen,
                 iconTheme: IconThemeData(color: seaWhite, size: 18.r),
                 centerTitle: false,
@@ -55,6 +55,11 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
       },
     );
   }
+}
+
+ScreenSize _validateSize(double mW) {
+  if (mW < 420.r) return ScreenSize.mobile;
+  return mW < 750.r ? ScreenSize.tab : ScreenSize.pc;
 }
 
 mixin CustomThemeMixin {

@@ -4,11 +4,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:wordtape/app.dart';
 
-import '../enum/pod.dart';
-import '../function/auth/pod.dart';
-import 'theme/color.dart';
+import '../theme/color.dart';
 
 const Duration _m1500 = Duration(milliseconds: 1500);
 
@@ -37,36 +37,34 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   onFinish(AnimateDoDirection direction) async {
     log("onFinish");
-    Future.delayed(_m1500, () {
-      if (mounted) setState(() => _loader = true);
-    });
+    Future.delayed(
+      _m1500,
+      () {
+        if (mounted) setState(() => _loader = true);
+      },
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 450),
-      color: midnightGreen,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox.square(
-            dimension: 540.r,
-            child: Stack(
-              children: [
-                if (_logo) Logo(onFinish: onFinish),
-                if (_lottie) StampLottie(onLoaded: onLoaded)
-              ],
+  Widget build(BuildContext context) => AnimatedContainer(
+        duration: const Duration(milliseconds: 450),
+        color: midnightGreen,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox.square(
+              dimension: 540.r,
+              child: Stack(
+                children: [
+                  if (_logo) Logo(onFinish: onFinish),
+                  if (_lottie) StampLottie(onLoaded: onLoaded)
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 45.h,
-            child: _loader ? const Loader() : null,
-          )
-        ],
-      ),
-    );
-  }
+            SizedBox(height: 45.h, child: _loader ? const Loader() : null)
+          ],
+        ),
+      );
 }
 
 class Loader extends ConsumerWidget {
@@ -77,7 +75,7 @@ class Loader extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return FadeIn(
       child: TextButton(
-        onPressed: () => ref.read(userLoginProvider),
+        onPressed: () => context.replace("/home"),
         child: Text("PRESS TO START", style: textTheme.labelSmall),
       ),
     );
@@ -95,12 +93,8 @@ class StampLottie extends StatelessWidget {
       right: -90.r,
       top: -90.r,
       bottom: -90.r,
-      child: Lottie.asset(
-        'lottie/stamp.json',
-        fit: BoxFit.fill,
-        repeat: false,
-        onLoaded: onLoaded,
-      ),
+      child: Lottie.asset('lottie/stamp.json',
+          fit: BoxFit.fill, repeat: false, onLoaded: onLoaded),
     );
   }
 }
@@ -110,23 +104,16 @@ class Logo extends ConsumerWidget {
   const Logo({this.onFinish, super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ScreenSize size = ref.watch(sizeProvider);
-    return Center(
-      child: Container(
-        alignment: Alignment.center,
-        constraints: BoxConstraints(maxWidth: 450.r),
+  Widget build(BuildContext context, WidgetRef ref) => Center(
         child: FadeIn(
           duration: const Duration(milliseconds: 300),
           delay: const Duration(milliseconds: 750),
           onFinish: onFinish,
           child: Text(
-            size != ScreenSize.pc ? "WORD\nTAPE" : "WORDTAPE",
+            "WORD TAPE",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.displayLarge,
           ),
         ),
-      ),
-    );
-  }
+      );
 }

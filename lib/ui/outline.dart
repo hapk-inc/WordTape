@@ -3,75 +3,45 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../enum/pod.dart';
-import '../function/auth/pod.dart';
-import '../function/controller/pod.dart';
-import 'theme/color.dart';
+import '../enum/enum.dart';
+import '../theme/color.dart';
 
-BorderRadius get _borderRadius30 =>
-    BorderRadius.vertical(top: Radius.circular(30.r));
+BorderRadius _borderRadius(double radius) =>
+    BorderRadius.vertical(top: Radius.circular(radius.r));
 
-const Duration _m3600 = Duration(milliseconds: 3600);
-
-class OutlinePage extends ConsumerStatefulWidget {
+class OutlinePage extends ConsumerWidget {
   final Widget child;
   const OutlinePage(this.child, {super.key});
 
   @override
-  ConsumerState<OutlinePage> createState() => _OutlinePageState();
-}
-
-class _OutlinePageState extends ConsumerState<OutlinePage> {
-  @override
-  void initState() {
-    Future.delayed(_m3600, () => ref.read(listenAuthProvider));
-    ref.listenManual(
-      sizeProvider,
-      (prev, __) {
-        debugPrint("Size changes");
-        if (prev == ScreenSize.mobile) {
-          final PanelController panel = ref.read(panelControllerProvider);
-          if (panel.isAttached && panel.isPanelOpen) panel.close();
-        }
-
-        ref.invalidate(panelControllerProvider);
-      },
-    );
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final ScreenSize size = ref.watch(sizeProvider);
-    final bool isMobile = size == ScreenSize.mobile;
-
+    final bool mobile = size == ScreenSize.mobile;
     return Scaffold(
       backgroundColor: blackBean,
-      body: LayoutBuilder(
-        builder: (_, constraints) => SizedBox.expand(
-          child: isMobile
+      body: SizedBox.expand(
+        child: LayoutBuilder(
+          builder: (context, constraints) => mobile
               ? SlidingUpPanel(
                   backdropEnabled: true,
                   backdropOpacity: 1,
                   isDraggable: false,
                   color: seaWhite,
-                  controller: ref.watch(panelControllerProvider),
+                  //controller: ref.watch(panelControllerProvider),
                   minHeight: 0,
                   maxHeight: 375.h,
                   padding: EdgeInsets.zero,
                   backdropColor: midnightGreen,
-                  borderRadius: _borderRadius30,
+                  borderRadius: _borderRadius(30),
                   renderPanelSheet: false,
                   panel: ClipRRect(
-                    borderRadius: _borderRadius30,
-                    child: ref.watch(widgetPanelProvider),
+                    borderRadius: _borderRadius(30),
+                    // child: ref.watch(widgetPanelProvider),
                   ),
-                  body: OutlineState(child: widget.child),
-                  onPanelClosed: () => ref
-                      .read(widgetPanelProvider.notifier)
-                      .state = const SizedBox(),
+                  body: OutlineState(child: child),
+                  onPanelClosed: () {},
                 )
-              : OutlineState(child: widget.child),
+              : OutlineState(child: child),
         ),
       ),
     );
@@ -90,20 +60,24 @@ class OutlineState extends StatelessWidget {
         final double maxWidth = constraints.maxWidth;
         return Stack(
           children: [
-            AnimatedContainer(
+            AnimatedAlign(
               duration: const Duration(milliseconds: 300),
-              constraints: BoxConstraints(maxWidth: mobileWidth),
-              color: seaWhite,
-              alignment: Alignment.topLeft,
-              child: child,
+              alignment: Alignment.center,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                constraints: BoxConstraints(maxWidth: mobileWidth),
+                color: seaWhite,
+                alignment: Alignment.topLeft,
+                child: child,
+              ),
             ),
-            if (maxWidth > mobileWidth)
+            /*if (maxWidth > mobileWidth)
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 150),
                 right: 0,
                 width: maxWidth - mobileWidth,
                 child: Container(color: blackBean, height: 900.h),
-              )
+              )*/
           ],
         );
       },
