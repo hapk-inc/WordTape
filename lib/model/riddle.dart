@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:mock_data/mock_data.dart';
 
 import 'date_converter.dart';
@@ -22,7 +23,17 @@ class Riddle extends Equatable with _$Riddle {
     @JsonKey(includeIfNull: false) String? id,
   }) = _Riddle;
 
-  factory Riddle.fromJson(Map<String, dynamic> json) => _$RiddleFromJson(json);
+  factory Riddle.fromJson(Map<String, dynamic> json) {
+    Riddle riddle = _$RiddleFromJson(json);
+    final List<Word> w = [];
+    for (int index = 0; index < riddle.words.length; index++) {
+      final x = riddle.words[index];
+      final String str = DateFormat('yyyy-MM-dd').format(riddle.date);
+      w.add(x.copyWith(id: "$str|$index"));
+    }
+    riddle = riddle.copyWith(words: w);
+    return riddle;
+  }
 
   factory Riddle.fromRandom() {
     final DateTime now = DateTime.now();
@@ -32,6 +43,8 @@ class Riddle extends Equatable with _$Riddle {
       id: mockString(8),
     );
   }
+
+  bool isCompleted(int length) => words.length == length;
 
   @override
   List<Object?> get props => [id];

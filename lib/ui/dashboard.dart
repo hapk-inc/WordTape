@@ -21,24 +21,18 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        final double mH = constraints.maxHeight;
-
-        return CustomScrollView(
-          slivers: <Widget>[
-            TodayRiddle(),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 900.h,
-                child: Center(
-                  child: Text('Scroll to see the SliverAppBar in effect.'),
-                ),
-              ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        const TodayRiddle(),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 900.h,
+            child: Center(
+              child: Text('Scroll to see the SliverAppBar in effect.'),
             ),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -56,7 +50,8 @@ class TodayRiddle extends ConsumerWidget {
       actions: [
         CircleAvatar(
           radius: 36.r,
-          child: RandomAvatar(mockString()),
+          backgroundColor: aquaMarine,
+          child: RandomAvatar(mockString(), trBackground: true),
         ),
         Gap(7.5.r)
       ],
@@ -83,9 +78,7 @@ class TodayRiddle extends ConsumerWidget {
       expandedHeight: 600.r,
       toolbarHeight: 90.h,
       titleSpacing: 30.r,
-      titleTextStyle: textTheme.displaySmall?.copyWith(
-        color: azureGreen,
-      ),
+      titleTextStyle: textTheme.displayMedium?.copyWith(color: seaWhite),
       title: const Text('WORDTAPE'),
       flexibleSpace: const FlexibleSpaceBar(
         background: GradientBox(child: TodayRiddleState()),
@@ -94,11 +87,14 @@ class TodayRiddle extends ConsumerWidget {
   }
 }
 
-class TodayRiddleState extends StatelessWidget {
+class TodayRiddleState extends ConsumerWidget {
   const TodayRiddleState({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final DateTime now = DateTime.now().convert();
+    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(now));
+    final List<Word> searchWord = notifier.searchWord;
     return LayoutBuilder(
       builder: (_, constraints) {
         final double mW = constraints.maxWidth;
@@ -106,7 +102,7 @@ class TodayRiddleState extends StatelessWidget {
         return Stack(
           children: [
             AnimatedPositioned(
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 150),
               width: mW,
               bottom: mH * 0.24,
               child: SizedBox(
@@ -115,11 +111,14 @@ class TodayRiddleState extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 4.5.r),
                   child: Column(
                     children: [
+                      Gap(30.r),
                       SizedBox(width: 600.r, child: const TodayRiddleTitle()),
                       Gap(30.r),
-                      EditableWord(Word(value: "TIGHT".toUpperCase())),
-                      Gap(7.5.r),
-                      EditableWord(Word(value: "SCHEDULE".toUpperCase())),
+                      for (Word search in searchWord)
+                        FadeIn(
+                          delay: const Duration(milliseconds: 750),
+                          child: EditableWord(search),
+                        ),
                     ],
                   ),
                 ),
@@ -138,7 +137,7 @@ class TodayRiddleTitle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime now = DateTime.now().convert();
-    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(now));
+    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(now));
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     //
@@ -168,7 +167,7 @@ class TodayRiddleTitle extends ConsumerWidget {
           ],
         ),
         maxLines: 2,
-        style: textTheme.bodyLarge?.copyWith(color: seaWhite),
+        style: textTheme.bodyLarge?.copyWith(color: azureGreen),
         textAlign: TextAlign.center,
       ),
     );

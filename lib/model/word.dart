@@ -13,6 +13,8 @@ class Word extends Equatable with _$Word {
     required String value,
     @JsonKey(includeIfNull: false) String? note,
     @JsonKey(includeIfNull: false) String? hint,
+    @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
+    String? id,
   }) = _Word;
 
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);

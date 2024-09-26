@@ -6,9 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:wordtape/app.dart';
 
-import '../theme/color.dart';
+import 'common/gradient_box.dart';
 
 const Duration _m1500 = Duration(milliseconds: 1500);
 
@@ -46,9 +45,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }
 
   @override
-  Widget build(BuildContext context) => AnimatedContainer(
-        duration: const Duration(milliseconds: 450),
-        color: midnightGreen,
+  Widget build(BuildContext context) => GradientBox(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -2,69 +2,91 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
-import 'package:wordtape/theme/color.dart';
+import '../../model/date_ext.dart';
 
 import '../../model/word.dart';
+import '../../riddle/notifier.dart';
+import '../../riddle/word_notifier.dart';
 import '../../theme/pin_theme.dart';
 
 class EditableWord extends ConsumerStatefulWidget {
-  final int? index;
   final Word word;
   final double? height;
-  const EditableWord(this.word, {this.index, this.height, super.key});
+  const EditableWord(this.word, {this.height, super.key});
 
   @override
   ConsumerState createState() => _EditableWordState();
 }
 
 class _EditableWordState extends ConsumerState<EditableWord> {
-  late Color color;
-  late bool isEnabled;
-  late TextEditingController controller;
+  //late Color color;
+  //late bool isEnabled;
+  //late TextEditingController controller;
+  //late
   late double height;
-  late String word;
+  late Word word;
+  late WordNotifier wordNotifier;
 
   @override
   void initState() {
-    height = widget.height ?? 75.r;
-    word = widget.word.value;
-    color = seaWhite;
-    controller = TextEditingController(text: word);
-    isEnabled = false;
+    word = widget.word;
+    height = widget.height ?? 61.5.r;
+    wordNotifier = ref.read(wordNotifierProvider(word));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    wordNotifier = ref.watch(wordNotifierProvider(word));
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 600),
-      height: 75.r,
+      duration: const Duration(milliseconds: 90),
+      height: 60.h,
+      margin: EdgeInsets.only(bottom: 7.5.r),
+      alignment: Alignment.center,
       child: LayoutBuilder(
         builder: (_, constraints) {
-          final PinTheme pinTheme = ref
-              .read(pinThemeProvider(constraints: constraints, color: color));
+          //
+          final PinTheme pinTheme = ref.read(pinThemeProvider(
+            constraints: constraints,
+            color: wordNotifier.color,
+          ));
+
           return Pinput(
-            length: word.length,
+            length: word.value.length,
             defaultPinTheme: pinTheme,
-            controller: controller,
+            controller: wordNotifier.controller,
             //
             isCursorAnimationEnabled: false,
             animationDuration: const Duration(milliseconds: 150),
             pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-            //validator: !isEnabled ? null : (value) {},
+            validator: !wordNotifier.isEnabled
+                ? null
+                : (value) {
+                    final int l = value?.length ?? 0;
+                    final bool filled = l == word.value.length;
+                    final DateTime date = DateTime.now().convert();
+                    if (filled) {
+                      ref.read(riddleNotifierProvider(date)).validate();
+                    } else {
+                      // ref.read(hintNotifierProvider(date).notifier).state =
+                      //     ref.read(fillTextProvider);
+                    }
+                    return null;
+                  },
             //
             keyboardType: TextInputType.none,
             readOnly: true,
             showCursor: false,
 
             //
-            enabled: isEnabled,
+            enabled: wordNotifier.isEnabled,
             animationCurve: Curves.easeOut,
             // autofocus: autoFocus,
 
             textCapitalization: TextCapitalization.characters,
             separatorBuilder: (_) {
-              final int len = word.length;
+              final int len = word.value.length;
               return SizedBox(width: len > 8 ? 4.5.r : 9.r);
             },
           );

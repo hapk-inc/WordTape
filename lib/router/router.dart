@@ -28,7 +28,7 @@ GoRouter router(RouterRef ref) {
           GoRoute(path: '/home', builder: (_, __) => const DashboardPage()),
           GoRoute(
             path: '/puzzle',
-            builder: (_, __) => RiddlePage(DateTime.now()),
+            builder: (_, __) => RiddlePage(DateTime.now().convert()),
           ),
         ],
       ),

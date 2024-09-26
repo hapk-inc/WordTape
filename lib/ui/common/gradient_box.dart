@@ -8,7 +8,8 @@ class GradientBox extends StatelessWidget {
   const GradientBox({required this.child, super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => AnimatedContainer(
+        duration: const Duration(milliseconds: 450),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -16,7 +17,7 @@ class GradientBox extends StatelessWidget {
             colors: <Color>[midnightGreen, gunMetal],
           ),
         ),
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         padding: EdgeInsets.symmetric(horizontal: 7.5.r),
         child: child,
       );
