@@ -14,6 +14,7 @@ import '../model/word.dart';
 import '../riddle/notifier.dart';
 import '../theme/color.dart';
 import 'common/editable_word.dart';
+import 'common/gradient_box.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -86,29 +87,47 @@ class TodayRiddle extends ConsumerWidget {
         color: azureGreen,
       ),
       title: const Text('WORDTAPE'),
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: false,
-        //collapseMode: CollapseMode.pin,
-        background: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[midnightGreen, gunMetal],
-            ),
-          ),
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 7.5.r),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TodayRiddleTitle(),
-              Gap(30.r),
-              EditableWord(Word(value: mockName().toUpperCase())),
-            ],
-          ),
-        ),
+      flexibleSpace: const FlexibleSpaceBar(
+        background: GradientBox(child: TodayRiddleState()),
       ),
+    );
+  }
+}
+
+class TodayRiddleState extends StatelessWidget {
+  const TodayRiddleState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        final double mW = constraints.maxWidth;
+        final double mH = constraints.maxHeight;
+        return Stack(
+          children: [
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 300),
+              width: mW,
+              bottom: mH * 0.24,
+              child: SizedBox(
+                height: mH * 0.54,
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 4.5.r),
+                  child: Column(
+                    children: [
+                      SizedBox(width: 600.r, child: const TodayRiddleTitle()),
+                      Gap(30.r),
+                      EditableWord(Word(value: "TIGHT".toUpperCase())),
+                      Gap(7.5.r),
+                      EditableWord(Word(value: "SCHEDULE".toUpperCase())),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

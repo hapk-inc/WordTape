@@ -26,7 +26,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
   @override
   void initState() {
-    height = widget.height ?? 75.h;
+    height = widget.height ?? 75.r;
     word = widget.word.value;
     color = seaWhite;
     controller = TextEditingController(text: word);
@@ -37,9 +37,8 @@ class _EditableWordState extends ConsumerState<EditableWord> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      padding: EdgeInsets.symmetric(horizontal: 7.5.r),
       duration: const Duration(milliseconds: 600),
-      constraints: BoxConstraints(maxWidth: 450.r, minHeight: height),
+      height: 75.r,
       child: LayoutBuilder(
         builder: (_, constraints) {
           final PinTheme pinTheme = ref
