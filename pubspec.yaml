@@ -89,6 +89,8 @@ dependencies:
 
   web: ^1.0.0
 
+  easy_localization: ^3.0.7
+
   # Local Database
   sqflite: ^2.3.3+1
   path: ^1.9.0
@@ -138,6 +140,7 @@ flutter:
     - images/
     - lottie/
     - assets/
+    - assets/locale/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

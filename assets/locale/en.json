@@ -1,0 +1,16 @@
+{
+  "press_start": "PRESS TO START",
+  "no_riddle_0": "No puzzles today! \uD83E\uDDE9\uD83D\uDEAB",
+  "no_riddle_1": "Today is puzzle-free! \uD83C\uDF89✨",
+  "no_riddle_2": "No brain teasers for today! \uD83E\uDD14❌",
+  "no_riddle_3": "Today has no puzzles! \uD83D\uDCC5\uD83E\uDDE0",
+  "no_riddle_4": "Skipping the puzzle today! \uD83D\uDE45\u200D♂\uFE0F\uD83E\uDDE9",
+  "no_riddle_5": "Today, we’re puzzle-less! \uD83D\uDE4C\uD83D\uDD0D",
+  "no_riddle_6": "Today is a puzzle-free zone! \uD83D\uDED1\uD83E\uDDE9",
+  "no_riddle_7": "No challenges today! ❌\uFE0F\uD83D\uDCA1",
+  "no_riddle_8": "This day is without a puzzle! \uD83C\uDF1E\uD83D\uDCD6",
+  "help_user": "This is puzzle game where user has to find out the second part of the word. We have given a word \"#\", where user has to find the second part of the word. ie., user has to fill the word \"#\". But user has entered \"#\". First If only typo correction, help the user to correct the spelling. Then, check if user has entered an invalid word. If yes, ask the user do not type something randomly and help user to use the hint icon. When you are helping, never mention about the correct word i.e., ## . And do not ask questions like \"Did you mean by\". Use simple english and also use less than 12 words.",
+  "hint": "This is a Word-Puzzle. User need to find the word \"#\". Give me short hint for word \"#\" less than 15 words. Use simple english.",
+  "with_note": "Create a sentence using a phrase \"#\" less than 15 words. Make sure that the word \"#\" replace with underscores. Do not highlight the word. Use simple english."
+}
+

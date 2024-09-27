@@ -1,15 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:wordtape/riddle/word_notifier.dart';
+import '../../model/date_ext.dart';
 
+import '../../model/found.dart';
+import '../../model/riddle.dart';
+import '../../model/underline_text.dart';
+import '../../model/word.dart';
 import '../firestore/pod.dart';
-import '../model/found.dart';
-import '../model/riddle.dart';
-import '../model/date_ext.dart';
-import '../model/underline_text.dart';
-import '../model/word.dart';
+import '../gen_ai/pod.dart';
 import '../underline_text/pod.dart';
+import 'word_notifier.dart';
 
 final ChangeNotifierProviderFamily<RiddleNotifier, DateTime>
     riddleNotifierProvider =
@@ -26,8 +29,10 @@ class RiddleNotifier extends ChangeNotifier {
   late Found _found = Found(date: date);
   late UnderlineText _title;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _completed = false;
 
   RiddleNotifier(this.ref, {required this.date}) {
+    log("Init RiddleNotifier $date");
     final DateTime d = date.convert();
     logger = Logger();
     _riddle = ref.watch(riddleFirestoreDateArgProvider(date: d)).value;
@@ -64,13 +69,16 @@ class RiddleNotifier extends ChangeNotifier {
     return _activeWord.value.length == _activeController.text.length;
   }
 
-  addText(String str) {
+  FocusNode get activeNode => ref.read(wordNotifierProvider(_activeWord)).node;
+
+  bool get completed => _completed;
+
+  Future addText(String str) async {
     if (!_enableDone) {
       String newText = _activeController.text + str;
       ref.read(wordNotifierProvider(_activeWord)).controller =
           TextEditingController(text: newText);
       onTextChanged(newText);
-      notifyListeners();
     }
   }
 
@@ -80,7 +88,6 @@ class RiddleNotifier extends ChangeNotifier {
     ref.read(wordNotifierProvider(_activeWord)).controller =
         TextEditingController(text: newText);
     onTextChanged(newText);
-    notifyListeners();
   }
 
   onTextChanged(String newText) {
@@ -99,7 +106,7 @@ class RiddleNotifier extends ChangeNotifier {
     if (!isValid) {
       _updateMistake(_activeController.text);
     } else {
-      _incrementFound();
+      await _incrementFound();
     }
   }
 
@@ -109,16 +116,43 @@ class RiddleNotifier extends ChangeNotifier {
   }
 
   Future<void> _incrementFound() async {
-    _found = _found.copyWith(
-      i: _found.i + 1,
-      lastFound: DateTime.now(),
-      mistake: null,
-    );
+    final DateTime now = DateTime.now();
+    _found = _found.copyWith(i: _found.i + 1, lastFound: now, mistake: null);
     logger.i("$_found");
     final bool everyFound = _riddle?.isCompleted(_found.i) ?? false;
-
-    notifyListeners();
+    _completed = everyFound;
   }
 
   String _firstLetter(String str) => str.isEmpty ? '' : str.substring(0, 1);
+
+  List<String> get highlightedChar {
+    if (!_found.soFar.containsKey(_found.i)) return [];
+    List<String> map = _found.soFar[_found.i];
+    return map;
+  }
+
+  String backspace = "🔙";
+  String done = "✔️";
+
+  listenTap(String str) {
+    if (str.length == 1) {
+      final bool regEx = RegExp(r'^[a-zA-Z0-9]$').hasMatch(str);
+      if (regEx) addText(str);
+    } else {
+      if (str == "Backspace" || str == backspace) removeText();
+      if (str == "Enter" || str == done) formKey.currentState!.validate();
+      log(str);
+    }
+    notifyListeners();
+  }
+
+  String get hint => ref
+      .watch(createHintProvider(_activeWord, _riddle?.answer(_found) ?? ""))
+      .when(
+        data: (data) => data,
+        error: (error, stackTrace) {
+          return "Some issue";
+        },
+        loading: () => "Loading",
+      );
 }

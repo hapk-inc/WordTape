@@ -8,10 +8,10 @@ import 'package:random_avatar/random_avatar.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+import '../function/riddle/notifier.dart';
 import '../model/date_ext.dart';
 import '../model/underline_text.dart';
 import '../model/word.dart';
-import '../riddle/notifier.dart';
 import '../theme/color.dart';
 import 'common/editable_word.dart';
 import 'common/gradient_box.dart';
@@ -21,17 +21,17 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
+    return const CustomScrollView(
       slivers: <Widget>[
-        const TodayRiddle(),
-        SliverToBoxAdapter(
+        TodayRiddle(),
+        /* SliverToBoxAdapter(
           child: SizedBox(
             height: 900.h,
             child: Center(
               child: Text('Scroll to see the SliverAppBar in effect.'),
             ),
           ),
-        ),
+        ),*/
       ],
     );
   }

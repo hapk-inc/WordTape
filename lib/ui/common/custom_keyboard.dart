@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import '../../function/riddle/notifier.dart';
 import '../../model/date_ext.dart';
 
 import '../../enum/enum.dart';
-import '../../riddle/notifier.dart';
+import '../../function/key_tap/pod.dart';
 import '../../theme/color.dart';
 
 // import '../../enum/pod.dart';
@@ -88,26 +89,11 @@ class MyKeyboardTile extends ConsumerWidget {
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
-      onTap: () {
-        final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
-
-        switch (str) {
-          case backspace:
-            notifier.removeText();
-            break;
-          case done:
-            {
-              notifier.formKey.currentState!.validate();
-              break;
-            }
-          default:
-            notifier.addText(str);
-        }
-      },
+      onTap: () => ref.read(riddleNotifierProvider(date)).listenTap(str),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: width,
-        height: 43.5.h,
+        height: 43.2.h,
         margin: EdgeInsets.symmetric(horizontal: 1.8.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(

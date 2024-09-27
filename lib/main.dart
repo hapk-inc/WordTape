@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,6 +21,9 @@ import 'app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  //
   WidgetsBinding.instance.addPostFrameCallback((_) {});
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
@@ -87,9 +91,16 @@ Future<void> main() async {
     appEnvProvider.overrideWithValue(appEnv)
   ];
   runApp(
-    ProviderScope(
-      overrides: override,
-      child: DevicePreview(enabled: kDebugMode, builder: (_) => const MyApp()),
+    EasyLocalization(
+      supportedLocales: [Locale('en')],
+      path: 'assets/locale',
+      child: ProviderScope(
+        overrides: override,
+        child: DevicePreview(
+          enabled: kDebugMode,
+          builder: (_) => const MyApp(),
+        ),
+      ),
     ),
   );
 }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -73,7 +74,7 @@ class Loader extends ConsumerWidget {
     return FadeIn(
       child: TextButton(
         onPressed: () => context.replace("/home"),
-        child: Text("PRESS TO START", style: textTheme.labelSmall),
+        child: Text("press_start".tr(), style: textTheme.labelSmall),
       ),
     );
   }

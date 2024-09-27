@@ -1,12 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
+import '../../function/riddle/notifier.dart';
+import '../../function/riddle/word_notifier.dart';
 import '../../model/date_ext.dart';
 
 import '../../model/word.dart';
-import '../../riddle/notifier.dart';
-import '../../riddle/word_notifier.dart';
 import '../../theme/pin_theme.dart';
 
 class EditableWord extends ConsumerStatefulWidget {
@@ -32,6 +34,14 @@ class _EditableWordState extends ConsumerState<EditableWord> {
     word = widget.word;
     height = widget.height ?? 61.5.r;
     wordNotifier = ref.read(wordNotifierProvider(word));
+    ref.listenManual(
+      riddleNotifierProvider(DateTime.now().convert())
+          .select((value) => value.found),
+      (prev, next) {
+        log("Found Changing for ${word.value} at i = ${next.i}");
+        wordNotifier.initV();
+      },
+    );
     super.initState();
   }
 

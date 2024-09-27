@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+
 import 'enum/enum.dart';
 import 'router/router.dart';
 import 'theme/color.dart';
@@ -17,10 +19,13 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
       designSize: const Size(360, 900),
       builder: (context, child) {
         final double mW = 360.w;
-        ScreenSize size = _validateSize(mW);
+        final ScreenSize size = _validateSize(mW);
         return ProviderScope(
           overrides: [sizeProvider.overrideWithValue(size)],
           child: MaterialApp.router(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             theme: ThemeData(
               iconTheme: iconThemeData,
               textTheme: defaultTextTheme,

@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../model/riddle.dart';
 import '../auth/pod.dart';
-import '../model/riddle.dart';
 import 'riddle.dart';
 
 part 'pod.g.dart';

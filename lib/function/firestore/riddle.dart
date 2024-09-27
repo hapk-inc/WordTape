@@ -29,7 +29,7 @@ class FirestoreRiddle {
         Map map = snapshot.docs[0].data() as Map;
         final String id = snapshot.docs[0].id;
         final Map<String, dynamic> m = Map<String, dynamic>.from(map);
-        final Riddle puzzle = Riddle.fromJson(m).copyWith(id: id);
+        final Riddle puzzle = Riddle.fromFirestore(m).copyWith(id: id);
         return puzzle;
       },
     );

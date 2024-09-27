@@ -57,7 +57,7 @@ class OutlineState extends StatelessWidget {
     double mobileWidth = 750.r;
     return LayoutBuilder(
       builder: (context, constraints) {
-        final double maxWidth = constraints.maxWidth;
+        // final double maxWidth = constraints.maxWidth;
         return Stack(
           children: [
             AnimatedAlign(
