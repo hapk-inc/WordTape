@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
 import '../../function/riddle/notifier.dart';
+import '../../function/riddle/riddle_hint.dart';
 import '../../function/riddle/word_notifier.dart';
 import '../../model/date_ext.dart';
 
@@ -21,25 +24,47 @@ class EditableWord extends ConsumerStatefulWidget {
 }
 
 class _EditableWordState extends ConsumerState<EditableWord> {
-  //late Color color;
-  //late bool isEnabled;
-  //late TextEditingController controller;
-  //late
-  late double height;
   late Word word;
   late WordNotifier wordNotifier;
+  late int index;
+  late DateTime date;
 
   @override
   void initState() {
     word = widget.word;
-    height = widget.height ?? 61.5.r;
+    final List<String> splitter = word.id?.split("|") ?? [];
+    if (splitter.isNotEmpty) {
+      index = int.parse(splitter[1]);
+      date = DateFormat('yyyy-MM-dd').parse(splitter[0]);
+    } else {
+      index = 0;
+      date = DateTime.now().convert();
+    }
+
     wordNotifier = ref.read(wordNotifierProvider(word));
     ref.listenManual(
       riddleNotifierProvider(DateTime.now().convert())
           .select((value) => value.found),
-      (prev, next) {
-        log("Found Changing for ${word.value} at i = ${next.i}");
+      (prev, next) async {
         wordNotifier.initV();
+        if (next.i == index) {
+          log("Found Changing for ${word.value} at i = ${next.i}");
+          final RiddleHint riddleHint =
+              ref.read(riddleHintProvider(date).notifier);
+
+          if (next.mistake != null) {
+            riddleHint.helpUser();
+          } else {
+            final bool compare =
+                const DeepCollectionEquality().equals(prev?.soFar, next.soFar);
+            if (!compare) {
+              riddleHint.state =
+                  ref.read(riddleNotifierProvider(date)).tip.text;
+            } else {
+              riddleHint.rearrange();
+            }
+          }
+        }
       },
     );
     super.initState();

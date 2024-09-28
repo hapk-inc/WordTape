@@ -1,16 +1,5 @@
-import 'dart:developer';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../firebase/pod.dart';
-// import '../../model/route_path.dart';
-import '../../router/router.dart';
-// import '../connectivity/pod.dart';
-import '../firestore/pod.dart';
-// import '../sqlite/pod.dart';
-// import '../remote_config/pod.dart';
 import 'auth.dart';
 
 part 'pod.g.dart';

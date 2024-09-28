@@ -92,7 +92,7 @@ Future<void> main() async {
   ];
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en')],
+      supportedLocales: const [Locale('en')],
       path: 'assets/locale',
       child: ProviderScope(
         overrides: override,

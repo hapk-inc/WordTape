@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import '../../function/date/date.dart';
 import '../../function/riddle/notifier.dart';
-import '../../model/date_ext.dart';
 
 import '../../enum/enum.dart';
-import '../../function/key_tap/pod.dart';
 import '../../theme/color.dart';
 
 // import '../../enum/pod.dart';
@@ -27,6 +26,9 @@ class CustomKeyboard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isMobile = size == ScreenSize.mobile;
+    final DateTime date = ref.read(selectedDateProvider);
+    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
+    final List<String> highlightedChar = notifier.highlightedChar;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -40,7 +42,11 @@ class CustomKeyboard extends ConsumerWidget {
                   final bool isChar = str.length == 1;
                   final double maxWidth = constraints.maxWidth;
                   final double width = maxWidth * (isChar ? 0.084 : 0.09);
-                  return MyKeyboardTile(str, width);
+                  return _KeyboardTile(
+                    str,
+                    width,
+                    isHighlighted: highlightedChar.contains(str),
+                  );
                 },
               ).toList(),
             ),
@@ -51,7 +57,11 @@ class CustomKeyboard extends ConsumerWidget {
                   final bool isChar = str.length == 1;
                   final double maxWidth = constraints.maxWidth;
                   final double width = maxWidth * (isChar ? 0.084 : 0.09);
-                  return MyKeyboardTile(str, width);
+                  return _KeyboardTile(
+                    str,
+                    width,
+                    isHighlighted: highlightedChar.contains(str),
+                  );
                 },
               ).toList(),
             ),
@@ -62,7 +72,11 @@ class CustomKeyboard extends ConsumerWidget {
                   final bool isChar = str.length == 1;
                   final double maxWidth = constraints.maxWidth;
                   final double width = maxWidth * (isChar ? 0.084 : 0.15);
-                  return MyKeyboardTile(str, width);
+                  return _KeyboardTile(
+                    str,
+                    width,
+                    isHighlighted: highlightedChar.contains(str),
+                  );
                 },
               ).toList(),
             ),
@@ -73,19 +87,20 @@ class CustomKeyboard extends ConsumerWidget {
   }
 }
 
-class MyKeyboardTile extends ConsumerWidget {
-  const MyKeyboardTile(this.str, this.width, {super.key});
-
+class _KeyboardTile extends ConsumerWidget {
   final String str;
   final double width;
+  final bool isHighlighted;
+
+  const _KeyboardTile(
+    this.str,
+    this.width, {
+    this.isHighlighted = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final DateTime date = ref.read(selectedDateProvider);
-    final DateTime date = DateTime.now().convert();
-    //final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
-    //final List<String> highlightedChar = notifier.highlightedChar;
-    final List<String> highlightedChar = [];
+    final DateTime date = ref.read(selectedDateProvider);
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
@@ -97,7 +112,7 @@ class MyKeyboardTile extends ConsumerWidget {
         margin: EdgeInsets.symmetric(horizontal: 1.8.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: highlightedChar.contains(str)
+          color: isHighlighted
               ? aquaMarine
               : isChar
                   ? null
@@ -109,9 +124,7 @@ class MyKeyboardTile extends ConsumerWidget {
           str,
           style: textTheme.headlineMedium?.copyWith(
             fontSize: isChar ? 15.r : 21.r,
-            color: !highlightedChar.contains(str) && isChar
-                ? Colors.white60
-                : Colors.black,
+            color: !isHighlighted && isChar ? Colors.white60 : Colors.black,
           ),
         ),
       ),

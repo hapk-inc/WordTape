@@ -3,15 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:lottie/lottie.dart';
-
 import '../function/key_tap/pod.dart';
 import '../function/riddle/notifier.dart';
 import '../model/word.dart';
-import 'common/custom_keyboard.dart';
+import 'riddle/custom_keyboard.dart';
 import 'common/editable_word.dart';
 import 'common/gradient_box.dart';
-import 'common/clue.dart';
+import 'riddle/clue.dart';
+import 'riddle/app_bar.dart';
 
 class RiddlePage extends ConsumerWidget {
   final DateTime date;
@@ -19,7 +18,6 @@ class RiddlePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
 
     //
@@ -43,19 +41,14 @@ class RiddlePage extends ConsumerWidget {
               return Form(
                 key: notifier.formKey,
                 child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: w_03 * 0.15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      AppBar(
-                        backgroundColor: Colors.transparent,
-                        toolbarHeight: 90.h,
-                        title: const Text("WORDTAPE"),
-                        actions: const [LottieHint()],
-                        titleTextStyle: textTheme.displaySmall,
-                      ),
+                      const RiddleAppBar(),
                       AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        height: h_03 * 5.4,
+                        duration: const Duration(milliseconds: 300),
+                        height: h_03 * 5.1,
                         alignment: Alignment.center,
                         padding: EdgeInsets.symmetric(horizontal: w_03 * 1.5),
                         child: const Clue(),
@@ -74,14 +67,4 @@ class RiddlePage extends ConsumerWidget {
       ),
     );
   }
-}
-
-class LottieHint extends StatelessWidget {
-  const LottieHint({super.key});
-
-  @override
-  Widget build(BuildContext context) => SizedBox.square(
-        dimension: 75.r,
-        child: Lottie.asset("lottie/bulb.json"),
-      );
 }

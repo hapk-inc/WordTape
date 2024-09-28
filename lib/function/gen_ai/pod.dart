@@ -5,8 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wordtape/function/underline_text/pod.dart';
 
 import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
@@ -18,6 +18,12 @@ part 'pod.g.dart';
 Future<String> createHint(CreateHintRef ref, Word word, String answer) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
   return ai.createHint(word, answer);
+}
+
+@Riverpod(keepAlive: true, dependencies: [GeminiAi])
+Future<String> helpUser(HelpUserRef ref, String correct, String mistake) async {
+  final GeminiAi ai = ref.read(geminiAiProvider.notifier);
+  return ai.helpUser(correct, mistake);
 }
 
 @Riverpod(keepAlive: true, dependencies: [env, appEnv])
@@ -36,9 +42,14 @@ class GeminiAi extends _$GeminiAi {
   FutureOr<String> helpUser(String correct, String mistake) async {
     final List<String> splitter = correct.split(' ');
     final String mistakeWord = mistake.split(' ').last;
-    final String prompt = "help_user".tr();
+    final String prompt = replaceHash("help_user".tr(), [
+      capitalize(correct),
+      splitter.last,
+      mistakeWord,
+      splitter.last,
+    ]);
     log(prompt);
-    final List<Content> contents = [Content.text("Hello")];
+    final List<Content> contents = [Content.text(prompt)];
     return await callResponse(contents);
   }
 
@@ -52,7 +63,11 @@ class GeminiAi extends _$GeminiAi {
     if (word.note != null) {
       withNote = replaceHash("with_note".tr(), [replaceQuestion ?? "", find]);
     }
-    prompt = replaceHash("hint".tr(), [answer, answer]);
+    prompt = replaceHash("hint".tr(), [
+      capitalize(answer),
+      capitalize(answer),
+      find,
+    ]);
     log(withNote ?? prompt);
     final List<Content> contents = [Content.text(withNote ?? prompt)];
     return await callResponse(contents);
@@ -60,10 +75,9 @@ class GeminiAi extends _$GeminiAi {
 
   FutureOr<String> callResponse(List<Content> contents) => state
           .generateContent(contents)
-          .then((value) => value.text ?? "Think")
+          .then((value) => value.text ?? ref.read(aiErrorProvider))
           .catchError(
         (e, _) {
-          print(e);
           if (e is SocketException) {
             // ref.read(validateConnectionProvider.notifier).state = -1;
           }
@@ -81,4 +95,6 @@ class GeminiAi extends _$GeminiAi {
     }
     return r.join('');
   }
+
+  String capitalize(String str) => toBeginningOfSentenceCase(str) ?? "";
 }

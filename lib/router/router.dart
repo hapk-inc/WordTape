@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
 import '../ui/riddle.dart';
-import '../ui/renovation.dart';
+// import '../ui/renovation.dart';
 import '../ui/splash.dart';
 import '../model/date_ext.dart';
 

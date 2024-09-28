@@ -9,8 +9,79 @@
   "no_riddle_6": "Today is a puzzle-free zone! \uD83D\uDED1\uD83E\uDDE9",
   "no_riddle_7": "No challenges today! ❌\uFE0F\uD83D\uDCA1",
   "no_riddle_8": "This day is without a puzzle! \uD83C\uDF1E\uD83D\uDCD6",
-  "help_user": "This is puzzle game where user has to find out the second part of the word. We have given a word \"#\", where user has to find the second part of the word. ie., user has to fill the word \"#\". But user has entered \"#\". First If only typo correction, help the user to correct the spelling. Then, check if user has entered an invalid word. If yes, ask the user do not type something randomly and help user to use the hint icon. When you are helping, never mention about the correct word i.e., ## . And do not ask questions like \"Did you mean by\". Use simple english and also use less than 12 words.",
-  "hint": "This is a Word-Puzzle. User need to find the word \"#\". Give me short hint for word \"#\" less than 15 words. Use simple english.",
-  "with_note": "Create a sentence using a phrase \"#\" less than 15 words. Make sure that the word \"#\" replace with underscores. Do not highlight the word. Use simple english."
-}
 
+  "help_user": "This is word puzzle game where user has to find out the second part of the word. We have given a word \"#\", where user has to find the second part of the word. ie., user has to fill the word \"#\". But user has entered \"#\". First If only typo correction, help the user to correct the spelling. Then, check if user has entered an invalid word. If yes, ask the user do not type something randomly and help user to use the hint icon. When you are helping, never mention about the correct word i.e., # . And do not ask questions like \"Did you mean by\". Use simple english and also use less than 12 words.",
+  "hint": "This is a word puzzle where user has to find out the second part of the word. Now, user need to find the word \"#\". Give me short hint for word \"#\" less than 15 words. Make sure that the hint does not have the word \"#\". Use simple english.",
+  "with_note": "Create a sentence using a phrase \"#\" less than 15 words. Make sure that the word \"#\" replace with underscores. Do not highlight the word. Use simple english.",
+
+  "welcome_0": "What word do you think comes next after this one?",
+  "welcome_0_pick": "comes next",
+
+  "welcome_1": "Can you guess what the next word will be?",
+  "welcome_1_pick": "next word",
+
+  "welcome_2": "Which word do you think is next?",
+  "welcome_2_pick": "is next?",
+
+  "welcome_3": "What do you think the next word is?",
+  "welcome_3_pick": "next word",
+
+  "welcome_4": "Which word do you think will come next?",
+  "welcome_4_pick": "comes next",
+
+  "welcome_5": "Which word do you think will come next?",
+  "welcome_5_pick": "comes next",
+
+  "welcome_6": "What’s your guess for the next word",
+  "welcome_6_pick": "next word",
+
+  "pass_0": "Spread the Word",
+  "pass_1": "Tell Your Friends",
+  "pass_2": "Pass It On",
+  "pass_3": "Invite Your Friends",
+  "pass_4": "Send to Friends",
+  "pass_5": "Let Friends Know",
+  "pass_6": "Connect with Friends",
+
+  "think_0": "Seems you need to solve this. Use your brain.",
+  "think_1": "You probably have to work this out. Think about it.",
+  "think_2": "Looks like you need to find the answer. Think hard.",
+  "think_3": "You might have to figure this out. Take a moment to think.",
+  "think_4": "Seems you need to think it through yourself.",
+  "think_5": "Looks like it's up to you to solve it.",
+  "think_6": "Looks like you have to work this out on your own. Use your mind!",
+  "think_7": "You need to find a way to figure this out. Think it over!",
+
+  "figure_0": "Find the next word.",
+  "figure_1": "Identify the next word.",
+  "figure_2": "Work out what the next word should be.",
+  "figure_3": "Guess what the next word is.",
+  "figure_4": "Come up with the next word.",
+  "figure_5": "Determine the next word.",
+  "figure_6": "Discover what the next word is.",
+
+  "tip_0": "The letter # can also be found in the word.",
+  "tip_1":"The word contains the letter #.",
+  "tip_2":"You can find the letter # in the word.",
+  "tip_3":"The letter # appears in the word.",
+  "tip_4": "The word includes the letter # too.",
+  "tip_5":"The letter # is part of the word.",
+  "tip_6": "The word also features the letter #.",
+  "tip_7":"You’ll also see the letter # in the word.",
+  "tip_8":"The letter # is included in the word.",
+
+  "resume_0": "Keep going to finish the sequence.",
+  "resume_1": "You started off great. Now try to complete the pattern.",
+  "resume_2": "You did well at first. Please finish the sequence.",
+  "resume_3": "You got off to a good start. Now complete the pattern.",
+  "resume_4": "You started strong. Keep going to complete the pattern.",
+  "resume_5": "You started out great. Try to complete the rest of the pattern.",
+  "resume_6": "You began well. Now work on completing the sequence.",
+
+
+  "use_highlighter_0": "Find a word using highlights.",
+  "use_highlighter_1": "Use highlights to find a word.",
+  "use_highlighter_2": "Type the word from highlights.",
+  "use_highlighter_3": "Identify a word from highlights.",
+  "use_highlighter_4": "Use highlighted letters to type."
+}
