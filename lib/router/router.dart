@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../function/riddle/notifier.dart';
+import '../function/sqlite/pod.dart';
+import '../model/found.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
 import '../ui/riddle.dart';
 // import '../ui/renovation.dart';
 import '../ui/splash.dart';
-import '../model/date_ext.dart';
 
 part 'router.g.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true, dependencies: [sqFound])
 GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
@@ -27,8 +29,17 @@ GoRouter router(RouterRef ref) {
           GoRoute(path: '/', builder: (_, __) => const SplashPage()),
           GoRoute(path: '/home', builder: (_, __) => const DashboardPage()),
           GoRoute(
-            path: '/puzzle',
-            builder: (_, __) => RiddlePage(DateTime.now().convert()),
+            path: '/riddle',
+            builder: (_, GoRouterState state) {
+              final DateTime args = state.extra as DateTime;
+              return RiddlePage(args);
+            },
+            onExit: (_, state) {
+              final DateTime date = state.extra as DateTime;
+              final Found found = ref.read(riddleNotifierProvider(date)).found;
+              ref.read(sqFoundProvider).insert(found);
+              return true;
+            },
           ),
         ],
       ),

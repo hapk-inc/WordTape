@@ -113,5 +113,10 @@
   "pass_detail_6": "Invite your pals to the puzzle and see if they can find the answer.",
   "pass_detail_7": "Ask your buddies to join in the puzzle and see if they can solve it.",
   "pass_detail_8": "Encourage your friends to join the puzzle and find out if they can get it right.",
-  "pass_detail_9": "Invite your friends to try the puzzle and see if they can figure it out."
+  "pass_detail_9": "Invite your friends to try the puzzle and see if they can figure it out.",
+
+  "progress_0": "App is currently under development.",
+  "progress_1": "App is undergoing enhancements.",
+  "progress_2": "App is work in progress."
+
 }

@@ -7,7 +7,7 @@ import '../enum/enum.dart';
 import 'color.dart';
 import 'font.dart';
 
-part 'pin_theme.g.dart';
+part 'pod.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [size])
 PinTheme pinTheme(PinThemeRef ref,
@@ -30,3 +30,11 @@ PinTheme pinTheme(PinThemeRef ref,
     textStyle: textTheme.headlineMedium?.copyWith(color: color),
   );
 }
+
+@Riverpod(keepAlive: true)
+Gradient gradient(
+  GradientRef ref, {
+  List<Color> color = const <Color>[midnightGreen, gunMetal],
+}) =>
+    LinearGradient(
+        begin: Alignment.topLeft, end: Alignment.bottomRight, colors: color);

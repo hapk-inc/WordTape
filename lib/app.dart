@@ -36,6 +36,12 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
                 centerTitle: false,
                 titleSpacing: 0,
               ),
+              snackBarTheme: SnackBarThemeData(
+                insetPadding: EdgeInsets.zero,
+                contentTextStyle: defaultTextTheme.bodySmall?.copyWith(
+                  color: seaWhite,
+                ),
+              ),
               inputDecorationTheme: InputDecorationTheme(
                 enabledBorder: underlineInputBorder(mint),
                 focusedBorder: underlineInputBorder(seaWhite),

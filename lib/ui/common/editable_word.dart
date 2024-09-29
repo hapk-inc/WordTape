@@ -13,12 +13,13 @@ import '../../function/underline_text/pod.dart';
 import '../../model/date_ext.dart';
 
 import '../../model/word.dart';
-import '../../theme/pin_theme.dart';
+import '../../theme/pod.dart';
 
 class EditableWord extends ConsumerStatefulWidget {
   final Word word;
-  final double? height;
-  const EditableWord(this.word, {this.height, super.key});
+  final bool isListening;
+
+  const EditableWord(this.word, {this.isListening = true, super.key});
 
   @override
   ConsumerState createState() => _EditableWordState();
@@ -42,32 +43,32 @@ class _EditableWordState extends ConsumerState<EditableWord> {
       date = DateTime.now().convert();
     }
 
-    wordNotifier = ref.read(wordNotifierProvider(word));
-    ref.listenManual(
-      riddleNotifierProvider(DateTime.now().convert())
-          .select((value) => value.found),
-      (prev, next) async {
-        wordNotifier.initV();
-        if (next.i == index) {
-          log("Found Changing for ${word.value} at i = ${next.i}");
-          final RiddleHint riddleHint =
-              ref.read(riddleHintProvider(date).notifier);
+    if (widget.isListening) {
+      ref.listenManual(
+        riddleNotifierProvider(date).select((value) => value.found),
+        (prev, next) async {
+          wordNotifier.initV();
+          if (next.i == index) {
+            log("Found Changing for ${word.value} at i = ${next.i}");
+            final RiddleHint riddleHint =
+                ref.read(riddleHintProvider(date).notifier);
 
-          if (next.mistake != null) {
-            riddleHint.helpUser();
-          } else {
-            final bool compare =
-                const DeepCollectionEquality().equals(prev?.soFar, next.soFar);
-            if (!compare) {
-              riddleHint.state =
-                  ref.read(riddleNotifierProvider(date)).tip.text;
+            if (next.mistake != null) {
+              riddleHint.helpUser();
             } else {
-              riddleHint.rearrange();
+              final bool compare = const DeepCollectionEquality()
+                  .equals(prev?.soFar, next.soFar);
+              if (!compare) {
+                riddleHint.state =
+                    ref.read(riddleNotifierProvider(date)).tip.text;
+              } else {
+                riddleHint.rearrange();
+              }
             }
           }
-        }
-      },
-    );
+        },
+      );
+    }
     super.initState();
   }
 

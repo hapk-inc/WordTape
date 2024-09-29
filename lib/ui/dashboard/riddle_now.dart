@@ -53,7 +53,10 @@ class RiddleNow extends ConsumerWidget {
                     backgroundColor: WidgetStatePropertyAll(azureGreen),
                     foregroundColor: WidgetStatePropertyAll(raisinBlack),
                   ),
-                  onPressed: () => context.push('/puzzle'),
+                  onPressed: () {
+                    final DateTime date = ref.read(selectedDateProvider);
+                    context.push('/riddle', extra: date);
+                  },
                   child: const Text("Play now"),
                 ),
               ElevatedButton(
@@ -106,7 +109,10 @@ class RiddleNowState extends ConsumerWidget {
                       for (Word search in search)
                         FadeIn(
                           delay: const Duration(milliseconds: 750),
-                          child: EditableWord(search),
+                          child: EditableWord(
+                            search,
+                            isListening: false,
+                          ),
                         ),
                     ],
                   ),

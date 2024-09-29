@@ -22,29 +22,23 @@ const String done = "✔️";
 final ChangeNotifierProviderFamily<RiddleNotifier, DateTime>
     riddleNotifierProvider =
     ChangeNotifierProvider.family<RiddleNotifier, DateTime>(
-  (ref, date) => RiddleNotifier(ref, date: date),
+  (ref, date) => RiddleNotifier(ref, date: date)..init(),
 );
 
 class RiddleNotifier extends ChangeNotifier {
   final Ref<RiddleNotifier> ref;
   final DateTime date;
-  late Riddle? _riddle;
+  Riddle? _riddle;
   late Found _found;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool _completed = false;
   late Tip _tip = const Tip(text: "", t: "");
 
   RiddleNotifier(this.ref, {required this.date}) {
-    debugPrint(date.toString());
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String dateStr = formatter.format(date);
     logger.i("RiddleNotifier for $dateStr");
-    _found = Found(date: date);
-    _riddle = ref.watch(riddleFirestoreDateArgProvider(date: date)).value;
-    if (_riddle != null) {
-      _found = ref.read(sqFoundArgProvider(id: _riddle!.id)).value ??
-          Found(date: date);
-    }
+    //_found = Found(date: date);
   }
 
   List<Word> get searchWord {
@@ -192,5 +186,16 @@ class RiddleNotifier extends ChangeNotifier {
     if (!map.containsKey(_found.i)) return true;
     final List<String> soFar = List<String>.from(_found.soFar[_found.i]);
     return soFar.every((char) => splitter.contains(char));
+  }
+
+  Future init() async {
+    _riddle =
+        await ref.watch(riddleFirestoreDateArgProvider(date: date).future);
+    if (_riddle != null) {
+      _found = await ref.watch(sqFoundArgProvider(id: _riddle!.id).future) ??
+          Found(date: date, id: _riddle!.id);
+      logger.i("$_found");
+    }
+    notifyListeners();
   }
 }

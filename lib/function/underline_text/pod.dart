@@ -53,6 +53,13 @@ String passTextDetail(PassTextDetailRef ref) {
   return passDetail[now.day % passDetail.length];
 }
 
+@Riverpod(keepAlive: true)
+String inProgress(InProgressRef ref) {
+  final DateTime now = DateTime.now();
+  final List<String> progress = List.generate(3, (i) => "progress_$i".tr());
+  return progress[now.day % progress.length];
+}
+
 @Riverpod()
 String useHighlighter(UseHighlighterRef ref) {
   final List<String> useHighlighter =

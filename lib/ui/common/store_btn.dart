@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-class StoreBtn extends StatelessWidget {
+import '../../function/underline_text/pod.dart';
+
+class StoreBtn extends ConsumerWidget {
   const StoreBtn({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Wrap(
       spacing: 15.r,
       runSpacing: 15.r,
@@ -18,8 +21,19 @@ class StoreBtn extends StatelessWidget {
       ]
           .map(
             (e) => AnimatedSize(
-              duration: const Duration(milliseconds: 450),
-              child: InkWell(child: SizedBox(width: 180.r, child: e)),
+              duration: const Duration(milliseconds: 150),
+              child: InkWell(
+                onTap: () {
+                  final String progress = ref.read(inProgressProvider);
+                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                    SnackBar(
+                      content: Text(progress),
+                      padding: EdgeInsets.all(15.r),
+                    ),
+                  );
+                },
+                child: SizedBox(width: 180.r, child: e),
+              ),
             ),
           )
           .toList(),

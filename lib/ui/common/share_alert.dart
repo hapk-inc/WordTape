@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
 import '../../theme/color.dart';
 
@@ -20,8 +19,14 @@ class ShareAlert extends ConsumerWidget {
     final String detail = ref.read(passTextDetailProvider);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      color: seaWhite,
       width: 540.r,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [seaWhite, ghostWhite],
+        ),
+      ),
       padding: EdgeInsets.symmetric(horizontal: 15.r, vertical: 30.r),
       constraints: BoxConstraints(maxWidth: 540.r),
       child: SingleChildScrollView(
@@ -36,11 +41,14 @@ class ShareAlert extends ConsumerWidget {
               ),
               maxLines: 1,
             ),
-            Gap(6.r),
+            Gap(7.5.r),
             AutoSizeText(
               "$detail Tap down",
-              style: textTheme.bodySmall?.copyWith(color: Colors.grey),
-              maxLines: ref.watch(sizeProvider) == ScreenSize.mobile ? 2 : 1,
+              style: textTheme.bodySmall?.copyWith(
+                color: Colors.grey,
+                fontSize: 16.r,
+              ),
+              maxLines: 2,
             ),
             Center(
               child: SizedBox.square(

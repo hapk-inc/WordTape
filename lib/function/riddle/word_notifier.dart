@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 import '../../model/word.dart';
 import '../../theme/color.dart';
 import 'notifier.dart';
+
+final Logger logger = Logger();
 
 final ChangeNotifierProviderFamily<WordNotifier, Word> wordNotifierProvider =
     ChangeNotifierProvider.family<WordNotifier, Word>(
@@ -36,7 +41,9 @@ class WordNotifier extends ChangeNotifier {
   }
 
   void initV() {
+    logger.i("initV-$_index");
     _isEnabled = _index == _notifier.found.i;
+    log(_isEnabled.toString());
     _node = FocusNode(canRequestFocus: _isEnabled);
     if (_isEnabled) {
       _controller = TextEditingController(text: _firstLetter(word.value));
