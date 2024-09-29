@@ -102,6 +102,8 @@ class _EditableWordState extends ConsumerState<EditableWord> {
                     final bool filled = l == word.value.length;
                     final DateTime date = DateTime.now().convert();
                     if (filled) {
+                      final List<String> splitter = value?.split("")??[];
+                      //final bool compareHighlighter =
                       ref.read(riddleNotifierProvider(date)).validate();
                     } else {
                       // ref.read(hintNotifierProvider(date).notifier).state =
