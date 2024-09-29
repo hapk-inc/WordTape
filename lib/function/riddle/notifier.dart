@@ -11,6 +11,7 @@ import '../../model/word.dart';
 import '../firestore/pod.dart';
 import '../sqlite/pod.dart';
 import '../underline_text/pod.dart';
+import 'riddle_hint.dart';
 import 'word_notifier.dart';
 
 final Logger logger = Logger();
@@ -48,6 +49,7 @@ class RiddleNotifier extends ChangeNotifier {
 
   List<Word> get searchWord {
     if (_riddle == null) return [];
+    if (_riddle?.id == null) return [];
     return [
       _riddle!.words[_found.i - 1],
       _riddle!.words[_found.i],
@@ -127,6 +129,8 @@ class RiddleNotifier extends ChangeNotifier {
     if (!isValid) {
       _updateMistake(_activeController!.text);
     } else {
+      ref.read(riddleHintProvider(date).notifier).state =
+          ref.read(correctAnswerProvider);
       await _incrementFound();
     }
     notifyListeners();
@@ -180,4 +184,13 @@ class RiddleNotifier extends ChangeNotifier {
   }
 
   String _firstLetter(String str) => str.isEmpty ? '' : str.substring(0, 1);
+
+  bool compareHighlighter(String? value) {
+    if (value == null) return false;
+    final List<String> splitter = value.split("");
+    Map<int, dynamic> map = _found.soFar;
+    if (!map.containsKey(_found.i)) return true;
+    final List<String> soFar = List<String>.from(_found.soFar[_found.i]);
+    return soFar.every((char) => splitter.contains(char));
+  }
 }

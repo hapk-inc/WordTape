@@ -83,5 +83,14 @@
   "use_highlighter_1": "Use highlights to find a word.",
   "use_highlighter_2": "Type the word from highlights.",
   "use_highlighter_3": "Identify a word from highlights.",
-  "use_highlighter_4": "Use highlighted letters to type."
+  "use_highlighter_4": "Use highlighted letters to type.",
+
+  "correct_0": "\uD83C\uDF1F You’re so smart! Now, find the next one!",
+  "correct_1": "\uD83D\uDC4D You’re brilliant! Give the next one a shot!",
+  "correct_2": "\uD83D\uDE4C You’re amazing! See if you can find the next!",
+  "correct_3": "\uD83D\uDCA1 You’re a genius! Try to discover the next one!",
+  "correct_4": "\uD83D\uDC4F You’re really clever! Now, hunt for the next!",
+  "correct_5": "\uD83E\uDDE0 You’ve got a sharp mind! That’s right. Find the next one!",
+  "correct_6": "\uD83D\uDD0D You’re a mastermind! That’s true. Look for what comes next!",
+  "correct_7": "✔\uFE0F You’re fantastic! That’s right. See if you can spot the next one!"
 }

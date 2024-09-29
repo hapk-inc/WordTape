@@ -9,6 +9,7 @@ import 'package:pinput/pinput.dart';
 import '../../function/riddle/notifier.dart';
 import '../../function/riddle/riddle_hint.dart';
 import '../../function/riddle/word_notifier.dart';
+import '../../function/underline_text/pod.dart';
 import '../../model/date_ext.dart';
 
 import '../../model/word.dart';
@@ -91,6 +92,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             length: word.value.length,
             defaultPinTheme: pinTheme,
             controller: wordNotifier.controller,
+            //focusNode: wordNotifier.node,
             //
             isCursorAnimationEnabled: false,
             animationDuration: const Duration(milliseconds: 150),
@@ -100,11 +102,15 @@ class _EditableWordState extends ConsumerState<EditableWord> {
                 : (value) {
                     final int l = value?.length ?? 0;
                     final bool filled = l == word.value.length;
-                    final DateTime date = DateTime.now().convert();
                     if (filled) {
-                      final List<String> splitter = value?.split("")??[];
-                      //final bool compareHighlighter =
-                      ref.read(riddleNotifierProvider(date)).validate();
+                      final RiddleNotifier notifier =
+                          ref.read(riddleNotifierProvider(date));
+                      if (notifier.compareHighlighter(value)) {
+                        notifier.validate();
+                      } else {
+                        ref.read(riddleHintProvider(date).notifier).state =
+                            ref.read(useHighlighterProvider);
+                      }
                     } else {
                       // ref.read(hintNotifierProvider(date).notifier).state =
                       //     ref.read(fillTextProvider);

@@ -18,7 +18,7 @@ class RiddlePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
+    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
 
     //
     return GradientBox(
