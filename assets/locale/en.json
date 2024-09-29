@@ -92,5 +92,15 @@
   "correct_4": "\uD83D\uDC4F You’re really clever! Now, hunt for the next!",
   "correct_5": "\uD83E\uDDE0 You’ve got a sharp mind! That’s right. Find the next one!",
   "correct_6": "\uD83D\uDD0D You’re a mastermind! That’s true. Look for what comes next!",
-  "correct_7": "✔\uFE0F You’re fantastic! That’s right. See if you can spot the next one!"
+  "correct_7": "✔\uFE0F You’re fantastic! That’s right. See if you can spot the next one!",
+
+  "fill_text_0": "Complete the full text",
+  "fill_text_1": "Enter the complete text",
+  "fill_text_2": "Fill in the entire content",
+  "fill_text_3": "Write out the complete text",
+
+  "continue_0": "Go On",
+  "continue_1": "Proceed",
+  "continue_2": "Carry On",
+  "continue_3": "Resume"
 }

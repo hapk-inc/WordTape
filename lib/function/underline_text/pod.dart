@@ -59,6 +59,12 @@ String correctAnswer(CorrectAnswerRef ref) {
 }
 
 @riverpod
+String fillText(FillTextRef ref) {
+  final List<String> fillText = List.generate(4, (i) => "fill_text_$i".tr());
+  return fillText[mockInteger(0, fillText.length - 1)];
+}
+
+@riverpod
 String aiError(AiErrorRef ref) {
   final DateTime now = DateTime.now();
   final List<String> onYourOwn =

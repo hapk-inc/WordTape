@@ -112,8 +112,8 @@ class _EditableWordState extends ConsumerState<EditableWord> {
                             ref.read(useHighlighterProvider);
                       }
                     } else {
-                      // ref.read(hintNotifierProvider(date).notifier).state =
-                      //     ref.read(fillTextProvider);
+                      ref.read(riddleHintProvider(date).notifier).state =
+                          ref.read(fillTextProvider);
                     }
                     return null;
                   },
