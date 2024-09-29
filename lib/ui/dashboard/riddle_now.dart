@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:random_avatar/random_avatar.dart';
 
+import '../../function/alert/box.dart';
 import '../../function/date/date.dart';
 import '../../function/riddle/notifier.dart';
 import '../../function/underline_text/pod.dart';
@@ -16,6 +17,7 @@ import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
+import '../common/share_alert.dart';
 
 class RiddleNow extends ConsumerWidget {
   const RiddleNow({super.key});
@@ -23,7 +25,7 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final String share = ref.read(shareTextProvider);
+    final String share = ref.read(passTextProvider);
     final DateTime date = ref.read(nowProvider);
     final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
     return SliverAppBar(
@@ -54,7 +56,10 @@ class RiddleNow extends ConsumerWidget {
                   onPressed: () => context.push('/puzzle'),
                   child: const Text("Play now"),
                 ),
-              ElevatedButton(onPressed: () {}, child: Text(share)),
+              ElevatedButton(
+                  onPressed: () => ref.read(alertBoxProvider.notifier).state =
+                      const ShareAlert(),
+                  child: Text(share)),
             ],
           ),
         ),

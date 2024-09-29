@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'common/store_btn.dart';
 import 'dashboard/riddle_now.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -9,6 +11,8 @@ class DashboardPage extends StatelessWidget {
     return const CustomScrollView(
       slivers: <Widget>[
         RiddleNow(),
+        SliverToBoxAdapter(child: Gap(15)),
+        SliverToBoxAdapter(child: StoreBtn())
         /* SliverToBoxAdapter(
           child: SizedBox(
             height: 900.h,

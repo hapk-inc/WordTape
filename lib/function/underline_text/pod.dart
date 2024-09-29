@@ -39,10 +39,18 @@ UnderlineText resume(ResumeRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-String shareText(ShareTextRef ref) {
+String passText(PassTextRef ref) {
   final DateTime now = DateTime.now();
   final List<String> pass = List.generate(7, (index) => "pass_$index".tr());
   return pass[now.day % pass.length];
+}
+
+@Riverpod(keepAlive: true)
+String passTextDetail(PassTextDetailRef ref) {
+  final DateTime now = DateTime.now();
+  final List<String> passDetail =
+      List.generate(10, (i) => "pass_detail_$i".tr());
+  return passDetail[now.day % passDetail.length];
 }
 
 @Riverpod()
