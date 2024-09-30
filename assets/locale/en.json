@@ -123,5 +123,16 @@
   "wrong_1": "You got that answer wrong.",
   "wrong_2": "That’s not the right answer.",
   "wrong_3": "That answer isn’t correct.",
-  "wrong_4": "That answer is not right."
+  "wrong_4": "That answer is not right.",
+
+  "logout_0": "Would you like to log out now?",
+  "logout_1": "Do you want to sign out now?",
+  "logout_2": "Are you ready to log out now?",
+  "logout_3": "Do you feel like logging out now?",
+  "logout_4": "Do you want to exit now?",
+  "logout_5": "Would you like to sign off now?",
+  "logout_6": "Is it time for you to log out?",
+  "logout_7": "Do you want to leave your account now?",
+  "logout_8": "Are you going to log out now?",
+  "logout_9": "Do you wish to end your session now?"
 }

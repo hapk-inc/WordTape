@@ -5,9 +5,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:lottie/lottie.dart';
 
+import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
 import 'common/gradient_box.dart';
 
@@ -75,7 +76,7 @@ class Loader extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return FadeIn(
       child: TextButton(
-        onPressed: () => context.replace("/home"),
+        onPressed: () => ref.read(userLoginProvider),
         child: Text("press_start".tr(), style: textTheme.labelSmall),
       ),
     );

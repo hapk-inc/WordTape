@@ -14,10 +14,11 @@ import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
-import '../../panel/widget/share_panel.dart';
 import '../../theme/color.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
+import '../common/logout_panel.dart';
+import '../common/share_panel.dart';
 
 class RiddleNow extends ConsumerWidget {
   const RiddleNow({super.key});
@@ -36,7 +37,13 @@ class RiddleNow extends ConsumerWidget {
         CircleAvatar(
           radius: 36.r,
           backgroundColor: aquaMarine,
-          child: RandomAvatar(mockString(), trBackground: true),
+          child: InkWell(
+            onTap: () {
+              ref.read(panelNotifierProvider.notifier).state =
+                  const LogoutPanel();
+            },
+            child: RandomAvatar(mockString(), trBackground: true),
+          ),
         ),
         Gap(7.5.r)
       ],

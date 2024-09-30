@@ -10,9 +10,9 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
+import '../../panel/widget.dart';
 import '../../theme/color.dart';
 import '../../theme/pod.dart';
-import '../widget.dart';
 
 class SharePanel extends PanelWidget {
   const SharePanel({super.key});
