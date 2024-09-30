@@ -117,6 +117,11 @@
 
   "progress_0": "App is currently under development.",
   "progress_1": "App is undergoing enhancements.",
-  "progress_2": "App is work in progress."
+  "progress_2": "App is work in progress.",
 
+  "wrong_0": "That answer is wrong.",
+  "wrong_1": "You got that answer wrong.",
+  "wrong_2": "That’s not the right answer.",
+  "wrong_3": "That answer isn’t correct.",
+  "wrong_4": "That answer is not right."
 }

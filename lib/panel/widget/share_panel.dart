@@ -1,31 +1,34 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
 import '../../theme/color.dart';
+import '../../theme/pod.dart';
+import '../widget.dart';
 
-class ShareAlert extends ConsumerWidget {
-  const ShareAlert({super.key});
+class SharePanel extends PanelWidget {
+  const SharePanel({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final String str = ref.read(passTextProvider);
     final String detail = ref.read(passTextDetailProvider);
+    final ScreenSize size = ref.watch(sizeProvider);
+    final bool isM = size == ScreenSize.mobile;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: 540.r,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [seaWhite, ghostWhite],
-        ),
+      height: height(),
+      decoration: BoxDecoration(
+        gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
       ),
       padding: EdgeInsets.symmetric(horizontal: 15.r, vertical: 30.r),
       constraints: BoxConstraints(maxWidth: 540.r),
@@ -35,27 +38,26 @@ class ShareAlert extends ConsumerWidget {
           children: [
             AutoSizeText(
               str,
-              style: textTheme.bodyLarge?.copyWith(
-                color: blackBean,
-                height: 0,
-              ),
-              maxLines: 1,
+              style: textTheme.bodyLarge?.copyWith(color: blackBean, height: 0),
             ),
-            Gap(7.5.r),
+            Gap(4.5.r),
             AutoSizeText(
-              "$detail Tap down",
-              style: textTheme.bodySmall?.copyWith(
-                color: Colors.grey,
-                fontSize: 16.r,
-              ),
-              maxLines: 2,
+              detail,
+              style: textTheme.bodySmall?.copyWith(color: Colors.grey),
+              minFontSize: 10.5,
+              maxFontSize: 15,
+              stepGranularity: 1.5,
+              maxLines: !isM ? 1 : null,
             ),
             Center(
-              child: SizedBox.square(
-                dimension: 300.r,
-                child: InkWell(
-                  onTap: () => Share.share("xyz"),
-                  child: Lottie.asset('lottie/share.json'),
+              child: FadeIn(
+                delay: const Duration(milliseconds: 750),
+                child: SizedBox.square(
+                  dimension: 270.r,
+                  child: InkWell(
+                    onTap: () => Share.share("xyz"),
+                    child: Lottie.asset('lottie/share.json'),
+                  ),
                 ),
               ),
             ),
@@ -64,4 +66,7 @@ class ShareAlert extends ConsumerWidget {
       ),
     );
   }
+
+  @override
+  double height() => 375.r;
 }

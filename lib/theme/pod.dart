@@ -32,9 +32,11 @@ PinTheme pinTheme(PinThemeRef ref,
 }
 
 @Riverpod(keepAlive: true)
-Gradient gradient(
-  GradientRef ref, {
-  List<Color> color = const <Color>[midnightGreen, gunMetal],
-}) =>
-    LinearGradient(
-        begin: Alignment.topLeft, end: Alignment.bottomRight, colors: color);
+Gradient gradient(GradientRef ref,
+    {List<Color> color = const <Color>[midnightGreen, gunMetal]}) {
+  return LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: color,
+  );
+}

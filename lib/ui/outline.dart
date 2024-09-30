@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../enum/enum.dart';
+import '../panel/pod.dart';
 import '../theme/color.dart';
 
 BorderRadius _borderRadius(double radius) =>
@@ -27,16 +28,16 @@ class OutlinePage extends ConsumerWidget {
                   backdropOpacity: 1,
                   isDraggable: false,
                   color: seaWhite,
-                  //controller: ref.watch(panelControllerProvider),
+                  controller: mobile ? ref.read(panelControllerProvider) : null,
                   minHeight: 0,
-                  maxHeight: 375.h,
+                  maxHeight: ref.watch(panelNotifierProvider).height(),
                   padding: EdgeInsets.zero,
                   backdropColor: midnightGreen,
                   borderRadius: _borderRadius(30),
                   renderPanelSheet: false,
                   panel: ClipRRect(
                     borderRadius: _borderRadius(30),
-                    // child: ref.watch(widgetPanelProvider),
+                    child: ref.watch(panelNotifierProvider),
                   ),
                   body: OutlineState(child: child),
                   onPanelClosed: () {},

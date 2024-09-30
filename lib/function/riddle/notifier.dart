@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:mock_data/mock_data.dart';
 import '../../model/tip.dart';
 import '../../model/underline_text.dart';
 
@@ -32,7 +33,7 @@ class RiddleNotifier extends ChangeNotifier {
   late Found _found;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late bool _completed = false;
-  late Tip _tip = const Tip(text: "", t: "");
+  late Tip _tip = const Tip();
 
   RiddleNotifier(this.ref, {required this.date}) {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -120,6 +121,8 @@ class RiddleNotifier extends ChangeNotifier {
     if (_activeController == null) return;
     bool isValid = activeWord.value == _activeController!.text;
     if (!isValid) {
+      ref.read(riddleHintProvider(date).notifier).state =
+          "wrong_${mockInteger(0, 4)}".tr();
       _updateMistake(_activeController!.text);
     } else {
       ref.read(riddleHintProvider(date).notifier).state =

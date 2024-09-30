@@ -26,7 +26,7 @@ UnderlineText welcomeUser(WelcomeUserRef ref) {
   return welcome[now.day % welcome.length];
 }
 
-@Riverpod()
+@Riverpod(keepAlive: true)
 UnderlineText resume(ResumeRef ref) {
   final List<UnderlineText> resume = List.generate(
     7,

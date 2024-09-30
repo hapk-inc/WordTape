@@ -7,7 +7,7 @@ part 'tip.freezed.dart';
 @freezed
 class Tip with _$Tip {
   const Tip._();
-  const factory Tip({required String text, required String t}) = _Tip;
+  const factory Tip({@Default("") String text, @Default("") String t}) = _Tip;
 
   factory Tip.fromWord(String str, {List<String> soFar = const []}) {
     final List<String> splitter = str.split("");

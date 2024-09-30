@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
+import '../function/auth/running_user.dart';
 import 'common/gradient_box.dart';
 
 const Duration _m1500 = Duration(milliseconds: 1500);
@@ -37,6 +38,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   onFinish(AnimateDoDirection direction) async {
     log("onFinish");
+    ref.read(listenAuthProvider);
     Future.delayed(
       _m1500,
       () {
