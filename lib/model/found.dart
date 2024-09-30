@@ -1,8 +1,7 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logger/logger.dart';
+
+import 'so_far_converter.dart';
 
 part 'found.freezed.dart';
 part 'found.g.dart';
@@ -15,9 +14,7 @@ class Found extends Equatable with _$Found {
   const factory Found({
     @Default(1) int i,
     String? mistake,
-    @JsonKey(fromJson: _fromJson, toJson: _toJson)
-    @Default(<int, dynamic>{})
-    Map<int, dynamic> soFar,
+    @SoFarConverter() @Default(<int, dynamic>{}) Map<int, dynamic> soFar,
     DateTime? lastFound,
     required DateTime date,
     @JsonKey(includeIfNull: false) String? id, //later include in database
@@ -33,8 +30,6 @@ class Found extends Equatable with _$Found {
     return map;
   }
 
-  //factory Found.initial() => const Found();
-
   String foundTrack(int count) => i == 1
       ? "-"
       : i == count
@@ -46,6 +41,7 @@ class Found extends Equatable with _$Found {
   List<Object?> get props => [id, i, mistake, date, lastFound];
 }
 
+/*
 Map<int, dynamic> _fromJson(dynamic json) {
   if (json.isEmpty) return {};
   return {};
@@ -62,3 +58,4 @@ String _toJson(Map<int, dynamic> object) {
   final String str = jsonEncode(map);
   return str;
 }
+*/

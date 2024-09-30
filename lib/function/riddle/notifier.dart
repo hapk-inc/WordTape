@@ -70,7 +70,6 @@ class RiddleNotifier extends ChangeNotifier {
 
   List<String> get highlightedChar {
     if (!_found.soFar.containsKey(_found.i)) return [];
-    logger.d(_found.soFar[_found.i]);
     List<String> map = List.from(_found.soFar[_found.i]);
     return map;
   }
