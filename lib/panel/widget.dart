@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 abstract class PanelWidget extends ConsumerWidget {
   const PanelWidget({super.key});
 
   double height();
+
+  SlideDirection direction();
 }
 
 class EmptyPanel extends PanelWidget {
@@ -15,4 +18,7 @@ class EmptyPanel extends PanelWidget {
 
   @override
   double height() => 0;
+
+  @override
+  SlideDirection direction() => SlideDirection.UP;
 }

@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:sliding_up_panel/src/panel.dart';
 
 import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
@@ -14,22 +15,24 @@ import '../../panel/widget.dart';
 import '../../theme/color.dart';
 import '../../theme/pod.dart';
 
-class SharePanel extends PanelWidget {
-  const SharePanel({super.key});
+class NotifyAndShare extends PanelWidget {
+  const NotifyAndShare({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final String str = ref.read(passTextProvider);
-    final String detail = ref.read(passTextDetailProvider);
+    final String str = ref.read(passPromptProvider);
+    final String detail = ref.read(passPromptDetailProvider);
     final ScreenSize size = ref.watch(sizeProvider);
-    final bool isM = size == ScreenSize.mobile;
+    final bool isDialog = size != ScreenSize.mobile;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      height: height(),
+      height: isDialog ? 360.r : height(),
       decoration: BoxDecoration(
         gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
       ),
+      alignment: Alignment.topCenter,
       padding: EdgeInsets.symmetric(horizontal: 15.r, vertical: 30.r),
       constraints: BoxConstraints(maxWidth: 540.r),
       child: SingleChildScrollView(
@@ -38,7 +41,10 @@ class SharePanel extends PanelWidget {
           children: [
             AutoSizeText(
               str,
-              style: textTheme.bodyLarge?.copyWith(color: blackBean, height: 0),
+              style: textTheme.bodyLarge?.copyWith(
+                color: blackBean,
+                height: 0,
+              ),
             ),
             Gap(4.5.r),
             AutoSizeText(
@@ -47,7 +53,7 @@ class SharePanel extends PanelWidget {
               minFontSize: 10.5,
               maxFontSize: 15,
               stepGranularity: 1.5,
-              maxLines: !isM ? 1 : null,
+              maxLines: isDialog ? 1 : null,
             ),
             Center(
               child: FadeIn(
@@ -68,5 +74,8 @@ class SharePanel extends PanelWidget {
   }
 
   @override
-  double height() => 375.r;
+  double height() => 360.r;
+
+  @override
+  SlideDirection direction() => SlideDirection.UP;
 }

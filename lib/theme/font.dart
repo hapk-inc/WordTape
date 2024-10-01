@@ -69,7 +69,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   TextStyle? get headlineMedium => playTheme.copyWith(fontSize: 16.r);
 
   @override
-  TextStyle? get headlineSmall => playTheme.copyWith(fontSize: 14.r);
+  TextStyle? get headlineSmall => playTheme.copyWith(fontSize: 18.r);
 
   // Exception - only for "PRESS START"
   @override

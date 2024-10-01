@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'common/store_btn.dart';
@@ -12,7 +13,7 @@ class DashboardPage extends StatelessWidget {
       slivers: <Widget>[
         RiddleNow(),
         SliverToBoxAdapter(child: Gap(15)),
-        SliverToBoxAdapter(child: StoreBtn())
+        if (kIsWeb) SliverToBoxAdapter(child: StoreBtn())
         /* SliverToBoxAdapter(
           child: SizedBox(
             height: 900.h,

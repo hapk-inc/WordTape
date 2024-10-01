@@ -14,9 +14,11 @@ class RiddleAppBar extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       toolbarHeight: 90.r,
+      leadingWidth: 60.r,
+      titleSpacing: 0,
       title: const Text("WORDTAPE"),
       actions: const [LottieHint()],
-      titleTextStyle: Theme.of(context).textTheme.displaySmall,
+      titleTextStyle: Theme.of(context).textTheme.displayMedium,
     );
   }
 }

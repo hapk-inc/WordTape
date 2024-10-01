@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:random_avatar/random_avatar.dart';
+import 'package:wordtape/function/auth/pod.dart';
 
 import '../../function/date/date.dart';
 import '../../function/riddle/notifier.dart';
@@ -17,8 +19,8 @@ import '../../panel/pod.dart';
 import '../../theme/color.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
-import '../common/logout_panel.dart';
-import '../common/share_panel.dart';
+import '../common/logoff.dart';
+import '../common/notify.dart';
 
 class RiddleNow extends ConsumerWidget {
   const RiddleNow({super.key});
@@ -26,25 +28,25 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final String share = ref.read(passTextProvider);
+    final String share = ref.read(passPromptProvider);
     final DateTime date = ref.read(nowProvider);
     final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
+    final User? user = ref.watch(runningUserProvider).value;
     return SliverAppBar(
       pinned: true,
       snap: false,
       floating: false,
       actions: [
-        CircleAvatar(
-          radius: 36.r,
-          backgroundColor: aquaMarine,
-          child: InkWell(
-            onTap: () {
-              ref.read(panelNotifierProvider.notifier).state =
-                  const LogoutPanel();
-            },
-            child: RandomAvatar(mockString(), trBackground: true),
+        if (!(user?.isAnonymous ?? true))
+          CircleAvatar(
+            radius: 36.r,
+            backgroundColor: aquaMarine,
+            child: InkWell(
+              onTap: () => ref.read(panelNotifierProvider.notifier).state =
+                  const LogoffAlert(),
+              child: RandomAvatar(mockString(), trBackground: true),
+            ),
           ),
-        ),
         Gap(7.5.r)
       ],
       bottom: PreferredSize(
@@ -63,15 +65,16 @@ class RiddleNow extends ConsumerWidget {
                   onPressed: () {
                     final DateTime date = ref.read(selectedDateProvider);
                     context.push('/riddle', extra: date);
+                    // context.push('/summary');
                   },
                   child: const Text("Play now"),
                 ),
               ElevatedButton(
-                  onPressed: () {
-                    ref.read(panelNotifierProvider.notifier).state =
-                        const SharePanel();
-                  },
-                  child: Text(share)),
+                onPressed: () => ref
+                    .read(panelNotifierProvider.notifier)
+                    .state = const NotifyAndShare(),
+                child: Text(share),
+              ),
             ],
           ),
         ),
@@ -105,26 +108,24 @@ class RiddleNowState extends ConsumerWidget {
             AnimatedPositioned(
               duration: const Duration(milliseconds: 150),
               width: mW,
-              bottom: mH * 0.24,
+              bottom: mH * 0.18,
               child: SizedBox(
-                height: mH * 0.54,
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 4.5.r),
-                  child: Column(
-                    children: [
-                      Gap(30.r),
-                      SizedBox(width: 600.r, child: const RiddleNowWelcome()),
-                      Gap(30.r),
-                      for (Word search in search)
-                        FadeIn(
-                          delay: const Duration(milliseconds: 750),
-                          child: EditableWord(
-                            search,
-                            isListening: false,
-                          ),
+                height: mH * 0.6,
+                child: Column(
+                  children: [
+                    Gap(30.r),
+                    SizedBox(width: 600.r, child: const RiddleNowWelcome()),
+                    Gap(30.r),
+                    for (Word search in search)
+                      FadeIn(
+                        delay: const Duration(milliseconds: 750),
+                        child: EditableWord(
+                          search,
+                          isListening: false,
                         ),
-                    ],
-                  ),
+                      ),
+                    const Spacer(),
+                  ],
                 ),
               ),
             ),

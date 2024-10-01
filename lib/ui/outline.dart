@@ -32,7 +32,8 @@ class OutlinePage extends ConsumerWidget {
                   minHeight: 0,
                   maxHeight: ref.watch(panelNotifierProvider).height(),
                   padding: EdgeInsets.zero,
-                  backdropColor: midnightGreen,
+                  backdropColor: gunMetal,
+                  slideDirection: ref.watch(panelNotifierProvider).direction(),
                   borderRadius: _borderRadius(30),
                   renderPanelSheet: false,
                   panel: ClipRRect(
@@ -55,9 +56,9 @@ class OutlineState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double mobileWidth = 750.r;
+    double mobileWidth = 720.r;
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (_, constraints) {
         // final double maxWidth = constraints.maxWidth;
         return Stack(
           children: [

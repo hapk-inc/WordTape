@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wordtape/ui/summary.dart';
 
 import '../function/riddle/notifier.dart';
 import '../function/sqlite/pod.dart';
@@ -41,6 +42,27 @@ GoRouter router(RouterRef ref) {
               return true;
             },
           ),
+          GoRoute(
+            path: '/summary',
+            //builder: (_, state) => const SummaryPage(),
+            pageBuilder: (context, state) {
+              return CustomTransitionPage(
+                child: const SummaryPage(),
+                transitionsBuilder: (_, animation, __, child) {
+                  const Offset begin = Offset(0.0, 1.0);
+                  const Offset end =
+                      Offset.zero; // End at the original position
+                  const curve = Curves.easeInOut;
+
+                  final Animatable<Offset> tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+                  final Animation<Offset> anim = animation.drive(tween);
+
+                  return SlideTransition(position: anim, child: child);
+                },
+              );
+            },
+          )
         ],
       ),
     ],

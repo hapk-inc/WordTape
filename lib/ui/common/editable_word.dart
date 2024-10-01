@@ -4,8 +4,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/panel/pod.dart';
+import 'package:wordtape/router/router.dart';
+import 'package:wordtape/ui/summary.dart';
 import '../../function/riddle/notifier.dart';
 import '../../function/riddle/riddle_hint.dart';
 import '../../function/riddle/word_notifier.dart';
@@ -50,6 +54,8 @@ class _EditableWordState extends ConsumerState<EditableWord> {
           wordNotifier.initV();
           if (next.i == index) {
             log("Found Changing for ${word.value} at i = ${next.i}");
+            ref.read(panelNotifierProvider.notifier).state =
+                const SummaryPage();
             final RiddleHint riddleHint =
                 ref.read(riddleHintProvider(date).notifier);
 

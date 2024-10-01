@@ -39,18 +39,21 @@ UnderlineText resume(ResumeRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-String passText(PassTextRef ref) {
+String passPrompt(PassPromptRef ref) {
   final DateTime now = DateTime.now();
-  final List<String> pass = List.generate(7, (index) => "pass_$index".tr());
-  return pass[now.day % pass.length];
+  return "pass_${now.day % 7}".tr();
 }
 
 @Riverpod(keepAlive: true)
-String passTextDetail(PassTextDetailRef ref) {
+String logoutPrompt(LogoutPromptRef ref) {
   final DateTime now = DateTime.now();
-  final List<String> passDetail =
-      List.generate(10, (i) => "pass_detail_$i".tr());
-  return passDetail[now.day % passDetail.length];
+  return "logout_${now.day % 10}".tr();
+}
+
+@Riverpod(keepAlive: true)
+String passPromptDetail(PassPromptDetailRef ref) {
+  final DateTime now = DateTime.now();
+  return "pass_detail_${now.day % 10}".tr();
 }
 
 @Riverpod(keepAlive: true)
@@ -62,8 +65,10 @@ String inProgress(InProgressRef ref) {
 
 @Riverpod()
 String useHighlighter(UseHighlighterRef ref) {
-  final List<String> useHighlighter =
-      List.generate(5, (index) => "use_highlighter_$index".tr());
+  final List<String> useHighlighter = List.generate(
+    5,
+    (i) => "use_highlighter_$i".tr(),
+  );
   return useHighlighter[mockInteger(0, 4)];
 }
 
