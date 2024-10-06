@@ -1,64 +1,123 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'package:wordtape/panel/widget.dart';
-
-import '../enum/enum.dart';
+import '../panel/widget.dart';
 import '../theme/color.dart';
 
 class SummaryPage extends PanelWidget {
   const SummaryPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    final ScreenSize size = ref.watch(sizeProvider);
-    final bool isDialog = size != ScreenSize.mobile;
-    return Container(
-      color: seaWhite,
-      child: SafeArea(
-        child: Stack(
-          children: [
-            Lottie.asset('lottie/confetti.json', repeat: true),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox.square(
-                    dimension: 150.r,
-                    child: Lottie.asset('lottie/trophy.json', fit: BoxFit.fill),
-                  ),
-                  Gap(30.r),
-                  Text(
-                    "Better luck next time",
-                    style: textTheme.bodyLarge
-                        ?.copyWith(color: blackBean, height: 1.8),
-                  ),
-                  AutoSizeText(
-                    mockString(30),
-                    style: textTheme.bodySmall?.copyWith(color: Colors.grey),
-                    minFontSize: 12,
-                    maxFontSize: 15,
-                    stepGranularity: 1.5,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget build(context, ref) => SizedBox(
+        height: height(),
+        child: const Summary(),
+      );
 
   @override
   SlideDirection direction() => SlideDirection.DOWN;
 
   @override
-  double height() => 480.r;
+  double height() => 405.r;
+}
+
+class Summary extends ConsumerStatefulWidget {
+  const Summary({super.key});
+
+  @override
+  ConsumerState createState() => _SummaryState();
+}
+
+class _SummaryState extends ConsumerState<Summary> {
+  bool show = false;
+  @override
+  Widget build(BuildContext context) => AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        constraints: BoxConstraints(maxWidth: 300.r, maxHeight: 405.r),
+        color: seaWhite,
+        child: Stack(
+          children: [
+            Lottie.asset(
+              'lottie/confetti.json',
+              repeat: false,
+              onLoaded: (p0) => Future.delayed(
+                p0.duration * 0.75,
+                () => setState(() => show = true),
+              ),
+            ),
+            if (show)
+              FadeIn(
+                duration: const Duration(milliseconds: 750),
+                child: const Center(child: SummaryContent()),
+              ),
+          ],
+        ),
+      );
+}
+
+class SummaryContent extends ConsumerWidget {
+  const SummaryContent({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final UnderlineText hashTag = ref.read(hashTagProvider);
+    return Column(
+      children: [
+        SizedBox.square(
+          dimension: 270.r,
+          child: Lottie.asset('lottie/trophy_1.json', fit: BoxFit.fitHeight),
+        ),
+        const Spacer(),
+        Container(
+          color: azureGreen,
+          height: 90.r,
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.symmetric(horizontal: 15.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                mockString(30),
+                style: GoogleFonts.montserrat(
+                  color: gunMetal,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 15.r,
+                  height: 0,
+                  letterSpacing: 0.3,
+                ),
+                maxLines: 1,
+              ),
+              Gap(12.r),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "http://${mockString(60)}",
+                      style: GoogleFonts.robotoMono(
+                        fontSize: 15.r,
+                        letterSpacing: 0,
+                        height: 0,
+                        color: Colors.grey,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Gap(7.5.r),
+                  const Icon(Icons.copy)
+                ],
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
 }

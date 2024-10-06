@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -6,6 +8,8 @@ import 'package:wordtape/ui/summary.dart';
 import '../function/riddle/notifier.dart';
 import '../function/sqlite/pod.dart';
 import '../model/found.dart';
+import '../panel/pod.dart';
+import '../ui/common/logoff.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
 import '../ui/riddle.dart';
@@ -31,6 +35,17 @@ GoRouter router(RouterRef ref) {
           GoRoute(path: '/home', builder: (_, __) => const DashboardPage()),
           GoRoute(
             path: '/riddle',
+            redirect: (context, state) {
+              log("35==Redirect");
+              final DateTime args = state.extra as DateTime;
+              final RiddleNotifier notifier =
+                  ref.read(riddleNotifierProvider(args));
+              if (notifier.done) {
+                ref.read(panelNotifierProvider.notifier).state =
+                    const LogoffAlert();
+              }
+              return state.matchedLocation;
+            },
             builder: (_, GoRouterState state) {
               final DateTime args = state.extra as DateTime;
               return RiddlePage(args);

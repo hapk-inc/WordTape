@@ -9,6 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:random_avatar/random_avatar.dart';
 import 'package:wordtape/function/auth/pod.dart';
+import 'package:wordtape/ui/common/logoff.dart';
+import 'package:wordtape/ui/summary.dart';
 
 import '../../function/date/date.dart';
 import '../../function/riddle/notifier.dart';
@@ -19,7 +21,6 @@ import '../../panel/pod.dart';
 import '../../theme/color.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
-import '../common/logoff.dart';
 import '../common/notify.dart';
 
 class RiddleNow extends ConsumerWidget {
@@ -119,10 +120,7 @@ class RiddleNowState extends ConsumerWidget {
                     for (Word search in search)
                       FadeIn(
                         delay: const Duration(milliseconds: 750),
-                        child: EditableWord(
-                          search,
-                          isListening: false,
-                        ),
+                        child: EditableWord(search),
                       ),
                     const Spacer(),
                   ],
@@ -146,7 +144,7 @@ class RiddleNowWelcome extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     //
-    final UnderlineText sentence = notifier.title;
+    final UnderlineText sentence = notifier.header;
     List<String> words = sentence.text.split(' ');
     List<String> highlighter = (sentence.focus ?? "").split(' ');
     return FadeInUp(

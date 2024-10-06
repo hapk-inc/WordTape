@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:sliding_up_panel/src/panel.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';

@@ -2,9 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:mock_data/mock_data.dart';
+import '../extension/extension.dart';
 
 import 'date_converter.dart';
-import 'date_ext.dart';
+
 import 'found.dart';
 import 'word.dart';
 
@@ -49,13 +50,13 @@ class Riddle extends Equatable with _$Riddle {
 
   bool isCompleted(int length) => words.length == length;
 
-  List<Word> correctWord(Found found) {
+  List<Word> searchWord(Found found) {
     if (isCompleted(found.i)) return [];
     return [words[found.i - 1], words[found.i]];
   }
 
   String answer(Found found) {
-    final List<Word> words = correctWord(found);
+    final List<Word> words = searchWord(found);
     if (words.isEmpty) return "";
     return words.fold("", (prev, e) => "$prev ${e.value}").trim();
   }

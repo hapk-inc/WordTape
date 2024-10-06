@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:wordtape/function/riddle/word_notifier.dart';
+import 'package:wordtape/panel/pod.dart';
+import 'package:wordtape/ui/common/logoff.dart';
 import '../function/key_tap/pod.dart';
 import '../function/riddle/notifier.dart';
 import '../function/sqlite/pod.dart';
@@ -27,17 +30,20 @@ class RiddlePage extends ConsumerStatefulWidget {
 class _RiddlePageState extends ConsumerState<RiddlePage> {
   late final AppLifecycleListener _listener;
   late DateTime date;
+  late RiddleNotifier notifier;
   @override
   void initState() {
     super.initState();
     date = widget.date;
+    notifier = ref.read(riddleNotifierProvider(date));
+
     _listener = AppLifecycleListener(onStateChange: _onStateChanged);
   }
 
   void _onStateChanged(AppLifecycleState state) {
     log(state.name);
     if (state == AppLifecycleState.inactive) {
-      final Found found = ref.read(riddleNotifierProvider(date)).found;
+      final Found found = notifier.found;
       ref.read(sqFoundProvider).insert(found);
     }
   }
@@ -50,13 +56,14 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
 
   @override
   Widget build(BuildContext context) {
-    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
-
+    notifier = ref.watch(riddleNotifierProvider(date));
     return GradientBox(
       child: SafeArea(
         bottom: false,
         child: KeyboardListener(
-          focusNode: notifier.activeNode,
+          focusNode: notifier.focusedWord == null
+              ? FocusNode()
+              : ref.read(wordNotifierProvider(notifier.focusedWord!)).node,
           autofocus: true,
           onKeyEvent: (KeyEvent? value) {
             if (value is KeyDownEvent || value is KeyRepeatEvent) {

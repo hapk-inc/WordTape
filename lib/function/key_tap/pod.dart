@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../model/date_ext.dart';
+import '../../extension/extension.dart';
+import '../date/date.dart';
 import '../riddle/notifier.dart';
+import '../riddle/word_notifier.dart';
 
 part 'pod.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [SelectedDate])
 class KeyTapNotifier extends _$KeyTapNotifier {
   @override
   KeyEvent? build() => null;
@@ -15,35 +17,10 @@ class KeyTapNotifier extends _$KeyTapNotifier {
     if (value == null) return;
     super.state = value;
     final String str = value.logicalKey.keyLabel;
-    final DateTime date = DateTime.now().convert();
-    ref.read(riddleNotifierProvider(date)).listenTap(str);
+    final DateTime date = ref.read(selectedDateProvider).convert();
+    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+    final WordNotifier word =
+        ref.read(wordNotifierProvider(notifier.focusedWord!));
+    word.listenTap(str);
   }
 }
-
-/*
-@riverpod
-void listenTap(ListenTapRef ref, String str) async {
-  final DateTime date = DateTime.now().convert();
-  final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
-  if (str.length == 1) {
-    final bool regEx = RegExp(r'^[a-zA-Z0-9]$').hasMatch(str);
-    if (regEx) await notifier.addText(str);
-  } else {
-    switch (str) {
-      case "Backspace":
-        {
-          notifier.removeText();
-          break;
-        }
-      case "Enter":
-        {
-          notifier.formKey.currentState!.validate();
-        }
-      default:
-        {
-          log(str);
-        }
-    }
-  }
-}
-*/

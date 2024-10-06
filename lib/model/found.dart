@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wordtape/model/riddle.dart';
 
 import 'so_far_converter.dart';
 
@@ -39,6 +40,11 @@ class Found extends Equatable with _$Found {
   @override
   // TODO: implement props
   List<Object?> get props => [id, i, mistake, date, lastFound];
+
+  factory Found.fromRiddle(Riddle riddle) => Found(
+        date: riddle.date,
+        id: riddle.id,
+      );
 }
 
 /*

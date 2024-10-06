@@ -1,29 +1,20 @@
-import 'dart:developer';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
-import 'package:wordtape/panel/pod.dart';
-import 'package:wordtape/router/router.dart';
-import 'package:wordtape/ui/summary.dart';
-import '../../function/riddle/notifier.dart';
-import '../../function/riddle/riddle_hint.dart';
+
+//
 import '../../function/riddle/word_notifier.dart';
-import '../../function/underline_text/pod.dart';
-import '../../model/date_ext.dart';
+import '../../extension/extension.dart';
 
 import '../../model/word.dart';
 import '../../theme/pod.dart';
 
 class EditableWord extends ConsumerStatefulWidget {
   final Word word;
-  final bool isListening;
 
-  const EditableWord(this.word, {this.isListening = true, super.key});
+  const EditableWord(this.word, {super.key});
 
   @override
   ConsumerState createState() => _EditableWordState();
@@ -47,34 +38,6 @@ class _EditableWordState extends ConsumerState<EditableWord> {
       date = DateTime.now().convert();
     }
 
-    if (widget.isListening) {
-      ref.listenManual(
-        riddleNotifierProvider(date).select((value) => value.found),
-        (prev, next) async {
-          wordNotifier.initV();
-          if (next.i == index) {
-            log("Found Changing for ${word.value} at i = ${next.i}");
-            ref.read(panelNotifierProvider.notifier).state =
-                const SummaryPage();
-            final RiddleHint riddleHint =
-                ref.read(riddleHintProvider(date).notifier);
-
-            if (next.mistake != null) {
-              riddleHint.helpUser();
-            } else {
-              final bool compare = const DeepCollectionEquality()
-                  .equals(prev?.soFar, next.soFar);
-              if (!compare) {
-                riddleHint.state =
-                    ref.read(riddleNotifierProvider(date)).tip.text;
-              } else {
-                riddleHint.rearrange();
-              }
-            }
-          }
-        },
-      );
-    }
     super.initState();
   }
 
@@ -104,30 +67,11 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             isCursorAnimationEnabled: false,
             animationDuration: const Duration(milliseconds: 150),
             pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-            validator: !wordNotifier.isEnabled
-                ? null
-                : (value) {
-                    final int l = value?.length ?? 0;
-                    final bool filled = l == word.value.length;
-                    if (filled) {
-                      final RiddleNotifier notifier =
-                          ref.read(riddleNotifierProvider(date));
-                      if (notifier.compareHighlighter(value)) {
-                        notifier.validate();
-                      } else {
-                        ref.read(riddleHintProvider(date).notifier).state =
-                            ref.read(useHighlighterProvider);
-                      }
-                    } else {
-                      ref.read(riddleHintProvider(date).notifier).state =
-                          ref.read(fillTextProvider);
-                    }
-                    return null;
-                  },
+            validator: !wordNotifier.isEnabled ? null : wordNotifier.validator,
+
             //
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            showCursor: false,
+            keyboardType: TextInputType.none, readOnly: true,
+            showCursor: false, forceErrorState: wordNotifier.error,
 
             //
             enabled: wordNotifier.isEnabled,

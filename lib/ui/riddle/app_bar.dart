@@ -51,7 +51,7 @@ class _LottieHintState extends ConsumerState<LottieHint> {
         child: notifier.found.mistake == null
             ? const SizedBox()
             : InkWell(
-                onTap: () => notifier.createTip(),
+                onTap: () => notifier.initiateTip(),
                 child: Lottie.asset("lottie/bulb.json"),
               ),
       ),

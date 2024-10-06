@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../model/date_ext.dart';
+import '../../extension/extension.dart';
 
 part 'date.g.dart';
 

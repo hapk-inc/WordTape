@@ -5,6 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../enum/enum.dart';
 import '../panel/pod.dart';
+import '../panel/widget.dart';
 import '../theme/color.dart';
 
 BorderRadius _borderRadius(double radius) =>
@@ -21,30 +22,31 @@ class OutlinePage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: blackBean,
       body: SizedBox.expand(
-        child: LayoutBuilder(
-          builder: (context, constraints) => mobile
-              ? SlidingUpPanel(
-                  backdropEnabled: true,
-                  backdropOpacity: 1,
-                  isDraggable: false,
-                  color: seaWhite,
-                  controller: mobile ? ref.read(panelControllerProvider) : null,
-                  minHeight: 0,
-                  maxHeight: ref.watch(panelNotifierProvider).height(),
-                  padding: EdgeInsets.zero,
-                  backdropColor: gunMetal,
-                  slideDirection: ref.watch(panelNotifierProvider).direction(),
+        child: mobile
+            ? SlidingUpPanel(
+                backdropEnabled: true,
+                backdropOpacity: 1,
+                isDraggable: false,
+                color: seaWhite,
+                controller: mobile ? ref.read(panelControllerProvider) : null,
+                minHeight: 0,
+                maxHeight: ref.watch(panelNotifierProvider).height(),
+                padding: EdgeInsets.zero,
+                backdropColor: gunMetal,
+                slideDirection: ref.watch(panelNotifierProvider).direction(),
+                borderRadius: _borderRadius(30),
+                renderPanelSheet: false,
+                panel: ClipRRect(
                   borderRadius: _borderRadius(30),
-                  renderPanelSheet: false,
-                  panel: ClipRRect(
-                    borderRadius: _borderRadius(30),
-                    child: ref.watch(panelNotifierProvider),
-                  ),
-                  body: OutlineState(child: child),
-                  onPanelClosed: () {},
-                )
-              : OutlineState(child: child),
-        ),
+                  child: ref.watch(panelNotifierProvider),
+                ),
+                body: OutlineState(child: child),
+                onPanelClosed: () {
+                  ref.read(panelNotifierProvider.notifier).state =
+                      const EmptyPanel();
+                },
+              )
+            : OutlineState(child: child),
       ),
     );
   }

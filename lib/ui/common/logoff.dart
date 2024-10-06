@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/enum/enum.dart';
 import '../../function/auth/pod.dart';
 import '../../panel/pod.dart';
 import '../../panel/widget.dart';

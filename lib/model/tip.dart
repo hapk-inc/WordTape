@@ -16,9 +16,17 @@ class Tip with _$Tip {
       (char) => !soFar.contains(char),
     ));
 
-    final String randomChar = remaining[mockInteger(0, remaining.length - 1)];
+    final bool isLastOne = remaining.length == 1;
+
+    final String randomChar = isLastOne
+        ? remaining[0]
+        : remaining[mockInteger(0, remaining.length - 1)];
+
+    //
     final String text = _replaceHash(
-      "tip_${mockInteger(0, 8)}".tr(),
+      isLastOne
+          ? "last_chance_${mockInteger(0, 9)}".tr()
+          : "tip_${mockInteger(0, 8)}".tr(),
       [randomChar],
     );
 

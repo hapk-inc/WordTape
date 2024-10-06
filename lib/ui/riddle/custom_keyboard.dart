@@ -6,11 +6,8 @@ import '../../function/date/date.dart';
 import '../../function/riddle/notifier.dart';
 
 import '../../enum/enum.dart';
+import '../../function/riddle/word_notifier.dart';
 import '../../theme/color.dart';
-
-// import '../../enum/pod.dart';
-// import '../../function/puzzle/notifier.dart';
-// import '../../function/puzzle/pod.dart';
 
 const String backspace = "🔙";
 const String done = "✔️";
@@ -92,19 +89,22 @@ class _KeyboardTile extends ConsumerWidget {
   final double width;
   final bool isHighlighted;
 
-  const _KeyboardTile(
-    this.str,
-    this.width, {
-    this.isHighlighted = false,
-  });
+  const _KeyboardTile(this.str, this.width, {this.isHighlighted = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(selectedDateProvider);
     final bool isChar = str.length == 1;
     final TextTheme textTheme = Theme.of(context).textTheme;
+
     return InkWell(
-      onTap: () => ref.read(riddleNotifierProvider(date)).listenTap(str),
+      onTap: () {
+        final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+        if (notifier.focusedWord == null) return;
+        final WordNotifier wordNotifier =
+            ref.read(wordNotifierProvider(notifier.focusedWord!));
+        wordNotifier.listenTap(str);
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: width,
