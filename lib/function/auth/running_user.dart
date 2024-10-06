@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../firebase/pod.dart';
 import '../../router/router.dart';
 import '../connectivity/pod.dart';
+import '../firestore/pod.dart';
 import '../sqlite/pod.dart';
 import 'pod.dart';
 
@@ -20,14 +19,14 @@ part 'running_user.g.dart';
   sqFound,
   sqRiddle,
   remoteConfig,
-  // remotePlayer,
+  firestoreUser
 ])
 void listenAuth(ListenAuthRef ref) {
   ref.listen<User?>(
     runningUserProvider.select((value) => value.value),
     (prev, next) {
-      log("25==listenAuth");
       if (next != null) {
+        ref.read(firestoreUserProvider).updateMe();
         ref.read(routerProvider).replace("/home");
       } else {
         if (prev != null) {
@@ -37,14 +36,6 @@ void listenAuth(ListenAuthRef ref) {
           ref.read(routerProvider).replace('/');
         }
       }
-      /*if (prev != null && next == null) {
-        ref.read(sqFoundProvider).delete();
-        ref.read(sqRiddleProvider).delete();
-      }
-      if (next != null) {
-        // ref.read(remotePlayerProvider).updateMe();
-      }*/
-      // ref.read(authNotifierProvider.notifier).validateAuth(next == null);
     },
   );
 

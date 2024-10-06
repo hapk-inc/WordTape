@@ -28,7 +28,10 @@ class Clue extends ConsumerWidget {
         key: ValueKey(hint),
         child: AutoSizeText(
           hint,
-          style: textTheme.bodySmall?.copyWith(color: Colors.amber),
+          style: textTheme.bodySmall?.copyWith(
+            color: Colors.amber,
+            height: 1.8,
+          ),
           maxLines: 2,
           stepGranularity: 3,
           minFontSize: 12,

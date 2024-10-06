@@ -47,6 +47,7 @@ class RiddleNotifier extends ChangeNotifier {
 
   Future init() async {
     _riddle = await ref.watch(riddleDateArgProvider(date: date).future);
+
     if (_riddle != null) {
       final foundArg = sqFoundArgProvider(id: _riddle!.id);
       _found = await ref.watch(foundArg.future) ?? Found.fromRiddle(_riddle!);
@@ -61,6 +62,21 @@ class RiddleNotifier extends ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  @override
+  void addListener(VoidCallback listener) {
+    ref.listen<Riddle?>(
+      riddleDocProvider(date: date).select((value) => value.value),
+      (previous, next) {
+        logger.i("riddleDocProvider $next");
+        if (next != null) {
+          _riddle = next;
+          notifyListeners();
+        }
+      },
+    );
+    super.addListener(listener);
   }
 
   bool get done => _done;
@@ -86,6 +102,12 @@ class RiddleNotifier extends ChangeNotifier {
     if (!map.containsKey(_found.i)) return true;
     final List<String> soFar = List<String>.from(_found.soFar[_found.i]);
     return soFar.every((char) => splitter.contains(char));
+  }
+
+  @override
+  void dispose() {
+    logger.d("Why dispose $date");
+    super.dispose();
   }
 
   List<String> get highlightedChar {

@@ -62,5 +62,5 @@ class Riddle extends Equatable with _$Riddle {
   }
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id, played, win, date];
 }

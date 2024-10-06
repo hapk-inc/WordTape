@@ -16,6 +16,8 @@ class Hint extends _$Hint {
     if (notifier.focusedWord == null) {
       if (notifier.found.i == 6) {
         return "first_win_${mockInteger(0, 9)}".tr();
+      } else {
+        return ref.read(figureOutProvider);
       }
     }
     return ref
@@ -35,10 +37,14 @@ class Hint extends _$Hint {
 
   Future<void> rearrange() async {
     final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
-    state = await ref.watch(createHintProvider(
-      notifier.focusedWord!,
-      notifier.answer,
-    ).future);
+    if (notifier.focusedWord == null) {
+      state = ref.read(figureOutProvider);
+    } else {
+      state = await ref.watch(createHintProvider(
+        notifier.focusedWord!,
+        notifier.answer,
+      ).future);
+    }
   }
 
   Future<void> helpUser(String answer, String? mistake) async {

@@ -24,6 +24,7 @@ class Auth {
       onListen: () => _auth.authStateChanges().listen(
         (event) {
           if (!subject.hasValue || subject.value != event) {
+            log.d(event?.uid ?? "No ID");
             log.d(event?.displayName ?? "No Name");
             subject.add(event);
           }

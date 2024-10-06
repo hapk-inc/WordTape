@@ -32,11 +32,21 @@ GoRouter router(RouterRef ref) {
           GoRoute(
             path: '/riddle',
             builder: (_, GoRouterState state) {
+              if (state.extra == null) {
+                final DateTime args = ref.read(selectedDateProvider);
+                return RiddlePage(args);
+              }
               final DateTime args = state.extra as DateTime;
               return RiddlePage(args);
             },
             onExit: (_, state) {
-              final DateTime date = state.extra as DateTime;
+              DateTime date;
+              if (state.extra == null) {
+                date = ref.read(selectedDateProvider);
+              } else {
+                date = state.extra as DateTime;
+              }
+
               final Found found = ref.read(riddleNotifierProvider(date)).found;
               ref.read(sqFoundProvider).insert(found);
               return true;
@@ -44,7 +54,6 @@ GoRouter router(RouterRef ref) {
           ),
           GoRoute(
             path: '/summary',
-            //builder: (_, state) => const SummaryPage(),
             pageBuilder: (context, state) {
               final DateTime? args = state.extra as DateTime?;
               return CustomTransitionPage(

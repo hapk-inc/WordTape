@@ -69,7 +69,7 @@ class _SummaryState extends ConsumerState<Summary> {
                   () => setState(() => show = true),
                 ),
               ),
-            if (show)
+            if (show || !noHelp)
               FadeIn(
                 duration: const Duration(milliseconds: 750),
                 child: const Center(child: SummaryContent()),

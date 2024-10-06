@@ -36,7 +36,36 @@ class FirestoreRiddle {
     );
   }
 
-  Stream<Riddle> get onRiddleChanged {
+  Stream<Riddle> onRiddleModified(DateTime date) {
+    final String dateStr = DateFormat('yyyy-MM-dd').format(date);
+    late BehaviorSubject<Riddle> subject;
+    subject = BehaviorSubject(
+      onListen: () => collectionReference
+          .where('date', isEqualTo: dateStr)
+          .snapshots()
+          .listen(
+        (QuerySnapshot snapshot) {
+          final QueryDocumentSnapshot doc = snapshot.docs.first;
+          final Map map = doc.data() as Map;
+          final String id = doc.id;
+          final Map<String, dynamic> m = Map<String, dynamic>.from(map);
+          final Riddle r = Riddle.fromFirestore(m).copyWith(id: id);
+          subject.add(r);
+        },
+      ),
+    );
+
+    return subject.stream;
+  }
+
+  Future firstFound(String id) => collectionReference.doc(id).update(
+        <String, dynamic>{
+          "played": FieldValue.increment(1),
+        },
+      );
+
+  //DO NOT REMOVE
+  /*Stream<Riddle> get onRiddleChanged {
     late BehaviorSubject<Riddle> subject;
     subject = BehaviorSubject(
       onListen: () => collectionReference.snapshots().listen(
@@ -51,8 +80,10 @@ class FirestoreRiddle {
             }
           }
         },
-      ),
+      ).onError((e, s) {
+        log("60==onRiddle", error: e);
+      }),
     );
     return subject.stream;
-  }
+  }*/
 }

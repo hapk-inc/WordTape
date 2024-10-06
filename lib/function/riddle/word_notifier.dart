@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import '../../model/found.dart';
 import '../../model/word.dart';
 import '../../theme/color.dart';
+import '../firestore/pod.dart';
 import '../sqlite/pod.dart';
 import '../../extension/extension.dart';
 
@@ -76,6 +77,10 @@ class WordNotifier extends ChangeNotifier {
         if (_index == next.i) {
           log(next.toString(), name: "addListener-$_index");
           ref.read(sqFoundProvider).insert(next);
+          final bool isFirstFound = _index == 2 && ((prev?.i ?? 0) == 1);
+          if (isFirstFound) {
+            ref.read(riddleFirestoreProvider).firstFound(next.id ?? "");
+          }
           _error = next.mistake != null;
           final Hint hint = ref.read(hintProvider(_date).notifier);
           if (_error) {
