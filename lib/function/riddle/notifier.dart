@@ -11,8 +11,6 @@ import '../../model/riddle.dart';
 import '../../model/word.dart';
 
 //
-import '../../panel/pod.dart';
-import '../../ui/common/logoff.dart';
 import '../firestore/pod.dart';
 import '../sqlite/pod.dart';
 import '../underline_text/pod.dart';
@@ -43,6 +41,7 @@ class RiddleNotifier extends ChangeNotifier {
   RiddleNotifier(this.ref, {required this.date}) {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String dateStr = formatter.format(date);
+    _found = Found(date: date);
     logger.i("RiddleNotifier for $dateStr");
   }
 

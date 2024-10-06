@@ -5,20 +5,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:wordtape/function/riddle/word_notifier.dart';
-import 'package:wordtape/panel/pod.dart';
-import 'package:wordtape/ui/common/logoff.dart';
-import 'package:wordtape/ui/summary.dart';
+
 import '../function/key_tap/pod.dart';
 import '../function/riddle/notifier.dart';
+import '../function/riddle/word_notifier.dart';
 import '../function/sqlite/pod.dart';
 import '../model/found.dart';
 import '../model/word.dart';
+import '../panel/pod.dart';
 import 'riddle/custom_keyboard.dart';
 import 'common/editable_word.dart';
 import 'common/gradient_box.dart';
 import 'riddle/clue.dart';
 import 'riddle/app_bar.dart';
+import 'summary.dart';
 
 class RiddlePage extends ConsumerStatefulWidget {
   final DateTime date;
@@ -42,7 +42,8 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
       const Duration(milliseconds: 900),
       () {
         if (notifier.done) {
-          ref.read(panelNotifierProvider.notifier).state = const SummaryPage();
+          ref.read(panelNotifierProvider.notifier).state =
+              SummaryPage(date: date);
         }
       },
     );
@@ -51,7 +52,8 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
       riddleNotifierProvider(date).select((value) => value.done),
       (previous, next) {
         if (next) {
-          ref.read(panelNotifierProvider.notifier).state = const SummaryPage();
+          ref.read(panelNotifierProvider.notifier).state =
+              SummaryPage(date: date);
         }
       },
     );

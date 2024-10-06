@@ -8,10 +8,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:random_avatar/random_avatar.dart';
-import 'package:wordtape/function/auth/pod.dart';
-import 'package:wordtape/ui/common/logoff.dart';
-import 'package:wordtape/ui/summary.dart';
 
+import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
 import '../../function/riddle/notifier.dart';
 import '../../function/underline_text/pod.dart';
@@ -21,6 +19,7 @@ import '../../panel/pod.dart';
 import '../../theme/color.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
+import '../common/logoff.dart';
 import '../common/notify.dart';
 
 class RiddleNow extends ConsumerWidget {
@@ -48,7 +47,7 @@ class RiddleNow extends ConsumerWidget {
               child: RandomAvatar(mockString(), trBackground: true),
             ),
           ),
-        Gap(7.5.r)
+        Gap(15.r)
       ],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(120.h),
@@ -66,7 +65,6 @@ class RiddleNow extends ConsumerWidget {
                   onPressed: () {
                     final DateTime date = ref.read(selectedDateProvider);
                     context.push('/riddle', extra: date);
-                    // context.push('/summary');
                   },
                   child: const Text("Play now"),
                 ),

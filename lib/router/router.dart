@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,12 +6,9 @@ import '../function/date/date.dart';
 import '../function/riddle/notifier.dart';
 import '../function/sqlite/pod.dart';
 import '../model/found.dart';
-import '../panel/pod.dart';
-import '../ui/common/logoff.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
 import '../ui/riddle.dart';
-// import '../ui/renovation.dart';
 import '../ui/splash.dart';
 import '../ui/summary.dart';
 
@@ -51,8 +46,9 @@ GoRouter router(RouterRef ref) {
             path: '/summary',
             //builder: (_, state) => const SummaryPage(),
             pageBuilder: (context, state) {
+              final DateTime? args = state.extra as DateTime?;
               return CustomTransitionPage(
-                child: const SummaryPage(),
+                child: args == null ? Container() : SummaryPage(date: args),
                 transitionsBuilder: (_, animation, __, child) {
                   const Offset begin = Offset(0.0, 1.0);
                   const Offset end =

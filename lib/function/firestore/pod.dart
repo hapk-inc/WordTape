@@ -17,5 +17,5 @@ FirestoreRiddle riddleFirestore(RiddleFirestoreRef ref) {
 Future<Riddle?> riddleFirestoreDateArg(RiddleFirestoreDateArgRef ref,
     {required DateTime date}) async {
   final FirestoreRiddle firestoreRiddle = ref.read(riddleFirestoreProvider);
-  return firestoreRiddle.puzzle(date);
+  return firestoreRiddle.riddle(date);
 }

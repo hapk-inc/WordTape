@@ -9,25 +9,32 @@ import 'package:lottie/lottie.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../function/date/date.dart';
+import '../function/riddle/notifier.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
 
 class SummaryPage extends PanelWidget {
-  const SummaryPage({super.key});
+  final DateTime date;
+  const SummaryPage({required this.date, super.key});
 
   @override
-  Widget build(context, ref) =>
-      SizedBox(height: height(), child: const Summary());
+  Widget build(context, ref) => SizedBox(
+        height: height(),
+        width: 450.r,
+        child: Summary(date: date),
+      );
 
   @override
   SlideDirection direction() => SlideDirection.DOWN;
 
   @override
-  double height() => 405.r;
+  double height() => 420.r;
 }
 
 class Summary extends ConsumerStatefulWidget {
-  const Summary({super.key});
+  final DateTime date;
+  const Summary({required this.date, super.key});
 
   @override
   ConsumerState createState() => _SummaryState();
@@ -35,6 +42,15 @@ class Summary extends ConsumerStatefulWidget {
 
 class _SummaryState extends ConsumerState<Summary> {
   bool show = false;
+
+  @override
+  void initState() {
+    final RiddleNotifier notifier =
+        ref.read(riddleNotifierProvider(widget.date));
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => AnimatedContainer(
         duration: const Duration(milliseconds: 300),
@@ -65,15 +81,18 @@ class SummaryContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final UnderlineText hashTag = ref.read(hashTagProvider);
+    final DateTime date = ref.read(selectedDateProvider);
+    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+    final bool noHelp = notifier.found.soFar.isEmpty;
+
     return LayoutBuilder(
       builder: (context, constraints) => Column(
         children: [
           Expanded(
             child: Lottie.asset(
-              'lottie/sad.json',
+              'lottie/${noHelp ? 'trophy_1.json' : 'sad.json'}',
               fit: BoxFit.fitWidth,
-              width: constraints.maxHeight * 0.6,
+              width: constraints.maxHeight * (noHelp ? 0.72 : 0.54),
             ),
           ),
           AnimatedContainer(
