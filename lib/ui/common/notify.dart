@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -33,41 +33,44 @@ class NotifyAndShare extends PanelWidget {
         gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
       ),
       alignment: Alignment.topCenter,
-      padding: EdgeInsets.symmetric(horizontal: 15.r, vertical: 30.r),
+      padding: EdgeInsets.all(15.r),
       constraints: BoxConstraints(maxWidth: 540.r),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AutoSizeText(
-              str,
-              style: textTheme.bodyLarge?.copyWith(
-                color: blackBean,
-                height: 0,
+      child: FadeIn(
+        delay: const Duration(milliseconds: 300),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AutoSizeText(str,
+                  style: GoogleFonts.montserrat(
+                    color: blackBean,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 21.r,
+                    height: 2.1,
+                    letterSpacing: 0,
+                  )),
+              AutoSizeText(
+                detail,
+                style: textTheme.bodySmall?.copyWith(color: Colors.grey),
+                minFontSize: 10.5,
+                maxFontSize: 15,
+                stepGranularity: 1.5,
+                maxLines: isDialog ? 1 : null,
               ),
-            ),
-            Gap(4.5.r),
-            AutoSizeText(
-              detail,
-              style: textTheme.bodySmall?.copyWith(color: Colors.grey),
-              minFontSize: 10.5,
-              maxFontSize: 15,
-              stepGranularity: 1.5,
-              maxLines: isDialog ? 1 : null,
-            ),
-            Center(
-              child: FadeIn(
-                delay: const Duration(milliseconds: 750),
-                child: SizedBox.square(
-                  dimension: 270.r,
-                  child: InkWell(
-                    onTap: () => Share.share("xyz"),
-                    child: Lottie.asset('lottie/share.json'),
+              Center(
+                child: FadeIn(
+                  delay: const Duration(milliseconds: 750),
+                  child: SizedBox.square(
+                    dimension: 270.r,
+                    child: InkWell(
+                      onTap: () => Share.share("xyz"),
+                      child: Lottie.asset('lottie/share.json'),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

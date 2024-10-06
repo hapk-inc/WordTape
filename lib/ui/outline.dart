@@ -8,8 +8,11 @@ import '../panel/pod.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
 
-BorderRadius _borderRadius(double radius) =>
-    BorderRadius.vertical(top: Radius.circular(radius.r));
+BorderRadius _borderRadius(double radius, {bool isTop = true}) =>
+    BorderRadius.vertical(
+      top: isTop ? Radius.circular(radius.r) : Radius.zero,
+      bottom: !isTop ? Radius.circular(radius.r) : Radius.zero,
+    );
 
 class OutlinePage extends ConsumerWidget {
   final Widget child;
@@ -22,31 +25,42 @@ class OutlinePage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: blackBean,
       body: SizedBox.expand(
-        child: mobile
-            ? SlidingUpPanel(
-                backdropEnabled: true,
-                backdropOpacity: 1,
-                isDraggable: false,
-                color: seaWhite,
-                controller: mobile ? ref.read(panelControllerProvider) : null,
-                minHeight: 0,
-                maxHeight: ref.watch(panelNotifierProvider).height(),
-                padding: EdgeInsets.zero,
-                backdropColor: gunMetal,
-                slideDirection: ref.watch(panelNotifierProvider).direction(),
-                borderRadius: _borderRadius(30),
-                renderPanelSheet: false,
-                panel: ClipRRect(
-                  borderRadius: _borderRadius(30),
-                  child: ref.watch(panelNotifierProvider),
+        child: Builder(
+          builder: (_) {
+            if (!mobile) return OutlineState(child: child);
+            final PanelWidget panelWidget = ref.watch(panelNotifierProvider);
+
+            return SlidingUpPanel(
+              backdropEnabled: true,
+              backdropOpacity: 1,
+              isDraggable: false,
+              color: seaWhite,
+              controller: mobile ? ref.read(panelControllerProvider) : null,
+              minHeight: 0,
+              maxHeight: panelWidget.height(),
+              padding: EdgeInsets.zero,
+              backdropColor: gunMetal,
+              slideDirection: panelWidget.direction(),
+              borderRadius: _borderRadius(
+                15,
+                isTop: panelWidget.direction() == SlideDirection.UP,
+              ),
+              renderPanelSheet: true,
+              panel: ClipRRect(
+                borderRadius: _borderRadius(
+                  15,
+                  isTop: panelWidget.direction() == SlideDirection.UP,
                 ),
-                body: OutlineState(child: child),
-                onPanelClosed: () {
-                  ref.read(panelNotifierProvider.notifier).state =
-                      const EmptyPanel();
-                },
-              )
-            : OutlineState(child: child),
+                child: panelWidget,
+              ),
+              body: OutlineState(child: child),
+              onPanelClosed: () {
+                ref.read(panelNotifierProvider.notifier).state =
+                    const EmptyPanel();
+              },
+            );
+          },
+        ),
       ),
     );
   }

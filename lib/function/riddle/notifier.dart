@@ -102,6 +102,7 @@ class RiddleNotifier extends ChangeNotifier {
   Future<void> validate(String text) async {
     if (_lastChance) {
       await _newFound();
+      lastChance = false;
     } else {
       bool isValid = focusedWord!.value == text;
       final Hint hint = ref.read(hintProvider(date).notifier);
@@ -171,9 +172,7 @@ class RiddleNotifier extends ChangeNotifier {
 
   set done(bool value) {
     _done = value;
-    if (_done) {
-      // ref.read(panelNotifierProvider.notifier).state = const LogoffAlert();
-    } else {
+    if (!_done) {
       final int i = _found.i;
       final bool containsIndex = _found.soFar.containsKey(i);
       if (containsIndex) {

@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wordtape/ui/summary.dart';
 
+import '../function/date/date.dart';
 import '../function/riddle/notifier.dart';
 import '../function/sqlite/pod.dart';
 import '../model/found.dart';
@@ -15,12 +15,13 @@ import '../ui/outline.dart';
 import '../ui/riddle.dart';
 // import '../ui/renovation.dart';
 import '../ui/splash.dart';
+import '../ui/summary.dart';
 
 part 'router.g.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-@Riverpod(keepAlive: true, dependencies: [sqFound])
+@Riverpod(keepAlive: true, dependencies: [sqFound, SelectedDate])
 GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
@@ -35,17 +36,6 @@ GoRouter router(RouterRef ref) {
           GoRoute(path: '/home', builder: (_, __) => const DashboardPage()),
           GoRoute(
             path: '/riddle',
-            redirect: (context, state) {
-              log("35==Redirect");
-              final DateTime args = state.extra as DateTime;
-              final RiddleNotifier notifier =
-                  ref.read(riddleNotifierProvider(args));
-              if (notifier.done) {
-                ref.read(panelNotifierProvider.notifier).state =
-                    const LogoffAlert();
-              }
-              return state.matchedLocation;
-            },
             builder: (_, GoRouterState state) {
               final DateTime args = state.extra as DateTime;
               return RiddlePage(args);

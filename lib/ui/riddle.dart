@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:wordtape/function/riddle/word_notifier.dart';
 import 'package:wordtape/panel/pod.dart';
 import 'package:wordtape/ui/common/logoff.dart';
+import 'package:wordtape/ui/summary.dart';
 import '../function/key_tap/pod.dart';
 import '../function/riddle/notifier.dart';
 import '../function/sqlite/pod.dart';
@@ -31,13 +32,32 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   late final AppLifecycleListener _listener;
   late DateTime date;
   late RiddleNotifier notifier;
+
+  //
   @override
   void initState() {
-    super.initState();
     date = widget.date;
     notifier = ref.read(riddleNotifierProvider(date));
+    Future.delayed(
+      const Duration(milliseconds: 900),
+      () {
+        if (notifier.done) {
+          ref.read(panelNotifierProvider.notifier).state = const SummaryPage();
+        }
+      },
+    );
+
+    ref.listenManual(
+      riddleNotifierProvider(date).select((value) => value.done),
+      (previous, next) {
+        if (next) {
+          ref.read(panelNotifierProvider.notifier).state = const SummaryPage();
+        }
+      },
+    );
 
     _listener = AppLifecycleListener(onStateChange: _onStateChanged);
+    super.initState();
   }
 
   void _onStateChanged(AppLifecycleState state) {

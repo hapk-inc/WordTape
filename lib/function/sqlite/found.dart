@@ -45,14 +45,16 @@ class LocalFound {
 
   Future insert(Found found) async {
     if (kIsWeb) return;
-    final Database db = await database;
-    final Map<String, dynamic> map = found.toJson();
+    if (await databaseFactory.databaseExists(await getDatabasesPath())) {
+      final Database db = await database;
+      final Map<String, dynamic> map = found.toJson();
 
-    return await db.insert(
-      _tableName,
-      map,
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+      return await db.insert(
+        _tableName,
+        map,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
   }
 
   Future delete() async {
