@@ -46,9 +46,7 @@ class RiddleNotifier extends ChangeNotifier {
   }
 
   Future init() async {
-    _riddle = await ref.watch(
-      riddleFirestoreDateArgProvider(date: date).future,
-    );
+    _riddle = await ref.watch(riddleDateArgProvider(date: date).future);
     if (_riddle != null) {
       final foundArg = sqFoundArgProvider(id: _riddle!.id);
       _found = await ref.watch(foundArg.future) ?? Found.fromRiddle(_riddle!);

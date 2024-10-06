@@ -42,11 +42,13 @@ class Summary extends ConsumerStatefulWidget {
 
 class _SummaryState extends ConsumerState<Summary> {
   bool show = false;
+  late bool noHelp;
 
   @override
   void initState() {
     final RiddleNotifier notifier =
         ref.read(riddleNotifierProvider(widget.date));
+    noHelp = notifier.found.soFar.isEmpty;
 
     super.initState();
   }
@@ -58,14 +60,15 @@ class _SummaryState extends ConsumerState<Summary> {
         color: seaWhite,
         child: Stack(
           children: [
-            Lottie.asset(
-              'lottie/confetti.json',
-              repeat: false,
-              onLoaded: (p0) => Future.delayed(
-                p0.duration * 0.75,
-                () => setState(() => show = true),
+            if (noHelp)
+              Lottie.asset(
+                'lottie/confetti.json',
+                repeat: false,
+                onLoaded: (p0) => Future.delayed(
+                  p0.duration * 0.75,
+                  () => setState(() => show = true),
+                ),
               ),
-            ),
             if (show)
               FadeIn(
                 duration: const Duration(milliseconds: 750),

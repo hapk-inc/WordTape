@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'enum/enum.dart';
 import 'router/router.dart';
@@ -57,6 +58,25 @@ class MyApp extends ConsumerWidget with CustomThemeMixin {
                 style: defaultButtonStyle.copyWith(
                   side: WidgetStatePropertyAll(outlineBorder),
                   foregroundColor: const WidgetStatePropertyAll(slateGray),
+                ),
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: defaultButtonStyle.copyWith(
+                  foregroundColor: const WidgetStatePropertyAll(slateGray),
+                  padding: WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 15.r),
+                  ),
+                  minimumSize: WidgetStatePropertyAll(Size(90.r, 45.r)),
+                  textStyle: WidgetStatePropertyAll(
+                    GoogleFonts.robotoMono(
+                      color: slateGray,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 15.r,
+                      height: 0,
+                      letterSpacing: 0,
+                      wordSpacing: 0,
+                    ),
+                  ),
                 ),
               ),
             ),

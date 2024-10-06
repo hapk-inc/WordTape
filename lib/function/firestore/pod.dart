@@ -14,7 +14,7 @@ FirestoreRiddle riddleFirestore(RiddleFirestoreRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-Future<Riddle?> riddleFirestoreDateArg(RiddleFirestoreDateArgRef ref,
+Future<Riddle?> riddleDateArg(RiddleDateArgRef ref,
     {required DateTime date}) async {
   final FirestoreRiddle firestoreRiddle = ref.read(riddleFirestoreProvider);
   return firestoreRiddle.riddle(date);
