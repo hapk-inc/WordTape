@@ -68,13 +68,14 @@ Future<void> main() async {
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
     logger.e("APP CRASH", error: error, stackTrace: stack);
+    print(stack);
     if (!kIsWeb && !kDebugMode) {
       crashlytics.recordError(error, stack, fatal: true);
     }
     return true;
   };
 
-  if (!kIsWeb) await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
+  if (!kIsWeb) await crashlytics.setCrashlyticsCollectionEnabled(kReleaseMode);
 
   logger.i("FIREBASE STARTED");
 

@@ -13,6 +13,8 @@ enum AppEnv { dev, prod }
 
 enum RiddleState { launch, resume, completed }
 
+enum PromptState { search, wrong, tip, correct }
+
 @Riverpod(keepAlive: true, dependencies: [])
 ScreenSize size(SizeRef ref) => ScreenSize.mobile;
 

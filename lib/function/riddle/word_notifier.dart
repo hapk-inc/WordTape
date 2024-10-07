@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:wordtape/enum/enum.dart';
 
 import '../../model/found.dart';
 import '../../model/word.dart';
@@ -75,7 +76,7 @@ class WordNotifier extends ChangeNotifier {
       riddleNotifierProvider(_date).select((value) => value.found),
       (prev, next) {
         if (_index == next.i) {
-          log(next.toString(), name: "addListener-$_index");
+          _notifier.riddleState = RiddleState.resume;
           ref.read(sqFoundProvider).insert(next);
           final bool isFirstFound = _index == 2 && ((prev?.i ?? 0) == 1);
           if (isFirstFound) {

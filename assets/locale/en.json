@@ -183,5 +183,16 @@
   "use_hint_4": "If you need a tip, just use the hint icon.",
   "use_hint_5": "If you want help, click the hint button.",
   "use_hint_6": "Need a little help? Use the hint icon.",
-  "use_hint_7": "If you’re having trouble, use the hint button."
+  "use_hint_7": "If you’re having trouble, use the hint button.",
+
+  "challenge_done_0": "You finished today’s challenge.",
+  "challenge_done_1": "You completed the challenge for today.",
+  "challenge_done_2": "Today, you did the challenge.",
+  "challenge_done_3": "You got through today’s challenge.",
+  "challenge_done_4": "You accomplished the challenge today.",
+  "challenge_done_5": "You wrapped up today’s challenge.",
+  "challenge_done_6": "You succeeded in today’s challenge.",
+  "challenge_done_7": "You tackled the challenge today.",
+  "challenge_done_8": "You achieved the challenge for today.",
+  "challenge_done_9": "You made it through today’s challenge."
 }

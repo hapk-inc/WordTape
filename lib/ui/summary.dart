@@ -112,19 +112,19 @@ class SummaryContent extends ConsumerWidget {
                   "congrats_detail_${mockInteger(0, 5)}".tr(),
                   style: GoogleFonts.montserrat(
                     color: midnightGreen,
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.w600,
                     fontSize: 15.r,
                     height: 0,
                     letterSpacing: 0,
                   ),
                   maxLines: 1,
                 ),
-                Gap(12.r),
+                Gap(15.r),
                 Row(
                   children: [
                     Expanded(
                       child: Text(
-                        "http://${mockString(60)}",
+                        "https://wordtape-demo.web.app/",
                         style: GoogleFonts.robotoMono(
                           fontSize: 15.r,
                           letterSpacing: 0,

@@ -18,7 +18,7 @@ import 'color.dart';
 class DefaultTextTheme extends TextTheme with FontMixin {
   //Title==============
   @override
-  TextStyle? get titleLarge => carterTheme.copyWith(fontSize: 30.r);
+  TextStyle? get titleLarge => carterTheme.copyWith(fontSize: 27.r);
 
   @override
   TextStyle? get titleMedium => carterTheme.copyWith(

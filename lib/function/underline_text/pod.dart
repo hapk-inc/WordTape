@@ -21,7 +21,10 @@ UnderlineText welcomeUser(WelcomeUserRef ref) {
   final DateTime now = DateTime.now();
   final List<UnderlineText> welcome = List.generate(
     7,
-    (i) => UnderlineText("welcome_$i".tr(), focus: "welcome_${i}_pick".tr()),
+    (i) => UnderlineText(
+      "welcome_$i".tr(),
+      focus: "welcome_${i}_pick".tr(),
+    ),
   );
   return welcome[now.day % welcome.length];
 }

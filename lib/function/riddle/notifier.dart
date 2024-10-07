@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:mock_data/mock_data.dart';
 
+import '../../enum/enum.dart';
 import '../../model/tip.dart';
 import '../../model/underline_text.dart';
 import '../../model/found.dart';
@@ -35,8 +36,9 @@ class RiddleNotifier extends ChangeNotifier {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Tip? _tip;
   late bool _done = false;
-  final UnderlineText _header = const UnderlineText("Hi");
+  late UnderlineText _header = const UnderlineText("Hi");
   bool _lastChance = false;
+  late RiddleState _riddleState = RiddleState.launch;
 
   RiddleNotifier(this.ref, {required this.date}) {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -49,6 +51,7 @@ class RiddleNotifier extends ChangeNotifier {
     _riddle = await ref.watch(riddleDateArgProvider(date: date).future);
 
     if (_riddle != null) {
+      _header = ref.read(welcomeUserProvider);
       final foundArg = sqFoundArgProvider(id: _riddle!.id);
       _found = await ref.watch(foundArg.future) ?? Found.fromRiddle(_riddle!);
       logger.i("$_found");
@@ -56,11 +59,16 @@ class RiddleNotifier extends ChangeNotifier {
     done = _found.i == 6;
 
     if (!_done) {
+      debugPrint("60==");
+      debugPrint(_found.i.toString());
+      riddleState = _found.i == 1 ? RiddleState.launch : RiddleState.resume;
       if (_found.soFar.containsKey(_found.i)) {
         final List<String> soFar1 = List<String>.from(_found.soFar[_found.i]);
         _lastChance = focusedWord!.value.length - 1 == soFar1.length;
       }
       notifyListeners();
+    } else {
+      riddleState = RiddleState.completed;
     }
   }
 
@@ -117,6 +125,31 @@ class RiddleNotifier extends ChangeNotifier {
   }
 
   UnderlineText get header => _header;
+
+  RiddleState get riddleState => _riddleState;
+
+  set riddleState(RiddleState value) {
+    logger.i(value.name);
+    if (_riddleState == value || _riddleState == RiddleState.completed) return;
+    _riddleState = value;
+    switch (_riddleState) {
+      case RiddleState.resume:
+        {
+          _header = ref.read(resumeProvider);
+          break;
+        }
+      case RiddleState.completed:
+        {
+          _header = UnderlineText("challenge_done_${mockInteger(0, 9)}".tr());
+          break;
+        }
+      default:
+        {
+          _header = ref.read(welcomeUserProvider);
+        }
+    }
+    notifyListeners();
+  }
 
   Future<void> validate(String text) async {
     if (_lastChance) {
@@ -198,6 +231,8 @@ class RiddleNotifier extends ChangeNotifier {
         final List<String> soFar1 = List<String>.from(_found.soFar[i]);
         lastChance = focusedWord!.value.length - 1 == soFar1.length;
       }
+    } else {
+      riddleState = RiddleState.completed;
     }
     notifyListeners();
   }

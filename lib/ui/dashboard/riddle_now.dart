@@ -113,7 +113,11 @@ class RiddleNowState extends ConsumerWidget {
                 child: Column(
                   children: [
                     Gap(30.r),
-                    SizedBox(width: 600.r, child: const RiddleNowWelcome()),
+                    Container(
+                      width: 600.r,
+                      padding: EdgeInsets.symmetric(horizontal: 7.5.r),
+                      child: const RiddleNowWelcome(),
+                    ),
                     Gap(30.r),
                     for (Word search in search)
                       FadeIn(
@@ -159,12 +163,6 @@ class RiddleNowWelcome extends ConsumerWidget {
                     ? textTheme.titleLarge?.copyWith(color: aquaMarine)
                     : null,
               ),
-            TextSpan(
-              text: sentence.end,
-              style: words.last == highlighter.last
-                  ? textTheme.titleLarge?.copyWith(color: aquaMarine)
-                  : null,
-            )
           ],
         ),
         maxLines: 2,
