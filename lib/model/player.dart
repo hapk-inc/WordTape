@@ -20,14 +20,15 @@ class Player extends Equatable with _$Player {
     String? photoURL,
     DateTime? nowTime,
     DateTime? created,
-    String? source,
+    @Default("web") String? source,
+    String? avatar,
 
     //
     @JsonKey(includeFromJson: false, includeToJson: false) String? id,
   }) = _Player;
 
   @override
-  List<Object?> get props => [rollNo, id];
+  List<Object?> get props => [rollNo, id, avatar];
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
@@ -35,18 +36,25 @@ class Player extends Equatable with _$Player {
       _$PlayerFromJson(json).copyWith(id: id);
 
   factory Player.newUser(User fUser) {
-    debugPrint(fUser.toString());
-    return Player(
-      nickName:
-          fUser.displayName ?? mockName() + mockInteger(0, 1000).toString(),
+    final String name = fUser.displayName ?? "Player";
+
+    Player player = Player(
+      name: name,
+      nickName: "$name${mockInteger(0, 1000)}",
       rollNo: mockInteger(100000, 99999999),
       nowTime: fUser.metadata.lastSignInTime,
       created: fUser.metadata.creationTime,
-      source: kIsWeb
-          ? "web"
-          : fUser.providerData[0].providerId == "gc.apple.com"
-              ? "iOS"
-              : "Android",
+      avatar: mockString(6, 'a'),
     );
+
+    if (!kIsWeb) {
+      player = player.copyWith(
+        source: fUser.providerData[0].providerId == "gc.apple.com"
+            ? "iOS"
+            : "Android",
+      );
+    }
+
+    return player;
   }
 }

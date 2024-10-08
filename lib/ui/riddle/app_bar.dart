@@ -2,21 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
 import '../../function/riddle/notifier.dart';
 
-class RiddleAppBar extends StatelessWidget {
+class RiddleAppBar extends ConsumerWidget {
   const RiddleAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final PackageInfo? package = ref.read(packageProvider).value;
+    final String name = package?.appName ?? "";
     return AppBar(
       backgroundColor: Colors.transparent,
       toolbarHeight: 90.r,
       leadingWidth: 60.r,
       titleSpacing: 0,
-      title: const Text("WORDTAPE"),
+      title: Text(name.toUpperCase()),
       actions: const [LottieHint()],
       titleTextStyle: Theme.of(context).textTheme.displayMedium,
     );

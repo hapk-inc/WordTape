@@ -1,18 +1,21 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mock_data/mock_data.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
+import '../../function/firestore/pod.dart';
 import '../../function/riddle/notifier.dart';
 import '../../function/underline_text/pod.dart';
+import '../../model/player.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
@@ -31,22 +34,32 @@ class RiddleNow extends ConsumerWidget {
     final String share = ref.read(passPromptProvider);
     final DateTime date = ref.read(nowProvider);
     final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
-    final User? user = ref.watch(runningUserProvider).value;
+
+    //
+    final PackageInfo? package = ref.read(packageProvider).value;
+    final String name = (package?.appName ?? "").toUpperCase();
+    //
+    final Player? player = ref.watch(playerProvider).value;
+    log(player.toString());
     return SliverAppBar(
       pinned: true,
       snap: false,
       floating: false,
       actions: [
-        if (!(user?.isAnonymous ?? true))
-          CircleAvatar(
-            radius: 36.r,
-            backgroundColor: aquaMarine,
-            child: InkWell(
-              onTap: () => ref.read(panelNotifierProvider.notifier).state =
-                  const LogoffAlert(),
-              child: RandomAvatar(mockString(), trBackground: true),
+        if (player != null)
+          if (player.source != "web")
+            CircleAvatar(
+              radius: 36.r,
+              backgroundColor: aquaMarine,
+              child: InkWell(
+                onTap: () => ref.read(panelNotifierProvider.notifier).state =
+                    const LogoffAlert(),
+                child: RandomAvatar(
+                  player.avatar ?? "${player.rollNo}",
+                  trBackground: true,
+                ),
+              ),
             ),
-          ),
         Gap(15.r)
       ],
       bottom: PreferredSize(
@@ -82,7 +95,7 @@ class RiddleNow extends ConsumerWidget {
       toolbarHeight: 90.h,
       titleSpacing: 30.r,
       titleTextStyle: textTheme.displayMedium?.copyWith(color: seaWhite),
-      title: const Text('WORDTAPE'),
+      title: Text(name),
       flexibleSpace: const FlexibleSpaceBar(
         background: GradientBox(child: RiddleNowState()),
       ),

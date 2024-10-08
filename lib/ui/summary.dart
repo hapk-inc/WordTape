@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/model/word.dart';
 
 import '../function/date/date.dart';
 import '../function/riddle/notifier.dart';
@@ -29,7 +30,7 @@ class SummaryPage extends PanelWidget {
   SlideDirection direction() => SlideDirection.DOWN;
 
   @override
-  double height() => 420.r;
+  double height() => 450.r;
 }
 
 class Summary extends ConsumerStatefulWidget {
@@ -92,58 +93,112 @@ class SummaryContent extends ConsumerWidget {
       builder: (context, constraints) => Column(
         children: [
           Expanded(
-            child: Lottie.asset(
-              'lottie/${noHelp ? 'trophy_1.json' : 'sad.json'}',
-              fit: BoxFit.fitWidth,
-              width: constraints.maxHeight * (noHelp ? 0.72 : 0.54),
-            ),
+            child: noHelp
+                ? Lottie.asset(
+                    'lottie/${noHelp ? 'trophy_1.json' : 'sad.json'}',
+                    fit: BoxFit.fitWidth,
+                    width: constraints.maxHeight * (noHelp ? 0.72 : 0.54),
+                  )
+                : const SafeArea(child: Center(child: SummaryStatus())),
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             color: azureGreen,
-            height: constraints.maxHeight * 0.24,
+            height: 90.r,
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.symmetric(horizontal: 15.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "congrats_detail_${mockInteger(0, 5)}".tr(),
-                  style: GoogleFonts.montserrat(
-                    color: midnightGreen,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15.r,
-                    height: 0,
-                    letterSpacing: 0,
-                  ),
-                  maxLines: 1,
-                ),
-                Gap(15.r),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "https://wordtape-demo.web.app/",
-                        style: GoogleFonts.robotoMono(
-                          fontSize: 15.r,
-                          letterSpacing: 0,
-                          height: 0,
-                          color: Colors.grey,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Gap(7.5.r),
-                    const Icon(Icons.copy)
-                  ],
-                )
-              ],
-            ),
+            child: SummaryFooter(noHelp),
           )
         ],
       ),
+    );
+  }
+}
+
+class SummaryStatus extends ConsumerWidget {
+  const SummaryStatus({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final DateTime date = ref.read(selectedDateProvider);
+    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+    final Map<int, dynamic> soFar = notifier.found.soFar;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        notifier.riddle?.words.length ?? 0,
+        (index) {
+          final Word word = notifier.riddle!.words[index];
+          String str = word.value.split('').map(
+            (e) {
+              if (soFar.isNotEmpty && soFar.containsKey(index)) {
+                List<String> list = List.castFrom(soFar[index]);
+                if (list.contains(e)) return "🟥";
+              }
+              return "🟩";
+            },
+          ).join();
+          return Text(
+            str,
+            style: TextStyle(
+              fontSize: 36.r,
+              letterSpacing: 1.5.r,
+              height: 0,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class SummaryFooter extends StatelessWidget {
+  final bool noHelp;
+
+  const SummaryFooter(this.noHelp, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          noHelp
+              ? "congrats_detail_${mockInteger(0, 5)}".tr()
+              : "pass_detail_${mockInteger(0, 9)}".tr(),
+          style: GoogleFonts.montserrat(
+            color: midnightGreen,
+            fontSize: 15.r,
+            height: 0,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0,
+          ),
+          maxLines: 1,
+        ),
+        Gap(7.5.r),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                "https://wordtape-demo.web.app/",
+                style: GoogleFonts.robotoMono(
+                  fontSize: 15.r,
+                  letterSpacing: 0,
+                  wordSpacing: 0,
+                  height: 0,
+                  color: Colors.grey,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Gap(9.r),
+            const Icon(Icons.copy)
+          ],
+        )
+      ],
     );
   }
 }

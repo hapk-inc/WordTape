@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../model/player.dart';
 import '../../model/riddle.dart';
 import '../auth/pod.dart';
 import 'player.dart';
@@ -31,4 +32,10 @@ Future<Riddle?> riddleDateArg(RiddleDateArgRef ref,
 Stream<Riddle> riddleDoc(RiddleDocRef ref, {required DateTime date}) {
   final FirestoreRiddle firestoreRiddle = ref.read(riddleFirestoreProvider);
   return firestoreRiddle.onRiddleModified(date);
+}
+
+@Riverpod(keepAlive: true, dependencies: [firestoreUser])
+Stream<Player?> player(PlayerRef ref) {
+  final FirestoreUser firestore = ref.read(firestoreUserProvider);
+  return firestore.player;
 }

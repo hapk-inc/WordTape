@@ -45,12 +45,14 @@ class FirestoreRiddle {
           .snapshots()
           .listen(
         (QuerySnapshot snapshot) {
-          final QueryDocumentSnapshot doc = snapshot.docs.first;
-          final Map map = doc.data() as Map;
-          final String id = doc.id;
-          final Map<String, dynamic> m = Map<String, dynamic>.from(map);
-          final Riddle r = Riddle.fromFirestore(m).copyWith(id: id);
-          subject.add(r);
+          if (snapshot.docs.isNotEmpty) {
+            final QueryDocumentSnapshot doc = snapshot.docs.first;
+            final Map map = doc.data() as Map;
+            final String id = doc.id;
+            final Map<String, dynamic> m = Map<String, dynamic>.from(map);
+            final Riddle r = Riddle.fromFirestore(m).copyWith(id: id);
+            subject.add(r);
+          }
         },
       ),
     );

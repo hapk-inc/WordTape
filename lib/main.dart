@@ -18,6 +18,7 @@ import 'firebase/pod.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
+import 'logger/log.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,14 +30,7 @@ Future<void> main() async {
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
-  //final String url = kIsWeb ? web.window.location.href : "";
-  const String url = "";
-
-  final AppEnv appEnv = kDebugMode
-      ? AppEnv.dev
-      : kIsWeb && url.contains('demo')
-          ? AppEnv.dev
-          : AppEnv.prod;
+  const AppEnv appEnv = kDebugMode ? AppEnv.dev : AppEnv.prod;
 
   final FirebaseApp app = await Firebase.initializeApp(
     options: appEnv == AppEnv.dev ? dev : prod,
@@ -54,25 +48,19 @@ Future<void> main() async {
     minimumFetchInterval: const Duration(seconds: 3),
   );
 
-  rc.setDefaults(
-    {
-      "renovation": "",
-    },
-  );
+  rc.setDefaults(<String, dynamic>{"renovation": ""});
   await rc.setConfigSettings(remoteConfigSetting);
 
   final Logger logger = Logger();
 
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
-    logger.e("APP CRASH", error: error, stackTrace: stack);
-    if (!kIsWeb && !kDebugMode) {
-      crashlytics.recordError(error, stack, fatal: true);
-    }
+    logger.e("App Crash", error: error, stackTrace: stack);
+    if (kReleaseMode) crashlytics.recordError(error, stack, fatal: true);
     return true;
   };
 
-  if (!kIsWeb) await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
+  await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
 
   logger.i("FIREBASE STARTED");
 
@@ -83,11 +71,11 @@ Future<void> main() async {
     firebaseAnalyticsProvider.overrideWithValue(analytics),
     //
     remoteConfigProvider.overrideWithValue(rc),
-    if (!kIsWeb) crashlyticsProvider.overrideWithValue(crashlytics),
+    crashlyticsProvider.overrideWithValue(crashlytics),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/.env")),
     //
-    // loggerProvider.overrideWithValue(logger),
-
+    logProvider.overrideWithValue(logger),
+    //
     appEnvProvider.overrideWithValue(appEnv)
   ];
   runApp(
@@ -96,10 +84,7 @@ Future<void> main() async {
       path: 'assets/locale',
       child: ProviderScope(
         overrides: override,
-        child: DevicePreview(
-          enabled: kDebugMode,
-          builder: (_) => const MyApp(),
-        ),
+        child: DevicePreview(enabled: kDebugMode, builder: (_) => const App()),
       ),
     ),
   );

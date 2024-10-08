@@ -22,17 +22,13 @@ class PanelNotifier extends _$PanelNotifier {
 
   @override
   set state(PanelWidget value) {
-    print(value.toString());
     if (!kIsWeb && value.toString() == const EmptyPanel().toString()) return;
     super.state = value;
     final PanelController panel = ref.read(panelControllerProvider);
     final ScreenSize size = ref.read(sizeProvider);
     if (panel.isAttached && size == ScreenSize.mobile) {
-      print("27==");
       if (panel.isPanelClosed) panel.open();
     } else {
-      print("30==");
-      print(navigatorKey.currentContext);
       showDialog(
         context: navigatorKey.currentContext!,
         builder: (_) => Dialog(

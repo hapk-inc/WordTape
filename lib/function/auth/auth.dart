@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../firebase/pod.dart';
+import '../../logger/log.dart';
 
 class Auth {
   final Ref ref;
@@ -15,7 +16,7 @@ class Auth {
 
   Auth(this.ref) {
     _auth = ref.read(firebaseAuthProvider);
-    log = Logger();
+    log = ref.read(logProvider);
   }
 
   Stream<User?> get authUser {

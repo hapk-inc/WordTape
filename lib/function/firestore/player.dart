@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../firebase/pod.dart';
 import '../../model/player.dart';
@@ -49,5 +50,35 @@ class FirestoreUser {
         log("updateMe Error", error: e, stackTrace: s);
       },
     );
+  }
+
+  Stream<Player?> get player {
+    late BehaviorSubject<Player?> subject;
+    subject = BehaviorSubject(
+      onListen: () => firebaseFirestore
+          .collection('user')
+          .doc(fUser?.uid)
+          .withConverter<Player>(
+            fromFirestore: (snapshot, _) => Player.fromFirestore(
+              snapshot.data() ?? {},
+              id: snapshot.id,
+            ),
+            toFirestore: (value, _) => value.toJson(),
+          )
+          .snapshots()
+          .listen(
+        (DocumentSnapshot<Player> documentSnapshot) {
+          Player? player = documentSnapshot.data();
+          if (!subject.hasValue) {
+            if (player != null) subject.add(player);
+          } else {
+            Player? p = subject.value;
+            if (p == player) return;
+            subject.add(p);
+          }
+        },
+      ),
+    );
+    return subject.stream;
   }
 }

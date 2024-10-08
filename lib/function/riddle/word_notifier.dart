@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:wordtape/enum/enum.dart';
 
+import '../../enum/enum.dart';
+import '../../logger/log.dart';
 import '../../model/found.dart';
 import '../../model/word.dart';
 import '../../theme/color.dart';
@@ -15,8 +14,6 @@ import '../../extension/extension.dart';
 import '../underline_text/pod.dart';
 import 'hint.dart';
 import 'notifier.dart';
-
-final Logger logger = Logger();
 
 final ChangeNotifierProviderFamily<WordNotifier, Word> wordNotifierProvider =
     ChangeNotifierProvider.family<WordNotifier, Word>(
@@ -33,11 +30,13 @@ class WordNotifier extends ChangeNotifier {
   late FocusNode _node;
   late DateTime _date;
   late int _index;
+  late Logger _logger;
 
   bool _enabled = false;
   bool _error = false;
 
   WordNotifier(this.ref, this.word) {
+    _logger = ref.read(logProvider);
     final List<String> splitter = word.id?.split("|") ?? [];
     if (splitter.isEmpty) return;
 
@@ -116,7 +115,7 @@ class WordNotifier extends ChangeNotifier {
       if (str == "Enter" || str == done) {
         final RiddleNotifier notifier = ref.read(riddleNotifierProvider(_date));
         notifier.formKey.currentState!.validate();
-        logger.i(str);
+        _logger.i(str);
       }
     }
   }
@@ -146,7 +145,7 @@ class WordNotifier extends ChangeNotifier {
   }
 
   String? validator(String? value) {
-    log("Validating 72--");
+    _logger.i("Validating 72--");
     final int len = value?.length ?? 0;
     final bool filled = len == word.value.length;
     final Hint hint = ref.read(hintProvider(_date).notifier);

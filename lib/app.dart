@@ -10,8 +10,8 @@ import 'router/router.dart';
 import 'theme/color.dart';
 import 'theme/font.dart';
 
-class MyApp extends ConsumerWidget with CustomThemeMixin {
-  const MyApp({super.key});
+class App extends ConsumerWidget with CustomThemeMixin {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

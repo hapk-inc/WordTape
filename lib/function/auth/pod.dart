@@ -20,7 +20,7 @@ Future<bool> userLogin(UserLoginRef ref) async {
   return auth.userLogin;
 }
 
-@Riverpod(dependencies: [auth])
+@Riverpod(keepAlive: true, dependencies: [auth])
 Future<User?> fUser(FUserRef ref) async {
   final Auth auth = ref.read(authProvider);
   return auth.fUser;

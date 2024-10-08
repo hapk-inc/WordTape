@@ -5,6 +5,8 @@ import 'package:logger/logger.dart';
 import 'package:mock_data/mock_data.dart';
 
 import '../../enum/enum.dart';
+import '../../logger/log.dart';
+import '../../model/player.dart';
 import '../../model/tip.dart';
 import '../../model/underline_text.dart';
 import '../../model/found.dart';
@@ -16,8 +18,6 @@ import '../firestore/pod.dart';
 import '../sqlite/pod.dart';
 import '../underline_text/pod.dart';
 import 'hint.dart';
-
-final Logger logger = Logger();
 
 const String backspace = "🔙";
 const String done = "✔️";
@@ -33,6 +33,7 @@ class RiddleNotifier extends ChangeNotifier {
   final DateTime date;
   Riddle? _riddle;
   late Found _found;
+  late Logger _logger;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Tip? _tip;
   late bool _done = false;
@@ -41,10 +42,14 @@ class RiddleNotifier extends ChangeNotifier {
   late RiddleState _riddleState = RiddleState.launch;
 
   RiddleNotifier(this.ref, {required this.date}) {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String dateStr = formatter.format(date);
+    _logger = ref.read(logProvider);
+    final Player? player = ref.read(playerProvider).value;
+    if (player != null) {
+      final String n = "${player.nickName}";
+      _header = UnderlineText("Hi $n", focus: n);
+    }
+
     _found = Found(date: date);
-    logger.i("RiddleNotifier for $dateStr");
   }
 
   Future init() async {
@@ -54,13 +59,10 @@ class RiddleNotifier extends ChangeNotifier {
       _header = ref.read(welcomeUserProvider);
       final foundArg = sqFoundArgProvider(id: _riddle!.id);
       _found = await ref.watch(foundArg.future) ?? Found.fromRiddle(_riddle!);
-      logger.i("$_found");
     }
     done = _found.i == 6;
 
     if (!_done) {
-      debugPrint("60==");
-      debugPrint(_found.i.toString());
       riddleState = _found.i == 1 ? RiddleState.launch : RiddleState.resume;
       if (_found.soFar.containsKey(_found.i)) {
         final List<String> soFar1 = List<String>.from(_found.soFar[_found.i]);
@@ -77,7 +79,7 @@ class RiddleNotifier extends ChangeNotifier {
     ref.listen<Riddle?>(
       riddleDocProvider(date: date).select((value) => value.value),
       (previous, next) {
-        logger.i("riddleDocProvider $next");
+        _logger.i("riddleDocProvider $next");
         if (next != null) {
           _riddle = next;
           notifyListeners();
@@ -112,12 +114,6 @@ class RiddleNotifier extends ChangeNotifier {
     return soFar.every((char) => splitter.contains(char));
   }
 
-  @override
-  void dispose() {
-    logger.d("Why dispose $date");
-    super.dispose();
-  }
-
   List<String> get highlightedChar {
     if (!_found.soFar.containsKey(_found.i)) return [];
     List<String> map = List.from(_found.soFar[_found.i]);
@@ -129,7 +125,7 @@ class RiddleNotifier extends ChangeNotifier {
   RiddleState get riddleState => _riddleState;
 
   set riddleState(RiddleState value) {
-    logger.i(value.name);
+    _logger.i(value.name);
     if (_riddleState == value || _riddleState == RiddleState.completed) return;
     _riddleState = value;
     switch (_riddleState) {
@@ -140,7 +136,10 @@ class RiddleNotifier extends ChangeNotifier {
         }
       case RiddleState.completed:
         {
-          _header = UnderlineText("challenge_done_${mockInteger(0, 9)}".tr());
+          _header = UnderlineText(
+            "challenge_done_${mockInteger(0, 9)}".tr(),
+            focus: "challenge. challenge",
+          );
           break;
         }
       default:
@@ -173,7 +172,7 @@ class RiddleNotifier extends ChangeNotifier {
   Future<void> _newFound() async {
     final DateTime now = DateTime.now();
     _found = _found.copyWith(i: _found.i + 1, lastFound: now, mistake: null);
-    logger.i("$_found");
+    _logger.i("$_found");
     final bool everyFound = _riddle?.isCompleted(_found.i) ?? false;
     done = everyFound;
   }
@@ -181,7 +180,7 @@ class RiddleNotifier extends ChangeNotifier {
   initiateTip() {
     if (_found.soFar.containsKey(_found.i)) {
       final List<String> soFar = List<String>.from(_found.soFar[_found.i]);
-      logger.i(_found.soFar.toString());
+      _logger.i(_found.soFar.toString());
       _tip = Tip.fromWord(focusedWord!.value, soFar: soFar);
       _updateSoFar(_tip);
     } else {

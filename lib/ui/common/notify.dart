@@ -41,14 +41,15 @@ class NotifyAndShare extends PanelWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AutoSizeText(str,
-                  style: GoogleFonts.montserrat(
-                    color: blackBean,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 21.r,
-                    height: 2.1,
-                    letterSpacing: 0,
-                  )),
+              AutoSizeText(
+                str,
+                style: GoogleFonts.montserrat(
+                  color: blackBean,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 21.r,
+                  letterSpacing: 0,
+                ),
+              ),
               AutoSizeText(
                 detail,
                 style: textTheme.bodySmall?.copyWith(color: Colors.grey),

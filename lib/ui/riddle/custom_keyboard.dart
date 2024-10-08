@@ -109,7 +109,7 @@ class _KeyboardTile extends ConsumerWidget {
         duration: const Duration(milliseconds: 150),
         width: width,
         height: 43.2.h,
-        margin: EdgeInsets.symmetric(horizontal: 1.8.r),
+        margin: EdgeInsets.symmetric(horizontal: 2.25.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isHighlighted
