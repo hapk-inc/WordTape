@@ -41,7 +41,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   @override
   TextStyle? get bodySmall => questrialTheme.copyWith(
-        fontSize: 18.r,
+        fontSize: 16.r,
         height: 1.8,
       );
 

@@ -38,6 +38,7 @@ class NotifyAndShare extends PanelWidget {
       child: FadeIn(
         delay: const Duration(milliseconds: 300),
         child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -50,12 +51,12 @@ class NotifyAndShare extends PanelWidget {
                   letterSpacing: 0,
                 ),
               ),
-              AutoSizeText(
+              Text(
                 detail,
-                style: textTheme.bodySmall?.copyWith(color: Colors.grey),
-                minFontSize: 10.5,
-                maxFontSize: 15,
-                stepGranularity: 1.5,
+                style: textTheme.bodySmall?.copyWith(
+                  color: slateGray,
+                  height: 0,
+                ),
                 maxLines: isDialog ? 1 : null,
               ),
               Center(

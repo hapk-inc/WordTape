@@ -141,10 +141,10 @@ class SummaryStatus extends ConsumerWidget {
           ).join();
           return Text(
             str,
-            style: TextStyle(
+            style: GoogleFonts.notoColorEmoji(
               fontSize: 36.r,
-              letterSpacing: 1.5.r,
-              height: 0,
+              letterSpacing: 0.3.r,
+              height: 1.5.r,
             ),
           );
         },
