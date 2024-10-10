@@ -58,6 +58,7 @@ dependencies:
 
   # Backend
   google_generative_ai: ^0.4.6
+  google_sign_in: ^6.2.1
   flutter_dotenv: ^5.1.0
   logger: ^2.4.0
   intl: ^0.19.0

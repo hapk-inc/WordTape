@@ -34,7 +34,7 @@ class Clue extends ConsumerWidget {
           ),
           maxLines: 2,
           stepGranularity: 3,
-          minFontSize: 12,
+          minFontSize: 15,
           maxFontSize: isTab ? 24 : 21,
           textAlign: TextAlign.center,
         ),

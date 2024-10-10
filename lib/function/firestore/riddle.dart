@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../firebase/pod.dart';
+import '../../model/found.dart';
 import '../../model/riddle.dart';
 
 class FirestoreRiddle {
@@ -65,6 +66,12 @@ class FirestoreRiddle {
           "played": FieldValue.increment(1),
         },
       );
+
+  Future fetchFound(Found found) => collectionReference
+      .doc(found.id)
+      .collection("found")
+      .doc(fUser?.uid)
+      .set(found.toFirestore());
 
   //DO NOT REMOVE
   /*Stream<Riddle> get onRiddleChanged {

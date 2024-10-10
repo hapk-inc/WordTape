@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wordtape/enum/enum.dart';
 
 import '../gen_ai/pod.dart';
 import '../underline_text/pod.dart';
@@ -37,6 +38,7 @@ class Hint extends _$Hint {
 
   Future<void> rearrange() async {
     final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+    notifier.promptState = PromptState.search;
     if (notifier.focusedWord == null) {
       state = ref.read(figureOutProvider);
     } else {
@@ -48,14 +50,21 @@ class Hint extends _$Hint {
   }
 
   Future<void> helpUser(String answer, String? mistake) async {
-    state = await ref.watch(helpUserProvider(answer, mistake ?? "").future);
-    await Future.delayed(
-      const Duration(milliseconds: 3600),
-      () {
-        if (mistake != null) {
-          state = "use_hint_${mockInteger(0, 7)}".tr();
-        }
-      },
-    );
+    if (mistake != null) {
+      final String help = await ref.watch(
+        helpUserProvider(answer, mistake).future,
+      );
+      final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+      final bool isWrong = notifier.promptState == PromptState.wrong;
+      if (isWrong) {
+        state = help;
+        await Future.delayed(
+          const Duration(milliseconds: 2400),
+          () {
+            if (isWrong) state = "use_hint_${mockInteger(0, 7)}".tr();
+          },
+        );
+      }
+    }
   }
 }

@@ -77,6 +77,7 @@ class CustomKeyboard extends ConsumerWidget {
                 },
               ).toList(),
             ),
+            Gap(1.5.r),
           ],
         ),
       ),
@@ -108,7 +109,7 @@ class _KeyboardTile extends ConsumerWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: width,
-        height: 43.2.h,
+        height: 42.h,
         margin: EdgeInsets.symmetric(horizontal: 2.25.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(

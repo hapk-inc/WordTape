@@ -53,10 +53,7 @@ class NotifyAndShare extends PanelWidget {
               ),
               Text(
                 detail,
-                style: textTheme.bodySmall?.copyWith(
-                  color: slateGray,
-                  height: 0,
-                ),
+                style: textTheme.bodySmall?.copyWith(color: silver),
                 maxLines: isDialog ? 1 : null,
               ),
               Center(

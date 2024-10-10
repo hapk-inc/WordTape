@@ -20,5 +20,5 @@ class Word extends Equatable with _$Word {
   factory Word.fromJson(Map<String, dynamic> json) => _$WordFromJson(json);
 
   @override
-  List<Object?> get props => [value];
+  List<Object?> get props => [id, value];
 }

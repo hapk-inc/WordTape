@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../firebase/pod.dart';
+import '../../logger/log.dart';
 import '../../router/router.dart';
 import '../connectivity/pod.dart';
 import '../firestore/pod.dart';
@@ -12,32 +14,44 @@ import 'pod.dart';
 
 part 'running_user.g.dart';
 
+const Duration _m1500 = Duration(milliseconds: 1500);
+
 @Riverpod(keepAlive: true, dependencies: [
+  log,
   runningUser,
   internetConnection,
   router,
   sqFound,
-  sqRiddle,
+  // sqRiddle,
   remoteConfig,
-  firestoreUser
+  firestoreUser,
+  auth
 ])
 void listenAuth(ListenAuthRef ref) {
-  ref.listen<User?>(
-    runningUserProvider.select((value) => value.value),
-    (prev, next) {
-      if (next != null) {
-        ref.read(firestoreUserProvider).updateMe();
-        ref.read(routerProvider).replace("/home");
+  print("30==");
+  ref.listen<User?>(runningUserProvider.select((value) => value.value),
+      (prev, next) {
+    print("36====");
+    final log = ref.read(logProvider);
+    log.i("RunningUser==");
+    if (next != null) {
+      ref.read(firestoreUserProvider).updateMe();
+      ref.read(routerProvider).replace("/home");
+    } else {
+      log.i("36==");
+      if (prev != null) {
+        ref.read(sqFoundProvider).delete();
+        ref.read(routerProvider).replace('/');
       } else {
-        if (prev != null) {
-          ref
-            ..read(sqRiddleProvider).delete()
-            ..read(sqFoundProvider).delete();
-          ref.read(routerProvider).replace('/');
+        log.i("Error");
+        if (kIsWeb) {
+          Future.delayed(_m1500, () => ref.read(authProvider).googleAuth);
         }
       }
-    },
-  );
+    }
+  }, onError: (e, s) {
+    debugPrint(e.toString());
+  }, fireImmediately: true);
 
   ref.listen<ConnectivityResult>(
     internetConnectionProvider.select(

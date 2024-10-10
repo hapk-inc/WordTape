@@ -40,6 +40,7 @@ class RiddleNotifier extends ChangeNotifier {
   late UnderlineText _header = const UnderlineText("Hi");
   bool _lastChance = false;
   late RiddleState _riddleState = RiddleState.launch;
+  late PromptState _promptState = PromptState.search;
 
   RiddleNotifier(this.ref, {required this.date}) {
     _logger = ref.read(logProvider);
@@ -60,17 +61,15 @@ class RiddleNotifier extends ChangeNotifier {
       final foundArg = sqFoundArgProvider(id: _riddle!.id);
       _found = await ref.watch(foundArg.future) ?? Found.fromRiddle(_riddle!);
     }
-    done = _found.i == 6;
-
+    // done = _found.i == 6;
+    done = _riddle?.isCompleted(_found.i) ?? false;
     if (!_done) {
       riddleState = _found.i == 1 ? RiddleState.launch : RiddleState.resume;
       if (_found.soFar.containsKey(_found.i)) {
         final List<String> soFar1 = List<String>.from(_found.soFar[_found.i]);
-        _lastChance = focusedWord!.value.length - 1 == soFar1.length;
+        lastChance = focusedWord!.value.length - 1 == soFar1.length;
       }
-      notifyListeners();
-    } else {
-      riddleState = RiddleState.completed;
+      // notifyListeners();
     }
   }
 
@@ -80,10 +79,7 @@ class RiddleNotifier extends ChangeNotifier {
       riddleDocProvider(date: date).select((value) => value.value),
       (previous, next) {
         _logger.i("riddleDocProvider $next");
-        if (next != null) {
-          _riddle = next;
-          notifyListeners();
-        }
+        if (next != null) riddle = next;
       },
     );
     super.addListener(listener);
@@ -103,7 +99,21 @@ class RiddleNotifier extends ChangeNotifier {
 
   Riddle? get riddle => _riddle;
 
+  set riddle(Riddle? value) {
+    if (_riddle == value || value == null) return;
+    _riddle = value;
+    notifyListeners();
+  }
+
   Tip? get tip => _tip;
+
+  PromptState get promptState => _promptState;
+
+  set promptState(PromptState value) {
+    if (_promptState == value) return;
+    _promptState = value;
+    notifyListeners();
+  }
 
   bool compareHighlighter(String? value) {
     if (value == null) return false;
@@ -175,6 +185,7 @@ class RiddleNotifier extends ChangeNotifier {
     _logger.i("$_found");
     final bool everyFound = _riddle?.isCompleted(_found.i) ?? false;
     done = everyFound;
+    if (done) ref.read(riddleFirestoreProvider).fetchFound(_found);
   }
 
   initiateTip() {
@@ -213,6 +224,7 @@ class RiddleNotifier extends ChangeNotifier {
 
   _updateSoFar(Tip? tip) {
     if (tip == null) return;
+    promptState = PromptState.tip;
     ref.read(hintProvider(date).notifier).state = _tip!.text;
 
     Map<int, dynamic> map = Map<int, dynamic>.from(_found.soFar);
@@ -231,6 +243,8 @@ class RiddleNotifier extends ChangeNotifier {
         lastChance = focusedWord!.value.length - 1 == soFar1.length;
       }
     } else {
+      ref.read(hintProvider(date).notifier).state =
+          "decoded_${mockInteger(0, 7)}".tr();
       riddleState = RiddleState.completed;
     }
     notifyListeners();

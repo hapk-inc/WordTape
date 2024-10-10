@@ -19,8 +19,10 @@ class KeyTapNotifier extends _$KeyTapNotifier {
     final String str = value.logicalKey.keyLabel;
     final DateTime date = ref.read(selectedDateProvider).convert();
     final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
-    final WordNotifier word =
-        ref.read(wordNotifierProvider(notifier.focusedWord!));
-    word.listenTap(str);
+    if (notifier.focusedWord != null) {
+      final WordNotifier word =
+          ref.read(wordNotifierProvider(notifier.focusedWord!));
+      word.listenTap(str);
+    }
   }
 }

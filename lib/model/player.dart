@@ -37,13 +37,14 @@ class Player extends Equatable with _$Player {
 
   factory Player.newUser(User fUser) {
     final String name = fUser.displayName ?? "Player";
+    final UserMetadata metadata = fUser.metadata;
 
     Player player = Player(
       name: name,
       nickName: "$name${mockInteger(0, 1000)}",
       rollNo: mockInteger(100000, 99999999),
-      nowTime: fUser.metadata.lastSignInTime,
-      created: fUser.metadata.creationTime,
+      nowTime: metadata.lastSignInTime,
+      created: metadata.creationTime,
       avatar: mockString(6, 'a'),
     );
 

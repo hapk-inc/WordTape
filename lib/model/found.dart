@@ -28,6 +28,7 @@ class Found extends Equatable with _$Found {
     map
       ..remove('id')
       ..remove('date');
+    if (soFar.isEmpty) map.remove('soFar');
     return map;
   }
 

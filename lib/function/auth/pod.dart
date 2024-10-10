@@ -14,6 +14,12 @@ Stream<User?> runningUser(RunningUserRef ref) {
   return auth.authUser;
 }
 
+@Riverpod(keepAlive: true, dependencies: [auth])
+Stream<User?> gUser(GUserRef ref) {
+  final Auth auth = ref.read(authProvider);
+  return auth.onGoogleUser();
+}
+
 @Riverpod(dependencies: [auth])
 Future<bool> userLogin(UserLoginRef ref) async {
   final Auth auth = ref.read(authProvider);

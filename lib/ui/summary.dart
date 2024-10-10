@@ -8,10 +8,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/model/word.dart';
 
 import '../function/date/date.dart';
 import '../function/riddle/notifier.dart';
+import '../model/word.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
 
@@ -90,14 +90,14 @@ class SummaryContent extends ConsumerWidget {
     final bool noHelp = notifier.found.soFar.isEmpty;
 
     return LayoutBuilder(
-      builder: (context, constraints) => Column(
+      builder: (_, constraints) => Column(
         children: [
           Expanded(
             child: noHelp
                 ? Lottie.asset(
-                    'lottie/${noHelp ? 'trophy_1.json' : 'sad.json'}',
+                    'lottie/trophy_1.json',
                     fit: BoxFit.fitWidth,
-                    width: constraints.maxHeight * (noHelp ? 0.72 : 0.54),
+                    width: constraints.maxHeight * 0.75,
                   )
                 : const SafeArea(child: Center(child: SummaryStatus())),
           ),
@@ -139,12 +139,15 @@ class SummaryStatus extends ConsumerWidget {
               return "🟩";
             },
           ).join();
-          return Text(
-            str,
-            style: GoogleFonts.notoColorEmoji(
-              fontSize: 36.r,
-              letterSpacing: 0.3.r,
-              height: 1.5.r,
+          return Container(
+            margin: EdgeInsets.only(bottom: 1.5.r),
+            child: Text(
+              str,
+              style: GoogleFonts.notoColorEmoji(
+                fontSize: 36.r,
+                letterSpacing: 0.3.r,
+                height: 0.r,
+              ),
             ),
           );
         },

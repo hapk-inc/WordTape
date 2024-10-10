@@ -194,5 +194,14 @@
   "challenge_done_6": "You succeeded in today’s challenge.",
   "challenge_done_7": "You tackled the challenge today.",
   "challenge_done_8": "You achieved the challenge for today.",
-  "challenge_done_9": "You made it through today’s challenge."
+  "challenge_done_9": "You made it through today’s challenge.",
+
+  "decoded_0": "You figured out the words.",
+  "decoded_1": "You solved the sequence.",
+  "decoded_2": "You understood the pattern.",
+  "decoded_3": "You got the sequence right.",
+  "decoded_4": "You found the right order.",
+  "decoded_5": "You unraveled the sequence.",
+  "decoded_6": "You decoded the pattern.",
+  "decoded_7": "You identified the sequence."
 }

@@ -8,7 +8,6 @@ import '../../model/found.dart';
 import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../firestore/pod.dart';
-import '../sqlite/pod.dart';
 import '../../extension/extension.dart';
 
 import '../underline_text/pod.dart';
@@ -76,7 +75,7 @@ class WordNotifier extends ChangeNotifier {
       (prev, next) {
         if (_index == next.i) {
           _notifier.riddleState = RiddleState.resume;
-          ref.read(sqFoundProvider).insert(next);
+          // ref.read(sqFoundProvider).insert(next);
           final bool isFirstFound = _index == 2 && ((prev?.i ?? 0) == 1);
           if (isFirstFound) {
             ref.read(riddleFirestoreProvider).firstFound(next.id ?? "");
@@ -84,6 +83,7 @@ class WordNotifier extends ChangeNotifier {
           _error = next.mistake != null;
           final Hint hint = ref.read(hintProvider(_date).notifier);
           if (_error) {
+            _notifier.promptState = PromptState.wrong;
             hint.helpUser(_notifier.answer, next.mistake);
           } else {
             if ((prev?.i ?? 0) != next.i) hint.rearrange();
@@ -121,9 +121,13 @@ class WordNotifier extends ChangeNotifier {
   }
 
   Future insertChar(String str) async {
-    String newText = _controller.text + str;
-    _controller = TextEditingController(text: newText);
-    onTextChanged(newText);
+    if (word.value.length > _controller.text.length) {
+      String newText = _controller.text + str;
+      _controller = TextEditingController(text: newText);
+      onTextChanged(newText);
+    } else {
+      _logger.i("Occupied Full Text");
+    }
   }
 
   deleteChar() {
@@ -145,7 +149,7 @@ class WordNotifier extends ChangeNotifier {
   }
 
   String? validator(String? value) {
-    _logger.i("Validating 72--");
+    _logger.i("Validating 72--$value");
     final int len = value?.length ?? 0;
     final bool filled = len == word.value.length;
     final Hint hint = ref.read(hintProvider(_date).notifier);

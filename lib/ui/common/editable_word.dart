@@ -62,7 +62,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             length: word.value.length,
             defaultPinTheme: pinTheme,
             controller: wordNotifier.controller,
-            //focusNode: wordNotifier.node,
+            // focusNode: wordNotifier.node,
             //
             isCursorAnimationEnabled: false,
             animationDuration: const Duration(milliseconds: 150),
@@ -76,7 +76,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             //
             enabled: wordNotifier.isEnabled,
             animationCurve: Curves.easeOut,
-            // autofocus: autoFocus,
+            autofocus: wordNotifier.isEnabled,
 
             textCapitalization: TextCapitalization.characters,
             separatorBuilder: (_) {
