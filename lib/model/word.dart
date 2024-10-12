@@ -10,7 +10,7 @@ class Word extends Equatable with _$Word {
 
   @JsonSerializable(includeIfNull: false)
   const factory Word({
-    required String value,
+    @JsonKey(fromJson: fromJson) required String value,
     @JsonKey(includeIfNull: false) String? note,
     @JsonKey(includeIfNull: false) String? hint,
     @JsonKey(includeIfNull: false, includeToJson: false, includeFromJson: false)
@@ -22,3 +22,5 @@ class Word extends Equatable with _$Word {
   @override
   List<Object?> get props => [id, value];
 }
+
+String fromJson(String str) => str.toUpperCase();

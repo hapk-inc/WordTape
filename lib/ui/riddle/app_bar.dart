@@ -6,7 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
-import '../../function/riddle/notifier.dart';
+import '../../function/question/notifier.dart';
 
 class RiddleAppBar extends ConsumerWidget {
   const RiddleAppBar({super.key});
@@ -36,18 +36,18 @@ class LottieHint extends ConsumerStatefulWidget {
 
 class _LottieHintState extends ConsumerState<LottieHint> {
   late DateTime date;
-  late RiddleNotifier notifier;
+  late QuestionNotifier notifier;
 
   @override
   void initState() {
     date = ref.read(selectedDateProvider);
-    notifier = ref.read(riddleNotifierProvider(date));
+    notifier = ref.read(questionNotifierProvider(date));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(riddleNotifierProvider(date));
+    notifier = ref.watch(questionNotifierProvider(date));
     return SizedBox.square(
       dimension: 75.r,
       child: AnimatedSwitcher(

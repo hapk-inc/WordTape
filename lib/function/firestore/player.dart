@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../firebase/pod.dart';
+import '../../model/found.dart';
 import '../../model/player.dart';
 
 class FirestoreUser {
@@ -55,8 +57,7 @@ class FirestoreUser {
   Stream<Player?> get player {
     late BehaviorSubject<Player?> subject;
     subject = BehaviorSubject(
-      onListen: () => firebaseFirestore
-          .collection('user')
+      onListen: () => userColl
           .doc(fUser?.uid)
           .withConverter<Player>(
             fromFirestore: (snapshot, _) => Player.fromFirestore(
@@ -80,5 +81,14 @@ class FirestoreUser {
       ),
     );
     return subject.stream;
+  }
+
+  Future<void> userFound(Found found) {
+    final String dateStr = DateFormat('yyyy-MM-dd').format(found.date);
+    return userColl.doc(fUser?.uid).update(
+      <String, dynamic>{
+        'done': FieldValue.arrayUnion([dateStr])
+      },
+    );
   }
 }

@@ -10,28 +10,28 @@ import '../../model/player.dart';
 import '../../model/tip.dart';
 import '../../model/underline_text.dart';
 import '../../model/found.dart';
-import '../../model/riddle.dart';
+import '../../model/question.dart';
 import '../../model/word.dart';
 
 //
 import '../firestore/pod.dart';
-import '../sqlite/pod.dart';
+import '../local/pod.dart';
 import '../underline_text/pod.dart';
 import 'hint.dart';
 
 const String backspace = "🔙";
 const String done = "✔️";
 
-final ChangeNotifierProviderFamily<RiddleNotifier, DateTime>
-    riddleNotifierProvider =
-    ChangeNotifierProvider.family<RiddleNotifier, DateTime>(
-  (ref, date) => RiddleNotifier(ref, date: date)..init(),
+final ChangeNotifierProviderFamily<QuestionNotifier, DateTime>
+    questionNotifierProvider =
+    ChangeNotifierProvider.family<QuestionNotifier, DateTime>(
+  (ref, date) => QuestionNotifier(ref, date: date)..init(),
 );
 
-class RiddleNotifier extends ChangeNotifier {
-  final Ref<RiddleNotifier> ref;
+class QuestionNotifier extends ChangeNotifier {
+  final Ref<QuestionNotifier> ref;
   final DateTime date;
-  Riddle? _riddle;
+  Question? _riddle;
   late Found _found;
   late Logger _logger;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -42,7 +42,7 @@ class RiddleNotifier extends ChangeNotifier {
   late RiddleState _riddleState = RiddleState.launch;
   late PromptState _promptState = PromptState.search;
 
-  RiddleNotifier(this.ref, {required this.date}) {
+  QuestionNotifier(this.ref, {required this.date}) {
     _logger = ref.read(logProvider);
     final Player? player = ref.read(playerProvider).value;
     if (player != null) {
@@ -54,20 +54,21 @@ class RiddleNotifier extends ChangeNotifier {
   }
 
   Future init() async {
-    _riddle = await ref.watch(riddleDateArgProvider(date: date).future);
+    _riddle = await ref.watch(questionWithDateProvider(date: date).future);
 
     if (_riddle != null) {
       _header = ref.read(welcomeUserProvider);
-      final foundArg = sqFoundArgProvider(id: _riddle!.id);
+      final foundArg = localFoundArgIdProvider(id: _riddle!.id);
       _found = await ref.watch(foundArg.future) ?? Found.fromRiddle(_riddle!);
     }
     // done = _found.i == 6;
     done = _riddle?.isCompleted(_found.i) ?? false;
     if (!_done) {
       riddleState = _found.i == 1 ? RiddleState.launch : RiddleState.resume;
-      if (_found.soFar.containsKey(_found.i)) {
-        final List<String> soFar1 = List<String>.from(_found.soFar[_found.i]);
-        lastChance = focusedWord!.value.length - 1 == soFar1.length;
+      if (_found.untilNow.containsKey(_found.i)) {
+        final List<String> untilNow1 =
+            List<String>.from(_found.untilNow[_found.i]);
+        lastChance = focusedWord!.value.length - 1 == untilNow1.length;
       }
       // notifyListeners();
     }
@@ -75,8 +76,8 @@ class RiddleNotifier extends ChangeNotifier {
 
   @override
   void addListener(VoidCallback listener) {
-    ref.listen<Riddle?>(
-      riddleDocProvider(date: date).select((value) => value.value),
+    ref.listen<Question?>(
+      onQuestionModifiedProvider(date: date).select((value) => value.value),
       (previous, next) {
         _logger.i("riddleDocProvider $next");
         if (next != null) riddle = next;
@@ -97,9 +98,9 @@ class RiddleNotifier extends ChangeNotifier {
 
   GlobalKey<FormState> get formKey => _formKey;
 
-  Riddle? get riddle => _riddle;
+  Question? get riddle => _riddle;
 
-  set riddle(Riddle? value) {
+  set riddle(Question? value) {
     if (_riddle == value || value == null) return;
     _riddle = value;
     notifyListeners();
@@ -118,15 +119,15 @@ class RiddleNotifier extends ChangeNotifier {
   bool compareHighlighter(String? value) {
     if (value == null) return false;
     final List<String> splitter = value.split("");
-    Map<int, dynamic> map = _found.soFar;
+    Map<int, dynamic> map = _found.untilNow;
     if (!map.containsKey(_found.i)) return true;
-    final List<String> soFar = List<String>.from(_found.soFar[_found.i]);
-    return soFar.every((char) => splitter.contains(char));
+    final List<String> untilNow = List<String>.from(_found.untilNow[_found.i]);
+    return untilNow.every((char) => splitter.contains(char));
   }
 
   List<String> get highlightedChar {
-    if (!_found.soFar.containsKey(_found.i)) return [];
-    List<String> map = List.from(_found.soFar[_found.i]);
+    if (!_found.untilNow.containsKey(_found.i)) return [];
+    List<String> map = List.from(_found.untilNow[_found.i]);
     return map;
   }
 
@@ -185,22 +186,26 @@ class RiddleNotifier extends ChangeNotifier {
     _logger.i("$_found");
     final bool everyFound = _riddle?.isCompleted(_found.i) ?? false;
     done = everyFound;
-    if (done) ref.read(riddleFirestoreProvider).fetchFound(_found);
+    if (done) {
+      ref.read(firestoreQuestionProvider).fetchFound(_found);
+      ref.read(firestoreUserProvider).userFound(found);
+    }
   }
 
   initiateTip() {
-    if (_found.soFar.containsKey(_found.i)) {
-      final List<String> soFar = List<String>.from(_found.soFar[_found.i]);
-      _logger.i(_found.soFar.toString());
-      _tip = Tip.fromWord(focusedWord!.value, soFar: soFar);
-      _updateSoFar(_tip);
+    if (_found.untilNow.containsKey(_found.i)) {
+      final List<String> untilNow =
+          List<String>.from(_found.untilNow[_found.i]);
+      _logger.i(_found.untilNow.toString());
+      _tip = Tip.fromWord(focusedWord!.value, untilNow: untilNow);
+      _updateuntilNow(_tip);
     } else {
       _tip = Tip.fromWord(focusedWord!.value);
-      _updateSoFar(_tip);
+      _updateuntilNow(_tip);
     }
 
-    final List<String> soFar1 = List<String>.from(_found.soFar[_found.i]);
-    lastChance = focusedWord!.value.length - 1 == soFar1.length;
+    final List<String> untilNow1 = List<String>.from(_found.untilNow[_found.i]);
+    lastChance = focusedWord!.value.length - 1 == untilNow1.length;
 
     notifyListeners();
   }
@@ -222,25 +227,25 @@ class RiddleNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  _updateSoFar(Tip? tip) {
+  _updateuntilNow(Tip? tip) {
     if (tip == null) return;
     promptState = PromptState.tip;
     ref.read(hintProvider(date).notifier).state = _tip!.text;
 
-    Map<int, dynamic> map = Map<int, dynamic>.from(_found.soFar);
+    Map<int, dynamic> map = Map<int, dynamic>.from(_found.untilNow);
     map.update(_found.i, (value) => [...value, tip.t], ifAbsent: () => [tip.t]);
     final DateTime now = DateTime.now();
-    _found = _found.copyWith(soFar: map, mistake: null, lastFound: now);
+    _found = _found.copyWith(untilNow: map, mistake: null, lastFound: now);
   }
 
   set done(bool value) {
     _done = value;
     if (!_done) {
       final int i = _found.i;
-      final bool containsIndex = _found.soFar.containsKey(i);
+      final bool containsIndex = _found.untilNow.containsKey(i);
       if (containsIndex) {
-        final List<String> soFar1 = List<String>.from(_found.soFar[i]);
-        lastChance = focusedWord!.value.length - 1 == soFar1.length;
+        final List<String> untilNow1 = List<String>.from(_found.untilNow[i]);
+        lastChance = focusedWord!.value.length - 1 == untilNow1.length;
       }
     } else {
       ref.read(hintProvider(date).notifier).state =

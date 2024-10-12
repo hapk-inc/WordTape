@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-class SoFarConverter implements JsonConverter<Map<int, dynamic>, String> {
-  const SoFarConverter();
+class UntilNowConverter implements JsonConverter<Map<int, dynamic>, String> {
+  const UntilNowConverter();
 
   @override
   Map<int, dynamic> fromJson(String json) {

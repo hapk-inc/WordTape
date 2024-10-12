@@ -3,10 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../function/date/date.dart';
-import '../../function/riddle/notifier.dart';
 
 import '../../enum/enum.dart';
-import '../../function/riddle/word_notifier.dart';
+
+import '../../function/question/notifier.dart';
+import '../../function/question/word_notifier.dart';
 import '../../theme/color.dart';
 
 const String backspace = "🔙";
@@ -24,7 +25,7 @@ class CustomKeyboard extends ConsumerWidget {
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isMobile = size == ScreenSize.mobile;
     final DateTime date = ref.read(selectedDateProvider);
-    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<String> highlightedChar = notifier.highlightedChar;
 
     return AnimatedContainer(
@@ -100,7 +101,8 @@ class _KeyboardTile extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
-        final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+        final QuestionNotifier notifier =
+            ref.read(questionNotifierProvider(date));
         if (notifier.focusedWord == null) return;
         final WordNotifier wordNotifier =
             ref.read(wordNotifierProvider(notifier.focusedWord!));

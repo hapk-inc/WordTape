@@ -4,31 +4,32 @@ import 'package:intl/intl.dart';
 import 'package:mock_data/mock_data.dart';
 import '../extension/extension.dart';
 
-import 'date_converter.dart';
+import 'converter/date_converter.dart';
 
 import 'found.dart';
 import 'word.dart';
 
-part 'riddle.freezed.dart';
-part 'riddle.g.dart';
+part 'question.freezed.dart';
+part 'question.g.dart';
 
 @freezed
-class Riddle extends Equatable with _$Riddle {
-  const Riddle._();
+class Question extends Equatable with _$Question {
+  const Question._();
 
   //@JsonSerializable(explicitToJson: true)
-  const factory Riddle({
+  const factory Question({
     @JsonKey() @DateConverter() required DateTime date,
     required List<Word> words,
-    @Default(0) int played,
+    @Default([]) List<String> played,
     @Default(0) int win,
     @JsonKey(includeIfNull: false) String? id,
   }) = _Riddle;
 
-  factory Riddle.fromJson(Map<String, dynamic> json) => _$RiddleFromJson(json);
+  factory Question.fromJson(Map<String, dynamic> json) =>
+      _$QuestionFromJson(json);
 
-  factory Riddle.fromFirestore(Map<String, dynamic> json) {
-    Riddle riddle = Riddle.fromJson(json);
+  factory Question.fromFirestore(Map<String, dynamic> json) {
+    Question riddle = Question.fromJson(json);
     final List<Word> w = [];
     for (int index = 0; index < riddle.words.length; index++) {
       final x = riddle.words[index];
@@ -39,9 +40,9 @@ class Riddle extends Equatable with _$Riddle {
     return riddle;
   }
 
-  factory Riddle.fromRandom() {
+  factory Question.fromRandom() {
     final DateTime now = DateTime.now();
-    return Riddle(
+    return Question(
       date: now.convert(),
       words: List.generate(6, (_) => Word(value: mockName().toUpperCase())),
       id: mockString(8),

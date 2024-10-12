@@ -10,7 +10,7 @@ import 'package:mock_data/mock_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../function/date/date.dart';
-import '../function/riddle/notifier.dart';
+import '../function/question/notifier.dart';
 import '../model/word.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
@@ -47,9 +47,9 @@ class _SummaryState extends ConsumerState<Summary> {
 
   @override
   void initState() {
-    final RiddleNotifier notifier =
-        ref.read(riddleNotifierProvider(widget.date));
-    noHelp = notifier.found.soFar.isEmpty;
+    final QuestionNotifier notifier =
+        ref.read(questionNotifierProvider(widget.date));
+    noHelp = notifier.found.untilNow.isEmpty;
 
     super.initState();
   }
@@ -86,8 +86,8 @@ class SummaryContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(selectedDateProvider);
-    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
-    final bool noHelp = notifier.found.soFar.isEmpty;
+    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
+    final bool noHelp = notifier.found.untilNow.isEmpty;
 
     return LayoutBuilder(
       builder: (_, constraints) => Column(
@@ -121,8 +121,8 @@ class SummaryStatus extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(selectedDateProvider);
-    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
-    final Map<int, dynamic> soFar = notifier.found.soFar;
+    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
+    final Map<int, dynamic> untilNow = notifier.found.untilNow;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -132,8 +132,8 @@ class SummaryStatus extends ConsumerWidget {
           final Word word = notifier.riddle!.words[index];
           String str = word.value.split('').map(
             (e) {
-              if (soFar.isNotEmpty && soFar.containsKey(index)) {
-                List<String> list = List.castFrom(soFar[index]);
+              if (untilNow.isNotEmpty && untilNow.containsKey(index)) {
+                List<String> list = List.castFrom(untilNow[index]);
                 if (list.contains(e)) return "🟥";
               }
               return "🟩";

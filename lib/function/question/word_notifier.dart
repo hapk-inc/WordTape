@@ -25,7 +25,7 @@ class WordNotifier extends ChangeNotifier {
 
   Color _color = Colors.white24;
   TextEditingController _controller = TextEditingController();
-  late RiddleNotifier _notifier;
+  late QuestionNotifier _notifier;
   late FocusNode _node;
   late DateTime _date;
   late int _index;
@@ -41,7 +41,7 @@ class WordNotifier extends ChangeNotifier {
 
     //
     _date = DateTime.parse(splitter[0]);
-    _notifier = ref.read(riddleNotifierProvider(_date));
+    _notifier = ref.read(questionNotifierProvider(_date));
     _index = int.parse(splitter[1]);
 
     validateController(_notifier.found.i);
@@ -52,7 +52,7 @@ class WordNotifier extends ChangeNotifier {
     final bool done = _notifier.done;
     if (done) {
       _controller = TextEditingController(text: word.value);
-      final bool didHeFound = !_notifier.found.soFar.containsKey(_index);
+      final bool didHeFound = !_notifier.found.untilNow.containsKey(_index);
       _color = didHeFound ? aquaMarine : cerise;
     } else {
       _node = FocusNode(canRequestFocus: _enabled);
@@ -71,14 +71,14 @@ class WordNotifier extends ChangeNotifier {
   @override
   void addListener(VoidCallback listener) {
     ref.listen<Found>(
-      riddleNotifierProvider(_date).select((value) => value.found),
+      questionNotifierProvider(_date).select((value) => value.found),
       (prev, next) {
         if (_index == next.i) {
           _notifier.riddleState = RiddleState.resume;
           // ref.read(sqFoundProvider).insert(next);
           final bool isFirstFound = _index == 2 && ((prev?.i ?? 0) == 1);
           if (isFirstFound) {
-            ref.read(riddleFirestoreProvider).firstFound(next.id ?? "");
+            ref.read(firestoreQuestionProvider).firstFound(next.id ?? "");
           }
           _error = next.mistake != null;
           final Hint hint = ref.read(hintProvider(_date).notifier);
@@ -113,7 +113,8 @@ class WordNotifier extends ChangeNotifier {
     } else {
       if (str == "Backspace" || str == backspace) deleteChar();
       if (str == "Enter" || str == done) {
-        final RiddleNotifier notifier = ref.read(riddleNotifierProvider(_date));
+        final QuestionNotifier notifier =
+            ref.read(questionNotifierProvider(_date));
         notifier.formKey.currentState!.validate();
         _logger.i(str);
       }

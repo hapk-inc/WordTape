@@ -30,7 +30,7 @@
   "welcome_4_pick": "comes next",
 
   "welcome_5": "Which word do you think will come next?",
-  "welcome_5_pick": "comes next",
+  "welcome_5_pick": "come next?",
 
   "welcome_6": "What’s your guess for the next word",
   "welcome_6_pick": "next word",
@@ -179,7 +179,7 @@
   "use_hint_0": "Need help? Tap the hint icon.",
   "use_hint_1": "If you're stuck, click the hint button.",
   "use_hint_2": "Use the hint icon if you need a clue.",
-  "use_hint_3": "Stuck on a puzzle? Press the hint icon for help.",
+  "use_hint_3": "Stuck on a word? Press the hint icon for help.",
   "use_hint_4": "If you need a tip, just use the hint icon.",
   "use_hint_5": "If you want help, click the hint button.",
   "use_hint_6": "Need a little help? Use the hint icon.",

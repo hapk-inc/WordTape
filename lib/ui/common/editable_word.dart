@@ -4,10 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
 
-//
-import '../../function/riddle/word_notifier.dart';
 import '../../extension/extension.dart';
 
+import '../../function/question/word_notifier.dart';
 import '../../model/word.dart';
 import '../../theme/pod.dart';
 

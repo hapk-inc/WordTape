@@ -7,9 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../function/key_tap/pod.dart';
-import '../function/riddle/notifier.dart';
-import '../function/riddle/word_notifier.dart';
-import '../function/sqlite/pod.dart';
+import '../function/local/pod.dart';
+import '../function/question/notifier.dart';
+import '../function/question/word_notifier.dart';
+
 import '../model/found.dart';
 import '../model/word.dart';
 import '../panel/pod.dart';
@@ -31,13 +32,13 @@ class RiddlePage extends ConsumerStatefulWidget {
 class _RiddlePageState extends ConsumerState<RiddlePage> {
   late final AppLifecycleListener _listener;
   late DateTime date;
-  late RiddleNotifier notifier;
+  late QuestionNotifier notifier;
 
   //
   @override
   void initState() {
     date = widget.date;
-    notifier = ref.read(riddleNotifierProvider(date));
+    notifier = ref.read(questionNotifierProvider(date));
     Future.delayed(
       const Duration(milliseconds: 900),
       () {
@@ -49,7 +50,7 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     );
 
     ref.listenManual(
-      riddleNotifierProvider(date).select((value) => value.done),
+      questionNotifierProvider(date).select((value) => value.done),
       (previous, next) {
         if (next) {
           ref.read(panelNotifierProvider.notifier).state =
@@ -66,7 +67,7 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     log(state.name);
     if (state == AppLifecycleState.inactive) {
       final Found found = notifier.found;
-      ref.read(sqFoundProvider).insert(found);
+      ref.read(localFoundProvider).insert(found);
     }
   }
 
@@ -78,7 +79,7 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(riddleNotifierProvider(date));
+    notifier = ref.watch(questionNotifierProvider(date));
     return GradientBox(
       child: SafeArea(
         bottom: false,
@@ -92,7 +93,6 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
             focusNode: wordNotifier.node,
             //autofocus: wordNotifier.isEnabled,
             onKeyEvent: (KeyEvent? value) {
-              debugPrint("94==");
               if (value is KeyDownEvent || value is KeyRepeatEvent) {
                 ref.read(keyTapNotifierProvider.notifier).state = value;
               }
@@ -111,7 +111,7 @@ class RiddlePageState extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
     return LayoutBuilder(
       builder: (_, constraints) {
         final double maxHeight = constraints.maxHeight - 90.h;

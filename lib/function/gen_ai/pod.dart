@@ -30,8 +30,8 @@ Future<String> helpUser(HelpUserRef ref, String correct, String mistake) async {
 class GeminiAi extends _$GeminiAi {
   @override
   GenerativeModel build() {
-    final DotEnv dotEnv = ref.watch(envProvider);
-    final AppEnv appEnv = ref.watch(appEnvProvider);
+    final DotEnv dotEnv = ref.read(envProvider);
+    final AppEnv appEnv = ref.read(appEnvProvider);
     String api;
 
     api = dotEnv.get(appEnv == AppEnv.dev ? 'GEMINI_DEV' : 'GEMINI_PROD');

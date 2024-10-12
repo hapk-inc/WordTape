@@ -23,7 +23,7 @@ class LocalFound {
           'id TEXT PRIMARY KEY,'
           'lastFound TEXT, date TEXT,' // date variable
           'i INTEGER,'
-          'mistake TEXT, soFar TEXT'
+          'mistake TEXT, untilNow TEXT'
           ')',
         ),
         version: 1,

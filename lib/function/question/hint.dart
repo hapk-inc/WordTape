@@ -13,7 +13,7 @@ part 'hint.g.dart';
 class Hint extends _$Hint {
   @override
   String build(DateTime date) {
-    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
     if (notifier.focusedWord == null) {
       if (notifier.found.i == 6) {
         return "first_win_${mockInteger(0, 9)}".tr();
@@ -37,7 +37,7 @@ class Hint extends _$Hint {
   }
 
   Future<void> rearrange() async {
-    final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
     notifier.promptState = PromptState.search;
     if (notifier.focusedWord == null) {
       state = ref.read(figureOutProvider);
@@ -54,7 +54,8 @@ class Hint extends _$Hint {
       final String help = await ref.watch(
         helpUserProvider(answer, mistake).future,
       );
-      final RiddleNotifier notifier = ref.read(riddleNotifierProvider(date));
+      final QuestionNotifier notifier =
+          ref.read(questionNotifierProvider(date));
       final bool isWrong = notifier.promptState == PromptState.wrong;
       if (isWrong) {
         state = help;

@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../function/date/date.dart';
-import '../function/riddle/notifier.dart';
-import '../function/sqlite/pod.dart';
+import '../function/local/pod.dart';
+import '../function/question/notifier.dart';
+
 import '../model/found.dart';
+
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
 import '../ui/riddle.dart';
@@ -16,7 +18,7 @@ part 'router.g.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-@Riverpod(keepAlive: true, dependencies: [sqFound, SelectedDate])
+@Riverpod(keepAlive: true, dependencies: [localFound, SelectedDate])
 GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
@@ -47,8 +49,9 @@ GoRouter router(RouterRef ref) {
                 date = state.extra as DateTime;
               }
 
-              final Found found = ref.read(riddleNotifierProvider(date)).found;
-              ref.read(sqFoundProvider).insert(found);
+              final Found found =
+                  ref.read(questionNotifierProvider(date)).found;
+              ref.read(localFoundProvider).insert(found);
               return true;
             },
           ),

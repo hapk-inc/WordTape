@@ -4,6 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mock_data/mock_data.dart';
 
+import 'converter/done_converter.dart';
+
 part 'player.freezed.dart';
 part 'player.g.dart';
 
@@ -21,6 +23,10 @@ class Player extends Equatable with _$Player {
     DateTime? nowTime,
     DateTime? created,
     @Default("web") String? source,
+    @JsonKey(includeIfNull: false)
+    @DoneConverter()
+    @Default([])
+    List<DateTime>? done,
     String? avatar,
 
     //

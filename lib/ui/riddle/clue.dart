@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../enum/enum.dart';
-import '../../function/riddle/hint.dart';
 
 import '../../extension/extension.dart';
+import '../../function/question/hint.dart';
 
 class Clue extends ConsumerWidget {
   const Clue({super.key});

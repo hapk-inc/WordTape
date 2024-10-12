@@ -9,11 +9,11 @@ class Tip with _$Tip {
   const Tip._();
   const factory Tip({@Default("") String text, @Default("") String t}) = _Tip;
 
-  factory Tip.fromWord(String str, {List<String> soFar = const []}) {
+  factory Tip.fromWord(String str, {List<String> untilNow = const []}) {
     final List<String> splitter = str.split("");
     splitter.removeAt(0);
     final List<String> remaining = List.from(splitter.where(
-      (char) => !soFar.contains(char),
+      (char) => !untilNow.contains(char),
     ));
 
     final bool isLastOne = remaining.length == 1;

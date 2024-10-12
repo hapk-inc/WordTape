@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wordtape/model/riddle.dart';
 
-import 'so_far_converter.dart';
+import 'converter/until_now.dart';
+import 'question.dart';
 
 part 'found.freezed.dart';
 part 'found.g.dart';
@@ -15,7 +15,7 @@ class Found extends Equatable with _$Found {
   const factory Found({
     @Default(1) int i,
     String? mistake,
-    @SoFarConverter() @Default(<int, dynamic>{}) Map<int, dynamic> soFar,
+    @UntilNowConverter() @Default(<int, dynamic>{}) Map<int, dynamic> untilNow,
     DateTime? lastFound,
     required DateTime date,
     @JsonKey(includeIfNull: false) String? id, //later include in database
@@ -28,7 +28,7 @@ class Found extends Equatable with _$Found {
     map
       ..remove('id')
       ..remove('date');
-    if (soFar.isEmpty) map.remove('soFar');
+    if (untilNow.isEmpty) map.remove('soFar');
     return map;
   }
 
@@ -42,7 +42,7 @@ class Found extends Equatable with _$Found {
   // TODO: implement props
   List<Object?> get props => [id, i, mistake, date, lastFound];
 
-  factory Found.fromRiddle(Riddle riddle) => Found(
+  factory Found.fromRiddle(Question riddle) => Found(
         date: riddle.date,
         id: riddle.id,
       );

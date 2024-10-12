@@ -69,10 +69,6 @@ Future<void> main() async {
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
     logger.e("APP CRASH", error: error, stackTrace: stack);
-
-    if (!kIsWeb && !kDebugMode) {
-      crashlytics.recordError(error, stack, fatal: true);
-    }
     return true;
   };
 

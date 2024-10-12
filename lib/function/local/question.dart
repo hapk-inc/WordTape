@@ -3,11 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../model/riddle.dart';
+import '../../model/question.dart';
 
-const String _tableName = 'Riddle';
+const String _tableName = 'Question';
 
-class LocalRiddle {
+class LocalQuestion {
   Database? _database;
 
   Future<Database> get database async {
@@ -29,7 +29,7 @@ class LocalRiddle {
         version: 1,
       );
 
-  Future<Riddle?> get latest async {
+  Future<Question?> get latest async {
     if (kIsWeb) return null;
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -41,10 +41,10 @@ class LocalRiddle {
     if (maps.isEmpty) return null;
     final Map<String, dynamic> map = Map<String, dynamic>.from(maps.first);
     // map['words'] = jsonDecode(map['words']);
-    return Riddle.fromJson(map);
+    return Question.fromJson(map);
   }
 
-  Future<Riddle?> fromDate(DateTime dateTime) async {
+  Future<Question?> fromDate(DateTime dateTime) async {
     if (kIsWeb) return null;
     final Database db = await database;
     final String dateStr = DateFormat('yyyy-MM-dd').format(dateTime);
@@ -57,13 +57,13 @@ class LocalRiddle {
 
     if (maps.isEmpty) return null;
     final Map<String, dynamic> map = Map<String, dynamic>.from(maps.first);
-    return Riddle.fromJson(map);
+    return Question.fromJson(map);
   }
 
-  Future insert(Riddle puzzle) async {
+  Future insert(Question question) async {
     if (kIsWeb) return;
     final Database db = await database;
-    final Map<String, dynamic> map = puzzle.toJson();
+    final Map<String, dynamic> map = question.toJson();
     return await db.insert(
       _tableName,
       map,

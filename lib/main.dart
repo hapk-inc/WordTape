@@ -60,7 +60,7 @@ Future<void> main() async {
     return true;
   };
 
-  await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
+  await crashlytics.setCrashlyticsCollectionEnabled(kReleaseMode);
 
   logger.i("FIREBASE STARTED");
 

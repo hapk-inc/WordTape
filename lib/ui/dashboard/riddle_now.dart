@@ -9,11 +9,11 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:random_avatar/random_avatar.dart';
+import 'package:wordtape/function/question/notifier.dart';
 
 import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
 import '../../function/firestore/pod.dart';
-import '../../function/riddle/notifier.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/player.dart';
 import '../../model/underline_text.dart';
@@ -33,7 +33,7 @@ class RiddleNow extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final String share = ref.read(passPromptProvider);
     final DateTime date = ref.read(nowProvider);
-    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
     //
     final PackageInfo? package = ref.read(packageProvider).value;
@@ -109,7 +109,7 @@ class RiddleNowState extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(nowProvider);
-    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> search = notifier.searchWord;
     return LayoutBuilder(
       builder: (_, constraints) {
@@ -155,7 +155,7 @@ class RiddleNowWelcome extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(nowProvider);
-    final RiddleNotifier notifier = ref.watch(riddleNotifierProvider(date));
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     //
