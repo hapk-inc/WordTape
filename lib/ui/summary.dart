@@ -7,7 +7,11 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mock_data/mock_data.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/function/auth/pod.dart';
+import '../../enum/enum.dart';
 
 import '../function/date/date.dart';
 import '../function/question/notifier.dart';
@@ -156,13 +160,16 @@ class SummaryStatus extends ConsumerWidget {
   }
 }
 
-class SummaryFooter extends StatelessWidget {
+class SummaryFooter extends ConsumerWidget {
   final bool noHelp;
 
   const SummaryFooter(this.noHelp, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final PackageInfo? packageInfo = ref.read(packageProvider).value;
+    final AppEnv appEnv = ref.read(appEnvProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -175,32 +182,37 @@ class SummaryFooter extends StatelessWidget {
             color: midnightGreen,
             fontSize: 15.r,
             height: 0,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.normal,
             letterSpacing: 0,
           ),
           maxLines: 1,
         ),
         Gap(7.5.r),
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                "https://wordtape-demo.web.app/",
-                style: GoogleFonts.robotoMono(
-                  fontSize: 15.r,
-                  letterSpacing: 0,
-                  wordSpacing: 0,
-                  height: 0,
-                  color: Colors.grey,
+        if (packageInfo != null)
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  "https://${packageInfo.appName}.web.app/",
+                  style: GoogleFonts.robotoMono(
+                    fontSize: 15.r,
+                    letterSpacing: 0,
+                    wordSpacing: 0,
+                    height: 0,
+                    color: Colors.grey,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            Gap(9.r),
-            const Icon(Icons.copy)
-          ],
-        )
+              Gap(9.r),
+              InkWell(
+                onTap: () => Share.share(
+                    "https://${appEnv == AppEnv.dev ? "wordtape-demo" : "wordtape"}.web.app/"),
+                child: const Icon(Icons.copy),
+              )
+            ],
+          )
       ],
     );
   }

@@ -38,9 +38,7 @@ void listenAuth(ListenAuthRef ref) {
     final Logger log = ref.read(logProvider);
     log.i("RunningUser==");
     if (next != null) {
-      if (prev == null) {
-        ref.read(firestoreUserProvider).updateMe();
-      }
+      if (prev == null) ref.read(firestoreUserProvider).updateMe();
       ref.read(routerProvider).replace("/home");
     } else {
       log.i("36==");
