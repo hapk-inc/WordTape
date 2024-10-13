@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/function/auth/pod.dart';
 import '../../enum/enum.dart';
 
+import '../function/auth/pod.dart';
 import '../function/date/date.dart';
 import '../function/question/notifier.dart';
 import '../model/word.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
+import '../theme/font.dart';
 
 class SummaryPage extends PanelWidget {
   final DateTime date;
@@ -103,7 +103,12 @@ class SummaryContent extends ConsumerWidget {
                     fit: BoxFit.fitWidth,
                     width: constraints.maxHeight * 0.75,
                   )
-                : const SafeArea(child: Center(child: SummaryStatus())),
+                : SafeArea(
+                    child: FadeIn(
+                      delay: const Duration(milliseconds: 750),
+                      child: const Center(child: SummaryStatus()),
+                    ),
+                  ),
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
@@ -127,6 +132,7 @@ class SummaryStatus extends ConsumerWidget {
     final DateTime date = ref.read(selectedDateProvider);
     final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
     final Map<int, dynamic> untilNow = notifier.found.untilNow;
+    final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -147,11 +153,7 @@ class SummaryStatus extends ConsumerWidget {
             margin: EdgeInsets.only(bottom: 1.5.r),
             child: Text(
               str,
-              style: GoogleFonts.notoColorEmoji(
-                fontSize: 36.r,
-                letterSpacing: 0.3.r,
-                height: 0.r,
-              ),
+              style: defaultTextTheme.emojiTheme,
             ),
           );
         },
@@ -169,6 +171,10 @@ class SummaryFooter extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final PackageInfo? packageInfo = ref.read(packageProvider).value;
     final AppEnv appEnv = ref.read(appEnvProvider);
+    final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
+
+    final String url =
+        "https://${appEnv == AppEnv.dev ? "wordtape-demo" : "wordtape"}.web.app/";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,38 +184,26 @@ class SummaryFooter extends ConsumerWidget {
           noHelp
               ? "congrats_detail_${mockInteger(0, 5)}".tr()
               : "pass_detail_${mockInteger(0, 9)}".tr(),
-          style: GoogleFonts.montserrat(
-            color: midnightGreen,
-            fontSize: 15.r,
-            height: 0,
-            fontWeight: FontWeight.normal,
-            letterSpacing: 0,
-          ),
+          style:
+              defaultTextTheme.montserratMedium.copyWith(color: midnightGreen),
           maxLines: 1,
         ),
         Gap(7.5.r),
         if (packageInfo != null)
           Row(
             children: [
+              InkWell(
+                onTap: () => Share.share(url),
+                child: const Icon(Icons.copy),
+              ),
+              Gap(7.5.r),
               Expanded(
                 child: Text(
-                  "https://${packageInfo.appName}.web.app/",
-                  style: GoogleFonts.robotoMono(
-                    fontSize: 15.r,
-                    letterSpacing: 0,
-                    wordSpacing: 0,
-                    height: 0,
-                    color: Colors.grey,
-                  ),
+                  url,
+                  style: defaultTextTheme.urlTheme,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              Gap(9.r),
-              InkWell(
-                onTap: () => Share.share(
-                    "https://${appEnv == AppEnv.dev ? "wordtape-demo" : "wordtape"}.web.app/"),
-                child: const Icon(Icons.copy),
               )
             ],
           )

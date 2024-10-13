@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -13,6 +12,7 @@ import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
 import '../../panel/widget.dart';
 import '../../theme/color.dart';
+import '../../theme/font.dart';
 import '../../theme/pod.dart';
 
 class NotifyAndShare extends PanelWidget {
@@ -25,6 +25,7 @@ class NotifyAndShare extends PanelWidget {
     final String detail = ref.read(passPromptDetailProvider);
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isDialog = size != ScreenSize.mobile;
+    final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -44,12 +45,7 @@ class NotifyAndShare extends PanelWidget {
             children: [
               AutoSizeText(
                 str,
-                style: GoogleFonts.montserrat(
-                  color: blackBean,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 21.r,
-                  letterSpacing: 0,
-                ),
+                style: defaultTextTheme.montserratLarge,
               ),
               Text(
                 detail,

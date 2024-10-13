@@ -6,11 +6,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wordtape/function/underline_text/pod.dart';
 
 import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
 import '../../model/word.dart';
+import '../underline_text/pod.dart';
 
 part 'pod.g.dart';
 

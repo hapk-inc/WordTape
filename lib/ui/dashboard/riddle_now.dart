@@ -9,17 +9,18 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:random_avatar/random_avatar.dart';
-import 'package:wordtape/function/question/notifier.dart';
 
 import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
 import '../../function/firestore/pod.dart';
+import '../../function/question/notifier.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/player.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
 import '../../theme/color.dart';
+import '../../theme/font.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
 import '../common/logoff.dart';
@@ -110,7 +111,7 @@ class RiddleNowState extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(nowProvider);
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
-    final List<Word> search = notifier.searchWord;
+    final List<Word> searchWord = notifier.searchWord;
     return LayoutBuilder(
       builder: (_, constraints) {
         final double mW = constraints.maxWidth;
@@ -132,11 +133,14 @@ class RiddleNowState extends ConsumerWidget {
                       child: const RiddleNowWelcome(),
                     ),
                     Gap(30.r),
-                    for (Word search in search)
-                      FadeIn(
-                        delay: const Duration(milliseconds: 750),
-                        child: EditableWord(search),
-                      ),
+                    if (searchWord.isEmpty)
+                      QuestionUntilNow(date)
+                    else
+                      for (Word search in searchWord)
+                        FadeIn(
+                          delay: const Duration(milliseconds: 750),
+                          child: EditableWord(search),
+                        ),
                     const Spacer(),
                   ],
                 ),
@@ -146,6 +150,27 @@ class RiddleNowState extends ConsumerWidget {
         );
       },
     );
+  }
+}
+
+class QuestionUntilNow extends ConsumerWidget {
+  final DateTime date;
+  const QuestionUntilNow(this.date, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
+    final Map<int, dynamic> untilNow = notifier.found.untilNow;
+    final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
+
+    final String foundEmoji = List.generate(
+      notifier.riddle?.words.length ?? 0,
+      (index) {
+        if (untilNow.containsKey(index)) return "🟥";
+        return "🟩";
+      },
+    ).join();
+    return Text(foundEmoji, style: defaultTextTheme.emojiTheme);
   }
 }
 

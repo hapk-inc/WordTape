@@ -78,6 +78,27 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         fontSize: 15.r,
         height: 0,
       );
+
+  TextStyle get urlTheme => robotoMonoTheme.copyWith(
+        fontSize: 15.r,
+        color: slateGray,
+        height: 0,
+        letterSpacing: 0,
+        wordSpacing: 0,
+      );
+
+  TextStyle get emojiTheme => notoColorEmojiTheme.copyWith(
+        fontSize: 36.r,
+        letterSpacing: 0.3.r,
+        height: 0.r,
+      );
+
+  TextStyle get montserratLarge => montserratTheme.copyWith(
+        fontSize: 21.r,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get montserratMedium => montserratTheme.copyWith(fontSize: 15.r);
 }
 
 mixin FontMixin {
@@ -112,5 +133,25 @@ mixin FontMixin {
         letterSpacing: 0,
         wordSpacing: 0,
         color: slateGray,
+      );
+
+  TextStyle get montserratTheme => const TextStyle(
+        fontFamily: 'Montserrat',
+        letterSpacing: 0,
+        wordSpacing: 0,
+        color: slateGray,
+      );
+
+  TextStyle get robotoMonoTheme => const TextStyle(
+        fontFamily: 'RobotoMono',
+        letterSpacing: 0,
+        wordSpacing: 0,
+        color: slateGray,
+      );
+
+  TextStyle get notoColorEmojiTheme => const TextStyle(
+        fontFamily: 'NotoColorEmoji',
+        letterSpacing: 0,
+        wordSpacing: 0,
       );
 }

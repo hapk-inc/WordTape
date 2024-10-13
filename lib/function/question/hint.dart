@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:wordtape/enum/enum.dart';
 
+import '../../enum/enum.dart';
 import '../gen_ai/pod.dart';
 import '../underline_text/pod.dart';
 import 'notifier.dart';

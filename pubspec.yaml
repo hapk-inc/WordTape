@@ -175,6 +175,18 @@ flutter:
     - family: Questrial
       fonts:
         - asset: fonts/Questrial-Regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat-Regular.ttf
+        - asset: fonts/Montserrat-SemiBold.ttf
+          weight: 600
+    - family: RobotoMono
+      fonts:
+        - asset: fonts/RobotoMono-Light.ttf
+          weight: 300
+    - family: NotoColorEmoji
+      fonts:
+        - asset: fonts/NotoColorEmoji-Regular.ttf
 
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic

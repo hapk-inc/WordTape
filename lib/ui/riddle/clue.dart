@@ -18,7 +18,7 @@ class Clue extends ConsumerWidget {
     final DateTime date = DateTime.now().convert();
     String hint = ref.watch(hintProvider(date));
     final ScreenSize size = ref.watch(sizeProvider);
-    final bool isTab = size == ScreenSize.tab;
+    final bool isM = size == ScreenSize.mobile;
     return AnimatedSwitcher(
       duration: Duration.zero,
       transitionBuilder: (child, _) => child,
@@ -34,8 +34,8 @@ class Clue extends ConsumerWidget {
           ),
           maxLines: 2,
           stepGranularity: 3,
-          minFontSize: 15,
-          maxFontSize: isTab ? 24 : 21,
+          minFontSize: isM ? 18 : 15,
+          maxFontSize: !isM ? 24 : 21,
           textAlign: TextAlign.center,
         ),
       ),

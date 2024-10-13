@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'enum/enum.dart';
 import 'router/router.dart';
@@ -67,16 +66,7 @@ class App extends ConsumerWidget with CustomThemeMixin {
                     EdgeInsets.symmetric(horizontal: 15.r),
                   ),
                   minimumSize: WidgetStatePropertyAll(Size(90.r, 45.r)),
-                  textStyle: WidgetStatePropertyAll(
-                    GoogleFonts.robotoMono(
-                      color: slateGray,
-                      fontWeight: FontWeight.w300,
-                      fontSize: 15.r,
-                      height: 0,
-                      letterSpacing: 0,
-                      wordSpacing: 0,
-                    ),
-                  ),
+                  textStyle: WidgetStatePropertyAll(defaultTextTheme.urlTheme),
                 ),
               ),
             ),
@@ -99,7 +89,7 @@ mixin CustomThemeMixin {
         color: slateGray,
       );
 
-  TextTheme get defaultTextTheme => DefaultTextTheme();
+  DefaultTextTheme get defaultTextTheme => DefaultTextTheme();
 
   ButtonStyle get defaultButtonStyle => ButtonStyle(
         elevation: WidgetStatePropertyAll(1.5.r),
