@@ -8,8 +8,10 @@ import '../function/question/notifier.dart';
 
 import '../model/found.dart';
 
+import '../remote_config/pod.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
+import '../ui/renovation.dart';
 import '../ui/riddle.dart';
 import '../ui/splash.dart';
 import '../ui/summary.dart';
@@ -18,10 +20,12 @@ part 'router.g.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-@Riverpod(keepAlive: true, dependencies: [localFound, SelectedDate])
+@Riverpod(keepAlive: true, dependencies: [renovation, localFound, SelectedDate])
 GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
+      final String? renovation = await ref.read(renovationProvider.future);
+      if (renovation?.isNotEmpty ?? false) return "/renovation";
       return state.matchedLocation;
     },
     routes: <RouteBase>[
@@ -30,6 +34,10 @@ GoRouter router(RouterRef ref) {
         builder: (_, __, child) => OutlinePage(child),
         routes: [
           GoRoute(path: '/', builder: (_, __) => const SplashPage()),
+          GoRoute(
+            path: '/renovation',
+            builder: (_, __) => const RenovationPage(),
+          ),
           GoRoute(path: '/home', builder: (_, __) => const DashboardPage()),
           GoRoute(
             path: '/riddle',

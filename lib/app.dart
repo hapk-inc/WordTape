@@ -43,10 +43,13 @@ class App extends ConsumerWidget with CustomThemeMixin {
                 ),
               ),
               inputDecorationTheme: InputDecorationTheme(
-                enabledBorder: underlineInputBorder(mint),
+                enabledBorder: underlineInputBorder(slateGray),
                 focusedBorder: underlineInputBorder(seaWhite),
                 errorBorder: underlineInputBorder(cerise),
                 focusedErrorBorder: underlineInputBorder(cerise),
+                contentPadding: const EdgeInsets.only(bottom: 9.6),
+                filled: false,
+                hintStyle: defaultTextTheme.bodyLarge,
               ),
               elevatedButtonTheme: ElevatedButtonThemeData(
                 style: defaultButtonStyle.copyWith(

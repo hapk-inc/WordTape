@@ -121,34 +121,69 @@ class RiddleNowState extends ConsumerWidget {
             AnimatedPositioned(
               duration: const Duration(milliseconds: 150),
               width: mW,
-              bottom: mH * 0.18,
+              bottom: mH * 0.15,
               child: SizedBox(
                 height: mH * 0.6,
-                child: Column(
-                  children: [
-                    Gap(30.r),
-                    Container(
-                      width: 600.r,
-                      padding: EdgeInsets.symmetric(horizontal: 7.5.r),
-                      child: const RiddleNowWelcome(),
-                    ),
-                    Gap(30.r),
-                    if (searchWord.isEmpty)
-                      QuestionUntilNow(date)
-                    else
-                      for (Word search in searchWord)
-                        FadeIn(
-                          delay: const Duration(milliseconds: 750),
-                          child: EditableWord(search),
-                        ),
-                    const Spacer(),
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4.5.r),
+                        child: const RiddleNowWelcome(),
+                      ),
+                      Gap(30.r),
+                      if (searchWord.isEmpty) ...[
+                        QuestionUntilNow(date),
+                        Gap(60.r),
+                        if (!notifier.done)
+                          FadeIn(
+                            delay: const Duration(milliseconds: 3600),
+                            child: const FeedbackTextField(),
+                          ),
+                      ] else
+                        for (Word search in searchWord)
+                          FadeIn(
+                            delay: const Duration(milliseconds: 750),
+                            child: EditableWord(search),
+                          ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         );
       },
+    );
+  }
+}
+
+class FeedbackTextField extends ConsumerWidget {
+  const FeedbackTextField({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.r),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        textAlignVertical: TextAlignVertical.bottom, //
+        cursorHeight: 36.r,
+        style: textTheme.bodyLarge?.copyWith(color: seaWhite),
+        decoration: const InputDecoration(
+          hintText: 'Enter your feedback here',
+        ),
+        maxLines: 1,
+        maxLength: 90,
+        textInputAction: TextInputAction.done,
+        validator: (String? text) {
+          if (text == null || text.isEmpty) {
+            return 'Please enter your feedback';
+          }
+          return null;
+        },
+      ),
     );
   }
 }
