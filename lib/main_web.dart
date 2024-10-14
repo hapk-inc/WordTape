@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -20,6 +21,7 @@ import 'firebase/pod.dart';
 import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
+import 'function/connectivity/pod.dart';
 import 'logger/log.dart';
 
 Future<void> main() async {
@@ -76,6 +78,20 @@ Future<void> main() async {
 
   logger.i("FIREBASE STARTED");
 
+  final Connectivity connectivity = Connectivity();
+  final List<ConnectivityResult> connectivityResult =
+      await connectivity.checkConnectivity();
+
+  final bool isValid = connectivityResult.contains(ConnectivityResult.mobile) ||
+      connectivityResult.contains(ConnectivityResult.wifi);
+  int validConnection = 0;
+  debugPrint("75==$connectivityResult==$isValid");
+  if (isValid) {
+    validConnection = await rc.fetchAndActivate().then((flag) => flag ? 1 : 0);
+  } else {
+    validConnection = -1;
+  }
+
   final List<Override> override = [
     firebaseAppProvider.overrideWithValue(app),
     firebaseAuthProvider.overrideWithValue(firebaseAuth),
@@ -88,7 +104,9 @@ Future<void> main() async {
     //
     logProvider.overrideWithValue(logger),
 
-    appEnvProvider.overrideWithValue(appEnv)
+    appEnvProvider.overrideWithValue(appEnv),
+
+    validateConnectionProvider.call(value: validConnection)
   ];
   runApp(
     EasyLocalization(

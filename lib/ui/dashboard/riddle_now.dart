@@ -135,7 +135,7 @@ class RiddleNowState extends ConsumerWidget {
                       if (searchWord.isEmpty) ...[
                         QuestionUntilNow(date),
                         Gap(60.r),
-                        if (!notifier.done)
+                        if (notifier.done)
                           FadeIn(
                             delay: const Duration(milliseconds: 3600),
                             child: const FeedbackTextField(),

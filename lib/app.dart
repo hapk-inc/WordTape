@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wordtape/function/connectivity/pod.dart';
 
 import 'enum/enum.dart';
 import 'router/router.dart';
@@ -20,6 +21,7 @@ class App extends ConsumerWidget with CustomThemeMixin {
       builder: (context, child) {
         final double mW = 360.w;
         final ScreenSize size = _validateSize(mW);
+        ref.read(listenConnectivityProvider);
         return ProviderScope(
           overrides: [sizeProvider.overrideWithValue(size)],
           child: MaterialApp.router(

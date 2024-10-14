@@ -25,6 +25,7 @@ GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
       final String? renovation = await ref.read(renovationProvider.future);
+      debugPrint("27==$renovation");
       if (renovation?.isNotEmpty ?? false) return "/renovation";
       return state.matchedLocation;
     },

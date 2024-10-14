@@ -17,7 +17,7 @@ Stream<User?> runningUser(RunningUserRef ref) {
 }
 
 @Riverpod(keepAlive: true, dependencies: [auth])
-Stream<User?> gUser(GUserRef ref) {
+Stream<User?> googleUser(GoogleUserRef ref) {
   final Auth auth = ref.read(authProvider);
   return auth.onGoogleUser;
 }
