@@ -20,14 +20,6 @@ class DashboardPage extends StatelessWidget {
         if (kIsWeb) SliverToBoxAdapter(child: StoreBtn()),
         SliverToBoxAdapter(child: Gap(1.5)),
         SliverToBoxAdapter(child: DashboardFooter())
-        /* SliverToBoxAdapter(
-          child: SizedBox(
-            height: 900.h,
-            child: Center(
-              child: Text('Scroll to see the SliverAppBar in effect.'),
-            ),
-          ),
-        ),*/
       ],
     );
   }

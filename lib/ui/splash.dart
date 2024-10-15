@@ -11,6 +11,7 @@ import 'package:lottie/lottie.dart';
 import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
 import 'common/gradient_box.dart';
+import 'common/logo.dart';
 
 const Duration _m1500 = Duration(milliseconds: 1500);
 
@@ -57,7 +58,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               dimension: 540.r,
               child: Stack(
                 children: [
-                  if (_logo) Logo(onFinish: onFinish),
+                  if (_logo) Logo(onFinish: onFinish, biggerText: true),
                   if (_lottie) StampLottie(onLoaded: onLoaded)
                 ],
               ),
@@ -98,23 +99,4 @@ class StampLottie extends StatelessWidget {
           fit: BoxFit.fill, repeat: false, onLoaded: onLoaded),
     );
   }
-}
-
-class Logo extends ConsumerWidget {
-  final void Function(AnimateDoDirection)? onFinish;
-  const Logo({this.onFinish, super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) => Center(
-        child: FadeIn(
-          duration: const Duration(milliseconds: 300),
-          delay: const Duration(milliseconds: 750),
-          onFinish: onFinish,
-          child: Text(
-            "WORD TAPE",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-        ),
-      );
 }

@@ -46,9 +46,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 90),
-      height: 60.h,
-      margin: EdgeInsets.only(bottom: 7.5.r),
-      alignment: Alignment.center,
+      height: 72.h,
       child: LayoutBuilder(
         builder: (_, constraints) {
           //

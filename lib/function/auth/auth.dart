@@ -11,6 +11,8 @@ import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
 import '../../logger/log.dart';
 
+//const List<String> _scopes = <String>['email'];
+
 class Auth {
   final Ref ref;
 

@@ -35,7 +35,6 @@ Future<void> main() async {
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
   final String url = kIsWeb ? web.window.location.href : "";
-  //const String url = "";
 
   final AppEnv appEnv = kDebugMode
       ? AppEnv.dev
@@ -43,9 +42,9 @@ Future<void> main() async {
           ? AppEnv.dev
           : AppEnv.prod;
 
-  final FirebaseApp app = await Firebase.initializeApp(
-    options: appEnv == AppEnv.dev ? dev : prod,
-  );
+  final FirebaseOptions options = appEnv == AppEnv.dev ? dev : prod;
+
+  final FirebaseApp app = await Firebase.initializeApp(options: options);
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);
   final FirebaseFirestore fireStore = FirebaseFirestore.instanceFor(app: app);
@@ -59,11 +58,7 @@ Future<void> main() async {
     minimumFetchInterval: const Duration(seconds: 3),
   );
 
-  rc.setDefaults(
-    {
-      "renovation": "",
-    },
-  );
+  rc.setDefaults(<String, dynamic>{"renovation": ""});
   await rc.setConfigSettings(remoteConfigSetting);
 
   final Logger logger = Logger();
@@ -85,7 +80,6 @@ Future<void> main() async {
   final bool isValid = connectivityResult.contains(ConnectivityResult.mobile) ||
       connectivityResult.contains(ConnectivityResult.wifi);
   int validConnection = 0;
-  debugPrint("75==$connectivityResult==$isValid");
   if (isValid) {
     validConnection = await rc.fetchAndActivate().then((flag) => flag ? 1 : 0);
   } else {

@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,19 +11,20 @@ class StoreBtn extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Wrap(
-      spacing: 15.r,
-      runSpacing: 15.r,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      alignment: WrapAlignment.center,
-      children: [
-        Lottie.asset('lottie/app_store.json'),
-        Image.asset('images/play-store.png')
-      ]
-          .map(
-            (e) => AnimatedSize(
-              duration: const Duration(milliseconds: 150),
-              child: InkWell(
+    return FadeIn(
+      delay: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
+      child: Wrap(
+        spacing: 15.r,
+        runSpacing: 15.r,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: WrapAlignment.center,
+        children: [
+          Lottie.asset('lottie/app_store.json'),
+          Image.asset('images/play-store.png')
+        ]
+            .map(
+              (e) => InkWell(
                 onTap: () {
                   final String progress = ref.read(inProgressProvider);
                   ScaffoldMessenger.maybeOf(context)?.showSnackBar(
@@ -32,11 +34,11 @@ class StoreBtn extends ConsumerWidget {
                     ),
                   );
                 },
-                child: SizedBox(width: 180.r, child: e),
+                child: SizedBox(width: 150.r, child: e),
               ),
-            ),
-          )
-          .toList(),
+            )
+            .toList(),
+      ),
     );
   }
 }

@@ -18,7 +18,7 @@ import 'color.dart';
 class DefaultTextTheme extends TextTheme with FontMixin {
   //Title==============
   @override
-  TextStyle? get titleLarge => carterTheme.copyWith(fontSize: 27.r);
+  TextStyle? get titleLarge => carterTheme.copyWith(fontSize: 24.r);
 
   @override
   TextStyle? get titleMedium => carterTheme.copyWith(
@@ -29,7 +29,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   //Body==============
   @override
   TextStyle? get bodyLarge => questrialTheme.copyWith(
-        fontSize: 24.r,
+        fontSize: 22.5.r,
         height: 2.1,
       );
 
@@ -47,7 +47,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
 //=============
   @override
-  TextStyle? get displayLarge => paytoneTheme.copyWith(fontSize: 72.r);
+  TextStyle? get displayLarge => paytoneTheme.copyWith(fontSize: 54.r);
 
   @override
   TextStyle? get displayMedium => paytoneTheme.copyWith(fontSize: 36.r);

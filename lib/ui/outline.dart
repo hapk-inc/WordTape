@@ -72,7 +72,7 @@ class OutlineState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double mobileWidth = 720.r;
+    double mobileWidth = 900.r;
     return LayoutBuilder(
       builder: (_, constraints) {
         // final double maxWidth = constraints.maxWidth;

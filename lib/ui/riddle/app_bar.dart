@@ -7,6 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
 import '../../function/question/notifier.dart';
+import '../../theme/color.dart';
 
 class RiddleAppBar extends ConsumerWidget {
   const RiddleAppBar({super.key});
@@ -20,6 +21,7 @@ class RiddleAppBar extends ConsumerWidget {
       toolbarHeight: 90.r,
       leadingWidth: 60.r,
       titleSpacing: 0,
+      iconTheme: IconThemeData(size: 21.r, color: seaWhite),
       title: Text(name.toUpperCase()),
       actions: const [LottieHint()],
       titleTextStyle: Theme.of(context).textTheme.displayMedium,

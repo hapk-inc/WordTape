@@ -25,6 +25,11 @@ class NotifyAndShare extends PanelWidget {
     final String detail = ref.read(passPromptDetailProvider);
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isDialog = size != ScreenSize.mobile;
+    final AppEnv appEnv = ref.read(appEnvProvider);
+    final String url =
+        "https://${appEnv == AppEnv.dev ? "wordtape-demo" : "wordtape"}"
+        ".web.app/";
+
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
     return AnimatedContainer(
@@ -58,7 +63,7 @@ class NotifyAndShare extends PanelWidget {
                   child: SizedBox.square(
                     dimension: 270.r,
                     child: InkWell(
-                      onTap: () => Share.share("xyz"),
+                      onTap: () => Share.share(url),
                       child: Lottie.asset('lottie/share.json'),
                     ),
                   ),

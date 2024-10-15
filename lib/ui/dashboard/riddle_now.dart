@@ -7,10 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:random_avatar/random_avatar.dart';
 
-import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
 import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
@@ -23,6 +21,7 @@ import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
+import '../common/logo.dart';
 import '../common/logoff.dart';
 import '../common/notify.dart';
 
@@ -31,14 +30,14 @@ class RiddleNow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    // final TextTheme textTheme = Theme.of(context).textTheme;
     final String share = ref.read(passPromptProvider);
     final DateTime date = ref.read(nowProvider);
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
     //
-    final PackageInfo? package = ref.read(packageProvider).value;
-    final String name = (package?.appName ?? "").toUpperCase();
+    // final PackageInfo? package = ref.read(packageProvider).value;
+    // final String name = (package?.appName ?? "").toUpperCase();
     //
     final Player? player = ref.watch(playerProvider).value;
     log(player.toString());
@@ -92,11 +91,11 @@ class RiddleNow extends ConsumerWidget {
           ),
         ),
       ),
-      expandedHeight: 600.r,
+      expandedHeight: 720.r,
       toolbarHeight: 90.h,
       titleSpacing: 30.r,
-      titleTextStyle: textTheme.displayMedium?.copyWith(color: seaWhite),
-      title: Text(name),
+      // titleTextStyle: textTheme.displayMedium?.copyWith(color: seaWhite),
+      // title: Text(name),
       flexibleSpace: const FlexibleSpaceBar(
         background: GradientBox(child: RiddleNowState()),
       ),
@@ -108,52 +107,72 @@ class RiddleNowState extends ConsumerWidget {
   const RiddleNowState({super.key});
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) => LayoutBuilder(
+        builder: (_, constraints) {
+          final double mW = constraints.maxWidth;
+          final double mH = constraints.maxHeight;
+          return Stack(
+            children: [
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 150),
+                width: mW,
+                bottom: 0,
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 150),
+                  child: SizedBox(
+                    height: mH * 0.85,
+                    child: const RiddleNowStateState(),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+}
+
+class RiddleNowStateState extends ConsumerWidget {
+  const RiddleNowStateState({super.key});
+
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(nowProvider);
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> searchWord = notifier.searchWord;
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        final double mW = constraints.maxWidth;
-        final double mH = constraints.maxHeight;
-        return Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 150),
-              width: mW,
-              bottom: mH * 0.15,
-              child: SizedBox(
-                height: mH * 0.6,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.5.r),
-                        child: const RiddleNowWelcome(),
-                      ),
-                      Gap(30.r),
-                      if (searchWord.isEmpty) ...[
-                        QuestionUntilNow(date),
-                        Gap(60.r),
-                        if (notifier.done)
-                          FadeIn(
-                            delay: const Duration(milliseconds: 3600),
-                            child: const FeedbackTextField(),
-                          ),
-                      ] else
-                        for (Word search in searchWord)
-                          FadeIn(
-                            delay: const Duration(milliseconds: 750),
-                            child: EditableWord(search),
-                          ),
-                    ],
-                  ),
-                ),
-              ),
+
+    return Column(
+      children: [
+        Gap(30.r),
+        const Logo(),
+        Gap(30.r),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 3.6.r),
+          child: const RiddleNowWelcome(),
+        ),
+        Gap(30.r),
+        if (searchWord.isEmpty) ...[
+          QuestionUntilNow(date),
+          Gap(60.r),
+          if (notifier.done)
+            FadeIn(
+              delay: const Duration(milliseconds: 3600),
+              child: const FeedbackTextField(),
             ),
-          ],
-        );
-      },
+        ] else
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4.5.r),
+            child: Wrap(
+              spacing: 30.r,
+              children: [
+                for (Word search in searchWord)
+                  FadeIn(
+                    delay: const Duration(milliseconds: 750),
+                    child: EditableWord(search),
+                  )
+              ],
+            ),
+          ),
+      ],
     );
   }
 }
@@ -223,7 +242,7 @@ class RiddleNowWelcome extends ConsumerWidget {
     List<String> words = sentence.text.split(' ');
     List<String> highlighter = (sentence.focus ?? "").split(' ');
     return FadeInUp(
-      delay: const Duration(milliseconds: 600),
+      delay: const Duration(milliseconds: 1200),
       from: 45.h,
       key: ValueKey(sentence),
       child: AutoSizeText.rich(

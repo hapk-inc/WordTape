@@ -34,9 +34,9 @@ Future<void> main() async {
 
   const AppEnv appEnv = kDebugMode ? AppEnv.dev : AppEnv.prod;
 
-  final FirebaseApp app = await Firebase.initializeApp(
-    options: appEnv == AppEnv.dev ? dev : prod,
-  );
+  final FirebaseOptions options = appEnv == AppEnv.dev ? dev : prod;
+
+  final FirebaseApp app = await Firebase.initializeApp(options: options);
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);
   final FirebaseFirestore fireStore = FirebaseFirestore.instanceFor(app: app);
@@ -73,7 +73,6 @@ Future<void> main() async {
   final bool isValid = connectivityResult.contains(ConnectivityResult.mobile) ||
       connectivityResult.contains(ConnectivityResult.wifi);
   int validConnection = 0;
-  debugPrint("75==$connectivityResult==$isValid");
   if (isValid) {
     validConnection = await rc.fetchAndActivate().then((flag) => flag ? 1 : 0);
   } else {

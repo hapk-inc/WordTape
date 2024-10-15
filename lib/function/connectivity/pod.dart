@@ -45,13 +45,9 @@ void listenConnectivity(ListenConnectivityRef ref) {
 }
 
 Future<int> _validateConnection(ListenConnectivityRef ref) => ref
-        .refresh(remoteConfigProvider)
-        .fetchAndActivate()
-        .then((value) => value ? 1 : 0)
-        .onError(
-      (e, __) {
-        print("validateConnection");
-        print(e);
-        return -1;
-      },
+    .refresh(remoteConfigProvider)
+    .fetchAndActivate()
+    .then((value) => value ? 1 : 0)
+    .onError(
+      (e, __) => -1,
     );

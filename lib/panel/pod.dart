@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,9 +32,12 @@ class PanelNotifier extends _$PanelNotifier {
     } else {
       showDialog(
         context: navigatorKey.currentContext!,
-        builder: (_) => Dialog(
-          shape: RoundedRectangleBorder(borderRadius: _radius()),
-          child: ClipRRect(borderRadius: _radius(), child: value),
+        builder: (_) => FadeIn(
+          duration: const Duration(milliseconds: 750),
+          child: Dialog(
+            shape: RoundedRectangleBorder(borderRadius: _radius()),
+            child: ClipRRect(borderRadius: _radius(), child: value),
+          ),
         ),
       );
     }
