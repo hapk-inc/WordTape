@@ -203,5 +203,18 @@
   "decoded_4": "You found the right order.",
   "decoded_5": "You unraveled the sequence.",
   "decoded_6": "You decoded the pattern.",
-  "decoded_7": "You identified the sequence."
+  "decoded_7": "You identified the sequence.",
+
+  "cookie_0" : "Cookies Consent",
+  "cookie_1" : "Accept Cookies",
+  "cookie_2" : "Cookies Usage Notice",
+  "cookie_3" : "Your Cookies Choice",
+  "cookie_4" : "Cookies Policy Alert",
+
+
+  "cookie_info_0" : "We use cookies to enhance your experience and analyze site traffic. By clicking Accept, you agree to our cookie policy. ",
+  "cookie_info_1" : "To improve your visit, we use cookies for personalization and analytics. Click Accept to consent to our cookie usage. ",
+  "cookie_info_2" : "Our site uses cookies for a better user experience and traffic analysis. By accepting, you agree to our cookie policy.",
+  "cookie_info_3" : "We utilize cookies to optimize your experience and gather insights on site usage. By selecting Accept, you consent to our cookie policy.",
+  "cookie_info_4" : "Cookies help us enhance your browsing experience and understand site usage. By clicking Accept, you consent to our use of cookies."
 }

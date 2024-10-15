@@ -20,7 +20,7 @@ class NotifyAndShare extends PanelWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    //final TextTheme textTheme = Theme.of(context).textTheme;
     final String str = ref.read(passPromptProvider);
     final String detail = ref.read(passPromptDetailProvider);
     final ScreenSize size = ref.watch(sizeProvider);
@@ -43,8 +43,8 @@ class NotifyAndShare extends PanelWidget {
       constraints: BoxConstraints(maxWidth: 540.r),
       child: FadeIn(
         delay: const Duration(milliseconds: 300),
-        child: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
+        child: AnimatedSize(
+          duration: const Duration(milliseconds: 300),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -54,7 +54,7 @@ class NotifyAndShare extends PanelWidget {
               ),
               Text(
                 detail,
-                style: textTheme.bodySmall?.copyWith(color: silver),
+                style: defaultTextTheme.bodySmall?.copyWith(color: silver),
                 maxLines: isDialog ? 1 : null,
               ),
               Center(

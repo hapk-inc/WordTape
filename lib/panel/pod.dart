@@ -2,8 +2,11 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/app.dart';
+import 'package:wordtape/ui/common/accept_cookies.dart';
 
 import '../enum/enum.dart';
 import '../router/router.dart';
@@ -30,7 +33,13 @@ class PanelNotifier extends _$PanelNotifier {
     if (panel.isAttached && size == ScreenSize.mobile) {
       if (panel.isPanelClosed) panel.open();
     } else {
-      showDialog(
+      show(value);
+    }
+  }
+
+  set dialogState(PanelWidget value) => show(value);
+
+  void show(PanelWidget value) => showDialog(
         context: navigatorKey.currentContext!,
         builder: (_) => FadeIn(
           duration: const Duration(milliseconds: 750),
@@ -40,6 +49,4 @@ class PanelNotifier extends _$PanelNotifier {
           ),
         ),
       );
-    }
-  }
 }

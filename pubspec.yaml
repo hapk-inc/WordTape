@@ -70,7 +70,8 @@ dependencies:
   connectivity_plus: ^6.0.5
 
   # smooth_page_indicator: ^1.2.0+3
-  google_fonts: ^6.2.1
+  # google_fonts: ^6.2.1
+  shared_preferences: ^2.3.2
 
   #auth
   rxdart: ^0.28.0

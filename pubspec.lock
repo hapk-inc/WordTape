@@ -698,14 +698,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.2.7"
-  google_fonts:
-    dependency: "direct main"
-    description:
-      name: google_fonts
-      sha256: b1ac0fe2832c9cc95e5e88b57d627c5e68c223b9657f4b96e1487aa9098c7b82
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.2.1"
   google_generative_ai:
     dependency: "direct main"
     description:
@@ -1219,7 +1211,7 @@ packages:
     source: hosted
     version: "5.0.0"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: "746e5369a43170c25816cc472ee016d3a66bc13fcf430c0bc41ad7b4b2922051"

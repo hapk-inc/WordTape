@@ -8,7 +8,9 @@ const Color mint = Color(0xff59c9a5);
 const Color mintGreen = Color(0xffC0E7DD);
 const Color azureGreen = Color(0xffDFF2ED);
 
+const Color tyrianPurple = Color(0xff561643);
 const Color cerise = Color(0xffDD2663);
+
 const Color seaWhite = Color(0xffFEFCFD);
 const Color ghostWhite = Color(0xffF6F3F7);
 const Color lightCyan = Color(0xffD4F5F5);
