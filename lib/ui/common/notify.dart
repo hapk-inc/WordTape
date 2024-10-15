@@ -43,18 +43,20 @@ class NotifyAndShare extends PanelWidget {
       constraints: BoxConstraints(maxWidth: 540.r),
       child: FadeIn(
         delay: const Duration(milliseconds: 300),
-        child: AnimatedSize(
-          duration: const Duration(milliseconds: 300),
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
                 str,
-                style: defaultTextTheme.montserratLarge,
+                style: defaultTextTheme.montserratLarge.copyWith(
+                  color: tyrianPurple,
+                ),
               ),
               Text(
                 detail,
-                style: defaultTextTheme.bodySmall?.copyWith(color: silver),
+                style: defaultTextTheme.bodySmall?.copyWith(color: slateGray),
                 maxLines: isDialog ? 1 : null,
               ),
               Center(

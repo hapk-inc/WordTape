@@ -2,11 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/app.dart';
-import 'package:wordtape/ui/common/accept_cookies.dart';
 
 import '../enum/enum.dart';
 import '../router/router.dart';

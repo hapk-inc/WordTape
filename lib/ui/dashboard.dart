@@ -23,13 +23,17 @@ class DashboardPage extends ConsumerStatefulWidget {
 class _DashboardPageState extends ConsumerState<DashboardPage> {
   @override
   void initState() {
+    if (kDebugMode) {
+      ref.read(panelNotifierProvider.notifier).dialogState =
+          const AcceptCookie();
+    }
     Future.delayed(
       const Duration(milliseconds: 1500),
       () async {
         final SharedPreferences pref = await ref.read(sharedProvider.future);
-        if (kDebugMode || kIsWeb) {
+        if (kIsWeb) {
           final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
-          if (!acceptCookies || kDebugMode) {
+          if (!acceptCookies) {
             ref.read(panelNotifierProvider.notifier).dialogState =
                 const AcceptCookie();
           }

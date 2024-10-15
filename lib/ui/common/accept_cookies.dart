@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -73,12 +74,8 @@ class AcceptCookie extends PanelWidget {
                         final SharedPreferences pref =
                             await ref.read(sharedProvider.future);
                         pref.setBool('accept_cookies', true).whenComplete(
-                          () {
-                            NavigatorState? navigatorState =
-                                Navigator.of(context);
-                            navigatorState.pop();
-                          },
-                        );
+                              () => context.pop(),
+                            );
                       },
                       child: const Text("Accept"),
                     ),
