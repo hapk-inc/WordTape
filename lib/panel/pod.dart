@@ -24,6 +24,7 @@ class PanelNotifier extends _$PanelNotifier {
   @override
   set state(PanelWidget value) {
     if (!kIsWeb && value.toString() == const EmptyPanel().toString()) return;
+    debugPrint(value.toString());
     super.state = value;
     final PanelController panel = ref.read(panelControllerProvider);
     final ScreenSize size = ref.read(sizeProvider);

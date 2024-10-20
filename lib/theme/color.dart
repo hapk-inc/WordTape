@@ -15,6 +15,10 @@ const Color seaWhite = Color(0xffFEFCFD);
 const Color ghostWhite = Color(0xffF6F3F7);
 const Color lightCyan = Color(0xffD4F5F5);
 
+const Color payneGray = Color(0xff34627A);
+const Color celestialBlue = Color(0xff5998C5);
+const Color lightBlue = Color(0xff98C9D1);
+
 const Color blackBean = Color(0xff2A0800);
 const Color englishViolet = Color(0xff413C58);
 const Color slateGray = Color(0xff767B91);

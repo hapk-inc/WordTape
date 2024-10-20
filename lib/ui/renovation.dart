@@ -11,7 +11,7 @@ import '../theme/color.dart';
 
 const UnderlineText _construction = UnderlineText(
   "We will be back soon.\nMeanwhile, try to decode above",
-  focus: "decode above",
+  focused: "decode above",
 );
 
 class RenovationPage extends ConsumerWidget {
@@ -20,7 +20,7 @@ class RenovationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<String> words = _construction.text.split(' ');
-    List<String> highlighter = (_construction.focus ?? "").split(' ');
+    List<String> highlighter = (_construction.focused ?? "").split(' ');
 
     final TextTheme textTheme = Theme.of(context).textTheme;
     return AnimatedContainer(

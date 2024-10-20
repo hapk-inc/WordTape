@@ -1,30 +1,42 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../function/auth/pod.dart';
 import '../../function/date/date.dart';
 import '../../function/question/notifier.dart';
-import '../../theme/color.dart';
+import '../../function/question/toast.dart';
+import '../../router/router.dart';
+
+import '../common/word_clue.dart';
 
 class RiddleAppBar extends ConsumerWidget {
   const RiddleAppBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final ScreenSize size = ref.watch(sizeProvider);
+    // final bool isPC = size == ScreenSize.pc;
     final PackageInfo? package = ref.read(packageProvider).value;
     final String name = package?.appName ?? "";
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return AppBar(
       backgroundColor: Colors.transparent,
-      toolbarHeight: 90.r,
-      leadingWidth: 60.r,
+      leadingWidth: 15.r,
+      leading: Container(),
       titleSpacing: 0,
-      iconTheme: IconThemeData(size: 21.r, color: seaWhite),
-      title: Text(name.toUpperCase()),
+      title: InkWell(
+        onTap: () {
+          ref.read(routerProvider).pop();
+        },
+        child: Text(name.toUpperCase(), maxLines: 1),
+      ),
       actions: const [LottieHint()],
-      titleTextStyle: Theme.of(context).textTheme.displayMedium,
+      titleTextStyle: textTheme.displayMedium,
     );
   }
 }
@@ -38,29 +50,27 @@ class LottieHint extends ConsumerStatefulWidget {
 
 class _LottieHintState extends ConsumerState<LottieHint> {
   late DateTime date;
-  late QuestionNotifier notifier;
 
   @override
   void initState() {
     date = ref.read(selectedDateProvider);
-    notifier = ref.read(questionNotifierProvider(date));
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    notifier = ref.watch(questionNotifierProvider(date));
-    return SizedBox.square(
-      dimension: 75.r,
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: notifier.found.mistake == null
-            ? const SizedBox()
-            : InkWell(
-                onTap: () => notifier.initiateTip(),
-                child: Lottie.asset("lottie/bulb.json"),
-              ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => InkWell(
+        onTap: () {
+          ref.read(questionNotifierProvider(date)).createClue();
+          ref.read(toastNotifierProvider.notifier).state =
+              toastification.showCustom(
+            alignment: Alignment.topCenter,
+            autoCloseDuration: const Duration(seconds: 15),
+            builder: (_, ToastificationItem item) => WordClueState(date, item),
+          );
+        },
+        child: SizedBox.square(
+          dimension: 75.r,
+          child: Lottie.asset("question".tr()),
+        ),
+      );
 }

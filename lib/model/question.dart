@@ -1,8 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:mock_data/mock_data.dart';
-import '../extension/extension.dart';
 
 import 'converter/date_converter.dart';
 
@@ -28,25 +27,26 @@ class Question extends Equatable with _$Question {
   factory Question.fromJson(Map<String, dynamic> json) =>
       _$QuestionFromJson(json);
 
-  factory Question.fromFirestore(Map<String, dynamic> json) {
-    Question riddle = Question.fromJson(json);
-    final List<Word> w = [];
-    for (int index = 0; index < riddle.words.length; index++) {
-      final x = riddle.words[index];
-      final String str = DateFormat('yyyy-MM-dd').format(riddle.date);
-      w.add(x.copyWith(id: "$str|$index"));
+  factory Question.fromJsonJson(Map<String, dynamic> json) {
+    Question q = Question.fromJson(json);
+
+    final List<Word> words = [];
+    for (int index = 0; index < q.words.length; index++) {
+      final Word x = q.words[index];
+      final String str = DateFormat('yyyy-MM-dd').format(q.date);
+      words.add(x.copyWith(id: "$str|$index"));
     }
-    riddle = riddle.copyWith(words: w);
-    return riddle;
+
+    q = q.copyWith(words: words);
+    return q;
   }
 
-  factory Question.fromRandom() {
-    final DateTime now = DateTime.now();
-    return Question(
-      date: now.convert(),
-      words: List.generate(6, (_) => Word(value: mockName().toUpperCase())),
-      id: mockString(8),
-    );
+  factory Question.fromSnapshot(QueryDocumentSnapshot<Object?> doc) {
+    final Map map = doc.data() as Map;
+    final String id = doc.id;
+    final Map<String, dynamic> m = Map<String, dynamic>.from(map);
+    final Question q = Question.fromJsonJson(m).copyWith(id: id);
+    return q;
   }
 
   bool isCompleted(int length) => words.length == length;

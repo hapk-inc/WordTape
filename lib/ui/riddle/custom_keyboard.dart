@@ -1,84 +1,42 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import '../../function/date/date.dart';
-
-import '../../enum/enum.dart';
 
 import '../../function/question/notifier.dart';
 import '../../function/question/word_notifier.dart';
+import '../../model/word.dart';
 import '../../theme/color.dart';
-
-const String backspace = "🔙";
-const String done = "✔️";
-
-const List<dynamic> row1 = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
-const List<dynamic> row2 = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
-const List<dynamic> row3 = [done, "Z", "X", "C", "V", "B", "N", "M", backspace];
+import '../../theme/font.dart';
 
 class CustomKeyboard extends ConsumerWidget {
   const CustomKeyboard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScreenSize size = ref.watch(sizeProvider);
-    final bool isMobile = size == ScreenSize.mobile;
-    final DateTime date = ref.read(selectedDateProvider);
-    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
-    final List<String> highlightedChar = notifier.highlightedChar;
+    final List<String> highlightedChar = [];
 
     return AnimatedContainer(
+      padding: EdgeInsets.symmetric(vertical: 7.5.r),
       duration: const Duration(milliseconds: 300),
-      constraints: BoxConstraints(maxWidth: isMobile ? 360.r : 375.r),
+      constraints: BoxConstraints(maxWidth: 375.r),
       child: LayoutBuilder(
         builder: (_, constraints) => Column(
           children: [
-            SingleChildScrollRow(
-              children: row1.map(
-                (str) {
-                  final bool isChar = str.length == 1;
-                  final double maxWidth = constraints.maxWidth;
-                  final double width = maxWidth * (isChar ? 0.084 : 0.09);
-                  return _KeyboardTile(
-                    str,
-                    width,
-                    isHighlighted: highlightedChar.contains(str),
-                  );
-                },
-              ).toList(),
-            ),
-            Gap(7.5.r),
-            SingleChildScrollRow(
-              children: row2.map(
-                (str) {
-                  final bool isChar = str.length == 1;
-                  final double maxWidth = constraints.maxWidth;
-                  final double width = maxWidth * (isChar ? 0.084 : 0.09);
-                  return _KeyboardTile(
-                    str,
-                    width,
-                    isHighlighted: highlightedChar.contains(str),
-                  );
-                },
-              ).toList(),
-            ),
-            Gap(7.5.r),
-            SingleChildScrollRow(
-              children: row3.map(
-                (str) {
-                  final bool isChar = str.length == 1;
-                  final double maxWidth = constraints.maxWidth;
-                  final double width = maxWidth * (isChar ? 0.084 : 0.15);
-                  return _KeyboardTile(
-                    str,
-                    width,
-                    isHighlighted: highlightedChar.contains(str),
-                  );
-                },
-              ).toList(),
-            ),
-            Gap(1.5.r),
+            for (int i = 1; i <= 3; i++)
+              SingleChildScrollRow(
+                children: [
+                  ..."row_$i".tr().split(",").map(
+                        (str) => _KeyboardTile(
+                          str,
+                          constraints.maxWidth,
+                          isHighlighted: highlightedChar.contains(str),
+                        ),
+                      )
+                ],
+              ),
           ],
         ),
       ),
@@ -97,38 +55,60 @@ class _KeyboardTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(selectedDateProvider);
     final bool isChar = str.length == 1;
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    final DefaultTextTheme textTheme = DefaultTextTheme();
+
+    double w = 0;
+    if (isChar) {
+      w = 0.0775;
+    } else {
+      w = str == "DEL" ? 0.12 : 0.21;
+    }
 
     return InkWell(
       onTap: () {
         final QuestionNotifier notifier =
             ref.read(questionNotifierProvider(date));
-        if (notifier.focusedWord == null) return;
-        final WordNotifier wordNotifier =
-            ref.read(wordNotifierProvider(notifier.focusedWord!));
-        wordNotifier.listenTap(str);
+        final Word? word = notifier.focusedWord;
+        // Checking if focused is not null
+        if (word != null) {
+          final WordNotifier wNotifier = ref.read(wordNotifierProvider(word));
+          switch (str) {
+            case "ENTER":
+              {
+                if (notifier.formKey.currentState?.validate() ?? false) {
+                  notifier.validate(wNotifier.controller.text);
+                }
+                break;
+              }
+            default:
+              {
+                wNotifier.keyboardTap(str);
+              }
+          }
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        width: width,
+        width: width * w,
         height: 42.h,
-        margin: EdgeInsets.symmetric(horizontal: 2.25.r),
+        margin: EdgeInsets.all(2.25.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isHighlighted
-              ? aquaMarine
-              : isChar
-                  ? null
-                  : Colors.amber,
+          gradient: LinearGradient(
+            colors: [
+              ...List.filled(5, payneGray),
+              if (isChar) celestialBlue,
+            ],
+          ),
           borderRadius: BorderRadius.circular(4.5.r),
           border: Border.all(width: 0.24.r, color: seaWhite),
         ),
-        child: Text(
+        padding: EdgeInsets.symmetric(horizontal: 7.5.r),
+        child: AutoSizeText(
           str,
-          style: textTheme.headlineMedium?.copyWith(
-            fontSize: isChar ? 15.r : 21.r,
-            color: !isHighlighted && isChar ? Colors.white60 : Colors.black,
-          ),
+          style: textTheme.headlineMedium?.copyWith(color: lightCyan),
+          presetFontSizes: [18.r, 15.r],
+          maxLines: 1,
         ),
       ),
     );

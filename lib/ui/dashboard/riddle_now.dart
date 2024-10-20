@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:random_avatar/random_avatar.dart';
+import 'package:wordtape/function/underline_text/pod.dart';
 
 import '../../function/date/date.dart';
 import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
-import '../../function/underline_text/pod.dart';
 import '../../model/player.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -31,7 +29,7 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final TextTheme textTheme = Theme.of(context).textTheme;
-    final String share = ref.read(passPromptProvider);
+    // final String share = "ref.read(passPromptProvider)";
     final DateTime date = ref.read(nowProvider);
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
@@ -40,7 +38,9 @@ class RiddleNow extends ConsumerWidget {
     // final String name = (package?.appName ?? "").toUpperCase();
     //
     final Player? player = ref.watch(playerProvider).value;
-    log(player.toString());
+
+    final UnderlineText underlineText = ref.read(notifyTextProvider);
+
     return SliverAppBar(
       pinned: true,
       snap: false,
@@ -67,9 +67,11 @@ class RiddleNow extends ConsumerWidget {
         child: Padding(
           padding: EdgeInsets.only(bottom: 30.r),
           child: OverflowBar(
+            overflowAlignment: OverflowBarAlignment.center,
             spacing: 15.r,
+            overflowSpacing: 15.r,
             children: [
-              if (notifier.riddle != null)
+              if (notifier.question != null)
                 ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(azureGreen),
@@ -84,8 +86,8 @@ class RiddleNow extends ConsumerWidget {
               ElevatedButton(
                 onPressed: () => ref
                     .read(panelNotifierProvider.notifier)
-                    .state = const NotifyAndShare(),
-                child: Text(share),
+                    .state = const NotifyDialog(),
+                child: Text(underlineText.text),
               ),
             ],
           ),
@@ -159,10 +161,9 @@ class RiddleNowStateState extends ConsumerWidget {
               child: const FeedbackTextField(),
             ),
         ] else
-          Padding(
+          Container(
             padding: EdgeInsets.symmetric(horizontal: 4.5.r),
-            child: Wrap(
-              spacing: 30.r,
+            child: Column(
               children: [
                 for (Word search in searchWord)
                   FadeIn(
@@ -218,7 +219,7 @@ class QuestionUntilNow extends ConsumerWidget {
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
     final String foundEmoji = List.generate(
-      notifier.riddle?.words.length ?? 0,
+      notifier.question?.words.length ?? 0,
       (index) {
         if (untilNow.containsKey(index)) return "🟥";
         return "🟩";
@@ -240,7 +241,7 @@ class RiddleNowWelcome extends ConsumerWidget {
     //
     final UnderlineText sentence = notifier.header;
     List<String> words = sentence.text.split(' ');
-    List<String> highlighter = (sentence.focus ?? "").split(' ');
+    List<String> highlighter = (sentence.focused ?? "").split(' ');
     return FadeInUp(
       delay: const Duration(milliseconds: 1200),
       from: 45.h,

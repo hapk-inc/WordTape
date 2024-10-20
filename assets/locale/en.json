@@ -7,41 +7,12 @@
   "no_riddle_4": "Skipping the puzzle today! \uD83D\uDE45\u200D♂\uFE0F\uD83E\uDDE9",
   "no_riddle_5": "Today, we’re puzzle-less! \uD83D\uDE4C\uD83D\uDD0D",
   "no_riddle_6": "Today is a puzzle-free zone! \uD83D\uDED1\uD83E\uDDE9",
-  "no_riddle_7": "No challenges today! ❌\uFE0F\uD83D\uDCA1",
+  "no_riddle_7": "No challenges today! ❌ \uFE0F\uD83D\uDCA1",
   "no_riddle_8": "This day is without a puzzle! \uD83C\uDF1E\uD83D\uDCD6",
 
   "help_user": "This is word puzzle game where user has to find out the second part of the word. We have given a word \"#\", where user has to find the second part of the word. ie., user has to fill the word \"#\". But user has entered \"#\". First If only typo correction, help the user to correct the spelling. Then, check if user has entered an invalid word. When you are helping, never mention about the correct word i.e., # . And do not ask questions like \"Did you mean by\". Use simple english and also use less than 12 words.",
   "hint": "This is a word puzzle where user has to find out the second part of the word. Now, user need to find the word \"#\". Give me short hint for word \"#\" less than 15 words. Make sure that the hint does not have the word \"#\". Use simple english.",
   "with_note": "Create a sentence using a phrase \"#\" less than 15 words. Make sure that the word \"#\" replace with underscores. Do not highlight the word. Use simple english.",
-
-  "welcome_0": "What word do you think comes next after this one?",
-  "welcome_0_pick": "comes next",
-
-  "welcome_1": "Can you guess what the next word will be?",
-  "welcome_1_pick": "next word",
-
-  "welcome_2": "Which word do you think is next?",
-  "welcome_2_pick": "is next?",
-
-  "welcome_3": "What do you think the next word is?",
-  "welcome_3_pick": "next word",
-
-  "welcome_4": "Which word do you think will come next?",
-  "welcome_4_pick": "comes next",
-
-  "welcome_5": "Which word do you think will come next?",
-  "welcome_5_pick": "come next?",
-
-  "welcome_6": "What’s your guess for the next word",
-  "welcome_6_pick": "next word",
-
-  "pass_0": "Spread the Word",
-  "pass_1": "Tell Your Friends",
-  "pass_2": "Pass It On",
-  "pass_3": "Invite Your Friends",
-  "pass_4": "Send to Friends",
-  "pass_5": "Let Friends Know",
-  "pass_6": "Connect with Friends",
 
   "think_0": "Seems you need to solve this. Use your brain.",
   "think_1": "You probably have to work this out. Think about it.",
@@ -103,17 +74,6 @@
   "continue_1": "Proceed",
   "continue_2": "Carry On",
   "continue_3": "Resume",
-
-  "pass_detail_0": "Ask your friends to join the puzzle.",
-  "pass_detail_1": "Tell your friends to come play the puzzle.",
-  "pass_detail_2": "Invite your friends to play the puzzle",
-  "pass_detail_3": "Bring your friends to the puzzle.",
-  "pass_detail_4": "Have your friends join the puzzle.",
-  "pass_detail_5": "Get your friends to take part in the puzzle.",
-  "pass_detail_6": "Invite your pals to the puzzle.",
-  "pass_detail_7": "Ask your buddies to join in the puzzle.",
-  "pass_detail_8": "Encourage your friends to join the puzzle.",
-  "pass_detail_9": "Invite your friends to try the puzzle.",
 
   "progress_0": "App is currently under development.",
   "progress_1": "App is undergoing enhancements.",
@@ -205,16 +165,16 @@
   "decoded_6": "You decoded the pattern.",
   "decoded_7": "You identified the sequence.",
 
-  "cookie_0" : "Cookies Consent",
-  "cookie_1" : "Accept Cookies",
-  "cookie_2" : "Cookies Usage Notice",
-  "cookie_3" : "Your Cookies Choice",
-  "cookie_4" : "Cookies Policy Alert",
+  "cookies": "{\"cookies\":[{\"text\":\"Cookies Consent\",\"focused\":\"We use cookies to enhance your experience and analyze site traffic. By clicking Accept, you agree to our cookie policy.\"},{\"text\":\"Accept Cookies\",\"focused\":\"To improve your visit, we use cookies for personalization and analytics. Click Accept to consent to our cookie usage.\"},{\"text\":\"Cookies Usage Notice\",\"focused\":\"Our site uses cookies for a better user experience and traffic analysis. By accepting, you agree to our cookie policy.\"},{\"text\":\"Your Cookies Choice\",\"focused\":\"We utilize cookies to optimize your experience and gather insights on site usage. By selecting Accept, you consent to our cookie policy.\"},{\"text\":\"Cookies Policy Alert\",\"focused\":\"Cookies help us enhance your browsing experience and understand site usage. By clicking Accept, you consent to our use of cookies.\"}]}",
 
+  "notify": "{\"notify\":[{\"text\":\"Spread the Word\",\"focused\":\"Ask your friends to join the puzzle.\"},{\"text\":\"Tell Your Friends\",\"focused\":\"Tell your friends to come play the puzzle.\"},{\"text\":\"Pass It On\",\"focused\":\"Invite your friends to play the puzzle.\"},{\"text\":\"Invite Your Friends\",\"focused\":\"Bring your friends to the puzzle.\"},{\"text\":\"Send to Friends\",\"focused\":\"Have your friends join the puzzle.\"},{\"text\":\"Let Friends Know\",\"focused\":\"Get your friends to take part in the puzzle.\"},{\"text\":\"Connect with Friends\",\"focused\":\"Invite your pals to the puzzle.\"}]}",
 
-  "cookie_info_0" : "We use cookies to enhance your experience and analyze site traffic. By clicking Accept, you agree to our cookie policy. ",
-  "cookie_info_1" : "To improve your visit, we use cookies for personalization and analytics. Click Accept to consent to our cookie usage. ",
-  "cookie_info_2" : "Our site uses cookies for a better user experience and traffic analysis. By accepting, you agree to our cookie policy.",
-  "cookie_info_3" : "We utilize cookies to optimize your experience and gather insights on site usage. By selecting Accept, you consent to our cookie policy.",
-  "cookie_info_4" : "Cookies help us enhance your browsing experience and understand site usage. By clicking Accept, you consent to our use of cookies."
+  "welcome": "{\"welcome\":[{\"text\":\"What word do you think comes next after this one?\",\"focused\":\"comes next\"},{\"text\":\"Can you guess what the next word will be?\",\"focused\":\"next word\"},{\"text\":\"Which word do you think is next?\",\"focused\":\"is next?\"},{\"text\":\"What do you think the next word is?\",\"focused\":\"next word\"},{\"text\":\"Which word do you think will come next?\",\"focused\":\"comes next\"},{\"text\":\"Which word do you think will come next?\",\"focused\":\"come next?\"},{\"text\":\"What’s your guess for the next word\",\"focused\":\"next word\"}]}",
+
+  "question": "lottie/question_mark.json",
+  "confetti": "lottie/confetti.json",
+
+  "row_1": "Q,W,E,R,T,Y,U,I,O,P",
+  "row_2": "A,S,D,F,G,H,J,K,L",
+  "row_3": "ENTER,Z,X,C,V,B,N,M,DEL"
 }

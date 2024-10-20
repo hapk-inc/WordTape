@@ -5,9 +5,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../logger/log.dart';
 import '../../router/router.dart';
+import '../connectivity/pod.dart';
 import '../firestore/pod.dart';
 
-import '../local/pod.dart';
+import '../local/found.dart';
+import '../local/question.dart';
 import 'pod.dart';
 
 part 'running_user.g.dart';
@@ -16,18 +18,19 @@ const Duration _m1500 = Duration(milliseconds: 1500);
 
 @Riverpod(keepAlive: true, dependencies: [
   log,
-  googleUser,
+  // googleUser,
   runningUser,
   // internetConnection,
   router,
-  localFound,
-  localQuestion,
+  // localFound,
+  // localQuestion,
   // remoteConfig,
+  ValidateConnection,
   firestoreUser,
   auth
 ])
 void listenAuth(ListenAuthRef ref) {
-  ref.read(googleUserProvider);
+  // ref.read(googleUserProvider);
 
   ref.listen<User?>(
     runningUserProvider.select((value) => value.value),
@@ -36,14 +39,17 @@ void listenAuth(ListenAuthRef ref) {
       log.i("RunningUser==");
       if (next != null) {
         if (prev == null) {
-          ref.read(firestoreUserProvider).updateMe();
+          final int validConnection = ref.read(validateConnectionProvider());
+          if (!validConnection.isNegative) {
+            ref.read(firestoreUserProvider).updateMe();
+          }
           ref.read(routerProvider).replace("/home");
         }
       } else {
         log.i("36==");
         if (prev != null) {
-          ref.read(localQuestionProvider).delete();
-          ref.read(localFoundProvider).delete();
+          LocalQuestion().delete();
+          LocalFound().delete();
           ref.read(routerProvider).replace('/');
         } else {
           if (kIsWeb) {
@@ -54,37 +60,4 @@ void listenAuth(ListenAuthRef ref) {
     },
     fireImmediately: true,
   );
-/*  print("60==select");
-  ref.listen<List<ConnectivityResult>>(
-    internetConnectionProvider.select(
-      //(x) => x.value?.last ?? ConnectivityResult.none,
-      (x) {
-        print("60==select==");
-        return x.value ?? [];
-      },
-    ),
-    (_, next) async {
-      print("60==ConnectivityResult==");
-      print(next);
-      final bool valid =
-          next == ConnectivityResult.wifi || next == ConnectivityResult.mobile;
-      ref.read(validateConnectionProvider.notifier).state =
-          valid ? await validateConnection(ref) : -1;
-    },
-    onError: (error, stackTrace) {
-      print("75==ConnectivityResult==");
-    },
-    fireImmediately: true,
-  );*/
 }
-
-/*Future<int> validateConnection(ListenAuthRef ref) =>
-    ref.refresh(remoteConfigProvider).fetchAndActivate().then((value) {
-      return value ? 1 : 0;
-    }).onError(
-      (e, __) {
-        print("validateConnection");
-        print(e);
-        return -1;
-      },
-    );*/

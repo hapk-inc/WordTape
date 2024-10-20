@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -57,13 +59,22 @@ class LocalQuestion {
 
     if (maps.isEmpty) return null;
     final Map<String, dynamic> map = Map<String, dynamic>.from(maps.first);
-    return Question.fromJson(map);
+    map.update(
+      "words",
+      (value) {
+        final list = jsonDecode(value) as List;
+        return list;
+      },
+    );
+    return Question.fromJsonJson(map);
   }
 
   Future insert(Question question) async {
     if (kIsWeb) return;
     final Database db = await database;
     final Map<String, dynamic> map = question.toJson();
+    map.update("words", (value) => jsonEncode(value));
+
     return await db.insert(
       _tableName,
       map,

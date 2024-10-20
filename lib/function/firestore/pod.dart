@@ -38,6 +38,13 @@ Stream<Question> onQuestionModified(OnQuestionModifiedRef ref,
   return firestoreQuestion.onQuestionModified(date);
 }
 
+@Riverpod(keepAlive: true)
+Future<Found?> firestoreFound(FirestoreFoundRef ref, {required String id}) {
+  final FirestoreQuestion firestoreQuestion =
+      ref.read(firestoreQuestionProvider);
+  return firestoreQuestion.found(id);
+}
+
 @Riverpod(keepAlive: true, dependencies: [firestoreUser])
 Stream<Player?> player(PlayerRef ref) {
   final FirestoreUser firestore = ref.read(firestoreUserProvider);

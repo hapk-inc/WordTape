@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 import 'enum/enum.dart';
 import 'function/connectivity/pod.dart';
@@ -22,60 +23,70 @@ class App extends ConsumerWidget with CustomThemeMixin {
         final double mW = 360.w;
         final ScreenSize size = _validateSize(mW);
         ref.read(listenConnectivityProvider);
-        return ProviderScope(
-          overrides: [sizeProvider.overrideWithValue(size)],
-          child: MaterialApp.router(
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            theme: ThemeData(
-              iconTheme: iconThemeData,
-              textTheme: defaultTextTheme,
-              appBarTheme: AppBarTheme(
-                toolbarHeight: 90.h,
-                backgroundColor: midnightGreen,
-                iconTheme: IconThemeData(color: seaWhite, size: 18.r),
-                centerTitle: false,
-                titleSpacing: 0,
-              ),
-              snackBarTheme: SnackBarThemeData(
-                insetPadding: EdgeInsets.zero,
-                contentTextStyle: defaultTextTheme.bodySmall?.copyWith(
-                  color: seaWhite,
+        return ToastificationWrapper(
+          child: ProviderScope(
+            overrides: [sizeProvider.overrideWithValue(size)],
+            child: MaterialApp.router(
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              theme: ThemeData(
+                iconTheme: iconThemeData,
+                textTheme: defaultTextTheme,
+                appBarTheme: AppBarTheme(
+                  toolbarHeight: 90.h,
+                  backgroundColor: midnightGreen,
+                  iconTheme: IconThemeData(color: seaWhite, size: 18.r),
+                  centerTitle: false,
+                  titleSpacing: 0,
                 ),
-              ),
-              inputDecorationTheme: InputDecorationTheme(
-                enabledBorder: underlineInputBorder(slateGray),
-                focusedBorder: underlineInputBorder(seaWhite),
-                errorBorder: underlineInputBorder(cerise),
-                focusedErrorBorder: underlineInputBorder(cerise),
-                contentPadding: const EdgeInsets.only(bottom: 9.6),
-                filled: false,
-                hintStyle: defaultTextTheme.bodyLarge,
-              ),
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                style: defaultButtonStyle.copyWith(
-                  backgroundColor: const WidgetStatePropertyAll(blackBean),
-                ),
-              ),
-              outlinedButtonTheme: OutlinedButtonThemeData(
-                style: defaultButtonStyle.copyWith(
-                  side: WidgetStatePropertyAll(outlineBorder),
-                  foregroundColor: const WidgetStatePropertyAll(slateGray),
-                ),
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: defaultButtonStyle.copyWith(
-                  foregroundColor: const WidgetStatePropertyAll(slateGray),
-                  padding: WidgetStatePropertyAll(
-                    EdgeInsets.symmetric(horizontal: 15.r),
+                snackBarTheme: SnackBarThemeData(
+                  insetPadding: EdgeInsets.zero,
+                  contentTextStyle: defaultTextTheme.bodySmall?.copyWith(
+                    color: seaWhite,
                   ),
-                  minimumSize: WidgetStatePropertyAll(Size(90.r, 45.r)),
-                  textStyle: WidgetStatePropertyAll(defaultTextTheme.urlTheme),
+                ),
+                inputDecorationTheme: InputDecorationTheme(
+                  enabledBorder: underlineInputBorder(slateGray),
+                  focusedBorder: underlineInputBorder(seaWhite),
+                  errorBorder: underlineInputBorder(cerise),
+                  focusedErrorBorder: underlineInputBorder(cerise),
+                  contentPadding: const EdgeInsets.only(bottom: 9.6),
+                  filled: false,
+                  hintStyle: defaultTextTheme.bodyLarge,
+                ),
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: defaultButtonStyle.copyWith(
+                    backgroundColor: const WidgetStatePropertyAll(blackBean),
+                  ),
+                ),
+                outlinedButtonTheme: OutlinedButtonThemeData(
+                  style: defaultButtonStyle.copyWith(
+                    side: WidgetStatePropertyAll(outlineBorder),
+                    foregroundColor: const WidgetStatePropertyAll(slateGray),
+                  ),
+                ),
+                iconButtonTheme: IconButtonThemeData(
+                  style: ButtonStyle(
+                    iconSize: WidgetStatePropertyAll(24.r),
+                    fixedSize: WidgetStatePropertyAll(Size.square(30.r)),
+                    foregroundColor: const WidgetStatePropertyAll(slateGray),
+                  ),
+                ),
+                textButtonTheme: TextButtonThemeData(
+                  style: defaultButtonStyle.copyWith(
+                    foregroundColor: const WidgetStatePropertyAll(slateGray),
+                    padding: WidgetStatePropertyAll(
+                      EdgeInsets.symmetric(horizontal: 15.r),
+                    ),
+                    minimumSize: WidgetStatePropertyAll(Size(90.r, 45.r)),
+                    textStyle:
+                        WidgetStatePropertyAll(defaultTextTheme.urlTheme),
+                  ),
                 ),
               ),
+              routerConfig: router,
             ),
-            routerConfig: router,
           ),
         );
       },

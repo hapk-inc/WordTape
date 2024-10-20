@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:toastification/toastification.dart';
 
 import '../enum/enum.dart';
 import '../panel/pod.dart';
@@ -22,44 +23,55 @@ class OutlinePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ScreenSize size = ref.watch(sizeProvider);
     final bool mobile = size == ScreenSize.mobile;
-    return Scaffold(
-      backgroundColor: blackBean,
-      body: SizedBox.expand(
-        child: Builder(
-          builder: (_) {
-            if (!mobile) return OutlineState(child: child);
-            final PanelWidget panelWidget = ref.watch(panelNotifierProvider);
+    return ToastificationConfigProvider(
+      config: ToastificationConfig(
+        marginBuilder: (_, __) => EdgeInsets.symmetric(
+          horizontal: 7.5.r,
+          vertical: 15.r,
+        ),
+        alignment: Alignment.center,
+        itemWidth: 450.r,
+        animationDuration: const Duration(milliseconds: 600),
+      ),
+      child: Scaffold(
+        backgroundColor: blackBean,
+        body: SizedBox.expand(
+          child: Builder(
+            builder: (_) {
+              if (!mobile) return OutlineState(child: child);
+              final PanelWidget panelWidget = ref.watch(panelNotifierProvider);
 
-            return SlidingUpPanel(
-              backdropEnabled: true,
-              backdropOpacity: 1,
-              isDraggable: false,
-              color: seaWhite,
-              controller: mobile ? ref.read(panelControllerProvider) : null,
-              minHeight: 0,
-              maxHeight: panelWidget.height(),
-              padding: EdgeInsets.zero,
-              backdropColor: gunMetal,
-              slideDirection: panelWidget.direction(),
-              borderRadius: _borderRadius(
-                15,
-                isTop: panelWidget.direction() == SlideDirection.UP,
-              ),
-              renderPanelSheet: true,
-              panel: ClipRRect(
+              return SlidingUpPanel(
+                backdropEnabled: panelWidget.backdropEnabled(),
+                backdropOpacity: 1,
+                isDraggable: false,
+                color: seaWhite,
+                controller: mobile ? ref.read(panelControllerProvider) : null,
+                minHeight: 0,
+                maxHeight: panelWidget.height(),
+                padding: EdgeInsets.zero,
+                backdropColor: gunMetal,
+                slideDirection: panelWidget.direction(),
                 borderRadius: _borderRadius(
                   15,
                   isTop: panelWidget.direction() == SlideDirection.UP,
                 ),
-                child: panelWidget,
-              ),
-              body: OutlineState(child: child),
-              onPanelClosed: () {
-                ref.read(panelNotifierProvider.notifier).state =
-                    const EmptyPanel();
-              },
-            );
-          },
+                renderPanelSheet: true,
+                panel: ClipRRect(
+                  borderRadius: _borderRadius(
+                    15,
+                    isTop: panelWidget.direction() == SlideDirection.UP,
+                  ),
+                  child: panelWidget,
+                ),
+                body: OutlineState(child: child),
+                onPanelClosed: () {
+                  ref.read(panelNotifierProvider.notifier).state =
+                      const EmptyPanel();
+                },
+              );
+            },
+          ),
         ),
       ),
     );

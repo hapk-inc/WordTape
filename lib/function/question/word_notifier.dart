@@ -1,18 +1,22 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:mock_data/mock_data.dart';
 
-import '../../enum/enum.dart';
 import '../../logger/log.dart';
 import '../../model/found.dart';
+import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../theme/color.dart';
-import '../firestore/pod.dart';
 import '../../extension/extension.dart';
 
 import '../underline_text/pod.dart';
-import 'hint.dart';
 import 'notifier.dart';
+// import 'p_notifier.dart';
+
+const String backspace = "🔙";
+const String done = "✔️";
 
 final ChangeNotifierProviderFamily<WordNotifier, Word> wordNotifierProvider =
     ChangeNotifierProvider.family<WordNotifier, Word>(
@@ -50,6 +54,7 @@ class WordNotifier extends ChangeNotifier {
   validateController(int i) {
     _enabled = i == _index;
     final bool done = _notifier.done;
+    _node = FocusNode(canRequestFocus: _enabled);
     if (done) {
       _controller = TextEditingController(text: word.value);
       final bool didHeFound = !_notifier.found.untilNow.containsKey(_index);
@@ -74,19 +79,19 @@ class WordNotifier extends ChangeNotifier {
       questionNotifierProvider(_date).select((value) => value.found),
       (prev, next) {
         if (_index == next.i) {
-          _notifier.riddleState = RiddleState.resume;
-          // ref.read(sqFoundProvider).insert(next);
-          final bool isFirstFound = _index == 2 && ((prev?.i ?? 0) == 1);
-          if (isFirstFound) {
-            ref.read(firestoreQuestionProvider).firstFound(next.id ?? "");
-          }
+          debugPrint("Listening $next");
+          final int p = prev?.i ?? 0;
+
+          final bool isFirstFound = _index == 2 && p == 1;
+          if (isFirstFound) {}
           _error = next.mistake != null;
-          final Hint hint = ref.read(hintProvider(_date).notifier);
           if (_error) {
-            _notifier.promptState = PromptState.wrong;
-            hint.helpUser(_notifier.answer, next.mistake);
-          } else {
-            if ((prev?.i ?? 0) != next.i) hint.rearrange();
+            _notifier.prompt = _notifier.prompt.copyWith(
+              text: UnderlineText(
+                "use_hint_${mockInteger(0, 7)}".tr(),
+                focused: "Hint hint",
+              ),
+            );
           }
         }
         if (!_index.isNext(next.i)) validateController(next.i);
@@ -106,18 +111,12 @@ class WordNotifier extends ChangeNotifier {
 
   bool get error => _error;
 
-  listenTap(String str) {
+  keyboardTap(String str) {
     if (str.length == 1) {
       final bool regEx = RegExp(r'^[a-zA-Z0-9]$').hasMatch(str);
       if (regEx) insertChar(str);
     } else {
-      if (str == "Backspace" || str == backspace) deleteChar();
-      if (str == "Enter" || str == done) {
-        final QuestionNotifier notifier =
-            ref.read(questionNotifierProvider(_date));
-        notifier.formKey.currentState!.validate();
-        _logger.i(str);
-      }
+      if (str == "DEL") deleteChar();
     }
   }
 
@@ -138,32 +137,34 @@ class WordNotifier extends ChangeNotifier {
     onTextChanged(newText);
   }
 
-  onTextChanged(String newText) {
+  onTextChanged(String? text) {
+    if (text == null) return;
     String exact = word.value;
-    if (!newText.startsWith(exact.firstChar) || newText.isEmpty) {
+    if (!text.startsWith(exact.firstChar) || text.isEmpty) {
       _controller.value = _controller.value.copyWith(
         text: exact.firstChar,
         selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
       );
+    } else {
+      _controller.value = _controller.value.copyWith(text: text.toUpperCase());
     }
     notifyListeners();
   }
 
   String? validator(String? value) {
     _logger.i("Validating 72--$value");
-    final int len = value?.length ?? 0;
+
+    if (value == null) return null;
+    final int len = value.length;
     final bool filled = len == word.value.length;
-    final Hint hint = ref.read(hintProvider(_date).notifier);
 
     if (filled) {
-      if (_notifier.compareHighlighter(value)) {
-        _notifier.validate(value!);
-      } else {
-        hint.state = ref.read(useHighlighterProvider);
-      }
+      return null;
     } else {
-      hint.state = ref.read(fillTextProvider);
+      _error = true;
+      final String err = ref.read(fillTextProvider);
+      notifyListeners();
+      return err;
     }
-    return null;
   }
 }

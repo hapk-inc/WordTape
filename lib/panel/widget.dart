@@ -8,6 +8,8 @@ abstract class PanelWidget extends ConsumerWidget {
   double height();
 
   SlideDirection direction();
+
+  bool backdropEnabled();
 }
 
 class EmptyPanel extends PanelWidget {
@@ -21,4 +23,7 @@ class EmptyPanel extends PanelWidget {
 
   @override
   SlideDirection direction() => SlideDirection.UP;
+
+  @override
+  bool backdropEnabled() => true;
 }

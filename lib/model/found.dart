@@ -17,7 +17,7 @@ class Found extends Equatable with _$Found {
     String? mistake,
     @UntilNowConverter() @Default(<int, dynamic>{}) Map<int, dynamic> untilNow,
     DateTime? lastFound,
-    required DateTime date,
+    @JsonKey(includeFromJson: false) DateTime? date,
     @JsonKey(includeIfNull: false) String? id, //later include in database
   }) = _Found;
 
@@ -32,37 +32,8 @@ class Found extends Equatable with _$Found {
     return map;
   }
 
-  String foundTrack(int count) => i == 1
-      ? "-"
-      : i == count
-          ? "DONE"
-          : "PENDING";
-
   @override
-  // TODO: implement props
-  List<Object?> get props => [id, i, mistake, date, lastFound];
+  List<Object?> get props => [id, i, mistake, date];
 
-  factory Found.fromRiddle(Question riddle) => Found(
-        date: riddle.date,
-        id: riddle.id,
-      );
+  factory Found.fromRiddle(Question q) => Found(date: q.date, id: q.id);
 }
-
-/*
-Map<int, dynamic> _fromJson(dynamic json) {
-  if (json.isEmpty) return {};
-  return {};
-  //final Map<String, dynamic> map = Map<String, dynamic>.from(jsonDecode(json));
-  //return map;
-}
-
-String _toJson(Map<int, dynamic> object) {
-  Logger().d(object);
-  Map<String, dynamic> map = {};
-  for (MapEntry m in object.entries) {
-    map["${m.key}"] = m.value;
-  }
-  final String str = jsonEncode(map);
-  return str;
-}
-*/

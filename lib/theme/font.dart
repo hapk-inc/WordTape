@@ -93,6 +93,13 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         height: 0.r,
       );
 
+  TextStyle get emojiSmall => notoColorEmojiTheme.copyWith(
+        fontSize: 21.r,
+        letterSpacing: 0.3.r,
+        color: seaWhite,
+        height: 0.r,
+      );
+
   TextStyle get montserratLarge => montserratTheme.copyWith(
         fontSize: 21.r,
         fontWeight: FontWeight.w600,
@@ -137,6 +144,7 @@ mixin FontMixin {
 
   TextStyle get montserratTheme => const TextStyle(
         fontFamily: 'Montserrat',
+        fontWeight: FontWeight.w600,
         letterSpacing: 0,
         wordSpacing: 0,
         color: slateGray,

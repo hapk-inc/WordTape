@@ -10,19 +10,19 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
+import '../../model/underline_text.dart';
 import '../../panel/widget.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../../theme/pod.dart';
 
-class NotifyAndShare extends PanelWidget {
-  const NotifyAndShare({super.key});
+class NotifyDialog extends PanelWidget {
+  const NotifyDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final TextTheme textTheme = Theme.of(context).textTheme;
-    final String str = ref.read(passPromptProvider);
-    final String detail = ref.read(passPromptDetailProvider);
+    final UnderlineText notify = ref.read(notifyTextProvider);
+
     final ScreenSize size = ref.watch(sizeProvider);
     final bool isDialog = size != ScreenSize.mobile;
     final AppEnv appEnv = ref.read(appEnvProvider);
@@ -49,21 +49,21 @@ class NotifyAndShare extends PanelWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AutoSizeText(
-                str,
+                notify.text,
                 style: defaultTextTheme.montserratLarge.copyWith(
                   color: tyrianPurple,
                 ),
               ),
               Text(
-                detail,
-                style: defaultTextTheme.bodySmall?.copyWith(color: slateGray),
+                notify.focused ?? "",
+                style: defaultTextTheme.bodySmall?.copyWith(color: silver),
                 maxLines: isDialog ? 1 : null,
               ),
               Center(
-                child: FadeIn(
+                child: FadeInUp(
                   delay: const Duration(milliseconds: 750),
                   child: SizedBox.square(
-                    dimension: 270.r,
+                    dimension: 300.r,
                     child: InkWell(
                       onTap: () => Share.share(url),
                       child: Lottie.asset('lottie/share.json'),
@@ -79,8 +79,11 @@ class NotifyAndShare extends PanelWidget {
   }
 
   @override
-  double height() => 360.r;
+  double height() => 300.r;
 
   @override
   SlideDirection direction() => SlideDirection.UP;
+
+  @override
+  bool backdropEnabled() => true;
 }

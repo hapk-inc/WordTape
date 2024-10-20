@@ -48,7 +48,7 @@ class LocalFound {
     if (await databaseFactory.databaseExists(await getDatabasesPath())) {
       final Database db = await database;
       final Map<String, dynamic> map = found.toJson();
-
+      debugPrint("Setting $found");
       return await db.insert(
         _tableName,
         map,

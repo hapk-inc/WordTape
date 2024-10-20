@@ -47,6 +47,7 @@ class FirestoreUser {
           transaction.update(docRef, player.toJson());
         }
       },
+      maxAttempts: 100,
     ).catchError(
       (e, s) {
         log("updateMe Error", error: e, stackTrace: s);
@@ -84,7 +85,7 @@ class FirestoreUser {
   }
 
   Future<void> userFound(Found found) {
-    final String dateStr = DateFormat('yyyy-MM-dd').format(found.date);
+    final String dateStr = DateFormat('yyyy-MM-dd').format(found.date!);
     return userColl.doc(fUser?.uid).update(
       <String, dynamic>{
         'done': FieldValue.arrayUnion([dateStr])

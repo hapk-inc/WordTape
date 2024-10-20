@@ -1,17 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../function/key_tap/pod.dart';
-import '../function/local/pod.dart';
 import '../function/question/notifier.dart';
-import '../function/question/word_notifier.dart';
 
-import '../model/found.dart';
 import '../model/word.dart';
 import '../panel/pod.dart';
 import 'riddle/custom_keyboard.dart';
@@ -66,8 +61,8 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   void _onStateChanged(AppLifecycleState state) {
     log(state.name);
     if (state == AppLifecycleState.inactive) {
-      final Found found = notifier.found;
-      ref.read(localFoundProvider).insert(found);
+      // final Found found = notifier.found;
+      // ref.read(localFoundProvider).insert(found);
     }
   }
 
@@ -83,23 +78,17 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     return GradientBox(
       child: SafeArea(
         bottom: false,
-        child: Builder(builder: (context) {
-          if (notifier.focusedWord == null) return RiddlePageState(date);
-          debugPrint(notifier.focusedWord!.toString());
-          final WordNotifier wordNotifier =
-              ref.read(wordNotifierProvider(notifier.focusedWord!));
-
-          return KeyboardListener(
-            focusNode: wordNotifier.node,
-            //autofocus: wordNotifier.isEnabled,
-            onKeyEvent: (KeyEvent? value) {
-              if (value is KeyDownEvent || value is KeyRepeatEvent) {
-                ref.read(keyTapNotifierProvider.notifier).state = value;
-              }
-            },
-            child: RiddlePageState(date),
-          );
-        }),
+        minimum: EdgeInsets.symmetric(horizontal: 7.5.r),
+        child: RiddlePageState(date),
+        /*child: KeyboardListener(
+          focusNode: word.node,
+          onKeyEvent: (KeyEvent? value) {
+            if (value is KeyDownEvent || value is KeyRepeatEvent) {
+              ref.read(keyTapNotifierProvider.notifier).state = value;
+            }
+          },
+          child: RiddlePageState(date),
+        ),*/
       ),
     );
   }
@@ -118,27 +107,23 @@ class RiddlePageState extends ConsumerWidget {
         final double maxWidth = constraints.maxWidth;
         final double h_03 = maxHeight * 0.03;
         final double w_03 = maxWidth * 0.03;
-        return Form(
-          key: notifier.formKey,
-          onChanged: () {
-            debugPrint("Form onChanged");
-          },
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: w_03 * 0.15),
+        return SingleChildScrollView(
+          child: Form(
+            key: notifier.formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const RiddleAppBar(),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: h_03 * 5.1,
+                  height: h_03 * 4.8,
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(horizontal: w_03 * 1.5),
-                  child: const Clue(),
+                  child: const RiddleClue(),
                 ),
-                for (Word word in notifier.riddle?.words ?? [])
+                for (Word word in notifier.question?.words ?? [])
                   EditableWord(word),
-                Gap(h_03 * 1.5),
+                Gap(h_03 * 1.2),
                 const CustomKeyboard(),
               ],
             ),

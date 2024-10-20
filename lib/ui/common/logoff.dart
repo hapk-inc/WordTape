@@ -58,4 +58,7 @@ class LogoffAlert extends PanelWidget {
 
   @override
   SlideDirection direction() => SlideDirection.DOWN;
+
+  @override
+  bool backdropEnabled() => true;
 }

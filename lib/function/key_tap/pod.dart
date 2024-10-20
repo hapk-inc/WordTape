@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../extension/extension.dart';
@@ -6,7 +7,9 @@ import '../question/notifier.dart';
 import '../question/word_notifier.dart';
 
 part 'pod.g.dart';
+*/
 
+/*
 @Riverpod(keepAlive: true, dependencies: [SelectedDate])
 class KeyTapNotifier extends _$KeyTapNotifier {
   @override
@@ -26,3 +29,4 @@ class KeyTapNotifier extends _$KeyTapNotifier {
     }
   }
 }
+*/

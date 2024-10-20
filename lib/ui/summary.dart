@@ -35,6 +35,9 @@ class SummaryPage extends PanelWidget {
 
   @override
   double height() => 450.r;
+
+  @override
+  bool backdropEnabled() => true;
 }
 
 class Summary extends ConsumerStatefulWidget {
@@ -67,11 +70,13 @@ class _SummaryState extends ConsumerState<Summary> {
           children: [
             if (noHelp)
               Lottie.asset(
-                'lottie/confetti.json',
+                'confetti'.tr(),
                 repeat: false,
                 onLoaded: (p0) => Future.delayed(
                   p0.duration * 0.75,
-                  () => setState(() => show = true),
+                  () {
+                    if (mounted) setState(() => show = true);
+                  },
                 ),
               ),
             if (show || !noHelp)
@@ -137,9 +142,9 @@ class SummaryStatus extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        notifier.riddle?.words.length ?? 0,
+        notifier.question?.words.length ?? 0,
         (index) {
-          final Word word = notifier.riddle!.words[index];
+          final Word word = notifier.question!.words[index];
           String str = word.value.split('').map(
             (e) {
               if (untilNow.isNotEmpty && untilNow.containsKey(index)) {
@@ -184,8 +189,9 @@ class SummaryFooter extends ConsumerWidget {
           noHelp
               ? "congrats_detail_${mockInteger(0, 5)}".tr()
               : "pass_detail_${mockInteger(0, 9)}".tr(),
-          style:
-              defaultTextTheme.montserratMedium.copyWith(color: midnightGreen),
+          style: defaultTextTheme.montserratMedium.copyWith(
+            color: midnightGreen,
+          ),
           maxLines: 1,
         ),
         Gap(7.5.r),

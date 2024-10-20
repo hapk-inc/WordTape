@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,7 +37,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
       index = 0;
       date = DateTime.now().convert();
     }
-
+    wordNotifier = ref.read(wordNotifierProvider(word));
     super.initState();
   }
 
@@ -44,44 +45,58 @@ class _EditableWordState extends ConsumerState<EditableWord> {
   Widget build(BuildContext context) {
     wordNotifier = ref.watch(wordNotifierProvider(word));
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 90),
-      height: 72.h,
-      child: LayoutBuilder(
-        builder: (_, constraints) {
-          //
-          final PinTheme pinTheme = ref.read(pinThemeProvider(
-            constraints: constraints,
-            color: wordNotifier.color,
-          ));
+    final bool enabled = wordNotifier.isEnabled;
 
-          return Pinput(
-            length: word.value.length,
-            defaultPinTheme: pinTheme,
-            controller: wordNotifier.controller,
-            // focusNode: wordNotifier.node,
+    return Hero(
+      tag: word.id ?? "",
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 90),
+        height: 72.h,
+        child: LayoutBuilder(
+          builder: (_, constraints) {
             //
-            isCursorAnimationEnabled: false,
-            animationDuration: const Duration(milliseconds: 150),
-            pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-            validator: !wordNotifier.isEnabled ? null : wordNotifier.validator,
+            final PinTheme pinTheme = ref.read(
+              pinThemeProvider(
+                  constraints: constraints, color: wordNotifier.color),
+            );
 
-            //
-            keyboardType: TextInputType.none, readOnly: true,
-            showCursor: false, forceErrorState: wordNotifier.error,
+            return Pinput(
+              length: word.value.length,
+              defaultPinTheme: pinTheme,
+              controller: wordNotifier.controller, focusNode: wordNotifier.node,
+              //
 
-            //
-            enabled: wordNotifier.isEnabled,
-            animationCurve: Curves.easeOut,
-            autofocus: wordNotifier.isEnabled,
+              pinAnimationType: PinAnimationType.fade,
+              animationDuration: const Duration(milliseconds: 150),
+              pinputAutovalidateMode: PinputAutovalidateMode.disabled,
+              validator: !enabled ? null : wordNotifier.validator,
 
-            textCapitalization: TextCapitalization.characters,
-            separatorBuilder: (_) {
-              final int len = word.value.length;
-              return SizedBox(width: len > 8 ? 4.5.r : 9.r);
-            },
-          );
-        },
+              // showCursor: false,
+              // isCursorAnimationEnabled: false,
+              //
+              keyboardType: TextInputType.none, // readOnly: true,
+              forceErrorState: wordNotifier.error,
+
+              //
+              enabled: enabled,
+              animationCurve: Curves.easeOut,
+              autofocus: enabled,
+
+              onChanged: ref.read(wordNotifierProvider(word)).onTextChanged,
+
+              textCapitalization: TextCapitalization.characters,
+              separatorBuilder: (_) {
+                final int len = word.value.length;
+                return SizedBox(width: len > 8 ? 4.5.r : 9.r);
+              },
+
+              errorBuilder: (e, _) => const SizedBox(),
+
+              useNativeKeyboard: kIsWeb,
+              textInputAction: TextInputAction.none,
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,15 +1,18 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mock_data/mock_data.dart';
 
-part 'tip.freezed.dart';
+import 'underline_text.dart';
+
+part 'word_clue.freezed.dart';
 
 @freezed
-class Tip with _$Tip {
-  const Tip._();
-  const factory Tip({@Default("") String text, @Default("") String t}) = _Tip;
+class WordClue with _$WordClue {
+  const WordClue._();
 
-  factory Tip.fromWord(String str, {List<String> untilNow = const []}) {
+  const factory WordClue(
+      {required UnderlineText text,
+      @Default(false) bool lastChance}) = _WordClue;
+/*
+  factory WordClue.fromWord(String str, {List<String> untilNow = const []}) {
     final List<String> splitter = str.split("");
     splitter.removeAt(0);
     final List<String> remaining = List.from(splitter.where(
@@ -48,5 +51,5 @@ class Tip with _$Tip {
       if (i < replace.length) r.add(replace[i]);
     }
     return r.join('');
-  }
+  }*/
 }

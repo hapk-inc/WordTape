@@ -7,6 +7,7 @@ import 'package:rxdart/rxdart.dart';
 import '../../firebase/pod.dart';
 import '../../model/found.dart';
 import '../../model/question.dart';
+import '../connectivity/pod.dart';
 
 class FirestoreQuestion {
   final Ref ref;
@@ -28,11 +29,8 @@ class FirestoreQuestion {
       (QuerySnapshot snapshot) {
         if (snapshot.size == 0) return null;
         if (!snapshot.docs[0].exists) return null;
-        final Map map = snapshot.docs[0].data() as Map;
-        final String id = snapshot.docs[0].id;
-        final Map<String, dynamic> m = Map<String, dynamic>.from(map);
-        final Question r = Question.fromFirestore(m).copyWith(id: id);
-        return r;
+        final QueryDocumentSnapshot doc = snapshot.docs[0];
+        return Question.fromSnapshot(doc);
       },
     );
   }
@@ -46,11 +44,10 @@ class FirestoreQuestion {
         (QuerySnapshot snapshot) {
           if (snapshot.docs.isNotEmpty) {
             final QueryDocumentSnapshot doc = snapshot.docs.first;
-            final Map map = doc.data() as Map;
-            final String id = doc.id;
-            final Map<String, dynamic> m = Map<String, dynamic>.from(map);
-            final Question r = Question.fromFirestore(m).copyWith(id: id);
-            subject.add(r);
+            if (doc.exists) {
+              final Question r = Question.fromSnapshot(doc);
+              subject.add(r);
+            }
           }
         },
       ),
@@ -65,11 +62,36 @@ class FirestoreQuestion {
         },
       );
 
-  Future fetchFound(Found found) => collection
+  Future setFound(Found found) => collection
       .doc(found.id)
       .collection("found")
       .doc(fUser?.uid)
       .set(found.toFirestore());
+
+  Future<Found?> found(String id) async => fUser == null
+      ? null
+      : collection.doc(id).collection("found").doc(fUser?.uid).get().then(
+          (DocumentSnapshot<Map<String, dynamic>> snapshot) {
+            if (!snapshot.exists) return null;
+            final Found found =
+                Found.fromJson(snapshot.data() ?? {}).copyWith(id: snapshot.id);
+            return found;
+          },
+          onError: (e, s) {
+            // print("81==$e");
+            if (e is FirebaseException) {
+              switch (e.code) {
+                case "unavailable":
+                  {
+                    ref.read(validateConnectionProvider().notifier).state = -1;
+                    break;
+                  }
+                default:
+                  {}
+              }
+            }
+          },
+        );
 
   //DO NOT REMOVE
   /*Stream<Riddle> get onRiddleChanged {
