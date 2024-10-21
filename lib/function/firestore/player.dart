@@ -10,6 +10,7 @@ import 'package:rxdart/rxdart.dart';
 import '../../firebase/pod.dart';
 import '../../model/found.dart';
 import '../../model/player.dart';
+import '../connectivity/pod.dart';
 
 class FirestoreUser {
   final Ref<FirestoreUser> ref;
@@ -51,6 +52,17 @@ class FirestoreUser {
     ).catchError(
       (e, s) {
         log("updateMe Error", error: e, stackTrace: s);
+        if (e is FirebaseException) {
+          switch (e.code) {
+            case "unavailable":
+              {
+                ref.read(validateConnectionProvider().notifier).state = -1;
+                break;
+              }
+            default:
+              {}
+          }
+        }
       },
     );
   }

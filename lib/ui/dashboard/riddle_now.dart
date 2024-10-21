@@ -6,11 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:random_avatar/random_avatar.dart';
-import 'package:wordtape/function/underline_text/pod.dart';
+import '../../extension/extension.dart';
 
-import '../../function/date/date.dart';
+import '../../function/date_selected/date_selected.dart';
 import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
+import '../../function/underline_text/pod.dart';
 import '../../model/player.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -28,15 +29,9 @@ class RiddleNow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final TextTheme textTheme = Theme.of(context).textTheme;
-    // final String share = "ref.read(passPromptProvider)";
-    final DateTime date = ref.read(nowProvider);
+    final DateTime date = DateTime.now().convert();
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
-    //
-    // final PackageInfo? package = ref.read(packageProvider).value;
-    // final String name = (package?.appName ?? "").toUpperCase();
-    //
     final Player? player = ref.watch(playerProvider).value;
 
     final UnderlineText underlineText = ref.read(notifyTextProvider);
@@ -78,8 +73,8 @@ class RiddleNow extends ConsumerWidget {
                     foregroundColor: WidgetStatePropertyAll(raisinBlack),
                   ),
                   onPressed: () {
-                    final DateTime date = ref.read(selectedDateProvider);
-                    context.push('/riddle', extra: date);
+                    final DateTime date = ref.read(dateSelectedProvider);
+                    context.push('/decode', extra: date);
                   },
                   child: const Text("Play now"),
                 ),
@@ -138,7 +133,7 @@ class RiddleNowStateState extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(nowProvider);
+    final DateTime date = DateTime.now().convert();
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> searchWord = notifier.searchWord;
 
@@ -234,7 +229,7 @@ class RiddleNowWelcome extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(nowProvider);
+    final DateTime date = DateTime.now().convert();
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final TextTheme textTheme = Theme.of(context).textTheme;
 

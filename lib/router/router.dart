@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../function/date/date.dart';
 // import '../function/local/pod.dart';
 
+import '../function/date_selected/date_selected.dart';
+import '../model/route_path.dart';
 import '../remote_config/pod.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
@@ -12,22 +13,28 @@ import '../ui/renovation.dart';
 import '../ui/riddle.dart';
 import '../ui/splash.dart';
 import '../ui/summary.dart';
+import 'path.dart';
 
 part 'router.g.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-@Riverpod(keepAlive: true, dependencies: [
-  renovation,
-  // localFound,
-  SelectedDate,
-])
+@Riverpod(
+  keepAlive: true,
+  dependencies: [renovation, DateSelected, PathNotifier],
+)
 GoRouter router(RouterRef ref) {
   return GoRouter(
     redirect: (_, state) async {
       final String? renovation = await ref.read(renovationProvider.future);
-
       if (renovation?.isNotEmpty ?? false) return "/renovation";
+
+      //
+      final RoutePath path = ref.read(pathNotifierProvider);
+      ref.read(pathNotifierProvider.notifier).state = path.copyWith(
+        path: state.matchedLocation,
+      );
+
       return state.matchedLocation;
     },
     routes: <RouteBase>[
@@ -45,10 +52,10 @@ GoRouter router(RouterRef ref) {
             builder: (_, __) => const DashboardPage(),
           ),
           GoRoute(
-            path: '/riddle',
+            path: '/decode',
             builder: (_, GoRouterState state) {
               if (state.extra == null) {
-                final DateTime args = ref.read(selectedDateProvider);
+                final DateTime args = ref.read(dateSelectedProvider);
                 return RiddlePage(args);
               }
               final DateTime args = state.extra as DateTime;

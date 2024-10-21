@@ -7,11 +7,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../function/auth/pod.dart';
-import '../../function/date/date.dart';
+import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../function/question/toast.dart';
-import '../../router/router.dart';
 
+import '../../router/router.dart';
 import '../common/word_clue.dart';
 
 class RiddleAppBar extends ConsumerWidget {
@@ -30,9 +30,7 @@ class RiddleAppBar extends ConsumerWidget {
       leading: Container(),
       titleSpacing: 0,
       title: InkWell(
-        onTap: () {
-          ref.read(routerProvider).pop();
-        },
+        onTap: () => ref.read(routerProvider).pop(),
         child: Text(name.toUpperCase(), maxLines: 1),
       ),
       actions: const [LottieHint()],
@@ -50,22 +48,27 @@ class LottieHint extends ConsumerStatefulWidget {
 
 class _LottieHintState extends ConsumerState<LottieHint> {
   late DateTime date;
+  late QuestionNotifier notifier;
 
   @override
   void initState() {
-    date = ref.read(selectedDateProvider);
+    date = ref.read(dateSelectedProvider);
+    notifier = ref.read(questionNotifierProvider(date));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) => InkWell(
         onTap: () {
-          ref.read(questionNotifierProvider(date)).createClue();
+          notifier.assistUser();
           ref.read(toastNotifierProvider.notifier).state =
               toastification.showCustom(
             alignment: Alignment.topCenter,
             autoCloseDuration: const Duration(seconds: 15),
-            builder: (_, ToastificationItem item) => WordClueState(date, item),
+            builder: (_, ToastificationItem item) => WordClueState(
+              date,
+              item,
+            ),
           );
         },
         child: SizedBox.square(

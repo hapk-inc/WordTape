@@ -95,8 +95,6 @@ dependencies:
   web: ^1.0.0
 
   easy_localization: ^3.0.7
-  animated_text_kit: ^4.2.2
-  toastification: ^2.3.0
 
   # Local Database
   sqflite: ^2.3.3+1

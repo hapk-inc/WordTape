@@ -23,7 +23,8 @@ class AcceptCookie extends PanelWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
     final ScreenSize size = ref.watch(sizeProvider);
-    final isM = size == ScreenSize.mobile;
+    final bool isPC = size == ScreenSize.pc;
+    //final isM = size == ScreenSize.mobile;
     final UnderlineText cookieInfo = ref.read(cookieInfoProvider);
 
     return AnimatedSize(
@@ -31,7 +32,7 @@ class AcceptCookie extends PanelWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: 600.r,
-          maxHeight: !isM ? 240.r : height(),
+          maxHeight: isPC ? 240.r : height(),
         ),
         child: Container(
           decoration: BoxDecoration(

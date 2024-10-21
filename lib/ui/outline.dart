@@ -25,12 +25,9 @@ class OutlinePage extends ConsumerWidget {
     final bool mobile = size == ScreenSize.mobile;
     return ToastificationConfigProvider(
       config: ToastificationConfig(
-        marginBuilder: (_, __) => EdgeInsets.symmetric(
-          horizontal: 7.5.r,
-          vertical: 15.r,
-        ),
+        marginBuilder: (_, __) => EdgeInsets.all(15.r),
         alignment: Alignment.center,
-        itemWidth: 450.r,
+        // itemWidth: 450.r,
         animationDuration: const Duration(milliseconds: 600),
       ),
       child: Scaffold(

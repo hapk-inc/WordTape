@@ -12,7 +12,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../enum/enum.dart';
 
 import '../function/auth/pod.dart';
-import '../function/date/date.dart';
+
+import '../function/date_selected/date_selected.dart';
 import '../function/question/notifier.dart';
 import '../model/word.dart';
 import '../panel/widget.dart';
@@ -94,7 +95,7 @@ class SummaryContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(selectedDateProvider);
+    final DateTime date = ref.read(dateSelectedProvider);
     final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
     final bool noHelp = notifier.found.untilNow.isEmpty;
 
@@ -134,7 +135,7 @@ class SummaryStatus extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(selectedDateProvider);
+    final DateTime date = ref.read(dateSelectedProvider);
     final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
     final Map<int, dynamic> untilNow = notifier.found.untilNow;
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();

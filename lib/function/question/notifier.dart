@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:mock_data/mock_data.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../enum/enum.dart';
 import '../../model/found.dart';
@@ -13,6 +14,7 @@ import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../firestore/pod.dart';
 import '../firestore/question.dart';
+import '../gen_ai/pod.dart';
 import '../local/found.dart';
 import '../local/question.dart';
 import '../underline_text/pod.dart';
@@ -46,6 +48,8 @@ class QuestionNotifier extends ChangeNotifier {
 
   //
   late bool _done = false;
+  String _clue = "";
+  // final BehaviorSubject<String> _subject = BehaviorSubject<String>();
 
   QuestionNotifier(this.ref, {required this.date}) {
     //final Player? player = ref.read(playerProvider).value;
@@ -57,6 +61,9 @@ class QuestionNotifier extends ChangeNotifier {
 
   Future questionFound() async {
     // final Player? player = await ref.read(playerProvider.future);
+
+    //Safe-Initialisation Found
+    _found = Found(date: date);
 
     _question = await _localQuestion.fromDate(date);
     _question ??= await _firestoreQuestion.question(date).then(
@@ -79,7 +86,6 @@ class QuestionNotifier extends ChangeNotifier {
     );
     _found = f ?? Found.fromRiddle(_question!);
     _done = _question!.isCompleted(_found.i);
-    debugPrint("75==$_found");
 
     _prompt = Prompt(
       text: UnderlineText(ref.read(figureOutProvider)),
@@ -87,6 +93,18 @@ class QuestionNotifier extends ChangeNotifier {
     );
 
     notifyListeners();
+  }
+
+  @override
+  void addListener(VoidCallback listener) {
+    ref.listen<Question?>(
+      onQuestionModifiedProvider(date: date).select((value) => value.value),
+      (_, next) {
+        if (next != null) _question = next;
+        notifyListeners();
+      },
+    );
+    super.addListener(listener);
   }
 
   //////////////////////////GET FUNCTION
@@ -113,6 +131,14 @@ class QuestionNotifier extends ChangeNotifier {
   bool get done => _done;
 
   UnderlineText get header => _header;
+
+  String get clue => _clue;
+
+  set clue(String value) {
+    if (_clue == value) return;
+    _clue = value;
+    notifyListeners();
+  }
 
   Prompt get prompt => _prompt;
 
@@ -173,5 +199,15 @@ class QuestionNotifier extends ChangeNotifier {
 
   List<Word> get searchWord => _question?.searchWord(_found) ?? [];
 
-  createClue() {}
+  // String get wordController => _subject.stream.;
+
+  Future<void> assistUser() async {
+    //_subject.add("Thinking");
+    clue = "Thinking";
+    clue = await ref.read(createHintProvider(
+      focusedWord!,
+      _question!.answer(_found),
+    ).future);
+    //_subject.add(str);
+  }
 }

@@ -2,13 +2,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../extension/extension.dart';
 
-part 'date.g.dart';
-
-@Riverpod(keepAlive: true)
-DateTime now(NowRef ref) => DateTime.now().convert();
+part 'date_selected.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [])
-class SelectedDate extends _$SelectedDate {
+class DateSelected extends _$DateSelected {
   @override
   DateTime build() {
     final DateTime now = DateTime.now();

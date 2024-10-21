@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../function/date/date.dart';
 
+import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../function/question/word_notifier.dart';
 import '../../model/word.dart';
@@ -53,7 +53,7 @@ class _KeyboardTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(selectedDateProvider);
+    final DateTime date = ref.read(dateSelectedProvider);
     final bool isChar = str.length == 1;
     final DefaultTextTheme textTheme = DefaultTextTheme();
 

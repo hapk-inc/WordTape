@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../function/auth/pod.dart';
 import '../panel/pod.dart';
+import '../router/router.dart';
 import '../shared/shared.dart';
 import 'common/accept_cookies.dart';
 import 'common/store_btn.dart';
@@ -27,13 +28,19 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       const Duration(milliseconds: 1500),
       () async {
         final PanelNotifier notifier = ref.read(panelNotifierProvider.notifier);
-        if (kDebugMode) {
-          notifier.dialogState = const AcceptCookie();
-        } else {
-          final SharedPreferences pref = await ref.read(sharedProvider.future);
-          if (kIsWeb) {
-            final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
-            if (!acceptCookies) notifier.dialogState = const AcceptCookie();
+        final String location =
+            ref.read(routerProvider).routeInformationProvider.value.uri.path;
+        if (location == "/home") {
+          if (kDebugMode) {
+            notifier.dialogState = const AcceptCookie();
+          } else {
+            final SharedPreferences pref =
+                await ref.read(sharedProvider.future);
+            if (kIsWeb) {
+              final bool acceptCookies =
+                  pref.getBool('accept_cookies') ?? false;
+              if (!acceptCookies) notifier.dialogState = const AcceptCookie();
+            }
           }
         }
       },

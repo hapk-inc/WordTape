@@ -4,11 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
+import '../../model/route_path.dart';
+import '../../router/path.dart';
 
 import '../../extension/extension.dart';
 
 import '../../function/question/word_notifier.dart';
 import '../../model/word.dart';
+
 import '../../theme/pod.dart';
 
 class EditableWord extends ConsumerStatefulWidget {
@@ -43,9 +46,16 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
   @override
   Widget build(BuildContext context) {
+    final RoutePath path = ref.read(pathNotifierProvider);
+
     wordNotifier = ref.watch(wordNotifierProvider(word));
 
-    final bool enabled = wordNotifier.isEnabled;
+    final bool enabled = wordNotifier.isEnabled && path.path == "/decode";
+
+    if (wordNotifier.isEnabled) {
+      debugPrint("${wordNotifier.isEnabled} && ${path.path}");
+      debugPrint("Enabled = $enabled");
+    }
 
     return Hero(
       tag: word.id ?? "",
@@ -54,7 +64,6 @@ class _EditableWordState extends ConsumerState<EditableWord> {
         height: 72.h,
         child: LayoutBuilder(
           builder: (_, constraints) {
-            //
             final PinTheme pinTheme = ref.read(
               pinThemeProvider(
                   constraints: constraints, color: wordNotifier.color),
@@ -70,6 +79,9 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               animationDuration: const Duration(milliseconds: 150),
               pinputAutovalidateMode: PinputAutovalidateMode.disabled,
               validator: !enabled ? null : wordNotifier.validator,
+              onTap: () {
+                debugPrint("75==");
+              },
 
               // showCursor: false,
               // isCursorAnimationEnabled: false,
