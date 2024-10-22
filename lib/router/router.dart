@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/panel/pod.dart';
 
 // import '../function/local/pod.dart';
 
@@ -21,7 +23,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [renovation, DateSelected, PathNotifier],
+  dependencies: [renovation, DateSelected, PathNotifier, panelController],
 )
 GoRouter router(RouterRef ref) {
   return GoRouter(
@@ -62,6 +64,13 @@ GoRouter router(RouterRef ref) {
               return RiddlePage(args);
             },
             onExit: (_, state) {
+              final PanelController panelController =
+                  ref.read(panelControllerProvider);
+              if (panelController.isAttached) {
+                if (panelController.isPanelOpen) {
+                  panelController.close();
+                }
+              }
               /*DateTime date;
               if (state.extra == null) {
                 date = ref.read(selectedDateProvider);

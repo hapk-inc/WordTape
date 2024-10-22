@@ -10,6 +10,7 @@ const Color azureGreen = Color(0xffDFF2ED);
 
 const Color tyrianPurple = Color(0xff561643);
 const Color cerise = Color(0xffDD2663);
+const Color melon = Color(0xffFFA69E);
 
 const Color seaWhite = Color(0xffFEFCFD);
 const Color ghostWhite = Color(0xffF6F3F7);

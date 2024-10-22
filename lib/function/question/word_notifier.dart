@@ -58,7 +58,7 @@ class WordNotifier extends ChangeNotifier {
     if (done) {
       _controller = TextEditingController(text: word.value);
       final bool didHeFound = !_notifier.found.untilNow.containsKey(_index);
-      _color = didHeFound ? aquaMarine : cerise;
+      _color = didHeFound ? aquaMarine : melon;
     } else {
       _node = FocusNode(canRequestFocus: _enabled);
       if (_enabled) {
@@ -79,11 +79,7 @@ class WordNotifier extends ChangeNotifier {
       questionNotifierProvider(_date).select((value) => value.found),
       (prev, next) {
         if (_index == next.i) {
-          debugPrint("Listening $next");
-          final int p = prev?.i ?? 0;
-
-          final bool isFirstFound = _index == 2 && p == 1;
-          if (isFirstFound) {}
+          final int p = prev?.i ?? const Found().i;
           _error = next.mistake != null;
           if (_error) {
             _notifier.prompt = _notifier.prompt.copyWith(
@@ -92,6 +88,14 @@ class WordNotifier extends ChangeNotifier {
                 focused: "Hint hint",
               ),
             );
+          } else {
+            _notifier.clue = "";
+            final bool isFirstFound = _index == 2 && p == 1;
+            if (isFirstFound) {
+              _notifier.header = UnderlineText(
+                  "resume_${mockInteger(0, 5)}".tr(),
+                  focused: "sequence. pattern");
+            }
           }
         }
         if (!_index.isNext(next.i)) validateController(next.i);

@@ -1,11 +1,11 @@
-// import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:toastification/toastification.dart';
-import 'package:typewritertext/typewritertext.dart';
 
 import '../../function/question/notifier.dart';
 import '../../theme/color.dart';
@@ -22,7 +22,7 @@ class WordClueState extends ConsumerWidget {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 15.r),
+      margin: EdgeInsets.symmetric(horizontal: 15.r, vertical: 15.r),
       decoration: BoxDecoration(
         color: seaWhite,
         borderRadius: BorderRadius.circular(7.5.r),
@@ -38,38 +38,56 @@ class WordClueState extends ConsumerWidget {
               icon: const Icon(Icons.close),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15.r),
-            alignment: Alignment.centerLeft,
-            // color: cerise,
-            child: TypewriterText(text: notifier.clue),
+          Positioned.fill(
+            top: 30.r,
+            right: 30.r,
+            left: 15.r,
+            bottom: 15.r,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 600),
+              child: notifier.clue.isEmpty
+                  ? Center(
+                      child: FadeIn(
+                        child: Lottie.asset("lottie/bulb.json"),
+                      ),
+                    )
+                  : Container(
+                      alignment: Alignment.topLeft,
+                      child: FadeIn(
+                        duration: const Duration(milliseconds: 600),
+                        child: TypewriterText(
+                          text: notifier.clue,
+                          key: ValueKey(notifier.clue),
+                        ),
+                      ),
+                    ),
+            ),
           ),
         ],
       ),
     );
   }
-
-  /*@override
-  bool backdropEnabled() => false;
-
-  @override
-  SlideDirection direction() => SlideDirection.DOWN;
-
-  @override
-  double height() => 135.r;*/
 }
 
 class TypewriterText extends StatefulWidget {
   final String text;
-  const TypewriterText({super.key, required this.text});
+  final Duration duration;
+  final Duration reverseDuration;
+
+  const TypewriterText({
+    super.key,
+    required this.text,
+    this.duration = const Duration(milliseconds: 90),
+    this.reverseDuration = const Duration(milliseconds: 90),
+  });
 
   @override
   State<TypewriterText> createState() => _TypewriterTextState();
 }
 
 class _TypewriterTextState extends State<TypewriterText> {
-  final _typingDuration = const Duration(milliseconds: 30);
-  final _deletingDuration = const Duration(milliseconds: 10);
+  late Duration _typingDuration;
+  late Duration _deletingDuration;
   late String _displayedText;
   late String _incomingText;
   late String _outgoingText;
@@ -77,20 +95,22 @@ class _TypewriterTextState extends State<TypewriterText> {
   @override
   void initState() {
     _incomingText = widget.text;
-    _outgoingText = '';
-    _displayedText = '';
+    _typingDuration = widget.duration;
+    _deletingDuration = widget.reverseDuration;
+
+    _outgoingText = _displayedText = '';
+    //
     animateText();
     super.initState();
   }
 
-  void animateText() async {
+  animateText() async {
     final backwardLength = _outgoingText.length;
     if (backwardLength > 0) {
       for (var i = backwardLength; i >= 0; i--) {
         await Future.delayed(_deletingDuration);
         _displayedText = _outgoingText.substring(0, i);
-        debugPrint("114=$_displayedText");
-        setState(() {});
+        if (mounted) setState(() {});
       }
     }
     final forwardLength = _incomingText.length;
@@ -98,8 +118,7 @@ class _TypewriterTextState extends State<TypewriterText> {
       for (var i = 0; i <= forwardLength; i++) {
         await Future.delayed(_typingDuration);
         _displayedText = _incomingText.substring(0, i).trim();
-        debugPrint("123=$_displayedText");
-        setState(() {});
+        if (mounted) setState(() {});
       }
     }
   }
@@ -118,8 +137,9 @@ class _TypewriterTextState extends State<TypewriterText> {
   Widget build(BuildContext context) {
     return AutoSizeText(
       _displayedText,
-      maxLines: 1,
-      style: const TextStyle(color: Colors.red),
+      maxLines: 2,
+      presetFontSizes: [19.5.r, 18.r, 15.r, 12.r],
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.8),
     );
   }
 }

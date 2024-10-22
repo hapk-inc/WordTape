@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:mock_data/mock_data.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../enum/enum.dart';
 import '../../model/found.dart';
@@ -49,10 +48,8 @@ class QuestionNotifier extends ChangeNotifier {
   //
   late bool _done = false;
   String _clue = "";
-  // final BehaviorSubject<String> _subject = BehaviorSubject<String>();
 
   QuestionNotifier(this.ref, {required this.date}) {
-    //final Player? player = ref.read(playerProvider).value;
     final DateTime now = DateTime.now();
     _isToday = DateUtils.isSameDay(date, now);
     _firestoreQuestion = ref.read(firestoreQuestionProvider);
@@ -60,8 +57,6 @@ class QuestionNotifier extends ChangeNotifier {
   }
 
   Future questionFound() async {
-    // final Player? player = await ref.read(playerProvider.future);
-
     //Safe-Initialisation Found
     _found = Found(date: date);
 
@@ -78,20 +73,40 @@ class QuestionNotifier extends ChangeNotifier {
     final String id = _question!.id!;
     Found? f;
     f = await _localFound.found(id);
+    debugPrint((f?.untilNow ?? {}).toString());
     f ??= await _firestoreQuestion.found(id).then(
       (value) {
         if (value != null) _localFound.insert(value);
         return value;
       },
     );
-    _found = f ?? Found.fromRiddle(_question!);
-    _done = _question!.isCompleted(_found.i);
-
+    found = f ?? Found.fromRiddle(_question!);
     _prompt = Prompt(
       text: UnderlineText(ref.read(figureOutProvider)),
       state: PromptState.search,
     );
 
+    final int i = _found.i;
+
+    if (_found.untilNow.containsKey(i)) {
+      List list = _found.untilNow[i];
+      clue = list.last;
+      // _clue = _found.untilNow.containsKey(i) ? _found.untilNow[i][]
+    }
+
+    _done = _question!.isCompleted(_found.i);
+
+    if (_done) {
+      _header = UnderlineText(
+        "challenge_done_${mockInteger(0, 6)}".tr(),
+        focused: "today. today’s",
+      );
+    } else {
+      if (_found.i != 1) {
+        _header = UnderlineText("resume_${mockInteger(0, 5)}".tr(),
+            focused: "sequence. pattern.");
+      }
+    }
     notifyListeners();
   }
 
@@ -100,7 +115,13 @@ class QuestionNotifier extends ChangeNotifier {
     ref.listen<Question?>(
       onQuestionModifiedProvider(date: date).select((value) => value.value),
       (_, next) {
-        if (next != null) _question = next;
+        if (next != null) {
+          _question = next;
+          _prompt = Prompt(
+            text: UnderlineText(ref.read(figureOutProvider)),
+            state: PromptState.search,
+          );
+        }
         notifyListeners();
       },
     );
@@ -117,7 +138,7 @@ class QuestionNotifier extends ChangeNotifier {
   }
 
   set found(Found value) {
-    if (_found == value) return;
+    //if (_found == value) return;
     _found = value;
 
     if (kIsWeb) {
@@ -125,12 +146,18 @@ class QuestionNotifier extends ChangeNotifier {
     } else {
       _localFound.insert(_found);
     }
+    _done = question!.isCompleted(_found.i);
     notifyListeners();
   }
 
   bool get done => _done;
 
   UnderlineText get header => _header;
+
+  set header(UnderlineText value) {
+    _header = value;
+    notifyListeners();
+  }
 
   String get clue => _clue;
 
@@ -143,12 +170,13 @@ class QuestionNotifier extends ChangeNotifier {
   Prompt get prompt => _prompt;
 
   set prompt(Prompt value) {
+    debugPrint("150==Setting prompt $value");
     if (_prompt == value) return;
     if (_prompt.state == value.state) {
       Future.delayed(
         _m2400,
         () {
-          _prompt = value;
+          _prompt = value.copyWith(state: PromptState.search);
           notifyListeners();
         },
       );
@@ -176,7 +204,7 @@ class QuestionNotifier extends ChangeNotifier {
       } else {
         prompt = Prompt(
           text: UnderlineText("wrong_${mockInteger(0, 4)}".tr()),
-          state: PromptState.wrong,
+          state: PromptState.error,
         );
         final DateTime now = DateTime.now();
 
@@ -186,28 +214,51 @@ class QuestionNotifier extends ChangeNotifier {
   }
 
   Future<void> _newFound() async {
+    prompt = Prompt(
+      text: UnderlineText(ref.read(correctAnswerProvider)),
+      state: PromptState.right,
+    );
     final DateTime now = DateTime.now();
     found = _found.copyWith(i: _found.i + 1, mistake: null, lastFound: now);
-    debugPrint("$_found");
-    final bool everyFound = _question?.isCompleted(_found.i) ?? false;
-    _done = everyFound;
-    if (_done) {
-      ref.read(firestoreQuestionProvider).setFound(_found);
-      ref.read(firestoreUserProvider).userFound(_found);
-    }
   }
 
   List<Word> get searchWord => _question?.searchWord(_found) ?? [];
 
   // String get wordController => _subject.stream.;
 
-  Future<void> assistUser() async {
-    //_subject.add("Thinking");
-    clue = "Thinking";
-    clue = await ref.read(createHintProvider(
-      focusedWord!,
-      _question!.answer(_found),
-    ).future);
-    //_subject.add(str);
+  Future<void> helpUser() async {
+    if (_found.untilNow.containsKey(_found.i)) {
+      final List<String> list = List.castFrom(_found.untilNow[_found.i]);
+      debugPrint(list.toString());
+      if (list.isNotEmpty && list.first.isNotEmpty) {
+        clue = list[0];
+        return;
+      }
+    }
+    clue = "";
+    final String answer = _question!.answer(_found);
+    clue = await ref
+        .read(createHintProvider(focusedWord!, answer).future)
+        .catchError(
+      (error, stackTrace) {
+        debugPrint("240==error");
+        return "";
+      },
+    );
+    if (clue.isEmpty) {
+      print("clue.isEmpty");
+      return;
+    }
+    Map<int, dynamic> map = Map<int, dynamic>.from(_found.untilNow);
+    map.update(
+      _found.i,
+      (value) {
+        if (value is List) {
+          return [...value, if (!value.contains(_clue)) _clue];
+        }
+      },
+      ifAbsent: () => [_clue],
+    );
+    found = _found.copyWith(untilNow: map);
   }
 }

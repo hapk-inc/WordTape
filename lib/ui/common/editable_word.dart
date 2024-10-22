@@ -61,7 +61,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
       tag: word.id ?? "",
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 90),
-        height: 72.h,
+        height: 70.5.h,
         child: LayoutBuilder(
           builder: (_, constraints) {
             final PinTheme pinTheme = ref.read(
@@ -104,7 +104,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
               errorBuilder: (e, _) => const SizedBox(),
 
-              useNativeKeyboard: kIsWeb,
+              useNativeKeyboard: kDebugMode,
               textInputAction: TextInputAction.none,
             );
           },

@@ -19,6 +19,7 @@ import '../model/word.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
 import '../theme/font.dart';
+import 'dashboard/riddle_now.dart';
 
 class SummaryPage extends PanelWidget {
   final DateTime date;
@@ -32,10 +33,10 @@ class SummaryPage extends PanelWidget {
       );
 
   @override
-  SlideDirection direction() => SlideDirection.DOWN;
+  SlideDirection direction() => SlideDirection.UP;
 
   @override
-  double height() => 450.r;
+  double height() => 240.r;
 
   @override
   bool backdropEnabled() => true;
@@ -112,7 +113,8 @@ class SummaryContent extends ConsumerWidget {
                 : SafeArea(
                     child: FadeIn(
                       delay: const Duration(milliseconds: 750),
-                      child: const Center(child: SummaryStatus()),
+                      //child: const Center(child: SummaryStatus()),
+                      child: Center(child: QuestionUntilNow(date)),
                     ),
                   ),
           ),
@@ -130,6 +132,7 @@ class SummaryContent extends ConsumerWidget {
   }
 }
 
+/*
 class SummaryStatus extends ConsumerWidget {
   const SummaryStatus({super.key});
 
@@ -167,6 +170,7 @@ class SummaryStatus extends ConsumerWidget {
     );
   }
 }
+*/
 
 class SummaryFooter extends ConsumerWidget {
   final bool noHelp;
@@ -189,7 +193,7 @@ class SummaryFooter extends ConsumerWidget {
         Text(
           noHelp
               ? "congrats_detail_${mockInteger(0, 5)}".tr()
-              : "pass_detail_${mockInteger(0, 9)}".tr(),
+              : "pass_detail_${mockInteger(0, 6)}".tr(),
           style: defaultTextTheme.montserratMedium.copyWith(
             color: midnightGreen,
           ),
@@ -197,22 +201,26 @@ class SummaryFooter extends ConsumerWidget {
         ),
         Gap(7.5.r),
         if (packageInfo != null)
-          Row(
-            children: [
-              InkWell(
-                onTap: () => Share.share(url),
-                child: const Icon(Icons.copy),
-              ),
-              Gap(7.5.r),
-              Expanded(
-                child: Text(
-                  url,
-                  style: defaultTextTheme.urlTheme,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+          SafeArea(
+            bottom: false,
+            top: false,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    url,
+                    style: defaultTextTheme.urlTheme,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              )
-            ],
+                InkWell(
+                  onTap: () => Share.share(url),
+                  child: const Icon(Icons.copy),
+                ),
+                Gap(7.5.r),
+              ],
+            ),
           )
       ],
     );

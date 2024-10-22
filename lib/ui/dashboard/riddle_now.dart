@@ -146,10 +146,10 @@ class RiddleNowStateState extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: 3.6.r),
           child: const RiddleNowWelcome(),
         ),
-        Gap(30.r),
+        Gap(45.r),
         if (searchWord.isEmpty) ...[
           QuestionUntilNow(date),
-          Gap(60.r),
+          Gap(90.r),
           if (notifier.done)
             FadeIn(
               delay: const Duration(milliseconds: 3600),
@@ -187,7 +187,7 @@ class FeedbackTextField extends ConsumerWidget {
         cursorHeight: 36.r,
         style: textTheme.bodyLarge?.copyWith(color: seaWhite),
         decoration: const InputDecoration(
-          hintText: 'Enter your feedback here',
+          hintText: 'Any feedback here',
         ),
         maxLines: 1,
         maxLength: 90,

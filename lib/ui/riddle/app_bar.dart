@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,7 +61,7 @@ class _LottieHintState extends ConsumerState<LottieHint> {
   @override
   Widget build(BuildContext context) => InkWell(
         onTap: () {
-          notifier.assistUser();
+          notifier.helpUser();
           ref.read(toastNotifierProvider.notifier).state =
               toastification.showCustom(
             alignment: Alignment.topCenter,
@@ -71,9 +72,14 @@ class _LottieHintState extends ConsumerState<LottieHint> {
             ),
           );
         },
-        child: SizedBox.square(
-          dimension: 75.r,
-          child: Lottie.asset("question".tr()),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 150),
+          child: ref.watch(questionNotifierProvider(date)).done
+              ? SizedBox()
+              : SizedBox.square(
+                  dimension: 75.r,
+                  child: FadeIn(child: Lottie.asset("question".tr())),
+                ),
         ),
       );
 }

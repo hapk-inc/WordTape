@@ -94,20 +94,20 @@ class _KeyboardTile extends ConsumerWidget {
         margin: EdgeInsets.all(2.25.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          /*gradient: LinearGradient(
             colors: [
               ...List.filled(5, payneGray),
               if (isChar) celestialBlue,
             ],
-          ),
+          ),*/
           borderRadius: BorderRadius.circular(4.5.r),
           border: Border.all(width: 0.24.r, color: seaWhite),
         ),
         padding: EdgeInsets.symmetric(horizontal: 7.5.r),
         child: AutoSizeText(
           str,
-          style: textTheme.headlineMedium?.copyWith(color: lightCyan),
-          presetFontSizes: [18.r, 15.r],
+          style: textTheme.headlineMedium?.copyWith(color: azureGreen),
+          presetFontSizes: [15.6.r, 15.r],
           maxLines: 1,
         ),
       ),
