@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wordtape/theme/font.dart';
-import '../../extension/extension.dart';
 
 import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
