@@ -12,7 +12,7 @@ import '../panel/pod.dart';
 import 'riddle/custom_keyboard.dart';
 import 'common/editable_word.dart';
 import 'common/gradient_box.dart';
-import 'riddle/clue.dart';
+import 'riddle/prompt.dart';
 import 'riddle/app_bar.dart';
 import 'summary.dart';
 
@@ -119,7 +119,7 @@ class RiddlePageState extends ConsumerWidget {
                   height: h_03 * 4.8,
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(horizontal: w_03 * 1.5),
-                  child: const RiddleClue(),
+                  child: const PromptWidget(),
                 ),
                 for (Word word in notifier.question?.words ?? [])
                   EditableWord(word),

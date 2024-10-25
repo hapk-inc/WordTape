@@ -106,6 +106,8 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   TextStyle get montserratMedium => montserratTheme.copyWith(fontSize: 15.r);
+
+  //TextStyle get latoTheme => latoTheme;
 }
 
 mixin FontMixin {
@@ -161,5 +163,14 @@ mixin FontMixin {
         fontFamily: 'NotoColorEmoji',
         letterSpacing: 0,
         wordSpacing: 0,
+      );
+
+  TextStyle get latoTheme => const TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.bold,
+        letterSpacing: 0,
+        color: raisinBlack,
+        wordSpacing: 0,
+        height: 1.8,
       );
 }

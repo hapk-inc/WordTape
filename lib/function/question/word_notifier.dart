@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:mock_data/mock_data.dart';
 
-import '../../logger/log.dart';
+import '../../enum/enum.dart';
 import '../../model/found.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -33,13 +33,13 @@ class WordNotifier extends ChangeNotifier {
   late FocusNode _node;
   late DateTime _date;
   late int _index;
-  late Logger _logger;
+  late Logger _tracker;
 
   bool _enabled = false;
   bool _error = false;
 
   WordNotifier(this.ref, this.word) {
-    _logger = ref.read(logProvider);
+    _tracker = ref.read(trackerProvider);
     final List<String> splitter = word.id?.split("|") ?? [];
     if (splitter.isEmpty) return;
 
@@ -130,7 +130,7 @@ class WordNotifier extends ChangeNotifier {
       _controller = TextEditingController(text: newText);
       onTextChanged(newText);
     } else {
-      _logger.i("Occupied Full Text");
+      _tracker.i("Occupied Full Text");
     }
   }
 
@@ -156,7 +156,7 @@ class WordNotifier extends ChangeNotifier {
   }
 
   String? validator(String? value) {
-    _logger.i("Validating 72--$value");
+    _tracker.i("Validating 72--$value");
 
     if (value == null) return null;
     final int len = value.length;

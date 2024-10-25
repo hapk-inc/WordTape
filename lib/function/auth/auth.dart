@@ -9,7 +9,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
-import '../../logger/log.dart';
 
 //const List<String> _scopes = <String>['email'];
 
@@ -17,12 +16,12 @@ class Auth {
   final Ref ref;
 
   late FirebaseAuth _auth;
-  late Logger log;
+  late Logger tracker;
   late GoogleSignIn _googleSignIn;
 
   Auth(this.ref) {
     _auth = ref.read(firebaseAuthProvider);
-    log = ref.read(logProvider);
+    tracker = ref.read(trackerProvider);
     final DotEnv dotEnv = ref.read(envProvider);
     final AppEnv appEnv = ref.read(appEnvProvider);
 
@@ -38,7 +37,7 @@ class Auth {
       onListen: () => _auth.authStateChanges().listen(
         (event) {
           if (!subject.hasValue || subject.value != event) {
-            log.d(event == null ? "No User" : event.displayName);
+            tracker.d(event == null ? "No User" : event.displayName);
             subject.add(event);
           }
         },
@@ -60,7 +59,7 @@ class Auth {
           if (isAuthorized) await _onGoogleAuth(account);
         },
         onError: (e, s) {
-          log.e("onGoogleUser", error: e, stackTrace: s);
+          tracker.e("onGoogleUser", error: e, stackTrace: s);
         },
       ),
     );
@@ -85,7 +84,7 @@ class Auth {
     } else {
       if (!await GamesServices.isSignedIn && !kIsWeb) {
         final String? str = await GamesServices.signIn();
-        log.d(str);
+        tracker.d(str);
       }
 
       switch (defaultTargetPlatform) {

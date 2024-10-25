@@ -22,7 +22,6 @@ import 'firebase/firebase_option_dev.dart';
 import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
 import 'function/connectivity/pod.dart';
-import 'logger/log.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,7 +95,7 @@ Future<void> main() async {
     if (!kIsWeb) crashlyticsProvider.overrideWithValue(crashlytics),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/env")),
     //
-    logProvider.overrideWithValue(logger),
+    trackerProvider.overrideWithValue(logger),
 
     appEnvProvider.overrideWithValue(appEnv),
 

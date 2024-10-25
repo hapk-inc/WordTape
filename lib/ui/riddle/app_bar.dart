@@ -75,7 +75,7 @@ class _LottieHintState extends ConsumerState<LottieHint> {
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 150),
           child: ref.watch(questionNotifierProvider(date)).done
-              ? SizedBox()
+              ? const SizedBox()
               : SizedBox.square(
                   dimension: 75.r,
                   child: FadeIn(child: Lottie.asset("question".tr())),

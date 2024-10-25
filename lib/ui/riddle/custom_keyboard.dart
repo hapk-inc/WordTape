@@ -59,9 +59,9 @@ class _KeyboardTile extends ConsumerWidget {
 
     double w = 0;
     if (isChar) {
-      w = 0.0775;
+      w = 0.084;
     } else {
-      w = str == "DEL" ? 0.12 : 0.21;
+      w = str == "DEL" ? 0.12 : 0.18;
     }
 
     return InkWell(
@@ -90,7 +90,7 @@ class _KeyboardTile extends ConsumerWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: width * w,
-        height: 42.h,
+        height: 48.h,
         margin: EdgeInsets.all(2.25.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(

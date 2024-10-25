@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'enum.g.dart';
@@ -20,3 +21,6 @@ ScreenSize size(SizeRef ref) => ScreenSize.mobile;
 
 @Riverpod(keepAlive: true, dependencies: [])
 AppEnv appEnv(AppEnvRef ref) => kDebugMode ? AppEnv.dev : AppEnv.prod;
+
+@Riverpod(keepAlive: true)
+Logger tracker(TrackerRef ref) => Logger();

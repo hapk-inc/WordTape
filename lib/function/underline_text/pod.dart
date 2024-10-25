@@ -50,11 +50,11 @@ String useHighlighter(UseHighlighterRef ref) {
   return useHighlighter[mockInteger(0, 4)];
 }
 
-@Riverpod()
+/*@Riverpod()
 String correctAnswer(CorrectAnswerRef ref) {
   final List<String> correct = List.generate(8, (i) => "correct_$i".tr());
   return correct[mockInteger(0, 7)];
-}
+}*/
 
 @riverpod
 String fillText(FillTextRef ref) {
@@ -120,4 +120,20 @@ UnderlineText welcomeUser(WelcomeUserRef ref) {
   );
   final DateTime now = DateTime.now();
   return welcome[now.day % welcome.length];
+}
+
+@Riverpod(keepAlive: true)
+UnderlineText foundWord(FoundWordRef ref) {
+  final Map map = jsonDecode("correct_text".tr());
+  final List list = map["correct"];
+  final List<UnderlineText> foundWord = List.from(
+    list.map(
+      (e) {
+        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
+        return UnderlineText.fromJson(json);
+      },
+    ),
+  );
+  //final DateTime now = DateTime.now();
+  return foundWord[mockInteger(0, foundWord.length - 1)];
 }

@@ -9,8 +9,10 @@ import '../../enum/enum.dart';
 import '../../model/found.dart';
 import '../../model/prompt.dart';
 import '../../model/question.dart';
+import '../../model/route_path.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
+import '../../router/path.dart';
 import '../firestore/pod.dart';
 import '../firestore/question.dart';
 import '../gen_ai/pod.dart';
@@ -34,9 +36,6 @@ class QuestionNotifier extends ChangeNotifier {
 
   late bool _isToday;
   late Prompt _prompt;
-  // late Tip _tip;
-
-  //
   late UnderlineText _header;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -50,6 +49,14 @@ class QuestionNotifier extends ChangeNotifier {
   String _clue = "";
 
   QuestionNotifier(this.ref, {required this.date}) {
+    final RoutePath path = ref.read(pathNotifierProvider);
+    final bool isDecode = path.path == "/decode";
+    if (isDecode) {
+      _prompt = Prompt(
+        text: UnderlineText(ref.read(figureOutProvider)),
+        state: PromptState.search,
+      );
+    }
     final DateTime now = DateTime.now();
     _isToday = DateUtils.isSameDay(date, now);
     _firestoreQuestion = ref.read(firestoreQuestionProvider);
@@ -91,7 +98,6 @@ class QuestionNotifier extends ChangeNotifier {
     if (_found.untilNow.containsKey(i)) {
       List list = _found.untilNow[i];
       clue = list.last;
-      // _clue = _found.untilNow.containsKey(i) ? _found.untilNow[i][]
     }
 
     _done = _question!.isCompleted(_found.i);
@@ -121,6 +127,7 @@ class QuestionNotifier extends ChangeNotifier {
             text: UnderlineText(ref.read(figureOutProvider)),
             state: PromptState.search,
           );
+          _header = ref.read(welcomeUserProvider);
         }
         notifyListeners();
       },
@@ -215,7 +222,7 @@ class QuestionNotifier extends ChangeNotifier {
 
   Future<void> _newFound() async {
     prompt = Prompt(
-      text: UnderlineText(ref.read(correctAnswerProvider)),
+      text: ref.read(foundWordProvider),
       state: PromptState.right,
     );
     final DateTime now = DateTime.now();

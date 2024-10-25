@@ -14,7 +14,6 @@ import '../ui/outline.dart';
 import '../ui/renovation.dart';
 import '../ui/riddle.dart';
 import '../ui/splash.dart';
-import '../ui/summary.dart';
 import 'path.dart';
 
 part 'router.g.dart';
@@ -67,44 +66,17 @@ GoRouter router(RouterRef ref) {
               final PanelController panelController =
                   ref.read(panelControllerProvider);
               if (panelController.isAttached) {
-                if (panelController.isPanelOpen) {
-                  panelController.close();
-                }
-              }
-              /*DateTime date;
-              if (state.extra == null) {
-                date = ref.read(selectedDateProvider);
-              } else {
-                date = state.extra as DateTime;
+                if (panelController.isPanelOpen) panelController.close();
               }
 
-              final Found found =
-                  ref.read(questionNotifierProvider(date)).found;
-              ref.read(localFoundProvider).insert(found);*/
+              //
+              final RoutePath path = ref.read(pathNotifierProvider);
+              ref.read(pathNotifierProvider.notifier).state = path.copyWith(
+                path: "/home",
+              );
               return true;
             },
           ),
-          GoRoute(
-            path: '/summary',
-            pageBuilder: (context, state) {
-              final DateTime? args = state.extra as DateTime?;
-              return CustomTransitionPage(
-                child: args == null ? Container() : SummaryPage(date: args),
-                transitionsBuilder: (_, animation, __, child) {
-                  const Offset begin = Offset(0.0, 1.0);
-                  const Offset end =
-                      Offset.zero; // End at the original position
-                  const curve = Curves.easeInOut;
-
-                  final Animatable<Offset> tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
-                  final Animation<Offset> anim = animation.drive(tween);
-
-                  return SlideTransition(position: anim, child: child);
-                },
-              );
-            },
-          )
         ],
       ),
     ],

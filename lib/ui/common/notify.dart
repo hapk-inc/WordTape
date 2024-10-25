@@ -79,7 +79,7 @@ class NotifyDialog extends PanelWidget {
   }
 
   @override
-  double height() => 300.r;
+  double height() => 330.r;
 
   @override
   SlideDirection direction() => SlideDirection.UP;

@@ -15,7 +15,6 @@ import '../function/auth/pod.dart';
 
 import '../function/date_selected/date_selected.dart';
 import '../function/question/notifier.dart';
-import '../model/word.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
 import '../theme/font.dart';

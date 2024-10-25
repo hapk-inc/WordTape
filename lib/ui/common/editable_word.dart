@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/function/question/notifier.dart';
 import '../../model/route_path.dart';
 import '../../router/path.dart';
 
@@ -50,7 +51,9 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
     wordNotifier = ref.watch(wordNotifierProvider(word));
 
-    final bool enabled = wordNotifier.isEnabled && path.path == "/decode";
+    final bool isDecode = path.path == "/decode";
+
+    final bool enabled = wordNotifier.isEnabled && isDecode;
 
     if (wordNotifier.isEnabled) {
       debugPrint("${wordNotifier.isEnabled} && ${path.path}");
@@ -70,6 +73,9 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             );
 
             return Pinput(
+              onTapOutside: (event) {
+                debugPrint("onTapOutside");
+              },
               length: word.value.length,
               defaultPinTheme: pinTheme,
               controller: wordNotifier.controller, focusNode: wordNotifier.node,
@@ -81,6 +87,13 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               validator: !enabled ? null : wordNotifier.validator,
               onTap: () {
                 debugPrint("75==");
+                final QuestionNotifier notifier =
+                    ref.read(questionNotifierProvider(date));
+                print(notifier.focusedWord);
+                print(path.path);
+                if (!isDecode && notifier.focusedWord == word) {
+                  context.push('/decode', extra: date);
+                }
               },
 
               // showCursor: false,
@@ -90,7 +103,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               forceErrorState: wordNotifier.error,
 
               //
-              enabled: enabled,
+              enabled: true,
               animationCurve: Curves.easeOut,
               autofocus: enabled,
 
@@ -104,7 +117,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
               errorBuilder: (e, _) => const SizedBox(),
 
-              useNativeKeyboard: kDebugMode,
+              // useNativeKeyboard: kDebugMode,
               textInputAction: TextInputAction.none,
             );
           },

@@ -29,7 +29,7 @@ class RiddleNow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = DateTime.now().convert();
+    final DateTime date = ref.read(dateSelectedProvider);
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
     final Player? player = ref.watch(playerProvider).value;
@@ -73,8 +73,9 @@ class RiddleNow extends ConsumerWidget {
                     foregroundColor: WidgetStatePropertyAll(raisinBlack),
                   ),
                   onPressed: () {
-                    final DateTime date = ref.read(dateSelectedProvider);
-                    context.push('/decode', extra: date);
+                    final DateTime now = DateTime.now().convert();
+                    ref.read(dateSelectedProvider.notifier).state = now;
+                    context.push('/decode', extra: now);
                   },
                   child: const Text("Play now"),
                 ),

@@ -3,12 +3,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
 
 import 'package:toastification/toastification.dart';
 
 import '../../function/question/notifier.dart';
 import '../../theme/color.dart';
+import '../../theme/font.dart';
 
 class WordClueState extends ConsumerWidget {
   final DateTime date;
@@ -46,18 +46,21 @@ class WordClueState extends ConsumerWidget {
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 600),
               child: notifier.clue.isEmpty
-                  ? Center(
-                      child: FadeIn(
-                        child: Lottie.asset("lottie/bulb.json"),
-                      ),
-                    )
+                  ? const SizedBox.expand()
                   : Container(
                       alignment: Alignment.topLeft,
                       child: FadeIn(
                         duration: const Duration(milliseconds: 600),
+                        key: ValueKey(notifier.clue),
                         child: TypewriterText(
                           text: notifier.clue,
-                          key: ValueKey(notifier.clue),
+                          onEnd: () {
+                            print("onEnd");
+                            Future.delayed(
+                              const Duration(milliseconds: 4500),
+                              () {},
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -72,13 +75,13 @@ class WordClueState extends ConsumerWidget {
 class TypewriterText extends StatefulWidget {
   final String text;
   final Duration duration;
-  final Duration reverseDuration;
+  final void Function() onEnd;
 
   const TypewriterText({
     super.key,
     required this.text,
-    this.duration = const Duration(milliseconds: 90),
-    this.reverseDuration = const Duration(milliseconds: 90),
+    this.duration = const Duration(milliseconds: 75),
+    required this.onEnd,
   });
 
   @override
@@ -87,46 +90,34 @@ class TypewriterText extends StatefulWidget {
 
 class _TypewriterTextState extends State<TypewriterText> {
   late Duration _typingDuration;
-  late Duration _deletingDuration;
   late String _displayedText;
   late String _incomingText;
-  late String _outgoingText;
 
   @override
   void initState() {
     _incomingText = widget.text;
     _typingDuration = widget.duration;
-    _deletingDuration = widget.reverseDuration;
-
-    _outgoingText = _displayedText = '';
-    //
+    _displayedText = "";
     animateText();
     super.initState();
   }
 
   animateText() async {
-    final backwardLength = _outgoingText.length;
-    if (backwardLength > 0) {
-      for (var i = backwardLength; i >= 0; i--) {
-        await Future.delayed(_deletingDuration);
-        _displayedText = _outgoingText.substring(0, i);
-        if (mounted) setState(() {});
-      }
-    }
     final forwardLength = _incomingText.length;
     if (forwardLength > 0) {
       for (var i = 0; i <= forwardLength; i++) {
         await Future.delayed(_typingDuration);
         _displayedText = _incomingText.substring(0, i).trim();
+
         if (mounted) setState(() {});
       }
+      widget.onEnd();
     }
   }
 
   @override
   void didUpdateWidget(covariant TypewriterText oldWidget) {
     if (oldWidget.text != widget.text) {
-      _outgoingText = oldWidget.text;
       _incomingText = widget.text;
       animateText();
     }
@@ -135,11 +126,13 @@ class _TypewriterTextState extends State<TypewriterText> {
 
   @override
   Widget build(BuildContext context) {
+    final DefaultTextTheme textTheme = DefaultTextTheme();
     return AutoSizeText(
       _displayedText,
+      key: ValueKey(_displayedText),
       maxLines: 2,
-      presetFontSizes: [19.5.r, 18.r, 15.r, 12.r],
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.8),
+      presetFontSizes: [21.r, 18.r, 15.r, 12.r],
+      style: textTheme.latoTheme,
     );
   }
 }

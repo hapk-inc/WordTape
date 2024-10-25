@@ -1,6 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mock_data/mock_data.dart';
 import 'package:equatable/equatable.dart';
 
 import '../enum/enum.dart';

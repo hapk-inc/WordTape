@@ -70,7 +70,7 @@ dependencies:
   connectivity_plus: ^6.0.5
 
   # smooth_page_indicator: ^1.2.0+3
-  # google_fonts: ^6.2.1
+  google_fonts: ^6.2.1
   shared_preferences: ^2.3.2
 
   #auth
@@ -189,6 +189,10 @@ flutter:
     - family: NotoColorEmoji
       fonts:
         - asset: fonts/NotoColorEmoji-Regular.ttf
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato-Bold.ttf
+          weight: 700
 
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic

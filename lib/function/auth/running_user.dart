@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../logger/log.dart';
+import '../../enum/enum.dart';
 import '../../router/router.dart';
 import '../connectivity/pod.dart';
 import '../firestore/pod.dart';
@@ -17,26 +17,22 @@ part 'running_user.g.dart';
 const Duration _m1500 = Duration(milliseconds: 1500);
 
 @Riverpod(keepAlive: true, dependencies: [
-  log,
-  // googleUser,
+  tracker,
   runningUser,
-  // internetConnection,
   router,
-  // localFound,
-  // localQuestion,
-  // remoteConfig,
   ValidateConnection,
   firestoreUser,
-  auth
+  auth,
+  googleUser
 ])
 void listenAuth(ListenAuthRef ref) {
-  // ref.read(googleUserProvider);
+  ref.read(googleUserProvider);
 
   ref.listen<User?>(
     runningUserProvider.select((value) => value.value),
     (prev, next) {
-      final Logger log = ref.read(logProvider);
-      log.i("RunningUser==");
+      final Logger tracker = ref.read(trackerProvider);
+      tracker.i("RunningUser==");
       if (next != null) {
         if (prev == null) {
           final int validConnection = ref.read(validateConnectionProvider());
@@ -46,7 +42,7 @@ void listenAuth(ListenAuthRef ref) {
           ref.read(routerProvider).replace("/home");
         }
       } else {
-        log.i("36==");
+        tracker.i("36==");
         if (prev != null) {
           LocalQuestion().delete();
           LocalFound().delete();

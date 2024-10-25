@@ -12,6 +12,9 @@ const Color tyrianPurple = Color(0xff561643);
 const Color cerise = Color(0xffDD2663);
 const Color melon = Color(0xffFFA69E);
 
+const Color celadon = Color(0xffADF7B6);
+const Color selectiveYellow = Color(0xffF7B801);
+
 const Color seaWhite = Color(0xffFEFCFD);
 const Color ghostWhite = Color(0xffF6F3F7);
 const Color lightCyan = Color(0xffD4F5F5);
