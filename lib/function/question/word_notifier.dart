@@ -6,6 +6,7 @@ import 'package:mock_data/mock_data.dart';
 
 import '../../enum/enum.dart';
 import '../../model/found.dart';
+import '../../model/prompt.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../theme/color.dart';
@@ -82,12 +83,12 @@ class WordNotifier extends ChangeNotifier {
           final int p = prev?.i ?? const Found().i;
           _error = next.mistake != null;
           if (_error) {
-            _notifier.prompt = _notifier.prompt.copyWith(
+            /*_notifier.prompt = _notifier.prompt.copyWith(
               text: UnderlineText(
                 "use_hint_${mockInteger(0, 7)}".tr(),
                 focused: "Hint hint",
               ),
-            );
+            );*/
           } else {
             _notifier.clue = "";
             final bool isFirstFound = _index == 2 && p == 1;
@@ -116,6 +117,10 @@ class WordNotifier extends ChangeNotifier {
   bool get error => _error;
 
   keyboardTap(String str) {
+    _notifier.prompt = Prompt(
+      text: UnderlineText(ref.read(figureOutProvider)),
+      state: PromptState.search,
+    );
     if (str.length == 1) {
       final bool regEx = RegExp(r'^[a-zA-Z0-9]$').hasMatch(str);
       if (regEx) insertChar(str);

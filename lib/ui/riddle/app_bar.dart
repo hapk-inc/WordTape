@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:toastification/toastification.dart';
@@ -34,7 +35,7 @@ class RiddleAppBar extends ConsumerWidget {
         onTap: () => ref.read(routerProvider).pop(),
         child: Text(name.toUpperCase(), maxLines: 1),
       ),
-      actions: const [LottieHint()],
+      actions: const [LottieHint(), Gap(1.5)],
       titleTextStyle: textTheme.displayMedium,
     );
   }
@@ -62,14 +63,12 @@ class _LottieHintState extends ConsumerState<LottieHint> {
   Widget build(BuildContext context) => InkWell(
         onTap: () {
           notifier.helpUser();
+
           ref.read(toastNotifierProvider.notifier).state =
               toastification.showCustom(
             alignment: Alignment.topCenter,
-            autoCloseDuration: const Duration(seconds: 15),
-            builder: (_, ToastificationItem item) => WordClueState(
-              date,
-              item,
-            ),
+            autoCloseDuration: const Duration(seconds: 30),
+            builder: (_, ToastificationItem item) => WordClueState(date),
           );
         },
         child: AnimatedSwitcher(
@@ -78,7 +77,8 @@ class _LottieHintState extends ConsumerState<LottieHint> {
               ? const SizedBox()
               : SizedBox.square(
                   dimension: 75.r,
-                  child: FadeIn(child: Lottie.asset("question".tr())),
+                  //child: FadeIn(child: Lottie.asset("question".tr())),
+                  child: FadeIn(child: Lottie.asset("lottie/question_2.json")),
                 ),
         ),
       );

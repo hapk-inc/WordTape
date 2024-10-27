@@ -11,7 +11,6 @@ import '../../extension/extension.dart';
 import '../../function/date_selected/date_selected.dart';
 import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
-import '../../function/underline_text/pod.dart';
 import '../../model/player.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -30,11 +29,11 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(dateSelectedProvider);
-    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
+    // final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
     final Player? player = ref.watch(playerProvider).value;
 
-    final UnderlineText underlineText = ref.read(notifyTextProvider);
+    // final UnderlineText underlineText = ref.read(notifyTextProvider);
 
     return SliverAppBar(
       pinned: true,
@@ -61,32 +60,7 @@ class RiddleNow extends ConsumerWidget {
         preferredSize: Size.fromHeight(120.h),
         child: Padding(
           padding: EdgeInsets.only(bottom: 30.r),
-          child: OverflowBar(
-            overflowAlignment: OverflowBarAlignment.center,
-            spacing: 15.r,
-            overflowSpacing: 15.r,
-            children: [
-              if (notifier.question != null)
-                ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(azureGreen),
-                    foregroundColor: WidgetStatePropertyAll(raisinBlack),
-                  ),
-                  onPressed: () {
-                    final DateTime now = DateTime.now().convert();
-                    ref.read(dateSelectedProvider.notifier).state = now;
-                    context.push('/decode', extra: now);
-                  },
-                  child: const Text("Play now"),
-                ),
-              ElevatedButton(
-                onPressed: () => ref
-                    .read(panelNotifierProvider.notifier)
-                    .state = const NotifyDialog(),
-                child: Text(underlineText.text),
-              ),
-            ],
-          ),
+          child: BottomButton(date),
         ),
       ),
       expandedHeight: 720.r,
@@ -97,6 +71,44 @@ class RiddleNow extends ConsumerWidget {
       flexibleSpace: const FlexibleSpaceBar(
         background: GradientBox(child: RiddleNowState()),
       ),
+    );
+  }
+}
+
+class BottomButton extends ConsumerWidget {
+  final DateTime date;
+  const BottomButton(this.date, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
+    return OverflowBar(
+      overflowAlignment: OverflowBarAlignment.center,
+      spacing: 15.r,
+      overflowSpacing: 15.r,
+      children: [
+        if (notifier.question != null)
+          ElevatedButton(
+            style: const ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(azureGreen),
+              foregroundColor: WidgetStatePropertyAll(raisinBlack),
+            ),
+            onPressed: () {
+              final DateTime now = DateTime.now().convert();
+              ref.read(dateSelectedProvider.notifier).state = now;
+              context.push('/decode', extra: now);
+            },
+            child: const Text("Play now"),
+          ),
+        ElevatedButton(
+          onPressed: () {
+            ref.read(panelNotifierProvider.notifier).state =
+                const NotifyDialog();
+          },
+          //child: Text(underlineText.text),
+          child: Text("How to Play"),
+        ),
+      ],
     );
   }
 }

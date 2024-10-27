@@ -19,6 +19,7 @@ import '../gen_ai/pod.dart';
 import '../local/found.dart';
 import '../local/question.dart';
 import '../underline_text/pod.dart';
+import 'toast.dart';
 
 final ChangeNotifierProviderFamily<QuestionNotifier, DateTime>
     questionNotifierProvider =
@@ -47,6 +48,8 @@ class QuestionNotifier extends ChangeNotifier {
   //
   late bool _done = false;
   String _clue = "";
+
+  bool _typing = false;
 
   QuestionNotifier(this.ref, {required this.date}) {
     final RoutePath path = ref.read(pathNotifierProvider);
@@ -169,6 +172,7 @@ class QuestionNotifier extends ChangeNotifier {
   String get clue => _clue;
 
   set clue(String value) {
+    debugPrint("172==$value");
     if (_clue == value) return;
     _clue = value;
     notifyListeners();
@@ -177,16 +181,14 @@ class QuestionNotifier extends ChangeNotifier {
   Prompt get prompt => _prompt;
 
   set prompt(Prompt value) {
-    debugPrint("150==Setting prompt $value");
     if (_prompt == value) return;
     if (_prompt.state == value.state) {
-      Future.delayed(
-        _m2400,
-        () {
-          _prompt = value.copyWith(state: PromptState.search);
+      if (_prompt.state == PromptState.error) {
+        Future.delayed(_m2400, () {
+          _prompt = value;
           notifyListeners();
-        },
-      );
+        });
+      }
     } else {
       _prompt = value;
     }
@@ -213,6 +215,12 @@ class QuestionNotifier extends ChangeNotifier {
           text: UnderlineText("wrong_${mockInteger(0, 4)}".tr()),
           state: PromptState.error,
         );
+        prompt = _prompt.copyWith(
+          text: UnderlineText(
+            "use_hint_${mockInteger(0, 7)}".tr(),
+            focused: "Hint hint",
+          ),
+        );
         final DateTime now = DateTime.now();
 
         found = _found.copyWith(mistake: text, lastFound: now);
@@ -231,9 +239,17 @@ class QuestionNotifier extends ChangeNotifier {
 
   List<Word> get searchWord => _question?.searchWord(_found) ?? [];
 
+  set typing(bool value) {
+    if (_typing == value) return;
+    _typing = value;
+    if (!value) ref.read(toastNotifierProvider.notifier).dismiss();
+    notifyListeners();
+  }
+
   // String get wordController => _subject.stream.;
 
   Future<void> helpUser() async {
+    typing = true;
     if (_found.untilNow.containsKey(_found.i)) {
       final List<String> list = List.castFrom(_found.untilNow[_found.i]);
       debugPrint(list.toString());

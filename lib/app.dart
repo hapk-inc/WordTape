@@ -25,7 +25,9 @@ class App extends ConsumerWidget with CustomThemeMixin {
         ref.read(listenConnectivityProvider);
         return ToastificationWrapper(
           child: ProviderScope(
-            overrides: [sizeProvider.overrideWithValue(size)],
+            overrides: [
+              sizeProvider.overrideWithValue(size),
+            ],
             child: MaterialApp.router(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,

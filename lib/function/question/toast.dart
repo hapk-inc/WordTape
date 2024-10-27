@@ -15,4 +15,6 @@ class ToastNotifier extends _$ToastNotifier {
 
   @override
   set state(ToastificationItem value) => super.state = value;
+
+  dismiss() => toastification.dismiss(state);
 }

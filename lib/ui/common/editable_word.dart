@@ -1,10 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/enum/enum.dart';
 import 'package:wordtape/function/question/notifier.dart';
+import 'package:wordtape/function/underline_text/pod.dart';
+import 'package:wordtape/model/prompt.dart';
+import 'package:wordtape/model/underline_text.dart';
 import '../../model/route_path.dart';
 import '../../router/path.dart';
 
@@ -29,6 +34,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
   late WordNotifier wordNotifier;
   late int index;
   late DateTime date;
+  late QuestionNotifier notifier;
 
   @override
   void initState() {
@@ -53,12 +59,8 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
     final bool isDecode = path.path == "/decode";
 
-    final bool enabled = wordNotifier.isEnabled && isDecode;
-
-    if (wordNotifier.isEnabled) {
-      debugPrint("${wordNotifier.isEnabled} && ${path.path}");
-      debugPrint("Enabled = $enabled");
-    }
+    notifier = ref.watch(questionNotifierProvider(date));
+    final bool enabled = notifier.focusedWord == word && isDecode;
 
     return Hero(
       tag: word.id ?? "",
@@ -73,9 +75,6 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             );
 
             return Pinput(
-              onTapOutside: (event) {
-                debugPrint("onTapOutside");
-              },
               length: word.value.length,
               defaultPinTheme: pinTheme,
               controller: wordNotifier.controller, focusNode: wordNotifier.node,
@@ -85,16 +84,18 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               animationDuration: const Duration(milliseconds: 150),
               pinputAutovalidateMode: PinputAutovalidateMode.disabled,
               validator: !enabled ? null : wordNotifier.validator,
-              onTap: () {
-                debugPrint("75==");
-                final QuestionNotifier notifier =
-                    ref.read(questionNotifierProvider(date));
-                print(notifier.focusedWord);
-                print(path.path);
-                if (!isDecode && notifier.focusedWord == word) {
-                  context.push('/decode', extra: date);
-                }
-              },
+              onTap: notifier.focusedWord != word
+                  ? null
+                  : () {
+                      notifier.prompt = Prompt(
+                        text: UnderlineText(ref.read(figureOutProvider)),
+                        state: PromptState.search,
+                      );
+
+                      if (!isDecode && notifier.focusedWord == word) {
+                        context.push('/decode', extra: date);
+                      }
+                    },
 
               // showCursor: false,
               // isCursorAnimationEnabled: false,
@@ -102,10 +103,16 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               keyboardType: TextInputType.none, // readOnly: true,
               forceErrorState: wordNotifier.error,
 
+              onSubmitted: (value) {
+                debugPrint("120==");
+              },
+
               //
-              enabled: true,
+              enabled: notifier.focusedWord == word,
               animationCurve: Curves.easeOut,
               autofocus: enabled,
+
+              readOnly: !enabled,
 
               onChanged: ref.read(wordNotifierProvider(word)).onTextChanged,
 
@@ -117,7 +124,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
               errorBuilder: (e, _) => const SizedBox(),
 
-              // useNativeKeyboard: kDebugMode,
+              useNativeKeyboard: kDebugMode,
               textInputAction: TextInputAction.none,
             );
           },

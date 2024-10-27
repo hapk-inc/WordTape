@@ -122,7 +122,7 @@ UnderlineText welcomeUser(WelcomeUserRef ref) {
   return welcome[now.day % welcome.length];
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 UnderlineText foundWord(FoundWordRef ref) {
   final Map map = jsonDecode("correct_text".tr());
   final List list = map["correct"];

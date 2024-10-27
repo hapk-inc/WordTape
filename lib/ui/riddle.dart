@@ -78,7 +78,7 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     return GradientBox(
       child: SafeArea(
         bottom: false,
-        minimum: EdgeInsets.symmetric(horizontal: 7.5.r),
+        //minimum: EdgeInsets.symmetric(horizontal: 7.5.r),
         child: RiddlePageState(date),
         /*child: KeyboardListener(
           focusNode: word.node,

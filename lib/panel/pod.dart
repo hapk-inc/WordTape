@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,9 +24,11 @@ class PanelNotifier extends _$PanelNotifier {
 
   @override
   set state(PanelWidget value) {
-    if (!kIsWeb && value.toString() == const EmptyPanel().toString()) return;
-    debugPrint(value.toString());
+    if (state == value) return;
     super.state = value;
+    String str = "$value";
+    debugPrint(str);
+    if (str == "ePanel".tr()) return;
     final PanelController panel = ref.read(panelControllerProvider);
     final ScreenSize size = ref.read(sizeProvider);
     if (panel.isAttached && size == ScreenSize.mobile) {

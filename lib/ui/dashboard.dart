@@ -54,7 +54,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       slivers: <Widget>[
         RiddleNow(),
         SliverToBoxAdapter(child: Gap(15)),
-        if (kIsWeb) SliverToBoxAdapter(child: StoreBtn()),
+        if (kDebugMode) SliverToBoxAdapter(child: StoreBtn()),
         SliverToBoxAdapter(child: Gap(1.5)),
         SliverToBoxAdapter(child: DashboardFooter())
       ],

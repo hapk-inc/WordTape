@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -26,7 +25,7 @@ const Duration _m1500 = Duration(milliseconds: 1500);
   googleUser
 ])
 void listenAuth(ListenAuthRef ref) {
-  ref.read(googleUserProvider);
+  // ref.read(googleUserProvider);
 
   ref.listen<User?>(
     runningUserProvider.select((value) => value.value),
@@ -39,7 +38,7 @@ void listenAuth(ListenAuthRef ref) {
           if (!validConnection.isNegative) {
             ref.read(firestoreUserProvider).updateMe();
           }
-          ref.read(routerProvider).replace("/home");
+          // ref.read(routerProvider).replace("/home");
         }
       } else {
         tracker.i("36==");
@@ -48,9 +47,9 @@ void listenAuth(ListenAuthRef ref) {
           LocalFound().delete();
           ref.read(routerProvider).replace('/');
         } else {
-          if (kIsWeb) {
+          /*if (kIsWeb) {
             Future.delayed(_m1500, () => ref.read(authProvider).googleAuth);
-          }
+          }*/
         }
       }
     },

@@ -19,9 +19,11 @@ class CustomKeyboard extends ConsumerWidget {
     final List<String> highlightedChar = [];
 
     return AnimatedContainer(
-      padding: EdgeInsets.symmetric(vertical: 7.5.r),
+      // color: cerise,
+      // padding: EdgeInsets.symmetric(vertical: 7.5.r),
+      padding: EdgeInsets.symmetric(horizontal: 1.5.r),
       duration: const Duration(milliseconds: 300),
-      constraints: BoxConstraints(maxWidth: 375.r),
+      constraints: BoxConstraints(maxWidth: 450.r),
       child: LayoutBuilder(
         builder: (_, constraints) => Column(
           children: [
@@ -59,9 +61,9 @@ class _KeyboardTile extends ConsumerWidget {
 
     double w = 0;
     if (isChar) {
-      w = 0.084;
+      w = 0.087;
     } else {
-      w = str == "DEL" ? 0.12 : 0.18;
+      w = str == "DEL" ? 0.12 : 0.165;
     }
 
     return InkWell(
@@ -90,24 +92,24 @@ class _KeyboardTile extends ConsumerWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: width * w,
-        height: 48.h,
-        margin: EdgeInsets.all(2.25.r),
+        height: 54.h,
+        margin: EdgeInsets.symmetric(
+          horizontal: isChar ? 2.4.r : 2.25.r,
+          vertical: 2.4.r,
+        ),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           /*gradient: LinearGradient(
-            colors: [
-              ...List.filled(5, payneGray),
-              if (isChar) celestialBlue,
-            ],
+            colors: [...List.filled(5, payneGray),if (isChar) celestialBlue ],
           ),*/
           borderRadius: BorderRadius.circular(4.5.r),
-          border: Border.all(width: 0.24.r, color: seaWhite),
+          border: Border.all(width: 0.27.r, color: seaWhite),
         ),
         padding: EdgeInsets.symmetric(horizontal: 7.5.r),
         child: AutoSizeText(
           str,
           style: textTheme.headlineMedium?.copyWith(color: azureGreen),
-          presetFontSizes: [15.6.r, 15.r],
+          presetFontSizes: [16.r, 15.r, 14.r],
           maxLines: 1,
         ),
       ),

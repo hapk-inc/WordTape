@@ -4,12 +4,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wordtape/theme/font.dart';
 
 import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../model/prompt.dart';
 import '../../theme/color.dart';
+import '../../theme/font.dart';
 
 class PromptWidget extends ConsumerWidget {
   const PromptWidget({super.key});
@@ -27,9 +27,6 @@ class PromptWidget extends ConsumerWidget {
     final bool isEmoji = highlighter.any(
       (char) => RegExp("regex_emoji".tr()).hasMatch(char),
     );
-
-    debugPrint("30==$highlighter");
-    debugPrint("30==$isEmoji");
 
     return AnimatedSwitcher(
       duration: Duration.zero,

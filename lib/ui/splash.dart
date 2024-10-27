@@ -7,9 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:lottie/lottie.dart';
-
-import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
+import '../router/router.dart';
 import 'common/gradient_box.dart';
 import 'common/logo.dart';
 
@@ -77,7 +76,8 @@ class Loader extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return FadeIn(
       child: TextButton(
-        onPressed: () => ref.read(userLoginProvider),
+        // onPressed: () => ref.read(userLoginProvider),
+        onPressed: () => ref.read(routerProvider).replace("/home"),
         child: Text("press_start".tr(), style: textTheme.labelSmall),
       ),
     );
