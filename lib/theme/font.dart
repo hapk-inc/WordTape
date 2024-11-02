@@ -69,7 +69,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   TextStyle? get headlineMedium => playTheme.copyWith(fontSize: 16.r);
 
   @override
-  TextStyle? get headlineSmall => playTheme.copyWith(fontSize: 18.r);
+  TextStyle? get headlineSmall => playTheme.copyWith(fontSize: 14.r);
 
   // Exception - only for "PRESS START"
   @override
@@ -94,7 +94,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   TextStyle get emojiSmall => notoColorEmojiTheme.copyWith(
-        fontSize: 21.r,
+        fontSize: 24.r,
         letterSpacing: 0.3.r,
         color: seaWhite,
         height: 0.r,
@@ -106,8 +106,6 @@ class DefaultTextTheme extends TextTheme with FontMixin {
       );
 
   TextStyle get montserratMedium => montserratTheme.copyWith(fontSize: 15.r);
-
-  //TextStyle get latoTheme => latoTheme;
 }
 
 mixin FontMixin {
@@ -172,5 +170,14 @@ mixin FontMixin {
         color: raisinBlack,
         wordSpacing: 0,
         height: 1.8,
+      );
+
+  TextStyle get poppinsTheme => const TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0,
+        color: raisinBlack,
+        wordSpacing: 0,
+        height: 1.5,
       );
 }

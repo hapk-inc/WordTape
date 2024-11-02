@@ -11,7 +11,7 @@ import '../panel/pod.dart';
 import '../router/router.dart';
 import '../shared/shared.dart';
 import 'common/accept_cookies.dart';
-import 'common/store_btn.dart';
+import 'dashboard/prev_question.dart';
 import 'dashboard/riddle_now.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
@@ -53,13 +53,30 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     return const CustomScrollView(
       slivers: <Widget>[
         RiddleNow(),
-        SliverToBoxAdapter(child: Gap(15)),
-        if (kDebugMode) SliverToBoxAdapter(child: StoreBtn()),
-        SliverToBoxAdapter(child: Gap(1.5)),
-        SliverToBoxAdapter(child: DashboardFooter())
+        GameArchives(),
+        SliverToBoxAdapter(child: PrevQuestion()),
+        SliverToBoxAdapter(child: Gap(30)),
+        SliverToBoxAdapter(child: DashboardFooter()),
+        SliverToBoxAdapter(child: Gap(30)),
       ],
     );
   }
+}
+
+class GameArchives extends StatelessWidget {
+  const GameArchives({super.key});
+
+  @override
+  Widget build(BuildContext context) => SliverToBoxAdapter(
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 15.r),
+          padding: EdgeInsets.symmetric(horizontal: 15.r),
+          child: Text(
+            "Game Archives",
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+        ),
+      );
 }
 
 class DashboardFooter extends ConsumerWidget {

@@ -1,12 +1,17 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:wordtape/function/question/word_notifier.dart';
 
+import '../function/key_tap/pod.dart';
+import '../function/local/found.dart';
 import '../function/question/notifier.dart';
 
+import '../model/found.dart';
 import '../model/word.dart';
 import '../panel/pod.dart';
 import 'riddle/custom_keyboard.dart';
@@ -58,12 +63,9 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     super.initState();
   }
 
-  void _onStateChanged(AppLifecycleState state) {
+  _onStateChanged(AppLifecycleState state) {
     log(state.name);
-    if (state == AppLifecycleState.inactive) {
-      // final Found found = notifier.found;
-      // ref.read(localFoundProvider).insert(found);
-    }
+    // if (state == AppLifecycleState.inactive) notifier.insert();
   }
 
   @override
@@ -75,16 +77,19 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   @override
   Widget build(BuildContext context) {
     notifier = ref.watch(questionNotifierProvider(date));
+    /*final FocusNode focusNode = notifier.focusedWord == null
+        ? FocusNode()
+        : ref.watch(wordNotifierProvider(notifier.focusedWord!)).node;*/
+
     return GradientBox(
       child: SafeArea(
         bottom: false,
-        //minimum: EdgeInsets.symmetric(horizontal: 7.5.r),
         child: RiddlePageState(date),
         /*child: KeyboardListener(
-          focusNode: word.node,
+          focusNode: FocusNode(canRequestFocus: true),
           onKeyEvent: (KeyEvent? value) {
             if (value is KeyDownEvent || value is KeyRepeatEvent) {
-              ref.read(keyTapNotifierProvider.notifier).state = value;
+              // ref.read(keyTapNotifierProvider.notifier).state = value;
             }
           },
           child: RiddlePageState(date),

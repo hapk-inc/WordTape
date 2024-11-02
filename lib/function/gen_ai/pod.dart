@@ -6,10 +6,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../extension/extension.dart';
 
 import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
 import '../../model/word.dart';
+import '../connectivity/pod.dart';
 import '../underline_text/pod.dart';
 
 part 'pod.g.dart';
@@ -42,12 +44,15 @@ class GeminiAi extends _$GeminiAi {
   FutureOr<String> helpUser(String correct, String mistake) async {
     final List<String> splitter = correct.split(' ');
     final String mistakeWord = mistake.split(' ').last;
-    final String prompt = replaceHash("help_user".tr(), [
-      capitalize(correct),
-      splitter.last,
-      mistakeWord,
-      splitter.last,
-    ]);
+    final String prompt = replaceHash(
+      "help_user".tr(),
+      [
+        correct.firstChar,
+        splitter.last,
+        mistakeWord,
+        splitter.last,
+      ],
+    );
     log(prompt);
     final List<Content> contents = [Content.text(prompt)];
     return await callResponse(contents);
@@ -73,13 +78,17 @@ class GeminiAi extends _$GeminiAi {
     return await callResponse(contents);
   }
 
-  FutureOr<String> callResponse(List<Content> contents) => state
-          .generateContent(contents)
-          .then((value) => value.text ?? ref.read(aiErrorProvider))
-          .catchError(
+  FutureOr<String> callResponse(List<Content> contents) =>
+      state.generateContent(contents).then(
+        (value) {
+          String str = value.text ?? ref.read(aiErrorProvider);
+          str = str.replaceAll('\n', '');
+          return str;
+        },
+      ).catchError(
         (e, _) {
           if (e is SocketException) {
-            // ref.read(validateConnectionProvider.notifier).state = -1;
+            ref.read(validateConnectionProvider().notifier).state = -1;
           }
           throw e;
         },
@@ -98,3 +107,14 @@ class GeminiAi extends _$GeminiAi {
 
   String capitalize(String str) => toBeginningOfSentenceCase(str) ?? "";
 }
+
+/*Let’s see if you’ve got the right word!
+Fingers crossed you typed the correct term!
+Hope you nailed the right word!
+Wishing you typed the perfect word!
+I trust you’ve entered the right word!
+Hope you’re on point with your word choice!
+Let’s hope you’ve got the right one!
+I’m rooting for you to type the correct word!
+Hope you picked the right word!
+Here’s to typing the perfect word!*/

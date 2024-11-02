@@ -40,7 +40,7 @@ class QuestionNotifier extends ChangeNotifier {
   late UnderlineText _header;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Logger logger = Logger();
+  late Logger _tracker;
   final LocalQuestion _localQuestion = LocalQuestion();
   final LocalFound _localFound = LocalFound();
   late FirestoreQuestion _firestoreQuestion;
@@ -53,6 +53,7 @@ class QuestionNotifier extends ChangeNotifier {
 
   QuestionNotifier(this.ref, {required this.date}) {
     final RoutePath path = ref.read(pathNotifierProvider);
+    _tracker = ref.read(trackerProvider);
     final bool isDecode = path.path == "/decode";
     if (isDecode) {
       _prompt = Prompt(
@@ -106,14 +107,21 @@ class QuestionNotifier extends ChangeNotifier {
     _done = _question!.isCompleted(_found.i);
 
     if (_done) {
-      _header = UnderlineText(
+      header = UnderlineText(
         "challenge_done_${mockInteger(0, 6)}".tr(),
         focused: "today. today’s",
       );
+      prompt = const Prompt(
+        state: PromptState.done,
+        text: UnderlineText(
+            "You've pieced together the puzzle... but it took teamwork."),
+      );
     } else {
       if (_found.i != 1) {
-        _header = UnderlineText("resume_${mockInteger(0, 5)}".tr(),
-            focused: "sequence. pattern.");
+        _header = UnderlineText(
+          "resume_${mockInteger(0, 5)}".tr(),
+          focused: "sequence. pattern.",
+        );
       }
     }
     notifyListeners();
@@ -148,19 +156,20 @@ class QuestionNotifier extends ChangeNotifier {
   }
 
   set found(Found value) {
-    //if (_found == value) return;
+    if (_found.i == 1 && value.i == 2) _firestoreQuestion.firstFound(value.id);
     _found = value;
-
-    if (kIsWeb) {
-      ref.read(firestoreQuestionProvider).setFound(_found);
-    } else {
-      _localFound.insert(_found);
-    }
-    _done = question!.isCompleted(_found.i);
+    done = question!.isCompleted(_found.i);
+    insert();
     notifyListeners();
   }
 
   bool get done => _done;
+
+  set done(bool value) {
+    if (_done == value) return;
+    _done = value;
+    notifyListeners();
+  }
 
   UnderlineText get header => _header;
 
@@ -172,7 +181,6 @@ class QuestionNotifier extends ChangeNotifier {
   String get clue => _clue;
 
   set clue(String value) {
-    debugPrint("172==$value");
     if (_clue == value) return;
     _clue = value;
     notifyListeners();
@@ -184,10 +192,13 @@ class QuestionNotifier extends ChangeNotifier {
     if (_prompt == value) return;
     if (_prompt.state == value.state) {
       if (_prompt.state == PromptState.error) {
-        Future.delayed(_m2400, () {
-          _prompt = value;
-          notifyListeners();
-        });
+        Future.delayed(
+          _m2400,
+          () {
+            _prompt = value;
+            notifyListeners();
+          },
+        );
       }
     } else {
       _prompt = value;
@@ -264,14 +275,16 @@ class QuestionNotifier extends ChangeNotifier {
         .read(createHintProvider(focusedWord!, answer).future)
         .catchError(
       (error, stackTrace) {
-        debugPrint("240==error");
+        _tracker.e("Clue error", error: error);
+        if (focusedWord?.hint != null) return focusedWord?.hint ?? "";
         return "";
       },
     );
     if (clue.isEmpty) {
-      print("clue.isEmpty");
+      clue = "think_${mockInteger(0, 7)}".tr();
       return;
     }
+
     Map<int, dynamic> map = Map<int, dynamic>.from(_found.untilNow);
     map.update(
       _found.i,
@@ -284,4 +297,8 @@ class QuestionNotifier extends ChangeNotifier {
     );
     found = _found.copyWith(untilNow: map);
   }
+
+  Future<void> insert() async => await Future.wait(
+        [_localFound.insert(found), _firestoreQuestion.setFound(found)],
+      );
 }

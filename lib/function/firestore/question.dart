@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
 import '../../model/found.dart';
 import '../../model/question.dart';
@@ -16,10 +18,12 @@ class FirestoreQuestion {
   late CollectionReference collection;
 
   User? fUser;
+  late Logger _tracker;
 
   FirestoreQuestion(this.ref, {this.fUser}) {
     firebaseFirestore = ref.read(firestoreProvider);
     collection = firebaseFirestore.collection('question');
+    _tracker = ref.read(trackerProvider);
   }
 
   Future<Question?> question(DateTime date) {
@@ -39,8 +43,13 @@ class FirestoreQuestion {
     final String dateStr = DateFormat('yyyy-MM-dd').format(date);
     late BehaviorSubject<Question> subject;
     subject = BehaviorSubject(
-      onListen: () =>
-          collection.where('date', isEqualTo: dateStr).snapshots().listen(
+      onListen: () => collection
+          .where(
+            'date',
+            isEqualTo: dateStr,
+          )
+          .snapshots()
+          .listen(
         (QuerySnapshot snapshot) {
           if (snapshot.docs.isNotEmpty) {
             final QueryDocumentSnapshot doc = snapshot.docs.first;
@@ -56,42 +65,60 @@ class FirestoreQuestion {
     return subject.stream;
   }
 
-  Future firstFound(String id) => collection.doc(id).update(
-        <String, dynamic>{
-          "played": FieldValue.arrayUnion([fUser?.uid]),
-        },
+  Future<void> firstFound(String? id) async {
+    if (id != null && fUser != null) {
+      _tracker.d("FirstFound");
+      collection.doc(id).update(
+        <String, dynamic>{"played": FieldValue.increment(1)},
       );
+    }
+  }
 
-  Future setFound(Found found) => collection
-      .doc(found.id)
-      .collection("found")
-      .doc(fUser?.uid)
-      .set(found.toFirestore());
+  Future<void> setFound(Found found) async {
+    if (fUser != null && found.id != null) {
+      collection
+          .doc(found.id)
+          .collection("found")
+          .doc(fUser?.uid)
+          .set(found.toFirestore());
+    } else {
+      _tracker.i("75== Found ${found.id} User ${fUser?.uid}");
+    }
+  }
 
-  Future<Found?> found(String id) async => fUser == null
-      ? null
-      : collection.doc(id).collection("found").doc(fUser?.uid).get().then(
-          (DocumentSnapshot<Map<String, dynamic>> snapshot) {
-            if (!snapshot.exists) return null;
-            final Found found =
-                Found.fromJson(snapshot.data() ?? {}).copyWith(id: snapshot.id);
-            return found;
-          },
-          onError: (e, s) {
-            // print("81==$e");
-            if (e is FirebaseException) {
-              switch (e.code) {
-                case "unavailable":
-                  {
-                    ref.read(validateConnectionProvider().notifier).state = -1;
-                    break;
-                  }
-                default:
-                  {}
+  Future<Found?> found(String id) async {
+    if (fUser == null) return null;
+    return collection.doc(id).collection("found").doc(fUser?.uid).get().then(
+      (DocumentSnapshot<Map<String, dynamic>> snapshot) {
+        if (!snapshot.exists) return null;
+        final Found found =
+            Found.fromJson(snapshot.data() ?? {}).copyWith(id: snapshot.id);
+        return found;
+      },
+      onError: (e, s) {
+        if (e is FirebaseException) {
+          switch (e.code) {
+            case "unavailable":
+              {
+                ref.read(validateConnectionProvider().notifier).state = -1;
+                break;
               }
-            }
-          },
-        );
+            default:
+              {}
+          }
+        }
+      },
+    );
+  }
+
+  Query<Question> get prevQuestion =>
+      collection.orderBy('date', descending: true).limit(7).withConverter(
+            fromFirestore: (snapshot, options) {
+              final Map<String, dynamic> map = snapshot.data() ?? {};
+              return Question.fromJson(map).copyWith(id: snapshot.id);
+            },
+            toFirestore: (value, _) => value.toJson(),
+          );
 
   //DO NOT REMOVE
   /*Stream<Riddle> get onRiddleChanged {

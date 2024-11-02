@@ -25,7 +25,7 @@ class LocalQuestion {
           '('
           'id TEXT PRIMARY KEY, '
           'date TEXT, words TEXT, '
-          'played INTEGER, win INTEGER'
+          'played INTEGER, win TEXT'
           ')',
         ),
         version: 1,

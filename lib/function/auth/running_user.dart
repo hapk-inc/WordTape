@@ -13,7 +13,7 @@ import 'pod.dart';
 
 part 'running_user.g.dart';
 
-const Duration _m1500 = Duration(milliseconds: 1500);
+// const Duration _m1500 = Duration(milliseconds: 1500);
 
 @Riverpod(keepAlive: true, dependencies: [
   tracker,

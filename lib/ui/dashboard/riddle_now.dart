@@ -1,17 +1,15 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:random_avatar/random_avatar.dart';
 import '../../extension/extension.dart';
 
 import '../../function/date_selected/date_selected.dart';
-import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
-import '../../model/player.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
@@ -20,7 +18,6 @@ import '../../theme/font.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
 import '../common/logo.dart';
-import '../common/logoff.dart';
 import '../common/notify.dart';
 
 class RiddleNow extends ConsumerWidget {
@@ -29,47 +26,43 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(dateSelectedProvider);
-    // final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
-
-    final Player? player = ref.watch(playerProvider).value;
-
-    // final UnderlineText underlineText = ref.read(notifyTextProvider);
 
     return SliverAppBar(
       pinned: true,
       snap: false,
       floating: false,
-      actions: [
-        if (player != null)
-          if (player.source != "web")
-            CircleAvatar(
-              radius: 36.r,
-              backgroundColor: aquaMarine,
-              child: InkWell(
-                onTap: () => ref.read(panelNotifierProvider.notifier).state =
-                    const LogoffAlert(),
-                child: RandomAvatar(
-                  player.avatar ?? "${player.rollNo}",
-                  trBackground: true,
-                ),
+      /*actions: [
+        if (kDebugMode && player != null)
+          // if (player != null)
+          //  if (player.source != "web")
+          CircleAvatar(
+            radius: 36.r,
+            backgroundColor: aquaMarine,
+            child: InkWell(
+              onTap: () => ref.read(panelNotifierProvider.notifier).state =
+                  const LogoffAlert(),
+              child: RandomAvatar(
+                player.avatar ?? "${player.rollNo}",
+                trBackground: true,
               ),
             ),
+          ),
         Gap(15.r)
-      ],
-      bottom: PreferredSize(
+      ],*/
+      /* bottom: PreferredSize(
         preferredSize: Size.fromHeight(120.h),
         child: Padding(
           padding: EdgeInsets.only(bottom: 30.r),
           child: BottomButton(date),
         ),
-      ),
-      expandedHeight: 720.r,
+      ),*/
+      expandedHeight: 600.r,
       toolbarHeight: 90.h,
       titleSpacing: 30.r,
-      // titleTextStyle: textTheme.displayMedium?.copyWith(color: seaWhite),
-      // title: Text(name),
-      flexibleSpace: const FlexibleSpaceBar(
-        background: GradientBox(child: RiddleNowState()),
+      flexibleSpace: FlexibleSpaceBar(
+        expandedTitleScale: 1,
+        title: BottomButton(date),
+        background: const GradientBox(child: RiddleNowState()),
       ),
     );
   }
@@ -105,8 +98,7 @@ class BottomButton extends ConsumerWidget {
             ref.read(panelNotifierProvider.notifier).state =
                 const NotifyDialog();
           },
-          //child: Text(underlineText.text),
-          child: Text("How to Play"),
+          child: const Text("How to Play"),
         ),
       ],
     );
@@ -130,7 +122,7 @@ class RiddleNowState extends ConsumerWidget {
                 child: AnimatedSize(
                   duration: const Duration(milliseconds: 150),
                   child: SizedBox(
-                    height: mH * 0.85,
+                    height: mH * 0.84,
                     child: const RiddleNowStateState(),
                   ),
                 ),
@@ -152,7 +144,6 @@ class RiddleNowStateState extends ConsumerWidget {
 
     return Column(
       children: [
-        Gap(30.r),
         const Logo(),
         Gap(30.r),
         Padding(
@@ -162,12 +153,6 @@ class RiddleNowStateState extends ConsumerWidget {
         Gap(45.r),
         if (searchWord.isEmpty) ...[
           QuestionUntilNow(date),
-          Gap(90.r),
-          if (notifier.done)
-            FadeIn(
-              delay: const Duration(milliseconds: 3600),
-              child: const FeedbackTextField(),
-            ),
         ] else
           Container(
             padding: EdgeInsets.symmetric(horizontal: 4.5.r),
@@ -206,9 +191,7 @@ class FeedbackTextField extends ConsumerWidget {
         maxLength: 90,
         textInputAction: TextInputAction.done,
         validator: (String? text) {
-          if (text == null || text.isEmpty) {
-            return 'Please enter your feedback';
-          }
+          if (text == null || text.isEmpty) return 'Please enter your feedback';
           return null;
         },
       ),
@@ -226,12 +209,25 @@ class QuestionUntilNow extends ConsumerWidget {
     final Map<int, dynamic> untilNow = notifier.found.untilNow;
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
-    final String foundEmoji = List.generate(
+    /*if (found.i != 1)
+      for (int i = 1; i <= found.i; i++)
+        TextSpan(
+          text: found.untilNow.containsKey(i)
+              ? "🟧"
+              : "🟩",
+        )*/
+    /*final String foundEmoji = List.generate(
       notifier.question?.words.length ?? 0,
       (index) {
         if (untilNow.containsKey(index)) return "🟥";
         return "🟩";
       },
+    ).join();*/
+    final String foundEmoji = List<String>.from(
+      [
+        for (int i = 0; i <= notifier.found.i - 1; i++)
+          notifier.found.untilNow.containsKey(i) ? "🟧" : "🟩",
+      ],
     ).join();
     return Text(foundEmoji, style: defaultTextTheme.emojiTheme);
   }

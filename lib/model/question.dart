@@ -19,10 +19,10 @@ class Question extends Equatable with _$Question {
   const factory Question({
     @JsonKey() @DateConverter() required DateTime date,
     required List<Word> words,
-    @Default([]) List<String> played,
-    @Default(0) int win,
+    @Default(0) int played,
+    @Default([]) List<String> win,
     @JsonKey(includeIfNull: false) String? id,
-  }) = _Riddle;
+  }) = _Question;
 
   factory Question.fromJson(Map<String, dynamic> json) =>
       _$QuestionFromJson(json);

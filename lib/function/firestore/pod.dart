@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -55,4 +56,11 @@ Stream<Player?> player(PlayerRef ref) {
 Future<void> userFound(UserFoundRef ref, {required Found found}) async {
   final FirestoreUser firestore = ref.read(firestoreUserProvider);
   return firestore.userFound(found);
+}
+
+@Riverpod(keepAlive: true)
+Query<Question> prevQuestionQuery(PrevQuestionQueryRef ref) {
+  final FirestoreQuestion firestoreQuestion =
+      ref.read(firestoreQuestionProvider);
+  return firestoreQuestion.prevQuestion;
 }

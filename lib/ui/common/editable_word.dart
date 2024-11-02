@@ -84,28 +84,28 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               animationDuration: const Duration(milliseconds: 150),
               pinputAutovalidateMode: PinputAutovalidateMode.disabled,
               validator: !enabled ? null : wordNotifier.validator,
-              onTap: notifier.focusedWord != word
-                  ? null
-                  : () {
-                      notifier.prompt = Prompt(
-                        text: UnderlineText(ref.read(figureOutProvider)),
-                        state: PromptState.search,
-                      );
+              onSubmitted: (value) {
+                if (notifier.formKey.currentState?.validate() ?? false) {
+                  notifier.validate(value);
+                }
+              },
+              onTap: () {
+                if (notifier.focusedWord != word) return;
+                notifier.prompt = Prompt(
+                  text: UnderlineText(ref.read(figureOutProvider)),
+                  state: PromptState.search,
+                );
 
-                      if (!isDecode && notifier.focusedWord == word) {
-                        context.push('/decode', extra: date);
-                      }
-                    },
+                if (!isDecode && notifier.focusedWord == word) {
+                  context.push('/decode', extra: date);
+                }
+              },
 
               // showCursor: false,
               // isCursorAnimationEnabled: false,
               //
               keyboardType: TextInputType.none, // readOnly: true,
               forceErrorState: wordNotifier.error,
-
-              onSubmitted: (value) {
-                debugPrint("120==");
-              },
 
               //
               enabled: notifier.focusedWord == word,

@@ -26,4 +26,5 @@ const Color lightBlue = Color(0xff98C9D1);
 const Color blackBean = Color(0xff2A0800);
 const Color englishViolet = Color(0xff413C58);
 const Color slateGray = Color(0xff767B91);
+const Color cadetGray = Color(0xff9BA0A9);
 const Color silver = Color(0xffc0c5c1);

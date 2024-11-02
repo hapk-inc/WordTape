@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -12,6 +13,7 @@ import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../../extension/extension.dart';
 
+import '../auth/pod.dart';
 import '../underline_text/pod.dart';
 import 'notifier.dart';
 // import 'p_notifier.dart';
@@ -90,7 +92,7 @@ class WordNotifier extends ChangeNotifier {
               ),
             );*/
           } else {
-            _notifier.clue = "";
+            // _notifier.clue = "";
             final bool isFirstFound = _index == 2 && p == 1;
             if (isFirstFound) {
               _notifier.header = UnderlineText(
@@ -125,6 +127,11 @@ class WordNotifier extends ChangeNotifier {
       final bool regEx = RegExp(r'^[a-zA-Z0-9]$').hasMatch(str);
       if (regEx) insertChar(str);
     } else {
+      if (str == "ENTER") {
+        if (_notifier.formKey.currentState?.validate() ?? false) {
+          _notifier.validate(str);
+        }
+      }
       if (str == "DEL") deleteChar();
     }
   }
@@ -146,34 +153,38 @@ class WordNotifier extends ChangeNotifier {
     onTextChanged(newText);
   }
 
-  onTextChanged(String? text) {
+  onTextChanged(String? text) async {
     if (text == null) return;
+    String txt = text.toUpperCase();
+    final User? user = ref.read(runningUserProvider).value;
+    if (user == null) ref.read(userLoginProvider);
     String exact = word.value;
-    if (!text.startsWith(exact.firstChar) || text.isEmpty) {
+    if (!txt.startsWith(exact.firstChar) || txt.isEmpty) {
       _controller.value = _controller.value.copyWith(
         text: exact.firstChar,
         selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
       );
     } else {
-      _controller.value = _controller.value.copyWith(text: text.toUpperCase());
+      _controller.value = _controller.value.copyWith(
+        text: txt,
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: text.length),
+        ),
+      );
     }
     notifyListeners();
   }
 
   String? validator(String? value) {
-    _tracker.i("Validating 72--$value");
-
     if (value == null) return null;
     final int len = value.length;
     final bool filled = len == word.value.length;
+    if (filled) return null;
+    _error = true;
+    final String err = ref.read(fillTextProvider);
+    _notifier.prompt =
+        Prompt(text: UnderlineText(err), state: PromptState.error);
 
-    if (filled) {
-      return null;
-    } else {
-      _error = true;
-      final String err = ref.read(fillTextProvider);
-      notifyListeners();
-      return err;
-    }
+    return err;
   }
 }

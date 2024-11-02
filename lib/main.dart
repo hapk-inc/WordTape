@@ -52,18 +52,18 @@ Future<void> main() async {
   rc.setDefaults(<String, dynamic>{"renovation": ""});
   await rc.setConfigSettings(remoteConfigSetting);
 
-  final Logger logger = Logger();
+  final Logger tracker = Logger();
 
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
-    logger.e("App Crash", error: error, stackTrace: stack);
+    tracker.e("App Crash", error: error, stackTrace: stack);
     if (kReleaseMode) crashlytics.recordError(error, stack, fatal: true);
     return true;
   };
 
   await crashlytics.setCrashlyticsCollectionEnabled(kReleaseMode);
 
-  logger.i("FIREBASE STARTED");
+  tracker.i("FIREBASE STARTED");
 
   final Connectivity connectivity = Connectivity();
   final List<ConnectivityResult> connectivityResult =
@@ -73,7 +73,16 @@ Future<void> main() async {
       connectivityResult.contains(ConnectivityResult.wifi);
   int validConnection = 0;
   if (isValid) {
-    validConnection = await rc.fetchAndActivate().then((flag) => flag ? 1 : 0);
+    validConnection =
+        await rc.fetchAndActivate().then((flag) => flag ? 1 : 0).onError(
+      (error, stackTrace) {
+        if (error is FirebaseException) {
+          tracker.i("FirebaseExe", error: error);
+        }
+        tracker.e("Remote-err", error: error);
+        return -1;
+      },
+    );
   } else {
     validConnection = -1;
   }
@@ -88,7 +97,7 @@ Future<void> main() async {
     crashlyticsProvider.overrideWithValue(crashlytics),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/.env")),
     //
-    trackerProvider.overrideWithValue(logger),
+    trackerProvider.overrideWithValue(tracker),
     //
     appEnvProvider.overrideWithValue(appEnv),
     validateConnectionProvider.call(value: validConnection)

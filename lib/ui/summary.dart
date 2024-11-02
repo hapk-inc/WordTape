@@ -32,7 +32,7 @@ class SummaryPage extends PanelWidget {
       );
 
   @override
-  SlideDirection direction() => SlideDirection.UP;
+  SlideDirection direction() => SlideDirection.DOWN;
 
   @override
   double height() => 240.r;
@@ -112,7 +112,6 @@ class SummaryContent extends ConsumerWidget {
                 : SafeArea(
                     child: FadeIn(
                       delay: const Duration(milliseconds: 750),
-                      //child: const Center(child: SummaryStatus()),
                       child: Center(child: QuestionUntilNow(date)),
                     ),
                   ),
@@ -130,46 +129,6 @@ class SummaryContent extends ConsumerWidget {
     );
   }
 }
-
-/*
-class SummaryStatus extends ConsumerWidget {
-  const SummaryStatus({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(dateSelectedProvider);
-    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
-    final Map<int, dynamic> untilNow = notifier.found.untilNow;
-    final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        notifier.question?.words.length ?? 0,
-        (index) {
-          final Word word = notifier.question!.words[index];
-          String str = word.value.split('').map(
-            (e) {
-              if (untilNow.isNotEmpty && untilNow.containsKey(index)) {
-                List<String> list = List.castFrom(untilNow[index]);
-                if (list.contains(e)) return "🟥";
-              }
-              return "🟩";
-            },
-          ).join();
-          return Container(
-            margin: EdgeInsets.only(bottom: 1.5.r),
-            child: Text(
-              str,
-              style: defaultTextTheme.emojiTheme,
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-*/
 
 class SummaryFooter extends ConsumerWidget {
   final bool noHelp;

@@ -38,7 +38,7 @@ class LogoffAlert extends PanelWidget {
                       },
                       child: Text(
                         e,
-                        style: textTheme.headlineSmall?.copyWith(
+                        style: textTheme.headlineMedium?.copyWith(
                           color: logout ? gunMetal : Colors.black26,
                         ),
                       ),

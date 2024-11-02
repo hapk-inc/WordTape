@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -49,5 +48,5 @@ class PanelNotifier extends _$PanelNotifier {
             child: ClipRRect(borderRadius: _radius(), child: value),
           ),
         ),
-      );
+      ).then((_) => state = const EmptyPanel());
 }

@@ -24,11 +24,11 @@ class Auth {
     tracker = ref.read(trackerProvider);
     final DotEnv dotEnv = ref.read(envProvider);
     final AppEnv appEnv = ref.read(appEnvProvider);
+    final bool isDev = appEnv == AppEnv.dev;
 
     _googleSignIn = GoogleSignIn(
-        clientId: dotEnv.get(
-      appEnv == AppEnv.dev ? 'CLIENT_ID_DEV' : 'CLIENT_ID_PROD',
-    ));
+      clientId: dotEnv.get(isDev ? 'CLIENT_ID_DEV' : 'CLIENT_ID_PROD'),
+    );
   }
 
   Stream<User?> get authUser {
