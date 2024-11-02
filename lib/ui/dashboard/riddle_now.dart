@@ -18,7 +18,7 @@ import '../../theme/font.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
 import '../common/logo.dart';
-import '../common/notify.dart';
+import '../common/how_to_play.dart';
 
 class RiddleNow extends ConsumerWidget {
   const RiddleNow({super.key});
@@ -95,8 +95,7 @@ class BottomButton extends ConsumerWidget {
           ),
         ElevatedButton(
           onPressed: () {
-            ref.read(panelNotifierProvider.notifier).state =
-                const NotifyDialog();
+            ref.read(panelNotifierProvider.notifier).state = const HowToPlay();
           },
           child: const Text("How to Play"),
         ),
@@ -209,24 +208,10 @@ class QuestionUntilNow extends ConsumerWidget {
     final Map<int, dynamic> untilNow = notifier.found.untilNow;
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
-    /*if (found.i != 1)
-      for (int i = 1; i <= found.i; i++)
-        TextSpan(
-          text: found.untilNow.containsKey(i)
-              ? "🟧"
-              : "🟩",
-        )*/
-    /*final String foundEmoji = List.generate(
-      notifier.question?.words.length ?? 0,
-      (index) {
-        if (untilNow.containsKey(index)) return "🟥";
-        return "🟩";
-      },
-    ).join();*/
     final String foundEmoji = List<String>.from(
       [
         for (int i = 0; i <= notifier.found.i - 1; i++)
-          notifier.found.untilNow.containsKey(i) ? "🟧" : "🟩",
+          untilNow.containsKey(i) ? "🟧" : "🟩",
       ],
     ).join();
     return Text(foundEmoji, style: defaultTextTheme.emojiTheme);
@@ -264,6 +249,7 @@ class RiddleNowWelcome extends ConsumerWidget {
         ),
         maxLines: 2,
         style: textTheme.bodyLarge?.copyWith(color: azureGreen),
+        presetFontSizes: [24.r, 21.r],
         textAlign: TextAlign.center,
       ),
     );

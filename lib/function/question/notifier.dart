@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -69,6 +69,7 @@ class QuestionNotifier extends ChangeNotifier {
 
   Future questionFound() async {
     //Safe-Initialisation Found
+
     _found = Found(date: date);
 
     _question = await _localQuestion.fromDate(date);
@@ -84,7 +85,7 @@ class QuestionNotifier extends ChangeNotifier {
     final String id = _question!.id!;
     Found? f;
     f = await _localFound.found(id);
-    debugPrint((f?.untilNow ?? {}).toString());
+
     f ??= await _firestoreQuestion.found(id).then(
       (value) {
         if (value != null) _localFound.insert(value);
@@ -92,6 +93,7 @@ class QuestionNotifier extends ChangeNotifier {
       },
     );
     found = f ?? Found.fromRiddle(_question!);
+    _tracker.d(f);
     _prompt = Prompt(
       text: UnderlineText(ref.read(figureOutProvider)),
       state: PromptState.search,
@@ -124,6 +126,7 @@ class QuestionNotifier extends ChangeNotifier {
         );
       }
     }
+
     notifyListeners();
   }
 

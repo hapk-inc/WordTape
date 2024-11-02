@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/function/question/notifier.dart';
 import 'package:wordtape/panel/pod.dart';
-
-// import '../function/local/pod.dart';
 
 import '../function/date_selected/date_selected.dart';
 import '../model/route_path.dart';
@@ -71,7 +68,7 @@ GoRouter router(RouterRef ref) {
               }
 
               //
-              final DateTime date = ref.read(dateSelectedProvider);
+              // final DateTime date = ref.read(dateSelectedProvider);
               final RoutePath path = ref.read(pathNotifierProvider);
 
               //

@@ -1,16 +1,16 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
-import 'package:wordtape/enum/enum.dart';
-import 'package:wordtape/function/question/notifier.dart';
-import 'package:wordtape/function/underline_text/pod.dart';
-import 'package:wordtape/model/prompt.dart';
-import 'package:wordtape/model/underline_text.dart';
+
+import '../../enum/enum.dart';
+import '../../function/question/notifier.dart';
+import '../../function/underline_text/pod.dart';
+import '../../model/prompt.dart';
 import '../../model/route_path.dart';
+import '../../model/underline_text.dart';
 import '../../router/path.dart';
 
 import '../../extension/extension.dart';
@@ -85,9 +85,9 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               pinputAutovalidateMode: PinputAutovalidateMode.disabled,
               validator: !enabled ? null : wordNotifier.validator,
               onSubmitted: (value) {
-                if (notifier.formKey.currentState?.validate() ?? false) {
-                  notifier.validate(value);
-                }
+                final bool? validate =
+                    notifier.formKey.currentState?.validate();
+                if (validate ?? false) notifier.validate(value);
               },
               onTap: () {
                 if (notifier.focusedWord != word) return;
@@ -101,9 +101,6 @@ class _EditableWordState extends ConsumerState<EditableWord> {
                 }
               },
 
-              // showCursor: false,
-              // isCursorAnimationEnabled: false,
-              //
               keyboardType: TextInputType.none, // readOnly: true,
               forceErrorState: wordNotifier.error,
 
@@ -123,8 +120,6 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               },
 
               errorBuilder: (e, _) => const SizedBox(),
-
-              useNativeKeyboard: kDebugMode,
               textInputAction: TextInputAction.none,
             );
           },

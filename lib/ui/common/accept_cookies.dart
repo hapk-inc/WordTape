@@ -47,6 +47,7 @@ class AcceptCookie extends PanelWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Gap(15.r),
                 AutoSizeText.rich(
                   TextSpan(
                     children: [

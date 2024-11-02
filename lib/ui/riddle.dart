@@ -1,17 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:wordtape/function/question/word_notifier.dart';
 
-import '../function/key_tap/pod.dart';
-import '../function/local/found.dart';
 import '../function/question/notifier.dart';
 
-import '../model/found.dart';
 import '../model/word.dart';
 import '../panel/pod.dart';
 import 'riddle/custom_keyboard.dart';

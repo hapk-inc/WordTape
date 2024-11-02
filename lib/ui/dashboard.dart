@@ -31,16 +31,10 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         final String location =
             ref.read(routerProvider).routeInformationProvider.value.uri.path;
         if (location == "/home") {
-          if (kDebugMode) {
-            notifier.dialogState = const AcceptCookie();
-          } else {
-            final SharedPreferences pref =
-                await ref.read(sharedProvider.future);
-            if (kIsWeb) {
-              final bool acceptCookies =
-                  pref.getBool('accept_cookies') ?? false;
-              if (!acceptCookies) notifier.dialogState = const AcceptCookie();
-            }
+          final SharedPreferences pref = await ref.read(sharedProvider.future);
+          if (kIsWeb) {
+            final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
+            if (!acceptCookies) notifier.state = const AcceptCookie();
           }
         }
       },

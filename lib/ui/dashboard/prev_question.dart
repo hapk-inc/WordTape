@@ -25,20 +25,17 @@ class PrevQuestion extends ConsumerWidget {
   const PrevQuestion({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final DefaultTextTheme textTheme = DefaultTextTheme();
-    return SizedBox(
-      height: 210.r,
-      child: FirestoreListView.separated(
-        scrollDirection: Axis.horizontal,
-        pageSize: 2,
-        query: ref.read(prevQuestionQueryProvider),
-        padding: EdgeInsets.only(left: 30.r),
-        itemBuilder: (_, doc) => PrevQuestionTile(doc.data()),
-        separatorBuilder: (context, index) => Gap(15.r),
-      ),
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => SizedBox(
+        height: 210.r,
+        child: FirestoreListView.separated(
+          scrollDirection: Axis.horizontal,
+          pageSize: 2,
+          query: ref.read(prevQuestionQueryProvider),
+          padding: EdgeInsets.only(left: 30.r),
+          itemBuilder: (_, doc) => PrevQuestionTile(doc.data()),
+          separatorBuilder: (context, index) => Gap(15.r),
+        ),
+      );
 }
 
 class PrevQuestionTile extends ConsumerWidget {

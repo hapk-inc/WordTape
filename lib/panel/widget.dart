@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -12,6 +11,7 @@ abstract class PanelWidget extends ConsumerWidget {
   bool backdropEnabled();
 }
 
+/*
 class EmptyPanel extends PanelWidget {
   const EmptyPanel({super.key});
 
@@ -27,3 +27,4 @@ class EmptyPanel extends PanelWidget {
   @override
   bool backdropEnabled() => true;
 }
+*/

@@ -7,36 +7,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../enum/enum.dart';
-
 import '../../panel/widget.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../../theme/pod.dart';
 
-const a =
-    "Begin with a Starter Word: The game kicks off with a word displayed prominently on the screen.";
-const b =
-    "Guess Related Words: Players will guess the next word in the sequence.";
-const c = "Form the Sequence: Keep guessing until you "
-    "successfully connect all eight words in the sequence.";
-const d = "Use Hints: If you find yourself at a standstill, "
-    "you can access hints to assist you in moving forward.";
-
-class NotifyDialog extends PanelWidget {
-  const NotifyDialog({super.key});
+class HowToPlay extends PanelWidget {
+  const HowToPlay({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final UnderlineText notify = ref.read(notifyTextProvider);
-
-    final ScreenSize size = ref.watch(sizeProvider);
-    final bool isDialog = size != ScreenSize.mobile;
-    final AppEnv appEnv = ref.read(appEnvProvider);
-    final String url =
-        "https://${appEnv == AppEnv.dev ? "wordtape-demo" : "wordtape"}"
-        ".web.app/";
-
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
     return AnimatedContainer(
@@ -57,12 +37,12 @@ class NotifyDialog extends PanelWidget {
             children: [
               AutoSizeText(
                 "How to Play",
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: defaultTextTheme.headlineLarge,
               ),
               RichText(
                 text: TextSpan(
-                  children: [
-                    TextSpan(
+                  children: const <InlineSpan>[
+                    const TextSpan(
                       text: "Objective: The objective is to create a "
                           "sequence of five interconnected words, "
                           "starting from a designated word. Starting Point: "

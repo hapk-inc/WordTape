@@ -38,34 +38,35 @@ class OutlinePage extends ConsumerWidget {
           child: Builder(
             builder: (_) {
               if (!mobile) return OutlineState(child: child);
-              final PanelWidget panelWidget = ref.watch(panelNotifierProvider);
+              final PanelWidget? panelWidget = ref.watch(panelNotifierProvider);
+              final SlideDirection direction =
+                  panelWidget?.direction() ?? SlideDirection.UP;
               return SlidingUpPanel(
-                backdropEnabled: panelWidget.backdropEnabled(),
+                backdropEnabled: panelWidget?.backdropEnabled() ?? false,
                 backdropOpacity: 1,
                 isDraggable: false,
                 color: seaWhite,
                 controller: mobile ? ref.read(panelControllerProvider) : null,
                 minHeight: 0,
-                maxHeight: panelWidget.height(),
+                maxHeight: panelWidget?.height() ?? 0.h,
                 padding: EdgeInsets.zero,
                 backdropColor: gunMetal,
-                slideDirection: panelWidget.direction(),
+                slideDirection: direction,
                 borderRadius: _borderRadius(
                   15,
-                  isTop: panelWidget.direction() == SlideDirection.UP,
+                  isTop: direction == SlideDirection.UP,
                 ),
                 renderPanelSheet: true,
                 panel: ClipRRect(
                   borderRadius: _borderRadius(
                     15,
-                    isTop: panelWidget.direction() == SlideDirection.UP,
+                    isTop: direction == SlideDirection.UP,
                   ),
                   child: panelWidget,
                 ),
                 body: OutlineState(child: child),
                 onPanelClosed: () {
-                  ref.read(panelNotifierProvider.notifier).state =
-                      const EmptyPanel();
+                  ref.read(panelNotifierProvider.notifier).state = null;
                 },
               );
             },

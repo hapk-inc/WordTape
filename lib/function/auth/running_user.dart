@@ -32,13 +32,11 @@ void listenAuth(ListenAuthRef ref) {
     (prev, next) {
       final Logger tracker = ref.read(trackerProvider);
       tracker.i("RunningUser==");
+
       if (next != null) {
         if (prev == null) {
-          final int validConnection = ref.read(validateConnectionProvider());
-          if (!validConnection.isNegative) {
-            ref.read(firestoreUserProvider).updateMe();
-          }
-          // ref.read(routerProvider).replace("/home");
+          final int valid = ref.read(validateConnectionProvider());
+          if (!valid.isNegative) ref.read(firestoreUserProvider).updateMe();
         }
       } else {
         tracker.i("36==");

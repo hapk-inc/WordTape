@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,10 +18,26 @@ PanelController panelController(PanelControllerRef ref) => PanelController();
 @Riverpod(keepAlive: true, dependencies: [panelController, size])
 class PanelNotifier extends _$PanelNotifier {
   @override
-  PanelWidget build() => const EmptyPanel();
+  PanelWidget? build() => null;
 
   @override
-  set state(PanelWidget value) {
+  set state(PanelWidget? value) {
+    if ("$state" == "$value") return;
+    super.state = value;
+    final ScreenSize size = ref.read(sizeProvider);
+    if (value != null) {
+      if (size == ScreenSize.mobile) {
+        final PanelController panel = ref.read(panelControllerProvider);
+        if (panel.isAttached || panel.isPanelClosed) panel.open();
+      } else {
+        show(value);
+      }
+    }
+  }
+
+/*
+  @override
+  set state(PanelWidget? value) {
     if (state == value) return;
     super.state = value;
     String str = "$value";
@@ -36,10 +51,11 @@ class PanelNotifier extends _$PanelNotifier {
       show(value);
     }
   }
+ */
 
-  set dialogState(PanelWidget value) => show(value);
+  /*set dialogState(PanelWidget value) => show(value);*/
 
-  void show(PanelWidget value) => showDialog(
+  show(PanelWidget value) => showDialog(
         context: navigatorKey.currentContext!,
         builder: (_) => FadeIn(
           duration: const Duration(milliseconds: 750),
@@ -48,5 +64,5 @@ class PanelNotifier extends _$PanelNotifier {
             child: ClipRRect(borderRadius: _radius(), child: value),
           ),
         ),
-      ).then((_) => state = const EmptyPanel());
+      ).then((_) => state = null);
 }
