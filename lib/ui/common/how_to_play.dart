@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../function/underline_text/pod.dart';
+import '../../model/underline_text.dart';
 import '../../panel/widget.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
@@ -18,7 +21,7 @@ class HowToPlay extends PanelWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
-
+    final List<UnderlineText> list = ref.read(howPlayProvider);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: height(),
@@ -30,45 +33,51 @@ class HowToPlay extends PanelWidget {
       constraints: BoxConstraints(maxWidth: 540.r),
       child: FadeIn(
         delay: const Duration(milliseconds: 300),
-        child: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AutoSizeText(
-                "How to Play",
-                style: defaultTextTheme.headlineLarge,
-              ),
-              RichText(
-                text: TextSpan(
-                  children: const <InlineSpan>[
-                    const TextSpan(
-                      text: "Objective: The objective is to create a "
-                          "sequence of five interconnected words, "
-                          "starting from a designated word. Starting Point: "
-                          "The game begins with a starter word displayed on "
-                          "the screen.Guessing Words: Players will guess the "
-                          "next word in the sequence based on associations "
-                          "with the previous words.Hints: If players need "
-                          "assistance, they can view hints to help them "
-                          "progress. Collaboration: Players can discuss "
-                          "their guesses and hints with others to collaborate "
-                          "on finding the correct sequence.",
-                    )
-                  ],
-                  style: defaultTextTheme.bodySmall?.copyWith(color: slateGray),
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AutoSizeText(
+                  "How to Play",
+                  style: defaultTextTheme.headlineLarge,
                 ),
-              ),
-              Center(
-                child: FadeInUp(
-                  delay: const Duration(milliseconds: 750),
-                  child: SizedBox.square(
-                    dimension: 300.r,
-                    child: Lottie.asset('lottie/share.json'),
+                Gap(1.5.r),
+                RichText(
+                  text: TextSpan(
+                    children: <InlineSpan>[
+                      for (UnderlineText underline in list)
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "⚫️",
+                              style: defaultTextTheme.emojiSmall.copyWith(
+                                fontSize: 4.5.r,
+                              ),
+                            ),
+                            const TextSpan(text: "  "),
+                            TextSpan(text: underline.text),
+                            const TextSpan(text: "\n")
+                          ],
+                        )
+                    ],
+                    style:
+                        defaultTextTheme.bodySmall?.copyWith(color: cadetGray),
                   ),
                 ),
-              ),
-            ],
+                Center(
+                  child: FadeInUp(
+                    delay: const Duration(milliseconds: 750),
+                    child: SizedBox.square(
+                      dimension: 300.r,
+                      child: Lottie.asset('lottie/share.json'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

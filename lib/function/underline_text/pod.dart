@@ -134,6 +134,28 @@ UnderlineText foundWord(FoundWordRef ref) {
       },
     ),
   );
-  //final DateTime now = DateTime.now();
   return foundWord[mockInteger(0, foundWord.length - 1)];
+}
+
+@riverpod
+List<UnderlineText> howPlay(HowPlayRef ref) {
+  final List list = jsonDecode("how_to_play".tr());
+  //final List list = map["correct"];
+  /*final List<UnderlineText> playText = List.from(
+    m.entries.map(
+      (e) {
+        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
+        return UnderlineText.fromJson(json);
+      },
+    ),
+  );*/
+  return List.from(
+    list.map(
+      (e) {
+        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
+        return UnderlineText.fromJson(json);
+      },
+    ),
+  );
+  ;
 }

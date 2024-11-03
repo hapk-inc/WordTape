@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:lottie/lottie.dart';
 import '../function/auth/running_user.dart';
@@ -77,7 +78,10 @@ class Loader extends ConsumerWidget {
     return FadeIn(
       child: TextButton(
         // onPressed: () => ref.read(userLoginProvider),
-        onPressed: () => ref.read(routerProvider).replace("/home"),
+        onPressed: () {
+          final GoRouter router = ref.read(routerProvider);
+          router.pushReplacement("/dashboard");
+        },
         child: Text("press_start".tr(), style: textTheme.labelSmall),
       ),
     );

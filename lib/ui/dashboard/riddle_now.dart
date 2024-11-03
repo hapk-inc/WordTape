@@ -25,12 +25,20 @@ class RiddleNow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(dateSelectedProvider);
+    final DateTime date = DateTime.now().convert();
 
     return SliverAppBar(
       pinned: true,
       snap: false,
-      floating: false,
+      floating: true,
+      leadingWidth: 120.r,
+      /* leading: Row(
+        children: [
+          Gap(15.r),
+          CircleAvatar(radius: 36.r),
+        ],
+      ),*/
+
       /*actions: [
         if (kDebugMode && player != null)
           // if (player != null)
@@ -56,9 +64,9 @@ class RiddleNow extends ConsumerWidget {
           child: BottomButton(date),
         ),
       ),*/
-      expandedHeight: 600.r,
+      expandedHeight: 660.r,
       toolbarHeight: 90.h,
-      titleSpacing: 30.r,
+      titleSpacing: 0.r,
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1,
         title: BottomButton(date),
@@ -143,10 +151,11 @@ class RiddleNowStateState extends ConsumerWidget {
 
     return Column(
       children: [
-        const Logo(),
         Gap(30.r),
+        const Logo(),
+        Gap(15.r),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 3.6.r),
+          padding: EdgeInsets.symmetric(horizontal: 7.5.r),
           child: const RiddleNowWelcome(),
         ),
         Gap(45.r),
@@ -170,34 +179,6 @@ class RiddleNowStateState extends ConsumerWidget {
   }
 }
 
-class FeedbackTextField extends ConsumerWidget {
-  const FeedbackTextField({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.r),
-      child: TextFormField(
-        keyboardType: TextInputType.text,
-        textAlignVertical: TextAlignVertical.bottom, //
-        cursorHeight: 36.r,
-        style: textTheme.bodyLarge?.copyWith(color: seaWhite),
-        decoration: const InputDecoration(
-          hintText: 'Any feedback here',
-        ),
-        maxLines: 1,
-        maxLength: 90,
-        textInputAction: TextInputAction.done,
-        validator: (String? text) {
-          if (text == null || text.isEmpty) return 'Please enter your feedback';
-          return null;
-        },
-      ),
-    );
-  }
-}
-
 class QuestionUntilNow extends ConsumerWidget {
   final DateTime date;
   const QuestionUntilNow(this.date, {super.key});
@@ -208,12 +189,11 @@ class QuestionUntilNow extends ConsumerWidget {
     final Map<int, dynamic> untilNow = notifier.found.untilNow;
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
-    final String foundEmoji = List<String>.from(
-      [
-        for (int i = 0; i <= notifier.found.i - 1; i++)
-          untilNow.containsKey(i) ? "🟧" : "🟩",
-      ],
-    ).join();
+    final String foundEmoji = [
+      for (int i = 1; i <= notifier.found.i; i++)
+        untilNow.containsKey(i) ? "🟧" : "🟩",
+    ].join();
+    if (notifier.found.i == 1) return Container();
     return Text(foundEmoji, style: defaultTextTheme.emojiTheme);
   }
 }
@@ -249,7 +229,7 @@ class RiddleNowWelcome extends ConsumerWidget {
         ),
         maxLines: 2,
         style: textTheme.bodyLarge?.copyWith(color: azureGreen),
-        presetFontSizes: [24.r, 21.r],
+        presetFontSizes: [21.r, 18.r],
         textAlign: TextAlign.center,
       ),
     );

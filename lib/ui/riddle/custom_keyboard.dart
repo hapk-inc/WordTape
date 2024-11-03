@@ -19,8 +19,6 @@ class CustomKeyboard extends ConsumerWidget {
     final List<String> highlightedChar = [];
 
     return AnimatedContainer(
-      // color: cerise,
-      // padding: EdgeInsets.symmetric(vertical: 7.5.r),
       padding: EdgeInsets.symmetric(horizontal: 1.5.r),
       duration: const Duration(milliseconds: 300),
       constraints: BoxConstraints(maxWidth: 450.r),
@@ -61,7 +59,7 @@ class _KeyboardTile extends ConsumerWidget {
 
     double w = 0;
     if (isChar) {
-      w = 0.087;
+      w = 0.084;
     } else {
       w = str == "DEL" ? 0.12 : 0.165;
     }
@@ -83,9 +81,7 @@ class _KeyboardTile extends ConsumerWidget {
                 break;
               }
             default:
-              {
-                wNotifier.keyboardTap(str);
-              }
+              wNotifier.keyboardTap(str);
           }
         }
       },
@@ -93,15 +89,9 @@ class _KeyboardTile extends ConsumerWidget {
         duration: const Duration(milliseconds: 150),
         width: width * w,
         height: 54.h,
-        margin: EdgeInsets.symmetric(
-          horizontal: isChar ? 2.4.r : 2.25.r,
-          vertical: 2.4.r,
-        ),
+        margin: EdgeInsets.all(3.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          /*gradient: LinearGradient(
-            colors: [...List.filled(5, payneGray),if (isChar) celestialBlue ],
-          ),*/
           borderRadius: BorderRadius.circular(4.5.r),
           border: Border.all(width: 0.27.r, color: seaWhite),
         ),
@@ -109,7 +99,7 @@ class _KeyboardTile extends ConsumerWidget {
         child: AutoSizeText(
           str,
           style: textTheme.headlineMedium?.copyWith(color: azureGreen),
-          presetFontSizes: [16.r, 15.r, 14.r],
+          presetFontSizes: [18.r, 15.r, 12.r],
           maxLines: 1,
         ),
       ),

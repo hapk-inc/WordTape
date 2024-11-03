@@ -133,5 +133,5 @@
   "row_2": "A,S,D,F,G,H,J,K,L",
   "row_3": "ENTER,Z,X,C,V,B,N,M,DEL",
 
-  "ePanel": "EmptyPanel"
+  "how_to_play": "[{\"focused\":\"Objective\",\"text\":\"Create a sequence of five interconnected words, starting from a designated word.\"},{\"focused\":\"Starting Point\",\"text\":\"The game begins with a starter word displayed on the screen.\"},{\"focused\":\"Guessing Words\",\"text\":\"Players will guess the next word in the sequence based on associations with the previous words.\"},{\"focused\":\"Hints\",\"text\":\"Players can view hints if they need assistance to help them progress.\"},{\"focused\":\"Collaboration\",\"text\":\"Players can discuss their guesses and hints with others to collaborate on finding the correct sequence.\"}]"
 }

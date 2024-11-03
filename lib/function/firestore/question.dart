@@ -112,8 +112,8 @@ class FirestoreQuestion {
   }
 
   Query<Question> get prevQuestion =>
-      collection.orderBy('date', descending: true).limit(7).withConverter(
-            fromFirestore: (snapshot, options) {
+      collection.limit(2).orderBy('date', descending: true).withConverter(
+            fromFirestore: (snapshot, _) {
               final Map<String, dynamic> map = snapshot.data() ?? {};
               return Question.fromJson(map).copyWith(id: snapshot.id);
             },

@@ -6,7 +6,9 @@ const Color midnightGreen = Color(0xff1E555C);
 const Color aquaMarine = Color(0xff56E38F);
 const Color mint = Color(0xff59c9a5);
 const Color mintGreen = Color(0xffC0E7DD);
+const Color celeste = Color(0xffBFEEE5);
 const Color azureGreen = Color(0xffDFF2ED);
+const Color purpureous = Color(0xff995FA3);
 
 const Color tyrianPurple = Color(0xff561643);
 const Color cerise = Color(0xffDD2663);
