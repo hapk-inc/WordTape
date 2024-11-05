@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "15743304421",
     "project_id": "wordtape-51",
-    "storage_bucket": "wordtape-51.appspot.com"
+    "storage_bucket": "wordtape-51.firebasestorage.app"
   },
   "client": [
     {

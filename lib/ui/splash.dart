@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lottie/lottie.dart';
+import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
 import '../router/router.dart';
 import 'common/gradient_box.dart';
@@ -79,6 +80,7 @@ class Loader extends ConsumerWidget {
       child: TextButton(
         // onPressed: () => ref.read(userLoginProvider),
         onPressed: () {
+          ref.read(userLoginProvider);
           final GoRouter router = ref.read(routerProvider);
           router.go("/dashboard");
         },

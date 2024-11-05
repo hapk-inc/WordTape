@@ -36,7 +36,10 @@ void listenAuth(Ref ref) {
       if (next != null) {
         if (prev == null) {
           final int valid = ref.read(validateConnectionProvider());
-          if (!valid.isNegative) ref.read(firestoreUserProvider).updateMe();
+          final bool isAnonymous = next.isAnonymous;
+          if (!valid.isNegative && !isAnonymous) {
+            ref.read(firestoreUserProvider).updateMe();
+          }
         }
       } else {
         if (prev != null) {

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wordtape/theme/color.dart';
+import 'package:wordtape/theme/font.dart';
 
 import '../function/auth/pod.dart';
 import '../panel/pod.dart';
@@ -44,15 +47,54 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
+    final User? user = ref.watch(runningUserProvider).value;
+    final bool isAnonymous = user?.isAnonymous ?? true;
+    return CustomScrollView(
       slivers: <Widget>[
         RiddleNow(),
-        GameArchives(),
-        SliverToBoxAdapter(child: PrevQuestion()),
-        SliverToBoxAdapter(child: Gap(30)),
+        if (isAnonymous) ...[
+          GoogleLogin(),
+        ] else ...[
+          GameArchives(),
+          SliverToBoxAdapter(child: PrevQuestion()),
+        ],
         SliverToBoxAdapter(child: DashboardFooter()),
-        SliverToBoxAdapter(child: Gap(30)),
       ],
+    );
+  }
+}
+
+class GoogleLogin extends ConsumerWidget {
+  const GoogleLogin({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    DefaultTextTheme defaultTextTheme = DefaultTextTheme();
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.all(15.r),
+        child: Column(
+          children: [
+            Text(
+              "Would you like to revisit the previous games?",
+              style: defaultTextTheme.headlineLarge,
+              textAlign: TextAlign.center,
+            ),
+            Gap(15.r),
+            ElevatedButton(
+              style: ButtonStyle(
+                minimumSize: WidgetStatePropertyAll(Size(300.r, 60.r)),
+                backgroundColor: WidgetStatePropertyAll(celeste),
+              ),
+              onPressed: () => ref.read(googleLoginProvider),
+              child: Text(
+                "CREATE A FREE ACCOUNT",
+                style: TextStyle(color: gunMetal),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -63,8 +105,7 @@ class GameArchives extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SliverToBoxAdapter(
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 15.r),
-          padding: EdgeInsets.symmetric(horizontal: 15.r),
+          margin: EdgeInsets.all(15.r),
           child: Text(
             "Game Archives",
             style: Theme.of(context).textTheme.headlineLarge,
@@ -79,14 +120,17 @@ class DashboardFooter extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final PackageInfo? packageInfo = ref.watch(packageProvider).value;
-    return OverflowBar(
-      spacing: 7.5.r,
-      alignment: MainAxisAlignment.center,
-      children: [
-        if (packageInfo != null)
-          "Version ${packageInfo.version}(${packageInfo.buildNumber})",
-        "Privacy Policy",
-      ].map((e) => TextButton(onPressed: () {}, child: Text(e))).toList(),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 30.r),
+      child: OverflowBar(
+        spacing: 7.5.r,
+        alignment: MainAxisAlignment.center,
+        children: [
+          if (packageInfo != null)
+            "Version ${packageInfo.version}(${packageInfo.buildNumber})",
+          "Privacy Policy",
+        ].map((e) => TextButton(onPressed: () {}, child: Text(e))).toList(),
+      ),
     );
   }
 }

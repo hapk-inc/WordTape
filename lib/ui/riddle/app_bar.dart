@@ -31,7 +31,7 @@ class RiddleAppBar extends ConsumerWidget {
       leading: Container(),
       titleSpacing: 0,
       title: InkWell(
-        onTap: () => ref.read(routerProvider).pop(),
+        onTap: () => ref.read(routerProvider).go("/dashboard"),
         child: Text(name.toUpperCase(), maxLines: 1),
       ),
       actions: const [LottieHint(), Gap(1.5)],

@@ -209,6 +209,8 @@ class QuestionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get isWinner => found.untilNow.isEmpty;
+
   Word? get focusedWord {
     if (_question == null) return null;
     if (_done) return null;

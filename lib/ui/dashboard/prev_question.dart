@@ -84,7 +84,7 @@ class PrevQuestionTile extends ConsumerWidget {
       child: InkWell(
         onTap: () {
           ref.read(dateSelectedProvider.notifier).state = date;
-          context.push('/decode', extra: date);
+          context.go('/decode', extra: date);
         },
         child: SingleChildScrollView(
           child: Column(

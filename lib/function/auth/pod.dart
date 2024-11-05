@@ -23,6 +23,12 @@ Stream<User?> googleUser(Ref ref) {
   return auth.onGoogleUser;
 }
 
+@riverpod
+Future<void> googleLogin(Ref<void> ref) async {
+  final Auth auth = ref.read(authProvider);
+  return auth.googleAuth;
+}
+
 @Riverpod(dependencies: [auth])
 Future<bool> userLogin(Ref ref) async {
   final Auth auth = ref.read(authProvider);

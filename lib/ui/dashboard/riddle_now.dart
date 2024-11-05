@@ -10,6 +10,7 @@ import '../../extension/extension.dart';
 
 import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
+import '../../model/found.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
@@ -186,15 +187,30 @@ class QuestionUntilNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
+
+    final Found found = notifier.found;
     final Map<int, dynamic> untilNow = notifier.found.untilNow;
+
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
-    final String foundEmoji = [
+    /*final String foundEmoji = [
       for (int i = 1; i <= notifier.found.i; i++)
         untilNow.containsKey(i) ? "🟧" : "🟩",
-    ].join();
+    ].join();*/
     if (notifier.found.i == 1) return Container();
-    return Text(foundEmoji, style: defaultTextTheme.emojiTheme);
+    return AutoSizeText.rich(
+        TextSpan(
+          children: [
+            if (found.i != 1)
+              ...[
+                for (int i = 0; i <= found.i - 1; i++)
+                  found.untilNow.containsKey(i) ? "🟧" : "🟩",
+              ].map(
+                (e) => TextSpan(text: e),
+              )
+          ],
+        ),
+        style: defaultTextTheme.emojiTheme);
   }
 }
 
