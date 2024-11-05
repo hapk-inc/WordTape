@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -24,9 +26,7 @@ part 'running_user.g.dart';
   auth,
   googleUser
 ])
-void listenAuth(ListenAuthRef ref) {
-  // ref.read(googleUserProvider);
-
+void listenAuth(Ref ref) {
   ref.listen<User?>(
     runningUserProvider.select((value) => value.value),
     (prev, next) {
@@ -39,11 +39,11 @@ void listenAuth(ListenAuthRef ref) {
           if (!valid.isNegative) ref.read(firestoreUserProvider).updateMe();
         }
       } else {
-        tracker.i("36==");
         if (prev != null) {
           LocalQuestion().delete();
           LocalFound().delete();
-          ref.read(routerProvider).replace('/');
+          final GoRouter router = ref.read(routerProvider);
+          router.replace('/');
         } else {
           /*if (kIsWeb) {
             Future.delayed(_m1500, () => ref.read(authProvider).googleAuth);

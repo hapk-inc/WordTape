@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,13 +18,13 @@ import '../underline_text/pod.dart';
 part 'pod.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [GeminiAi])
-Future<String> createHint(CreateHintRef ref, Word word, String answer) async {
+Future<String> createHint(Ref ref, Word word, String answer) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
   return ai.createHint(word, answer);
 }
 
 @Riverpod(keepAlive: true, dependencies: [GeminiAi])
-Future<String> helpUser(HelpUserRef ref, String correct, String mistake) async {
+Future<String> helpUser(Ref ref, String correct, String mistake) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
   return ai.helpUser(correct, mistake);
 }

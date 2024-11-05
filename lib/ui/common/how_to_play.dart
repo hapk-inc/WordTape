@@ -94,10 +94,10 @@ class HowToPlay extends PanelWidget {
   bool backdropEnabled() => true;
 }
 
-TextSpan _pts(String title, String sub) => TextSpan(
+/*TextSpan _pts(String title, String sub) => TextSpan(
       text: title,
       children: [
         const TextSpan(text: " : "),
         TextSpan(text: sub, style: const TextStyle(color: slateGray))
       ],
-    );
+    );*/

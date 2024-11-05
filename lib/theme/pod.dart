@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,8 +11,8 @@ import 'font.dart';
 part 'pod.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [size])
-PinTheme pinTheme(PinThemeRef ref,
-    {required BoxConstraints constraints, Color color = raisinBlack}) {
+PinTheme pinTheme(Ref ref,
+    {required BoxConstraints constraints, Color color = raisinBlack,}) {
   final double maxWidth = constraints.maxWidth;
 
   final double boxWidth = maxWidth * 0.0975;
@@ -32,11 +33,9 @@ PinTheme pinTheme(PinThemeRef ref,
 }
 
 @Riverpod(keepAlive: true)
-Gradient gradient(GradientRef ref,
-    {List<Color> color = const <Color>[midnightGreen, gunMetal]}) {
-  return LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: color,
-  );
-}
+Gradient gradient(
+  Ref ref, {
+  List<Color> color = const <Color>[midnightGreen, gunMetal],
+}) =>
+    LinearGradient(
+        begin: Alignment.topLeft, end: Alignment.bottomRight, colors: color);

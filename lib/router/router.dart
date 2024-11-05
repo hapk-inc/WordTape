@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -22,23 +23,24 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   keepAlive: true,
   dependencies: [renovation, DateSelected, PathNotifier, panelController],
 )
-GoRouter router(RouterRef ref) {
+GoRouter router(Ref ref) {
   return GoRouter(
-    redirect: (_, state) async {
-      final String? renovation = await ref.read(renovationProvider.future);
-      if (renovation?.isNotEmpty ?? false) return "/renovation";
-
-      //
-      final RoutePath path = ref.read(pathNotifierProvider);
-      ref.read(pathNotifierProvider.notifier).state = path.copyWith(
-        path: state.matchedLocation,
-      );
-
-      return state.matchedLocation;
-    },
     navigatorKey: navigatorKey,
+    initialLocation: "/",
     routes: <RouteBase>[
       ShellRoute(
+        redirect: (_, state) async {
+          final String? renovation = await ref.read(renovationProvider.future);
+          if (renovation?.isNotEmpty ?? false) return "/renovation";
+
+          //
+          final RoutePath path = ref.read(pathNotifierProvider);
+          ref.read(pathNotifierProvider.notifier).state = path.copyWith(
+            path: state.matchedLocation,
+          );
+
+          return state.matchedLocation;
+        },
         builder: (_, __, child) => OutlinePage(child),
         routes: [
           GoRoute(

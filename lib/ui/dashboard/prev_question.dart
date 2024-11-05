@@ -6,8 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
-import 'package:wordtape/theme/pod.dart';
 
 import '../../extension/extension.dart';
 
@@ -19,7 +17,8 @@ import '../../model/question.dart';
 import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
-import 'package:badges/badges.dart' as badge;
+import '../../theme/pod.dart';
+// import 'package:badges/badges.dart' as badge;
 
 class PrevQuestion extends ConsumerWidget {
   const PrevQuestion({super.key});
@@ -27,28 +26,40 @@ class PrevQuestion extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => SizedBox(
         height: 210.r,
-        child: FirestoreListView(
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 7,
+          itemBuilder: (context, index) {
+            final DateTime now = DateTime.now();
+            final DateTime date =
+                now.subtract(Duration(days: index + 1)).convert();
+
+            return PrevQuestionTile(date);
+          },
+        ),
+        /*child: FirestoreListView(
           scrollDirection: Axis.horizontal,
           query: ref.watch(prevQuestionQueryProvider),
           padding: EdgeInsets.only(left: 30.r),
           itemBuilder: (_, doc) => PrevQuestionTile(doc.data()),
-        ),
+        ),*/
       );
 }
 
 class PrevQuestionTile extends ConsumerWidget {
-  final Question question;
-  const PrevQuestionTile(this.question, {super.key});
+  final DateTime date;
+  const PrevQuestionTile(this.date, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DefaultTextTheme textTheme = DefaultTextTheme();
-    final QuestionNotifier notifier =
-        ref.watch(questionNotifierProvider(question.date));
-    final List<Word> search = question.searchWord(notifier.found);
-    // final User? fUser = ref.watch(runningUserProvider).value;
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
+    final List<Word> search = notifier.searchWord;
+
     final bool isCompleted = notifier.done;
     final Found found = notifier.found;
+    final Question? question = notifier.question;
+    if (question == null) return SizedBox();
 
     return Container(
       width: 210.r,
@@ -61,10 +72,7 @@ class PrevQuestionTile extends ConsumerWidget {
           gradient: isCompleted
               ? ref.read(
                   gradientProvider(
-                    color: [
-                      ...List.filled(9, celeste),
-                      aquaMarine,
-                    ],
+                    color: [...List.filled(9, celeste), aquaMarine],
                   ),
                 )
               : null
@@ -75,7 +83,6 @@ class PrevQuestionTile extends ConsumerWidget {
       alignment: Alignment.centerLeft,
       child: InkWell(
         onTap: () {
-          final DateTime date = question.date.convert();
           ref.read(dateSelectedProvider.notifier).state = date;
           context.push('/decode', extra: date);
         },
@@ -85,7 +92,7 @@ class PrevQuestionTile extends ConsumerWidget {
             children: [
               Gap(7.5.r),
               Text(
-                DateFormat('MMMM dd').format(question.date),
+                DateFormat('MMMM dd').format(date),
                 style: textTheme.headlineSmall?.copyWith(color: raisinBlack),
               ),
               AutoSizeText.rich(

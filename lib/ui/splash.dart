@@ -80,7 +80,7 @@ class Loader extends ConsumerWidget {
         // onPressed: () => ref.read(userLoginProvider),
         onPressed: () {
           final GoRouter router = ref.read(routerProvider);
-          router.pushReplacement("/dashboard");
+          router.go("/dashboard");
         },
         child: Text("press_start".tr(), style: textTheme.labelSmall),
       ),

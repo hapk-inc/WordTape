@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -17,10 +18,10 @@ enum RiddleState { launch, resume, completed }
 enum PromptState { search, error, errorAgain, right, lastChance, done }
 
 @Riverpod(keepAlive: true, dependencies: [])
-ScreenSize size(SizeRef ref) => ScreenSize.mobile;
+ScreenSize size(Ref<ScreenSize> ref) => ScreenSize.mobile;
 
 @Riverpod(keepAlive: true, dependencies: [])
-AppEnv appEnv(AppEnvRef ref) => kDebugMode ? AppEnv.dev : AppEnv.prod;
+AppEnv appEnv(Ref<AppEnv> ref) => kDebugMode ? AppEnv.dev : AppEnv.prod;
 
 @Riverpod(keepAlive: true)
-Logger tracker(TrackerRef ref) => Logger();
+Logger tracker(Ref<Logger> ref) => Logger();

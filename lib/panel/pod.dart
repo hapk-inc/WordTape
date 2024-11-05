@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -13,7 +14,7 @@ part 'pod.g.dart';
 BorderRadius _radius({double ar = 7.5}) => BorderRadius.circular(ar.r);
 
 @Riverpod(keepAlive: true, dependencies: [])
-PanelController panelController(PanelControllerRef ref) => PanelController();
+PanelController panelController(Ref ref) => PanelController();
 
 @Riverpod(keepAlive: true, dependencies: [panelController, size])
 class PanelNotifier extends _$PanelNotifier {

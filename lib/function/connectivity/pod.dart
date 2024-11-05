@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../firebase/pod.dart';
@@ -7,7 +8,7 @@ import '../../firebase/pod.dart';
 part 'pod.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [])
-Stream<List<ConnectivityResult>> internetConnection(InternetConnectionRef ref) {
+Stream<List<ConnectivityResult>> internetConnection(Ref ref) {
   final Connectivity connectivity = Connectivity();
   return connectivity.onConnectivityChanged;
 }
@@ -29,7 +30,7 @@ class ValidateConnection extends _$ValidateConnection {
   internetConnection,
   remoteConfig,
 ])
-void listenConnectivity(ListenConnectivityRef ref) {
+void listenConnectivity(Ref ref) {
   ref.listen<List<ConnectivityResult>?>(
     internetConnectionProvider.select((x) => x.value),
     (prev, next) async {
@@ -44,7 +45,7 @@ void listenConnectivity(ListenConnectivityRef ref) {
   );
 }
 
-Future<int> _validateConnection(ListenConnectivityRef ref) => ref
+Future<int> _validateConnection(Ref ref) => ref
     .refresh(remoteConfigProvider)
     .fetchAndActivate()
     .then((value) => value ? 1 : 0)

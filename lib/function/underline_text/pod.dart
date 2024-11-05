@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,7 +10,7 @@ import '../../model/underline_text.dart';
 part 'pod.g.dart';
 
 @Riverpod(keepAlive: true)
-UnderlineText noQuestion(NoQuestionRef ref) {
+UnderlineText noQuestion(Ref ref) {
   final DateTime now = DateTime.now();
   final List<UnderlineText> list = List.generate(
     9,
@@ -19,7 +20,7 @@ UnderlineText noQuestion(NoQuestionRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-UnderlineText resume(ResumeRef ref) {
+UnderlineText resume(Ref ref) {
   final List<UnderlineText> resume = List.generate(
     7,
     (i) => UnderlineText(
@@ -31,18 +32,17 @@ UnderlineText resume(ResumeRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-String logoutText(LogoutTextRef ref) =>
-    "logout_${DateTime.now().day % 10}".tr();
+String logoutText(Ref ref) => "logout_${DateTime.now().day % 10}".tr();
 
 @Riverpod(keepAlive: true)
-String inProgress(InProgressRef ref) {
+String inProgress(Ref ref) {
   final DateTime now = DateTime.now();
   final List<String> progress = List.generate(3, (i) => "progress_$i".tr());
   return progress[now.day % progress.length];
 }
 
 @Riverpod()
-String useHighlighter(UseHighlighterRef ref) {
+String useHighlighter(Ref ref) {
   final List<String> useHighlighter = List.generate(
     5,
     (i) => "use_highlighter_$i".tr(),
@@ -50,34 +50,28 @@ String useHighlighter(UseHighlighterRef ref) {
   return useHighlighter[mockInteger(0, 4)];
 }
 
-/*@Riverpod()
-String correctAnswer(CorrectAnswerRef ref) {
-  final List<String> correct = List.generate(8, (i) => "correct_$i".tr());
-  return correct[mockInteger(0, 7)];
-}*/
-
 @riverpod
-String fillText(FillTextRef ref) {
+String fillText(Ref ref) {
   final List<String> fillText = List.generate(4, (i) => "fill_text_$i".tr());
   return fillText[mockInteger(0, fillText.length - 1)];
 }
 
 @riverpod
-String aiError(AiErrorRef ref) {
+String aiError(Ref ref) {
   final DateTime now = DateTime.now();
   final List<String> onYourOwn = List.generate(8, (i) => "think_$i".tr());
   return onYourOwn[now.day % onYourOwn.length];
 }
 
 @riverpod
-String figureOut(FigureOutRef ref) {
+String figureOut(Ref ref) {
   final DateTime now = DateTime.now();
   final List<String> figureOut = List.generate(7, (i) => "figure_$i".tr());
   return figureOut[now.day % figureOut.length];
 }
 
 @riverpod
-UnderlineText cookieInfo(CookieInfoRef ref) {
+UnderlineText cookieInfo(Ref ref) {
   final Map map = jsonDecode("cookies".tr());
   final List list = map["cookies"];
   final List<UnderlineText> cookieInfo = List.from(
@@ -92,7 +86,7 @@ UnderlineText cookieInfo(CookieInfoRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-UnderlineText notifyText(NotifyTextRef ref) {
+UnderlineText notifyText(Ref ref) {
   final Map map = jsonDecode("notify".tr());
   final List list = map["notify"];
   final List<UnderlineText> notify = List.from(
@@ -107,7 +101,7 @@ UnderlineText notifyText(NotifyTextRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-UnderlineText welcomeUser(WelcomeUserRef ref) {
+UnderlineText welcomeUser(Ref ref) {
   final Map map = jsonDecode("welcome".tr());
   final List list = map["welcome"];
   final List<UnderlineText> welcome = List.from(
@@ -123,7 +117,7 @@ UnderlineText welcomeUser(WelcomeUserRef ref) {
 }
 
 @riverpod
-UnderlineText foundWord(FoundWordRef ref) {
+UnderlineText foundWord(Ref ref) {
   final Map map = jsonDecode("correct_text".tr());
   final List list = map["correct"];
   final List<UnderlineText> foundWord = List.from(
@@ -138,17 +132,8 @@ UnderlineText foundWord(FoundWordRef ref) {
 }
 
 @riverpod
-List<UnderlineText> howPlay(HowPlayRef ref) {
+List<UnderlineText> howPlay(Ref ref) {
   final List list = jsonDecode("how_to_play".tr());
-  //final List list = map["correct"];
-  /*final List<UnderlineText> playText = List.from(
-    m.entries.map(
-      (e) {
-        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
-        return UnderlineText.fromJson(json);
-      },
-    ),
-  );*/
   return List.from(
     list.map(
       (e) {
@@ -157,5 +142,4 @@ List<UnderlineText> howPlay(HowPlayRef ref) {
       },
     ),
   );
-  ;
 }

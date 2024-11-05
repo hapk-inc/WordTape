@@ -5,31 +5,33 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'pod.g.dart';
 
 @Riverpod(keepAlive: true)
-FirebaseApp firebaseApp(FirebaseAppRef ref) => throw UnimplementedError();
+FirebaseApp firebaseApp(Ref<FirebaseApp> ref) => throw UnimplementedError();
 
 @Riverpod(keepAlive: true)
-FirebaseAuth firebaseAuth(FirebaseAuthRef ref) => throw UnimplementedError();
+FirebaseAuth firebaseAuth(Ref<FirebaseAuth> ref) => throw UnimplementedError();
 
 @Riverpod(keepAlive: true)
-FirebaseAnalytics firebaseAnalytics(FirebaseAnalyticsRef ref) =>
+FirebaseAnalytics firebaseAnalytics(Ref<FirebaseAnalytics> ref) =>
     throw UnimplementedError();
 
 @Riverpod(keepAlive: true)
-FirebaseFirestore firestore(FirestoreRef ref) => throw UnimplementedError();
-
-@Riverpod(keepAlive: true, dependencies: [])
-FirebaseRemoteConfig remoteConfig(RemoteConfigRef ref) =>
-    throw UnimplementedError();
-
-@Riverpod(keepAlive: true)
-FirebaseCrashlytics crashlytics(CrashlyticsRef ref) =>
+FirebaseFirestore firestore(Ref<FirebaseFirestore> ref) =>
     throw UnimplementedError();
 
 @Riverpod(keepAlive: true, dependencies: [])
-DotEnv env(EnvRef ref) => throw UnimplementedError();
+FirebaseRemoteConfig remoteConfig(Ref<FirebaseRemoteConfig> ref) =>
+    throw UnimplementedError();
+
+@Riverpod(keepAlive: true)
+FirebaseCrashlytics crashlytics(Ref<FirebaseCrashlytics> ref) =>
+    throw UnimplementedError();
+
+@Riverpod(keepAlive: true, dependencies: [])
+DotEnv env(Ref<DotEnv> ref) => throw UnimplementedError();
