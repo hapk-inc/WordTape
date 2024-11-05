@@ -27,6 +27,8 @@ part 'running_user.g.dart';
   googleUser
 ])
 void listenAuth(Ref ref) {
+  ref.read(googleUserProvider);
+
   ref.listen<User?>(
     runningUserProvider.select((value) => value.value),
     (prev, next) {

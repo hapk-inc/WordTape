@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +9,6 @@ import 'package:intl/intl.dart';
 import '../../extension/extension.dart';
 
 import '../../function/date_selected/date_selected.dart';
-import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
 import '../../model/found.dart';
 import '../../model/question.dart';

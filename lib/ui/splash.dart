@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -80,7 +81,8 @@ class Loader extends ConsumerWidget {
       child: TextButton(
         // onPressed: () => ref.read(userLoginProvider),
         onPressed: () {
-          ref.read(userLoginProvider);
+          final User? user = ref.read(runningUserProvider).value;
+          if (user == null) ref.read(userLoginProvider);
           final GoRouter router = ref.read(routerProvider);
           router.go("/dashboard");
         },

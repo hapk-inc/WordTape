@@ -74,6 +74,9 @@ class Auth {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+    if (_auth.currentUser != null) {
+      return _auth.currentUser?.linkWithCredential(credential);
+    }
     return _auth.signInWithCredential(credential);
   }
 

@@ -189,14 +189,8 @@ class QuestionUntilNow extends ConsumerWidget {
     final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
 
     final Found found = notifier.found;
-    final Map<int, dynamic> untilNow = notifier.found.untilNow;
-
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
-    /*final String foundEmoji = [
-      for (int i = 1; i <= notifier.found.i; i++)
-        untilNow.containsKey(i) ? "🟧" : "🟩",
-    ].join();*/
     if (notifier.found.i == 1) return Container();
     return AutoSizeText.rich(
         TextSpan(
