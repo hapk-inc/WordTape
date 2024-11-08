@@ -65,7 +65,7 @@ class RiddleNow extends ConsumerWidget {
           child: BottomButton(date),
         ),
       ),*/
-      expandedHeight: 660.r,
+      expandedHeight: 600.r,
       toolbarHeight: 90.h,
       titleSpacing: 0.r,
       flexibleSpace: FlexibleSpaceBar(
@@ -84,31 +84,35 @@ class BottomButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
-    return OverflowBar(
-      overflowAlignment: OverflowBarAlignment.center,
-      spacing: 15.r,
-      overflowSpacing: 15.r,
-      children: [
-        if (notifier.question != null)
-          ElevatedButton(
-            style: const ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(azureGreen),
-              foregroundColor: WidgetStatePropertyAll(raisinBlack),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 15.r),
+      child: OverflowBar(
+        overflowAlignment: OverflowBarAlignment.center,
+        spacing: 15.r,
+        overflowSpacing: 15.r,
+        children: [
+          if (notifier.question != null)
+            ElevatedButton(
+              style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(azureGreen),
+                foregroundColor: WidgetStatePropertyAll(raisinBlack),
+              ),
+              onPressed: () {
+                final DateTime now = DateTime.now().convert();
+                ref.read(dateSelectedProvider.notifier).state = now;
+                context.push('/decode', extra: now);
+              },
+              child: const Text("Play now"),
             ),
+          ElevatedButton(
             onPressed: () {
-              final DateTime now = DateTime.now().convert();
-              ref.read(dateSelectedProvider.notifier).state = now;
-              context.push('/decode', extra: now);
+              ref.read(panelNotifierProvider.notifier).state =
+                  const HowToPlay();
             },
-            child: const Text("Play now"),
+            child: const Text("How to Play"),
           ),
-        ElevatedButton(
-          onPressed: () {
-            ref.read(panelNotifierProvider.notifier).state = const HowToPlay();
-          },
-          child: const Text("How to Play"),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

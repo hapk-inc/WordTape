@@ -120,7 +120,7 @@ class WordNotifier extends ChangeNotifier {
 
   keyboardTap(String str) {
     _notifier.prompt = Prompt(
-      text: UnderlineText(ref.read(figureOutProvider)),
+      text: ref.read(figureOutProvider), //Typing check
       state: PromptState.search,
     );
     if (str.length == 1) {
@@ -181,10 +181,8 @@ class WordNotifier extends ChangeNotifier {
     final bool filled = len == word.value.length;
     if (filled) return null;
     _error = true;
-    final String err = ref.read(fillTextProvider);
-    _notifier.prompt =
-        Prompt(text: UnderlineText(err), state: PromptState.error);
-
-    return err;
+    final UnderlineText err = ref.read(fillTextProvider);
+    _notifier.prompt = Prompt(text: err, state: PromptState.error);
+    return err.text;
   }
 }

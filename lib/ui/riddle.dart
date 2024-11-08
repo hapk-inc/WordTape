@@ -58,10 +58,10 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     super.initState();
   }
 
-  _onStateChanged(AppLifecycleState state) {
-    log(state.name);
-    // if (state == AppLifecycleState.inactive) notifier.insert();
-  }
+  _onStateChanged(AppLifecycleState state) {}
+
+  // log(state.name);
+  // if (state == AppLifecycleState.inactive) notifier.insert();
 
   @override
   void dispose() {
@@ -72,15 +72,17 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   @override
   Widget build(BuildContext context) {
     notifier = ref.watch(questionNotifierProvider(date));
-    /*final FocusNode focusNode = notifier.focusedWord == null
+    return GradientBox(
+      child: SafeArea(bottom: false, child: RiddlePageState(date)),
+    );
+  }
+}
+
+/*final FocusNode focusNode = notifier.focusedWord == null
         ? FocusNode()
         : ref.watch(wordNotifierProvider(notifier.focusedWord!)).node;*/
 
-    return GradientBox(
-      child: SafeArea(
-        bottom: false,
-        child: RiddlePageState(date),
-        /*child: KeyboardListener(
+/*child: KeyboardListener(
           focusNode: FocusNode(canRequestFocus: true),
           onKeyEvent: (KeyEvent? value) {
             if (value is KeyDownEvent || value is KeyRepeatEvent) {
@@ -89,10 +91,6 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
           },
           child: RiddlePageState(date),
         ),*/
-      ),
-    );
-  }
-}
 
 class RiddlePageState extends ConsumerWidget {
   final DateTime date;

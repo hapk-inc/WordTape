@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../enum/enum.dart';
 import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../model/prompt.dart';
@@ -44,7 +45,11 @@ class PromptWidget extends ConsumerWidget {
                   style: highlighter.contains(word)
                       ? isEmoji
                           ? textTheme.emojiTheme
-                          : const TextStyle(color: selectiveYellow)
+                          : TextStyle(
+                              color: prompt.state == PromptState.error
+                                  ? melon
+                                  : selectiveYellow,
+                            )
                       : null,
                 ),
             ],

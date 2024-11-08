@@ -32,13 +32,13 @@ class SummaryPage extends PanelWidget {
       );
 
   @override
-  SlideDirection direction() => SlideDirection.DOWN;
+  SlideDirection direction() => SlideDirection.UP;
 
   @override
-  double height() => 240.r;
+  double height() => 210.r;
 
   @override
-  bool backdropEnabled() => true;
+  bool backdropEnabled() => false;
 }
 
 class Summary extends ConsumerStatefulWidget {
@@ -103,18 +103,12 @@ class SummaryContent extends ConsumerWidget {
       builder: (_, constraints) => Column(
         children: [
           Expanded(
-            child: noHelp
-                ? Lottie.asset(
-                    'lottie/trophy_1.json',
-                    fit: BoxFit.fitWidth,
-                    width: constraints.maxHeight * 0.75,
-                  )
-                : SafeArea(
-                    child: FadeIn(
-                      delay: const Duration(milliseconds: 750),
-                      child: Center(child: QuestionUntilNow(date)),
-                    ),
-                  ),
+            child: SafeArea(
+              child: FadeIn(
+                delay: const Duration(milliseconds: 750),
+                child: Center(child: QuestionUntilNow(date)),
+              ),
+            ),
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),

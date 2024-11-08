@@ -15,7 +15,6 @@ part 'question.g.dart';
 class Question extends Equatable with _$Question {
   const Question._();
 
-  //@JsonSerializable(explicitToJson: true)
   const factory Question({
     @JsonKey() @DateConverter() required DateTime date,
     required List<Word> words,

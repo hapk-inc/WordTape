@@ -120,6 +120,16 @@ class FirestoreQuestion {
             toFirestore: (value, _) => value.toJson(),
           );
 
+  Future<void> winPlayed(String? id) async {
+    if (id != null && fUser != null) {
+      collection.doc(id).update(
+        <String, dynamic>{
+          "win": FieldValue.arrayUnion([fUser!.uid]),
+        },
+      );
+    }
+  }
+
   //DO NOT REMOVE
   /*Stream<Riddle> get onRiddleChanged {
     late BehaviorSubject<Riddle> subject;

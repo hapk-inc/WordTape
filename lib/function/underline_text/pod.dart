@@ -51,9 +51,10 @@ String useHighlighter(Ref ref) {
 }
 
 @riverpod
-String fillText(Ref ref) {
+UnderlineText fillText(Ref ref) {
   final List<String> fillText = List.generate(4, (i) => "fill_text_$i".tr());
-  return fillText[mockInteger(0, fillText.length - 1)];
+  return UnderlineText(fillText[mockInteger(0, fillText.length - 1)],
+      focused: 'text content');
 }
 
 @riverpod
@@ -64,24 +65,17 @@ String aiError(Ref ref) {
 }
 
 @riverpod
-String figureOut(Ref ref) {
+UnderlineText figureOut(Ref ref) {
   final DateTime now = DateTime.now();
   final List<String> figureOut = List.generate(7, (i) => "figure_$i".tr());
-  return figureOut[now.day % figureOut.length];
+  return UnderlineText(figureOut[now.day % figureOut.length], focused: 'word');
 }
 
 @riverpod
 UnderlineText cookieInfo(Ref ref) {
   final Map map = jsonDecode("cookies".tr());
   final List list = map["cookies"];
-  final List<UnderlineText> cookieInfo = List.from(
-    list.map(
-      (e) {
-        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
-        return UnderlineText.fromJson(json);
-      },
-    ),
-  );
+  final List<UnderlineText> cookieInfo = _conversion(list);
   return cookieInfo[mockInteger(0, list.length - 1)];
 }
 
@@ -89,14 +83,7 @@ UnderlineText cookieInfo(Ref ref) {
 UnderlineText notifyText(Ref ref) {
   final Map map = jsonDecode("notify".tr());
   final List list = map["notify"];
-  final List<UnderlineText> notify = List.from(
-    list.map(
-      (e) {
-        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
-        return UnderlineText.fromJson(json);
-      },
-    ),
-  );
+  final List<UnderlineText> notify = _conversion(list);
   return notify[mockInteger(0, list.length - 1)];
 }
 
@@ -104,14 +91,7 @@ UnderlineText notifyText(Ref ref) {
 UnderlineText welcomeUser(Ref ref) {
   final Map map = jsonDecode("welcome".tr());
   final List list = map["welcome"];
-  final List<UnderlineText> welcome = List.from(
-    list.map(
-      (e) {
-        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
-        return UnderlineText.fromJson(json);
-      },
-    ),
-  );
+  final List<UnderlineText> welcome = _conversion(list);
   final DateTime now = DateTime.now();
   return welcome[now.day % welcome.length];
 }
@@ -120,26 +100,28 @@ UnderlineText welcomeUser(Ref ref) {
 UnderlineText foundWord(Ref ref) {
   final Map map = jsonDecode("correct_text".tr());
   final List list = map["correct"];
-  final List<UnderlineText> foundWord = List.from(
-    list.map(
-      (e) {
-        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
-        return UnderlineText.fromJson(json);
-      },
-    ),
-  );
+  final List<UnderlineText> foundWord = _conversion(list);
   return foundWord[mockInteger(0, foundWord.length - 1)];
 }
 
 @riverpod
 List<UnderlineText> howPlay(Ref ref) {
   final List list = jsonDecode("how_to_play".tr());
-  return List.from(
-    list.map(
-      (e) {
-        final Map<String, dynamic> json = Map<String, dynamic>.from(e);
-        return UnderlineText.fromJson(json);
-      },
-    ),
-  );
+  return _conversion(list);
 }
+
+@Riverpod()
+UnderlineText questionCracked(Ref ref) {
+  final Map map = jsonDecode("question_cracked".tr());
+  final List list = jsonDecode(map["question_cracked"]);
+  return _conversion(list).elementAt(mockInteger(0, list.length - 1));
+}
+
+List<UnderlineText> _conversion(List list) => List.from(
+      list.map(
+        (e) {
+          final Map<String, dynamic> json = Map<String, dynamic>.from(e);
+          return UnderlineText.fromJson(json);
+        },
+      ),
+    );

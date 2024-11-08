@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../extension/extension.dart';
 
@@ -16,7 +17,6 @@ import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../../theme/pod.dart';
-// import 'package:badges/badges.dart' as badge;
 
 class PrevQuestion extends ConsumerWidget {
   const PrevQuestion({super.key});
@@ -35,12 +35,6 @@ class PrevQuestion extends ConsumerWidget {
             return PrevQuestionTile(date);
           },
         ),
-        /*child: FirestoreListView(
-          scrollDirection: Axis.horizontal,
-          query: ref.watch(prevQuestionQueryProvider),
-          padding: EdgeInsets.only(left: 30.r),
-          itemBuilder: (_, doc) => PrevQuestionTile(doc.data()),
-        ),*/
       );
 }
 
@@ -70,7 +64,9 @@ class PrevQuestionTile extends ConsumerWidget {
           gradient: isCompleted
               ? ref.read(
                   gradientProvider(
-                    color: [...List.filled(9, celeste), aquaMarine],
+                    color: [
+                      ...List.filled(9, celeste), /*aquaMarine*/
+                    ],
                   ),
                 )
               : null
@@ -138,14 +134,29 @@ class PrevQuestionTile extends ConsumerWidget {
                       ),
                 // color: cerise,
               ),
-              AutoSizeText(
-                question.played == 0
-                    ? "No one started yet"
-                    : "${question.played} users played",
-                maxLines: 1,
-                style: textTheme.headlineSmall
-                    ?.copyWith(color: isCompleted ? raisinBlack : null),
-                presetFontSizes: [15.r, 12.r, 9.r],
+              Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AutoSizeText(
+                    question.played == 0
+                        ? "No one started yet"
+                        : "${question.played} users played",
+                    maxLines: 1,
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: isCompleted ? raisinBlack : null),
+                    presetFontSizes: [15.r, 12.r, 9.r],
+                  ),
+                  Spacer(),
+                  SizedBox.square(
+                    dimension: 30.r,
+                    child: Lottie.asset("lottie/trophy.json"),
+                  ),
+                  Text(
+                    "${question.win.length}",
+                    style: textTheme.bodySmall
+                        ?.copyWith(color: isCompleted ? raisinBlack : null),
+                  )
+                ],
               ),
             ],
           ),

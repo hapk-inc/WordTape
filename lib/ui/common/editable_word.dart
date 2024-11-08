@@ -10,7 +10,6 @@ import '../../function/question/notifier.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/prompt.dart';
 import '../../model/route_path.dart';
-import '../../model/underline_text.dart';
 import '../../router/path.dart';
 
 import '../../extension/extension.dart';
@@ -92,7 +91,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
               onTap: () {
                 if (notifier.focusedWord != word) return;
                 notifier.prompt = Prompt(
-                  text: UnderlineText(ref.read(figureOutProvider)),
+                  text: ref.read(figureOutProvider),
                   state: PromptState.search,
                 );
 

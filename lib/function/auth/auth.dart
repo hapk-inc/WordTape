@@ -34,7 +34,7 @@ class Auth {
   Stream<User?> get authUser {
     late BehaviorSubject<User?> subject;
     subject = BehaviorSubject<User?>(
-      onListen: () => _auth.authStateChanges().listen(
+      onListen: () => _auth.userChanges().listen(
         (event) {
           if (!subject.hasValue || subject.value != event) {
             tracker.d(event == null ? "No User" : event.displayName);
@@ -48,7 +48,16 @@ class Auth {
 
   Future<User?> get fUser async => _auth.currentUser;
 
-  Future get googleAuth async => _googleSignIn.signInSilently();
+  Future get googleAuth async => _googleSignIn.signInSilently().catchError(
+        (e, s) {
+          if (e is FirebaseAuthException) {
+            if (e.message != "provider-already-linked") {
+              return _googleSignIn.signIn();
+            }
+          }
+          return null;
+        },
+      );
 
   Stream<User?> get onGoogleUser {
     late BehaviorSubject<User?> subject;

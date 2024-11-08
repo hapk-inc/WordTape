@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +21,6 @@ class RiddleAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final ScreenSize size = ref.watch(sizeProvider);
-    // final bool isPC = size == ScreenSize.pc;
     final PackageInfo? package = ref.read(packageProvider).value;
     final String name = package?.appName ?? "";
     final TextTheme textTheme = Theme.of(context).textTheme;
@@ -76,8 +75,9 @@ class _LottieHintState extends ConsumerState<LottieHint> {
               ? const SizedBox()
               : SizedBox.square(
                   dimension: 75.r,
-                  //child: FadeIn(child: Lottie.asset("question".tr())),
-                  child: FadeIn(child: Lottie.asset("lottie/question_2.json")),
+                  child: FadeIn(
+                    child: Lottie.asset("question_lottie".tr()),
+                  ),
                 ),
         ),
       );

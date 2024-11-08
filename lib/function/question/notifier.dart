@@ -57,7 +57,7 @@ class QuestionNotifier extends ChangeNotifier {
     final bool isDecode = path.path == "/decode";
     if (isDecode) {
       _prompt = Prompt(
-        text: UnderlineText(ref.read(figureOutProvider)),
+        text: ref.read(figureOutProvider),
         state: PromptState.search,
       );
     }
@@ -69,7 +69,6 @@ class QuestionNotifier extends ChangeNotifier {
 
   Future questionFound() async {
     //Safe-Initialisation Found
-
     _found = Found(date: date);
 
     _question = await _localQuestion.fromDate(date);
@@ -94,37 +93,21 @@ class QuestionNotifier extends ChangeNotifier {
     );
     found = f ?? Found.fromRiddle(_question!);
     _tracker.d(f);
-    _prompt = Prompt(
-      text: UnderlineText(ref.read(figureOutProvider)),
+    prompt = Prompt(
+      text: ref.read(figureOutProvider),
       state: PromptState.search,
     );
 
-    final int i = _found.i;
-
-    if (_found.untilNow.containsKey(i)) {
-      List list = _found.untilNow[i];
+    if (_found.untilNow.containsKey(_found.i)) {
+      List list = _found.untilNow[_found.i];
       clue = list.last;
     }
 
     _done = _question!.isCompleted(_found.i);
 
     if (_done) {
-      header = UnderlineText(
-        "challenge_done_${mockInteger(0, 6)}".tr(),
-        focused: "today. today’s",
-      );
-      prompt = const Prompt(
-        state: PromptState.done,
-        text: UnderlineText(
-            "You've pieced together the puzzle... but it took teamwork."),
-      );
-    } else {
-      if (_found.i != 1) {
-        _header = UnderlineText(
-          "resume_${mockInteger(0, 5)}".tr(),
-          focused: "sequence. pattern.",
-        );
-      }
+      final UnderlineText text = ref.read(questionCrackedProvider);
+      prompt = Prompt(text: text, state: PromptState.done);
     }
 
     notifyListeners();
@@ -138,7 +121,7 @@ class QuestionNotifier extends ChangeNotifier {
         if (next != null) {
           _question = next;
           _prompt = Prompt(
-            text: UnderlineText(ref.read(figureOutProvider)),
+            text: ref.read(figureOutProvider),
             state: PromptState.search,
           );
           _header = ref.read(welcomeUserProvider);
@@ -171,6 +154,9 @@ class QuestionNotifier extends ChangeNotifier {
   set done(bool value) {
     if (_done == value) return;
     _done = value;
+    final UnderlineText text = ref.read(questionCrackedProvider);
+    prompt = Prompt(text: text, state: PromptState.done);
+    if (_found.untilNow.isEmpty) _firestoreQuestion.winPlayed(_found.id);
     notifyListeners();
   }
 

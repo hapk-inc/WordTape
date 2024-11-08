@@ -34,6 +34,7 @@ void listenAuth(Ref ref) {
     (prev, next) {
       final Logger tracker = ref.read(trackerProvider);
       tracker.i("RunningUser==");
+      print(next?.uid ?? "nullUser");
 
       if (next != null) {
         if (prev == null) {
@@ -45,15 +46,15 @@ void listenAuth(Ref ref) {
         }
       } else {
         if (prev != null) {
-          LocalQuestion().delete();
-          LocalFound().delete();
+          LocalQuestion.delete();
+          LocalFound.delete();
           final GoRouter router = ref.read(routerProvider);
           router.replace('/');
-        } else {
-          /*if (kIsWeb) {
+        } /*else {
+          if (kIsWeb) {
             Future.delayed(_m1500, () => ref.read(authProvider).googleAuth);
-          }*/
-        }
+          }
+        }*/
       }
     },
     fireImmediately: true,

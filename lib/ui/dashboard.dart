@@ -6,13 +6,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wordtape/theme/color.dart';
-import 'package:wordtape/theme/font.dart';
 
 import '../function/auth/pod.dart';
 import '../panel/pod.dart';
 import '../router/router.dart';
 import '../shared/shared.dart';
+import '../theme/color.dart';
+import '../theme/font.dart';
 import 'common/accept_cookies.dart';
 import 'dashboard/prev_question.dart';
 import 'dashboard/riddle_now.dart';
@@ -84,12 +84,13 @@ class GoogleLogin extends ConsumerWidget {
             ElevatedButton(
               style: ButtonStyle(
                 minimumSize: WidgetStatePropertyAll(Size(300.r, 60.r)),
-                backgroundColor: WidgetStatePropertyAll(celeste),
+                backgroundColor: WidgetStatePropertyAll(gunMetal),
               ),
               onPressed: () => ref.read(googleLoginProvider),
               child: Text(
                 "CREATE A FREE ACCOUNT",
-                style: TextStyle(color: gunMetal),
+                style: defaultTextTheme.headlineMedium
+                    ?.copyWith(color: azureGreen),
               ),
             ),
           ],

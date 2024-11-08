@@ -82,7 +82,7 @@ class LocalQuestion {
     );
   }
 
-  Future<void> delete() async {
+  static Future<void> delete() async {
     if (kIsWeb) return;
     if (await databaseFactory.databaseExists(await getDatabasesPath())) {
       deleteDatabase(join(await getDatabasesPath(), '$_tableName.db'));
