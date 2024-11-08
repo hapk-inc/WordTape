@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,7 +84,7 @@ class QuestionNotifier extends ChangeNotifier {
     _header = ref.read(welcomeUserProvider);
     final String id = _question!.id!;
     Found? f;
-    f = await _localFound.found(id);
+    if (!kIsWeb) f = await _localFound.found(id);
 
     f ??= await _firestoreQuestion.found(id).then(
       (value) {
@@ -91,16 +92,14 @@ class QuestionNotifier extends ChangeNotifier {
         return value;
       },
     );
-    found = f ?? Found.fromRiddle(_question!);
+    _found = f ?? Found.fromRiddle(_question!);
     _tracker.d(f);
-    prompt = Prompt(
-      text: ref.read(figureOutProvider),
-      state: PromptState.search,
-    );
+    final UnderlineText text = ref.read(figureOutProvider);
+    _prompt = Prompt(text: text, state: PromptState.search);
 
     if (_found.untilNow.containsKey(_found.i)) {
-      List list = _found.untilNow[_found.i];
-      clue = list.last;
+      List l = _found.untilNow[_found.i];
+      _clue = l.last;
     }
 
     _done = _question!.isCompleted(_found.i);
@@ -208,13 +207,17 @@ class QuestionNotifier extends ChangeNotifier {
   Future<void> validate(String text, {bool revealed = false}) async {
     if (revealed) {
     } else {
-      debugPrint("${focusedWord!.value}; Entered $text");
       bool isValid = focusedWord!.value == text;
+      final DateTime now = DateTime.now();
+      found = _found.copyWith(lastFound: now);
       if (isValid) {
         await _newFound();
       } else {
         prompt = Prompt(
-          text: UnderlineText("wrong_${mockInteger(0, 4)}".tr()),
+          text: UnderlineText(
+            "wrong_${mockInteger(0, 4)}".tr(),
+            focused: "answer",
+          ),
           state: PromptState.error,
         );
         prompt = _prompt.copyWith(
@@ -223,20 +226,16 @@ class QuestionNotifier extends ChangeNotifier {
             focused: "Hint hint",
           ),
         );
-        final DateTime now = DateTime.now();
 
-        found = _found.copyWith(mistake: text, lastFound: now);
+        found = _found.copyWith(mistake: text);
       }
     }
   }
 
   Future<void> _newFound() async {
-    prompt = Prompt(
-      text: ref.read(foundWordProvider),
-      state: PromptState.right,
-    );
-    final DateTime now = DateTime.now();
-    found = _found.copyWith(i: _found.i + 1, mistake: null, lastFound: now);
+    final UnderlineText underlineText = ref.read(foundWordProvider);
+    prompt = Prompt(text: underlineText, state: PromptState.right);
+    found = _found.copyWith(i: _found.i + 1, mistake: null);
   }
 
   List<Word> get searchWord => _question?.searchWord(_found) ?? [];
@@ -247,8 +246,6 @@ class QuestionNotifier extends ChangeNotifier {
     if (!value) ref.read(toastNotifierProvider.notifier).dismiss();
     notifyListeners();
   }
-
-  // String get wordController => _subject.stream.;
 
   Future<void> helpUser() async {
     typing = true;

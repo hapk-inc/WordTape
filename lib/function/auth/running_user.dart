@@ -34,15 +34,12 @@ void listenAuth(Ref ref) {
     (prev, next) {
       final Logger tracker = ref.read(trackerProvider);
       tracker.i("RunningUser==");
-      print(next?.uid ?? "nullUser");
 
       if (next != null) {
-        if (prev == null) {
-          final int valid = ref.read(validateConnectionProvider());
-          final bool isAnonymous = next.isAnonymous;
-          if (!valid.isNegative && !isAnonymous) {
-            ref.read(firestoreUserProvider).updateMe();
-          }
+        final int valid = ref.read(validateConnectionProvider());
+        final bool anonymous = next.isAnonymous;
+        if (!anonymous) {
+          if (!valid.isNegative) ref.read(firestoreUserProvider).updateMe();
         }
       } else {
         if (prev != null) {

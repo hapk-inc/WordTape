@@ -45,5 +45,28 @@
   "fill_text_0": "Complete the full text",
   "fill_text_1": "Enter the complete text",
   "fill_text_2": "Fill in the entire content",
-  "fill_text_3": "Write out the complete text"
+  "fill_text_3": "Write out the complete text",
+
+  "wrong_0": "That answer is wrong",
+  "wrong_1": "You got that answer wrong",
+  "wrong_2": "That’s not the right answer",
+  "wrong_3": "That answer isn’t correct",
+  "wrong_4": "That answer is not right",
+
+  "use_hint_0": "Need help? Tap the hint icon.",
+  "use_hint_1": "If you're stuck, click the hint button.",
+  "use_hint_2": "Use the hint icon if you need a clue.",
+  "use_hint_3": "Stuck on a word? Press the hint icon for help.",
+  "use_hint_4": "If you need a tip, just use the hint icon.",
+  "use_hint_5": "If you want help, click the hint button.",
+  "use_hint_6": "Need a little help? Use the hint icon.",
+  "use_hint_7": "If you’re having trouble, use the hint button.",
+
+  "pass_detail_0": "Ask your friends to join the puzzle.",
+  "pass_detail_1": "Tell your friends to come play the puzzle.",
+  "pass_detail_2": "Invite your friends to play the puzzle",
+  "pass_detail_3": "Bring your friends to the puzzle.",
+  "pass_detail_4": "Have your friends join the puzzle.",
+  "pass_detail_5": "Get your friends to take part in the puzzle.",
+  "pass_detail_6": "Invite your pals to the puzzle."
 }

@@ -48,8 +48,13 @@ class Auth {
 
   Future<User?> get fUser async => _auth.currentUser;
 
-  Future get googleAuth async => _googleSignIn.signInSilently().catchError(
+  Future<GoogleSignInAccount?> get googleAuth async {
+    final GoogleSignInAccount? account = await _googleSignIn.signInSilently();
+    if (account == null) return _googleSignIn.signIn();
+    return account;
+  } /*.catchError(
         (e, s) {
+          debugPrint("51==");
           if (e is FirebaseAuthException) {
             if (e.message != "provider-already-linked") {
               return _googleSignIn.signIn();
@@ -57,7 +62,7 @@ class Auth {
           }
           return null;
         },
-      );
+      );*/
 
   Stream<User?> get onGoogleUser {
     late BehaviorSubject<User?> subject;
@@ -76,17 +81,23 @@ class Auth {
   }
 
   Future<UserCredential?> _onGoogleAuth(GoogleSignInAccount account) async {
-    final GoogleSignInAuthentication googleAuth = await account.authentication;
+    try {
+      final GoogleSignInAuthentication googleAuth =
+          await account.authentication;
 
-    // Create a new credential
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    if (_auth.currentUser != null) {
-      return _auth.currentUser?.linkWithCredential(credential);
+      // Create a new credential
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      if (_auth.currentUser != null) {
+        return _auth.currentUser?.linkWithCredential(credential);
+      }
+      return _auth.signInWithCredential(credential);
+    } catch (e, s) {
+      tracker.e(e.toString(), stackTrace: s);
+      rethrow;
     }
-    return _auth.signInWithCredential(credential);
   }
 
   Future<bool> get userLogin async {

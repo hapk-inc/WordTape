@@ -86,7 +86,7 @@ class GoogleLogin extends ConsumerWidget {
                 minimumSize: WidgetStatePropertyAll(Size(300.r, 60.r)),
                 backgroundColor: WidgetStatePropertyAll(gunMetal),
               ),
-              onPressed: () => ref.read(googleLoginProvider),
+              onPressed: () => ref.read(googleAuthProvider),
               child: Text(
                 "CREATE A FREE ACCOUNT",
                 style: defaultTextTheme.headlineMedium
