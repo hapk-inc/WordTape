@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +28,7 @@ class PanelNotifier extends _$PanelNotifier {
     super.state = value;
     final ScreenSize size = ref.read(sizeProvider);
     if (value != null) {
-      if (size == ScreenSize.mobile) {
+      if (size == ScreenSize.mobile && !kIsWeb) {
         final PanelController panel = ref.read(panelControllerProvider);
         if (panel.isAttached || panel.isPanelClosed) panel.open();
       } else {

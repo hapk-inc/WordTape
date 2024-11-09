@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lottie/lottie.dart';
+import 'package:mock_data/mock_data.dart';
 import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
 import '../router/router.dart';
@@ -79,14 +80,16 @@ class Loader extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return FadeIn(
       child: TextButton(
-        // onPressed: () => ref.read(userLoginProvider),
         onPressed: () {
           final User? user = ref.read(runningUserProvider).value;
           if (user == null) ref.read(userLoginProvider);
           final GoRouter router = ref.read(routerProvider);
           router.go("/dashboard");
         },
-        child: Text("press_start".tr(), style: textTheme.labelSmall),
+        child: Text(
+          "press_start_${mockInteger(0, 3)}".tr(),
+          style: textTheme.labelSmall,
+        ),
       ),
     );
   }

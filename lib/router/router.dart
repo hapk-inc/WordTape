@@ -43,10 +43,7 @@ GoRouter router(Ref ref) {
         },
         builder: (_, __, child) => OutlinePage(child),
         routes: [
-          GoRoute(
-            path: '/',
-            builder: (_, __) => const SplashPage(),
-          ),
+          GoRoute(path: '/', builder: (_, __) => const SplashPage()),
           GoRoute(
             path: '/renovation',
             builder: (_, __) => const RenovationPage(),

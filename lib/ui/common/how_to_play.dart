@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
 import '../../panel/widget.dart';
@@ -22,9 +24,10 @@ class HowToPlay extends PanelWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
     final List<UnderlineText> list = ref.read(howPlayProvider);
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      height: height(),
+    final ScreenSize size = ref.watch(sizeProvider);
+    debugPrint("${size != ScreenSize.pc}" "$kIsWeb");
+    return Container(
+      height: (size != ScreenSize.pc && kIsWeb) ? 720.r : height(),
       decoration: BoxDecoration(
         gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
       ),
@@ -52,7 +55,7 @@ class HowToPlay extends PanelWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: "⚫️",
+                              text: "⚫️ ",
                               style: defaultTextTheme.emojiSmall.copyWith(
                                 fontSize: 4.5.r,
                               ),
@@ -61,10 +64,17 @@ class HowToPlay extends PanelWidget {
                             TextSpan(text: underline.text),
                             const TextSpan(text: "\n")
                           ],
-                        )
+                        ),
                     ],
                     style:
                         defaultTextTheme.bodySmall?.copyWith(color: cadetGray),
+                  ),
+                ),
+                Text(
+                  "Find the words without looking at hints.",
+                  style: defaultTextTheme.headlineSmall?.copyWith(
+                    height: 0,
+                    color: raisinBlack,
                   ),
                 ),
                 Center(
@@ -85,7 +95,7 @@ class HowToPlay extends PanelWidget {
   }
 
   @override
-  double height() => 600.r;
+  double height() => 675.r;
 
   @override
   SlideDirection direction() => SlideDirection.UP;

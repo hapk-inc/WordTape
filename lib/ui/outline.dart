@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,7 +38,7 @@ class OutlinePage extends ConsumerWidget {
           bottom: false,
           child: Builder(
             builder: (_) {
-              if (!mobile) return OutlineState(child: child);
+              if (!mobile && kIsWeb) return OutlineState(child: child);
               final PanelWidget? panelWidget = ref.watch(panelNotifierProvider);
               final SlideDirection direction =
                   panelWidget?.direction() ?? SlideDirection.UP;

@@ -33,39 +33,7 @@ class RiddleNow extends ConsumerWidget {
       snap: false,
       floating: true,
       leadingWidth: 120.r,
-      /* leading: Row(
-        children: [
-          Gap(15.r),
-          CircleAvatar(radius: 36.r),
-        ],
-      ),*/
-
-      /*actions: [
-        if (kDebugMode && player != null)
-          // if (player != null)
-          //  if (player.source != "web")
-          CircleAvatar(
-            radius: 36.r,
-            backgroundColor: aquaMarine,
-            child: InkWell(
-              onTap: () => ref.read(panelNotifierProvider.notifier).state =
-                  const LogoffAlert(),
-              child: RandomAvatar(
-                player.avatar ?? "${player.rollNo}",
-                trBackground: true,
-              ),
-            ),
-          ),
-        Gap(15.r)
-      ],*/
-      /* bottom: PreferredSize(
-        preferredSize: Size.fromHeight(120.h),
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 30.r),
-          child: BottomButton(date),
-        ),
-      ),*/
-      expandedHeight: 600.r,
+      expandedHeight: 675.r,
       toolbarHeight: 90.h,
       titleSpacing: 0.r,
       flexibleSpace: FlexibleSpaceBar(
@@ -243,7 +211,7 @@ class RiddleNowWelcome extends ConsumerWidget {
         ),
         maxLines: 2,
         style: textTheme.bodyLarge?.copyWith(color: azureGreen),
-        presetFontSizes: [21.r, 18.r],
+        presetFontSizes: [22.5.r, 21.r, 18.r],
         textAlign: TextAlign.center,
       ),
     );

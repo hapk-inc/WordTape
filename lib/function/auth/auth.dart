@@ -52,17 +52,7 @@ class Auth {
     final GoogleSignInAccount? account = await _googleSignIn.signInSilently();
     if (account == null) return _googleSignIn.signIn();
     return account;
-  } /*.catchError(
-        (e, s) {
-          debugPrint("51==");
-          if (e is FirebaseAuthException) {
-            if (e.message != "provider-already-linked") {
-              return _googleSignIn.signIn();
-            }
-          }
-          return null;
-        },
-      );*/
+  }
 
   Stream<User?> get onGoogleUser {
     late BehaviorSubject<User?> subject;
@@ -71,9 +61,6 @@ class Auth {
         (GoogleSignInAccount? account) async {
           bool isAuthorized = account != null;
           if (isAuthorized) await _onGoogleAuth(account);
-        },
-        onError: (e, s) {
-          tracker.e("onGoogleUser", error: e, stackTrace: s);
         },
       ),
     );

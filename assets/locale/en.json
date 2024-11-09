@@ -1,5 +1,9 @@
 {
-  "press_start": "PRESS TO START",
+  "press_start_0": "PRESS TO START",
+  "press_start_1": "CLICK TO LAUNCH",
+  "press_start_2": "PUSH TO START",
+  "press_start_3": "TOUCH HERE TO START",
+
 
   "help_user": "This is word puzzle game where user has to find out the second part of the word. We have given a word \"#\", where user has to find the second part of the word. ie., user has to fill the word \"#\". But user has entered \"#\". First If only typo correction, help the user to correct the spelling. Then, check if user has entered an invalid word. When you are helping, never mention about the correct word i.e., # . And do not ask questions like \"Did you mean by\". Use simple english and also use less than 12 words.",
   "hint": "This is a word puzzle where user has to find out the second part of the word. Now, user need to find the word \"#\". Give me short hint for word \"#\" less than 15 words. Make sure that the hint does not have the word \"#\". Use simple english.",
