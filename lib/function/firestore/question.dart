@@ -43,23 +43,31 @@ class FirestoreQuestion {
     final String dateStr = DateFormat('yyyy-MM-dd').format(date);
     late BehaviorSubject<Question> subject;
     subject = BehaviorSubject(
-      onListen: () => collection
-          .where(
-            'date',
-            isEqualTo: dateStr,
-          )
-          .snapshots()
-          .listen(
-        (QuerySnapshot snapshot) {
-          if (snapshot.docs.isNotEmpty) {
-            final QueryDocumentSnapshot doc = snapshot.docs.first;
-            if (doc.exists) {
-              final Question r = Question.fromSnapshot(doc);
-              subject.add(r);
-            }
-          }
-        },
-      ),
+      onListen: fUser == null
+          ? null
+          : () => collection
+                  .where(
+                    'date',
+                    isEqualTo: dateStr,
+                  )
+                  .snapshots()
+                  .listen(
+                (QuerySnapshot snapshot) {
+                  if (snapshot.docs.isNotEmpty) {
+                    final QueryDocumentSnapshot doc = snapshot.docs.first;
+                    if (doc.exists) {
+                      final Question r = Question.fromSnapshot(doc);
+                      subject.add(r);
+                    }
+                  }
+                },
+              ).onError(
+                (e, s) {
+                  print("64--");
+                  print(e);
+                  print(s);
+                },
+              ),
     );
 
     return subject.stream;

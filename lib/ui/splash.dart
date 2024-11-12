@@ -61,7 +61,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               dimension: 540.r,
               child: Stack(
                 children: [
-                  if (_logo) Logo(onFinish: onFinish, biggerText: true),
+                  if (_logo) Logo(onFinish: onFinish),
                   if (_lottie) StampLottie(onLoaded: onLoaded)
                 ],
               ),

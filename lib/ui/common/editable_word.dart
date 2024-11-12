@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
+import 'package:wordtape/theme/color.dart';
 
 import '../../enum/enum.dart';
 import '../../function/question/notifier.dart';
@@ -21,8 +22,9 @@ import '../../theme/pod.dart';
 
 class EditableWord extends ConsumerStatefulWidget {
   final Word word;
+  final bool initialised;
 
-  const EditableWord(this.word, {super.key});
+  const EditableWord(this.word, {this.initialised = true, super.key});
 
   @override
   ConsumerState createState() => _EditableWordState();
@@ -38,20 +40,58 @@ class _EditableWordState extends ConsumerState<EditableWord> {
   @override
   void initState() {
     word = widget.word;
-    final List<String> splitter = word.id?.split("|") ?? [];
-    if (splitter.isNotEmpty) {
-      index = int.parse(splitter[1]);
-      date = DateFormat('yyyy-MM-dd').parse(splitter[0]);
-    } else {
-      index = 0;
-      date = DateTime.now().convert();
+    if (widget.initialised) {
+      final List<String> splitter = word.id?.split("|") ?? [];
+      if (splitter.isNotEmpty) {
+        index = int.parse(splitter[1]);
+        date = DateFormat('yyyy-MM-dd').parse(splitter[0]);
+      } else {
+        index = 0;
+        date = DateTime.now().convert();
+      }
+      wordNotifier = ref.read(wordNotifierProvider(word));
     }
-    wordNotifier = ref.read(wordNotifierProvider(word));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.initialised) {
+      return SizedBox(
+        height: 72.h,
+        child: LayoutBuilder(
+          builder: (_, constraints) {
+            final PinTheme pinTheme = ref.read(
+              pinThemeProvider(constraints: constraints, color: raisinBlack),
+            );
+
+            return Pinput(
+              length: word.value.length,
+              defaultPinTheme: pinTheme,
+              controller: TextEditingController(text: word.value),
+              //
+
+              keyboardType: TextInputType.none, // readOnly: true,
+
+              //
+              enabled: false,
+              animationCurve: Curves.easeOut,
+
+              readOnly: true,
+
+              textCapitalization: TextCapitalization.characters,
+              separatorBuilder: (_) {
+                final int len = word.value.length;
+                return SizedBox(width: len > 8 ? 4.5.r : 9.r);
+              },
+
+              errorBuilder: (e, _) => const SizedBox(),
+              textInputAction: TextInputAction.none,
+            );
+          },
+        ),
+      );
+    }
     final RoutePath path = ref.read(pathNotifierProvider);
 
     wordNotifier = ref.watch(wordNotifierProvider(word));
@@ -65,7 +105,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
       tag: word.id ?? "",
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 90),
-        height: 70.5.h,
+        height: 72.h,
         child: LayoutBuilder(
           builder: (_, constraints) {
             final PinTheme pinTheme = ref.read(

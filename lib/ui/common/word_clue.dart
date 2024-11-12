@@ -50,7 +50,7 @@ class WordClueState extends ConsumerWidget {
                         duration: const Duration(milliseconds: 600),
                         key: ValueKey(notifier.clue),
                         child: TypewriterText(
-                          text: notifier.clue,
+                          notifier.clue,
                           onEnd: () async {
                             await Future.delayed(_m4500);
                             notifier.typing = false;

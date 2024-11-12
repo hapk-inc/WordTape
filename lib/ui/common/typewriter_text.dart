@@ -9,9 +9,9 @@ class TypewriterText extends StatefulWidget {
   final Duration duration;
   final void Function() onEnd;
 
-  const TypewriterText({
+  const TypewriterText(
+    this.text, {
     super.key,
-    required this.text,
     this.duration = const Duration(milliseconds: 75),
     required this.onEnd,
   });
