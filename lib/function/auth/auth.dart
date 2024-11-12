@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,14 +11,12 @@ import 'package:rxdart/rxdart.dart';
 import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
 
-//const List<String> _scopes = <String>['email'];
-
 class Auth {
   final Ref ref;
 
   late FirebaseAuth _auth;
   late Logger tracker;
-  late GoogleSignIn _googleSignIn;
+  late GoogleSignIn _google;
 
   Auth(this.ref) {
     _auth = ref.read(firebaseAuthProvider);
@@ -26,8 +25,11 @@ class Auth {
     final AppEnv appEnv = ref.read(appEnvProvider);
     final bool isDev = appEnv == AppEnv.dev;
 
-    _googleSignIn = GoogleSignIn(
-      clientId: dotEnv.get(isDev ? 'CLIENT_ID_DEV' : 'CLIENT_ID_PROD'),
+    _google = GoogleSignIn(
+      clientId: dotEnv.get(
+        isDev ? 'CLIENT_ID_DEV' : 'CLIENT_ID_PROD',
+        fallback: "CLIENT_ID_PROD".tr(),
+      ),
     );
   }
 
@@ -49,15 +51,15 @@ class Auth {
   Future<User?> get fUser async => _auth.currentUser;
 
   Future<GoogleSignInAccount?> get googleAuth async {
-    final GoogleSignInAccount? account = await _googleSignIn.signInSilently();
-    if (account == null) return _googleSignIn.signIn();
+    final GoogleSignInAccount? account = await _google.signInSilently();
+    if (account == null) return _google.signIn();
     return account;
   }
 
-  Stream<User?> get onGoogleUser {
-    late BehaviorSubject<User?> subject;
+  Stream<GoogleSignInAccount?> get onGoogleUser {
+    late BehaviorSubject<GoogleSignInAccount?> subject;
     subject = BehaviorSubject(
-      onListen: () => _googleSignIn.onCurrentUserChanged.listen(
+      onListen: () => _google.onCurrentUserChanged.listen(
         (GoogleSignInAccount? account) async {
           bool isAuthorized = account != null;
           if (isAuthorized) await _onGoogleAuth(account);
@@ -68,23 +70,16 @@ class Auth {
   }
 
   Future<UserCredential?> _onGoogleAuth(GoogleSignInAccount account) async {
-    try {
-      final GoogleSignInAuthentication googleAuth =
-          await account.authentication;
-
-      // Create a new credential
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      if (_auth.currentUser != null) {
-        return _auth.currentUser?.linkWithCredential(credential);
-      }
-      return _auth.signInWithCredential(credential);
-    } catch (e, s) {
-      tracker.e(e.toString(), stackTrace: s);
-      rethrow;
+    final GoogleSignInAuthentication googleAuth = await account.authentication;
+    // Create a new credential
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    if (_auth.currentUser != null) {
+      return _auth.currentUser?.linkWithCredential(credential);
     }
+    return _auth.signInWithCredential(credential);
   }
 
   Future<bool> get userLogin async {

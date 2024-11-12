@@ -71,6 +71,8 @@ class FirestoreQuestion {
       collection.doc(id).update(
         <String, dynamic>{"played": FieldValue.increment(1)},
       );
+    } else {
+      print("First Found $id $fUser");
     }
   }
 
@@ -83,10 +85,13 @@ class FirestoreQuestion {
           .set(found.toFirestore());
     } else {
       _tracker.i("75== Found ${found.id} User ${fUser?.uid}");
+      print("SetFound ${found.id} $fUser");
     }
   }
 
   Future<Found?> found(String id) async {
+    print("Found $id");
+    print("$fUser");
     if (fUser == null) return null;
     return collection.doc(id).collection("found").doc(fUser?.uid).get().then(
       (DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -127,6 +132,8 @@ class FirestoreQuestion {
           "win": FieldValue.arrayUnion([fUser!.uid]),
         },
       );
+    } else {
+      print("winPlayed $id $fUser");
     }
   }
 

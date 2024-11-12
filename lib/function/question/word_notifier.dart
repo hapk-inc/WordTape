@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -13,7 +12,6 @@ import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../../extension/extension.dart';
 
-import '../auth/pod.dart';
 import '../underline_text/pod.dart';
 import 'notifier.dart';
 // import 'p_notifier.dart';
@@ -156,8 +154,7 @@ class WordNotifier extends ChangeNotifier {
   onTextChanged(String? text) async {
     if (text == null) return;
     String txt = text.toUpperCase();
-    final User? user = ref.read(runningUserProvider).value;
-    if (user == null) ref.read(userLoginProvider);
+
     String exact = word.value;
     if (!txt.startsWith(exact.firstChar) || txt.isEmpty) {
       _controller.value = _controller.value.copyWith(

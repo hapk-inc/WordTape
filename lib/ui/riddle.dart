@@ -32,6 +32,7 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   void initState() {
     date = widget.date;
     notifier = ref.read(questionNotifierProvider(date));
+
     Future.delayed(
       const Duration(milliseconds: 600),
       () {

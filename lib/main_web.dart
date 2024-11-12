@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,31 +45,44 @@ Future<void> main() async {
   final FirebaseApp app = await Firebase.initializeApp(options: options);
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);
-  final FirebaseFirestore fireStore = FirebaseFirestore.instanceFor(app: app);
-  final FirebaseRemoteConfig rc = FirebaseRemoteConfig.instanceFor(app: app);
+  final FirebaseFirestore firebaseFirestore =
+      FirebaseFirestore.instanceFor(app: app);
+  firebaseFirestore.settings = Settings(webExperimentalForceLongPolling: true);
+  final FirebaseRemoteConfig remoteConfig =
+      FirebaseRemoteConfig.instanceFor(app: app);
 
   final FirebaseAnalytics analytics = FirebaseAnalytics.instanceFor(app: app);
-  final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
 
   final RemoteConfigSettings remoteConfigSetting = RemoteConfigSettings(
     fetchTimeout: const Duration(seconds: 45),
     minimumFetchInterval: const Duration(seconds: 3),
   );
 
-  rc.setDefaults(<String, dynamic>{"renovation": ""});
-  await rc.setConfigSettings(remoteConfigSetting);
+  remoteConfig.setDefaults(<String, dynamic>{"renovation": ""});
+  await remoteConfig.setConfigSettings(remoteConfigSetting);
 
-  final Logger logger = Logger();
+  final Logger tracker = Logger();
 
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
-    logger.e("APP CRASH", error: error, stackTrace: stack);
+    tracker.e("WEB CRASH", error: error, stackTrace: stack);
+
+    if (firebaseAuth.currentUser != null) {
+      firebaseFirestore
+          .collection('user')
+          .doc(firebaseAuth.currentUser?.uid)
+          .update(
+        <String, dynamic>{
+          "error": FieldValue.arrayUnion(
+            [
+              {"error": error, "stacktrace": stack}
+            ],
+          )
+        },
+      );
+    }
     return true;
   };
-
-  if (!kIsWeb) await crashlytics.setCrashlyticsCollectionEnabled(kReleaseMode);
-
-  logger.i("FIREBASE STARTED");
 
   final Connectivity connectivity = Connectivity();
   final List<ConnectivityResult> connectivityResult =
@@ -80,7 +92,9 @@ Future<void> main() async {
       connectivityResult.contains(ConnectivityResult.wifi);
   int validConnection = 0;
   if (isValid) {
-    validConnection = await rc.fetchAndActivate().then((flag) => flag ? 1 : 0);
+    validConnection = await remoteConfig.fetchAndActivate().then(
+          (flag) => flag ? 1 : 0,
+        );
   } else {
     validConnection = -1;
   }
@@ -88,14 +102,13 @@ Future<void> main() async {
   final List<Override> override = [
     firebaseAppProvider.overrideWithValue(app),
     firebaseAuthProvider.overrideWithValue(firebaseAuth),
-    firestoreProvider.overrideWithValue(fireStore),
+    firestoreProvider.overrideWithValue(firebaseFirestore),
     firebaseAnalyticsProvider.overrideWithValue(analytics),
     //
-    remoteConfigProvider.overrideWithValue(rc),
-    if (!kIsWeb) crashlyticsProvider.overrideWithValue(crashlytics),
+    remoteConfigProvider.overrideWithValue(remoteConfig),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/env")),
     //
-    trackerProvider.overrideWithValue(logger),
+    trackerProvider.overrideWithValue(tracker),
 
     appEnvProvider.overrideWithValue(appEnv),
 

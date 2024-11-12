@@ -46,7 +46,7 @@ class DefaultFirebaseOptionsProd {
     messagingSenderId: '15743304421',
     projectId: 'wordtape-51',
     authDomain: 'wordtape-51.firebaseapp.com',
-    storageBucket: 'wordtape-51.appspot.com',
+    storageBucket: 'wordtape-51.firebasestorage.app',
     measurementId: 'G-NW90FRE1L6',
   );
 

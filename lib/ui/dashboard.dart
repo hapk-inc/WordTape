@@ -69,7 +69,7 @@ class GoogleLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    DefaultTextTheme defaultTextTheme = DefaultTextTheme();
+    DefaultTextTheme textTheme = DefaultTextTheme();
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.all(15.r),
@@ -77,7 +77,7 @@ class GoogleLogin extends ConsumerWidget {
           children: [
             Text(
               "Would you like to revisit the previous games?",
-              style: defaultTextTheme.headlineLarge,
+              style: textTheme.headlineLarge,
               textAlign: TextAlign.center,
             ),
             Gap(15.r),
@@ -86,11 +86,17 @@ class GoogleLogin extends ConsumerWidget {
                 minimumSize: WidgetStatePropertyAll(Size(300.r, 60.r)),
                 backgroundColor: WidgetStatePropertyAll(gunMetal),
               ),
-              onPressed: () => ref.read(googleAuthProvider),
+              onPressed: () => ref.read(googleAuthProvider.future).onError(
+                (error, stackTrace) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Authentication Failed $error"),
+                  ));
+                  return null;
+                },
+              ),
               child: Text(
                 "CREATE A FREE ACCOUNT",
-                style: defaultTextTheme.headlineMedium
-                    ?.copyWith(color: azureGreen),
+                style: textTheme.headlineMedium?.copyWith(color: azureGreen),
               ),
             ),
           ],

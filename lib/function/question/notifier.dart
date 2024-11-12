@@ -44,7 +44,7 @@ class QuestionNotifier extends ChangeNotifier {
   late Logger _tracker;
   final LocalQuestion _localQuestion = LocalQuestion();
   final LocalFound _localFound = LocalFound();
-  late FirestoreQuestion _firestoreQuestion;
+  // late FirestoreQuestion _firestoreQuestion;
 
   //
   late bool _done = false;
@@ -64,9 +64,12 @@ class QuestionNotifier extends ChangeNotifier {
     }
     final DateTime now = DateTime.now();
     _isToday = DateUtils.isSameDay(date, now);
-    _firestoreQuestion = ref.read(firestoreQuestionProvider);
+    // _firestoreQuestion = ref.read(firestoreQuestionProvider);
     _header = const UnderlineText("Thinking for today's puzzle");
   }
+
+  FirestoreQuestion get _firestoreQuestion =>
+      ref.read(firestoreQuestionProvider);
 
   Future questionFound() async {
     //Safe-Initialisation Found
@@ -220,11 +223,9 @@ class QuestionNotifier extends ChangeNotifier {
           ),
           state: PromptState.error,
         );
+        final int random2 = mockInteger(0, 7);
         prompt = _prompt.copyWith(
-          text: UnderlineText(
-            "use_hint_${mockInteger(0, 7)}".tr(),
-            focused: "Hint hint",
-          ),
+          text: UnderlineText("use_hint_$random2".tr(), focused: "Hint hint"),
         );
 
         found = _found.copyWith(mistake: text);

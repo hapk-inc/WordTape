@@ -25,9 +25,8 @@ class FirestoreUser {
   }
 
   Future<void> updateMe() async {
-    final String id = fUser?.uid ?? "unknown";
-    log(id, name: "updateMe");
-    if (id == "unknown") return;
+    if (fUser == null) return;
+    final String id = fUser!.uid;
     DocumentReference docRef = userColl.doc(id);
     return firebaseFirestore.runTransaction(
       (transaction) async {

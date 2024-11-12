@@ -117,7 +117,7 @@ mixin CustomThemeMixin {
             fontSize: 16.r,
           ),
         ),
-        minimumSize: WidgetStatePropertyAll(Size(150.r, 54.r)),
+        minimumSize: WidgetStatePropertyAll(Size(150.r, 51.r)),
         padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.r)),
         foregroundColor: const WidgetStatePropertyAll(seaWhite),
       );
