@@ -8,6 +8,7 @@ import 'package:toastification/toastification.dart';
 import '../enum/enum.dart';
 import '../panel/pod.dart';
 import '../panel/widget.dart';
+import '../router/router.dart';
 import '../theme/color.dart';
 
 BorderRadius _borderRadius(double radius, {bool isTop = true}) =>
@@ -32,6 +33,7 @@ class OutlinePage extends ConsumerWidget {
       ),
       child: Scaffold(
         backgroundColor: blackBean,
+        key: scaffoldKey,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           top: false,

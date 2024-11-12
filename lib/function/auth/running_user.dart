@@ -33,7 +33,6 @@ void listenAuth(Ref ref) {
     runningUserProvider.select((value) => value.value),
     (prev, next) {
       final Logger tracker = ref.read(trackerProvider);
-      print("RunningUser==${next?.uid}");
       tracker.i("RunningUser==${next?.uid}");
 
       if (next != null) {
@@ -56,9 +55,5 @@ void listenAuth(Ref ref) {
       }
     },
     fireImmediately: true,
-    onError: (error, stackTrace) {
-      print(error);
-      print(stackTrace);
-    },
   );
 }

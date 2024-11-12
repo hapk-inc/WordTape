@@ -88,7 +88,7 @@ class GoogleLogin extends ConsumerWidget {
               ),
               onPressed: () => ref.read(googleAuthProvider.future).onError(
                 (error, stackTrace) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  scaffoldKey.currentState?.showSnackBar(SnackBar(
                     content: Text("Authentication Failed $error"),
                   ));
                   return null;

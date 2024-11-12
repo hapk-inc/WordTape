@@ -6,19 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/model/word.dart';
 
 import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
+import '../../model/word.dart';
 import '../../panel/widget.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../../theme/pod.dart';
 import 'editable_word.dart';
-import 'typewriter_text.dart';
 
 class HowToPlay extends PanelWidget {
   const HowToPlay({super.key});
