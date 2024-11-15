@@ -54,6 +54,13 @@
   "fill_text_2": "Fill in the entire content",
   "fill_text_3": "Write out the complete text",
 
+  "resume_0": "Keep going to finish the sequence.",
+  "resume_1": "You started off great. Now try to complete the pattern.",
+  "resume_2": "You did well at first. Please finish the sequence.",
+  "resume_3": "You got off to a good start. Now complete the pattern.",
+  "resume_4": "You started out great. Try to complete the rest of the pattern.",
+  "resume_5": "You began well. Now work on completing the sequence.",
+
   "wrong_0": "That answer is wrong",
   "wrong_1": "You got that answer wrong",
   "wrong_2": "That’s not the right answer",
@@ -75,5 +82,14 @@
   "pass_detail_3": "Bring your friends to the puzzle.",
   "pass_detail_4": "Have your friends join the puzzle.",
   "pass_detail_5": "Get your friends to take part in the puzzle.",
-  "pass_detail_6": "Invite your pals to the puzzle."
+  "pass_detail_6": "Invite your pals to the puzzle.",
+
+  "think_0": "Seems you need to solve this. Use your brain.",
+  "think_1": "You probably have to work this out. Think about it.",
+  "think_2": "Looks like you need to find the answer. Think.",
+  "think_3": "You might have to figure this out. Take a moment to think.",
+  "think_4": "Seems you need to think it through yourself.",
+  "think_5": "Looks like it's up to you to solve it.",
+  "think_6": "Looks like you have to work this out on your own. Use your mind!",
+  "think_7": "You need to find a way to figure this out. Think it over!"
 }

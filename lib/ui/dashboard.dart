@@ -55,7 +55,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         if (isAnonymous) ...[
           GoogleLogin(),
         ] else ...[
-          GameArchives(),
+          GameArchive(),
           SliverToBoxAdapter(child: PrevQuestion()),
         ],
         SliverToBoxAdapter(child: DashboardFooter()),
@@ -106,8 +106,8 @@ class GoogleLogin extends ConsumerWidget {
   }
 }
 
-class GameArchives extends StatelessWidget {
-  const GameArchives({super.key});
+class GameArchive extends StatelessWidget {
+  const GameArchive({super.key});
 
   @override
   Widget build(BuildContext context) => SliverToBoxAdapter(

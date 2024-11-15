@@ -158,25 +158,26 @@ class QuestionUntilNow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
     final Found found = notifier.found;
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
     if (notifier.found.i == 1) return Container();
     return AutoSizeText.rich(
-        TextSpan(
-          children: [
-            if (found.i != 1)
-              ...[
-                for (int i = 0; i <= found.i - 1; i++)
-                  found.untilNow.containsKey(i) ? "🟧" : "🟩",
-              ].map(
-                (e) => TextSpan(text: e),
-              )
-          ],
-        ),
-        style: defaultTextTheme.emojiTheme);
+      TextSpan(
+        children: [
+          if (found.i != 1)
+            ...[
+              for (int i = 0; i <= found.i - 1; i++)
+                found.untilNow.containsKey(i) ? "🟧" : "🟩",
+            ].map(
+              (e) => TextSpan(text: e),
+            )
+        ],
+      ),
+      style: defaultTextTheme.emojiTheme,
+    );
   }
 }
 
@@ -190,7 +191,7 @@ class RiddleNowWelcome extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     //
-    final UnderlineText sentence = notifier.header;
+    final UnderlineText sentence = notifier.headline;
     List<String> words = sentence.text.split(' ');
     List<String> highlighter = (sentence.focused ?? "").split(' ');
     return FadeInUp(

@@ -66,21 +66,12 @@ Future<void> main() async {
   // Async exceptions
   PlatformDispatcher.instance.onError = (error, stack) {
     tracker.e("WEB CRASH", error: error, stackTrace: stack);
+    firebaseFirestore.collection('errors').add(<String, dynamic>{
+      "error": FieldValue.arrayUnion([
+        {"error": error, "stacktrace": stack}
+      ])
+    });
 
-    if (firebaseAuth.currentUser != null) {
-      firebaseFirestore
-          .collection('user')
-          .doc(firebaseAuth.currentUser?.uid)
-          .update(
-        <String, dynamic>{
-          "error": FieldValue.arrayUnion(
-            [
-              {"error": error, "stacktrace": stack}
-            ],
-          )
-        },
-      );
-    }
     return true;
   };
 

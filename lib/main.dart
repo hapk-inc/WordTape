@@ -39,7 +39,9 @@ Future<void> main() async {
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);
   final FirebaseFirestore fireStore = FirebaseFirestore.instanceFor(app: app);
-  final FirebaseRemoteConfig rc = FirebaseRemoteConfig.instanceFor(app: app);
+  final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instanceFor(
+    app: app,
+  );
 
   final FirebaseAnalytics analytics = FirebaseAnalytics.instanceFor(app: app);
   final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
@@ -49,8 +51,8 @@ Future<void> main() async {
     minimumFetchInterval: const Duration(seconds: 3),
   );
 
-  rc.setDefaults(<String, dynamic>{"renovation": ""});
-  await rc.setConfigSettings(remoteConfigSetting);
+  remoteConfig.setDefaults(<String, dynamic>{"renovation": ""});
+  await remoteConfig.setConfigSettings(remoteConfigSetting);
 
   final Logger tracker = Logger();
 
@@ -73,8 +75,10 @@ Future<void> main() async {
       connectivityResult.contains(ConnectivityResult.wifi);
   int validConnection = 0;
   if (isValid) {
-    validConnection =
-        await rc.fetchAndActivate().then((flag) => flag ? 1 : 0).onError(
+    validConnection = await remoteConfig
+        .fetchAndActivate()
+        .then((flag) => flag ? 1 : 0)
+        .onError(
       (error, stackTrace) {
         if (error is FirebaseException) {
           tracker.i("FirebaseExe", error: error);
@@ -93,7 +97,7 @@ Future<void> main() async {
     firestoreProvider.overrideWithValue(fireStore),
     firebaseAnalyticsProvider.overrideWithValue(analytics),
     //
-    remoteConfigProvider.overrideWithValue(rc),
+    remoteConfigProvider.overrideWithValue(remoteConfig),
     crashlyticsProvider.overrideWithValue(crashlytics),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/.env")),
     //

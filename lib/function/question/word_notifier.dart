@@ -1,8 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:mock_data/mock_data.dart';
 
 import '../../enum/enum.dart';
 import '../../model/found.dart';
@@ -93,9 +91,7 @@ class WordNotifier extends ChangeNotifier {
             // _notifier.clue = "";
             final bool isFirstFound = _index == 2 && p == 1;
             if (isFirstFound) {
-              _notifier.header = UnderlineText(
-                  "resume_${mockInteger(0, 5)}".tr(),
-                  focused: "sequence. pattern");
+              _notifier.headline = ref.read(resumeProvider);
             }
           }
         }

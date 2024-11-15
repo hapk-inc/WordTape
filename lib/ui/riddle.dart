@@ -72,7 +72,10 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   Widget build(BuildContext context) {
     notifier = ref.watch(questionNotifierProvider(date));
     return GradientBox(
-      child: SafeArea(bottom: false, child: RiddlePageState(date)),
+      child: SafeArea(
+        bottom: false,
+        child: RiddlePageState(date),
+      ),
     );
   }
 }
@@ -97,7 +100,7 @@ class RiddlePageState extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     return LayoutBuilder(
       builder: (_, constraints) {
         final double maxHeight = constraints.maxHeight - 90.h;

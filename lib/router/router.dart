@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../function/date_selected/date_selected.dart';
 import '../model/route_path.dart';
@@ -65,20 +64,15 @@ GoRouter router(Ref ref) {
               return RiddlePage(args);
             },
             onExit: (_, state) {
-              final PanelController panelController =
+              /*final PanelController panelController =
                   ref.read(panelControllerProvider);
               if (panelController.isAttached) {
                 if (panelController.isPanelOpen) panelController.close();
-              }
+              }*/
+              ref.read(panelNotifierProvider.notifier).state = null;
 
-              //
-              // final DateTime date = ref.read(dateSelectedProvider);
               final RoutePath path = ref.read(pathNotifierProvider);
 
-              //
-              // final QuestionNotifier questionNotifier =
-              //    ref.read(questionNotifierProvider(date));
-              // questionNotifier.insert();
               ref.read(pathNotifierProvider.notifier).state = path.copyWith(
                 path: "/home",
               );

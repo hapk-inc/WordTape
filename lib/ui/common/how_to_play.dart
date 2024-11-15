@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../../enum/enum.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -25,17 +23,12 @@ class HowToPlay extends PanelWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
     final List<UnderlineText> list = ref.read(howPlayProvider);
-    final ScreenSize size = ref.watch(sizeProvider);
-    debugPrint("${size != ScreenSize.pc}" "$kIsWeb");
+
     return Container(
-      // height: (size != ScreenSize.pc && kIsWeb) ? 720.r : height(),
       decoration: BoxDecoration(
         gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
       ),
-      padding:
-          EdgeInsets.only(left: 15.r, top: 15.r, bottom: 45.r, right: 15.r),
-      //alignment: Alignment.topLeft,
-
+      padding: EdgeInsets.fromLTRB(7.5.r, 15.r, 7.5.r, 45.r),
       constraints: BoxConstraints(maxWidth: 540.r),
       child: LayoutBuilder(
         builder: (context, constraints) => FadeIn(
@@ -53,6 +46,7 @@ class HowToPlay extends PanelWidget {
                 Gap(15.r),
                 for (UnderlineText underline in list)
                   InstructionTile(underline.text, constraints.maxWidth * 0.9),
+                Gap(15.r),
                 EditableWord(Word(value: "WASHING"), initialised: false),
                 EditableWord(Word(value: "MACHINE"), initialised: false),
                 EditableWord(Word(value: "GUN"), initialised: false),
@@ -65,7 +59,7 @@ class HowToPlay extends PanelWidget {
   }
 
   @override
-  double height() => 600.r;
+  double height() => 720.r;
 
   @override
   SlideDirection direction() => SlideDirection.UP;
@@ -146,8 +140,8 @@ class InstructionTile extends StatelessWidget {
     return Wrap(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 10.r),
-          child: Icon(Icons.circle, color: midnightGreen, size: 9.r),
+          margin: EdgeInsets.only(top: 12.r),
+          child: Icon(Icons.circle, color: midnightGreen, size: 7.5.r),
         ),
         Container(
           padding: EdgeInsets.only(left: 7.5.r),
@@ -161,11 +155,3 @@ class InstructionTile extends StatelessWidget {
     );
   }
 }
-
-/*TextSpan _pts(String title, String sub) => TextSpan(
-      text: title,
-      children: [
-        const TextSpan(text: " : "),
-        TextSpan(text: sub, style: const TextStyle(color: slateGray))
-      ],
-    );*/

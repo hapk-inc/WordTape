@@ -30,32 +30,17 @@ class PanelNotifier extends _$PanelNotifier {
     if (value != null) {
       if (size == ScreenSize.mobile && !kIsWeb) {
         final PanelController panel = ref.read(panelControllerProvider);
-        if (panel.isAttached || panel.isPanelClosed) panel.open();
+        if (panel.isAttached) if (panel.isPanelClosed) panel.open();
       } else {
         show(value);
       }
-    }
-  }
-
-/*
-  @override
-  set state(PanelWidget? value) {
-    if (state == value) return;
-    super.state = value;
-    String str = "$value";
-    debugPrint(str);
-    if (str == "ePanel".tr()) return;
-    final PanelController panel = ref.read(panelControllerProvider);
-    final ScreenSize size = ref.read(sizeProvider);
-    if (panel.isAttached && size == ScreenSize.mobile) {
-      if (panel.isPanelClosed) panel.open();
     } else {
-      show(value);
+      final PanelController panel = ref.read(panelControllerProvider);
+      if (panel.isAttached) {
+        if (panel.isPanelOpen) panel.close();
+      }
     }
   }
- */
-
-  /*set dialogState(PanelWidget value) => show(value);*/
 
   show(PanelWidget value) => showDialog(
         context: navigatorKey.currentContext!,

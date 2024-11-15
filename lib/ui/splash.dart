@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,9 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lottie/lottie.dart';
-import 'package:mock_data/mock_data.dart';
 import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
+import '../function/underline_text/pod.dart';
 import '../router/router.dart';
 import 'common/gradient_box.dart';
 import 'common/logo.dart';
@@ -86,10 +85,7 @@ class Loader extends ConsumerWidget {
           final GoRouter router = ref.read(routerProvider);
           router.go("/dashboard");
         },
-        child: Text(
-          "press_start_${mockInteger(0, 3)}".tr(),
-          style: textTheme.labelSmall,
-        ),
+        child: Text(ref.read(pressStartProvider), style: textTheme.labelSmall),
       ),
     );
   }

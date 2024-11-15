@@ -64,7 +64,7 @@ class _TypewriterTextState extends State<TypewriterText> {
       key: ValueKey(_displayedText),
       maxLines: 2,
       presetFontSizes: [21.r, 18.r, 15.r, 12.r],
-      style: textTheme.latoTheme,
+      style: textTheme.poppinsTheme,
     );
   }
 }

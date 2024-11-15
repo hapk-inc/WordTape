@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +23,7 @@ class OutlinePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ScreenSize size = ref.watch(sizeProvider);
-    final bool mobile = size == ScreenSize.mobile;
+    final bool isMobile = size == ScreenSize.mobile;
     return ToastificationConfigProvider(
       config: ToastificationConfig(
         marginBuilder: (_, __) => EdgeInsets.all(15.r),
@@ -40,7 +39,7 @@ class OutlinePage extends ConsumerWidget {
           bottom: false,
           child: Builder(
             builder: (_) {
-              if (!mobile && kIsWeb) return OutlineState(child: child);
+              if (!isMobile) return OutlineState(child: child);
               final PanelWidget? panelWidget = ref.watch(panelNotifierProvider);
               final SlideDirection direction =
                   panelWidget?.direction() ?? SlideDirection.UP;
@@ -49,7 +48,7 @@ class OutlinePage extends ConsumerWidget {
                 backdropOpacity: 1,
                 isDraggable: false,
                 color: seaWhite,
-                controller: mobile ? ref.read(panelControllerProvider) : null,
+                controller: isMobile ? ref.read(panelControllerProvider) : null,
                 minHeight: 0,
                 maxHeight: panelWidget?.height() ?? 0.h,
                 padding: EdgeInsets.zero,

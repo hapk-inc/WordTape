@@ -28,7 +28,7 @@ UnderlineText resume(Ref ref) {
       focused: "complete pattern. sequence.",
     ),
   );
-  return resume[mockInteger(0, 6)];
+  return resume[mockInteger(0, 5)];
 }
 
 @Riverpod(keepAlive: true)
@@ -53,9 +53,14 @@ String useHighlighter(Ref ref) {
 @riverpod
 UnderlineText fillText(Ref ref) {
   final List<String> fillText = List.generate(4, (i) => "fill_text_$i".tr());
-  return UnderlineText(fillText[mockInteger(0, fillText.length - 1)],
-      focused: 'text content');
+  return UnderlineText(
+    fillText[mockInteger(0, fillText.length - 1)],
+    focused: 'text content',
+  );
 }
+
+@Riverpod(keepAlive: true)
+String pressStart(Ref ref) => "press_start_${mockInteger(0, 3)}".tr();
 
 @riverpod
 String aiError(Ref ref) {

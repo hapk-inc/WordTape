@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../function/question/notifier.dart';
 import '../../theme/color.dart';
@@ -35,7 +36,7 @@ class WordClueState extends ConsumerWidget {
               icon: const Icon(Icons.close),
             ),
           ),
-          Positioned.fill(
+          Positioned(
             top: 30.r,
             right: 30.r,
             left: 15.r,
@@ -43,7 +44,10 @@ class WordClueState extends ConsumerWidget {
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 600),
               child: notifier.clue.isEmpty
-                  ? const SizedBox.expand()
+                  ? SizedBox.square(
+                      dimension: 90.r,
+                      child: Lottie.asset('lottie/loading.json'),
+                    )
                   : Container(
                       alignment: Alignment.topLeft,
                       child: FadeIn(

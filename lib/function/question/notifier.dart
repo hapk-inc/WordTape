@@ -38,7 +38,7 @@ class QuestionNotifier extends ChangeNotifier {
 
   late bool _isToday;
   late Prompt _prompt;
-  late UnderlineText _header;
+  late UnderlineText _headline;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Logger _tracker;
@@ -64,8 +64,7 @@ class QuestionNotifier extends ChangeNotifier {
     }
     final DateTime now = DateTime.now();
     _isToday = DateUtils.isSameDay(date, now);
-    // _firestoreQuestion = ref.read(firestoreQuestionProvider);
-    _header = const UnderlineText("Thinking for today's puzzle");
+    _headline = const UnderlineText("Thinking for today's puzzle");
   }
 
   FirestoreQuestion get _firestoreQuestion =>
@@ -84,9 +83,12 @@ class QuestionNotifier extends ChangeNotifier {
     );
 
     if (_question == null) return;
-    _header = ref.read(welcomeUserProvider);
+
+    if (_isToday) _headline = ref.read(welcomeUserProvider);
+
     final String id = _question!.id!;
     Found? f;
+
     if (!kIsWeb) f = await _localFound.found(id);
 
     f ??= await _firestoreQuestion.found(id).then(
@@ -95,10 +97,13 @@ class QuestionNotifier extends ChangeNotifier {
         return value;
       },
     );
+
     _found = f ?? Found.fromRiddle(_question!);
     _tracker.d(f);
     final UnderlineText text = ref.read(figureOutProvider);
     _prompt = Prompt(text: text, state: PromptState.search);
+
+    if (_found.i != 1 && _isToday) _headline = ref.read(resumeProvider);
 
     if (_found.untilNow.containsKey(_found.i)) {
       List l = _found.untilNow[_found.i];
@@ -109,7 +114,8 @@ class QuestionNotifier extends ChangeNotifier {
 
     if (_done) {
       final UnderlineText text = ref.read(questionCrackedProvider);
-      prompt = Prompt(text: text, state: PromptState.done);
+      _prompt = Prompt(text: text, state: PromptState.done);
+      _headline = text;
     }
 
     notifyListeners();
@@ -126,7 +132,7 @@ class QuestionNotifier extends ChangeNotifier {
             text: ref.read(figureOutProvider),
             state: PromptState.search,
           );
-          _header = ref.read(welcomeUserProvider);
+          _headline = ref.read(welcomeUserProvider);
         }
         notifyListeners();
       },
@@ -162,10 +168,10 @@ class QuestionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  UnderlineText get header => _header;
+  UnderlineText get headline => _headline;
 
-  set header(UnderlineText value) {
-    _header = value;
+  set headline(UnderlineText value) {
+    _headline = value;
     notifyListeners();
   }
 
@@ -270,7 +276,7 @@ class QuestionNotifier extends ChangeNotifier {
       },
     );
     if (clue.isEmpty) {
-      clue = "think_${mockInteger(0, 7)}".tr();
+      clue = ref.read(aiErrorProvider);
       return;
     }
 
