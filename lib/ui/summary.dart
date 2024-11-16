@@ -146,7 +146,7 @@ class SummaryFooter extends ConsumerWidget {
           noHelp
               ? "congrats_detail_${mockInteger(0, 5)}".tr()
               : "pass_detail_${mockInteger(0, 6)}".tr(),
-          style: defaultTextTheme.montserratMedium.copyWith(
+          style: defaultTextTheme.kanitMedium.copyWith(
             color: midnightGreen,
           ),
           maxLines: 1,

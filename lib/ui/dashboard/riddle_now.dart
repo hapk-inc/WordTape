@@ -19,7 +19,7 @@ import '../../theme/font.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
 import '../common/logo.dart';
-import '../common/how_to_play.dart';
+import '../common/instruction.dart';
 
 class RiddleNow extends ConsumerWidget {
   const RiddleNow({super.key});
@@ -75,7 +75,7 @@ class BottomButton extends ConsumerWidget {
           ElevatedButton(
             onPressed: () {
               ref.read(panelNotifierProvider.notifier).state =
-                  const HowToPlay();
+                  const InstructionDialog();
             },
             child: const Text("How to Play"),
           ),
@@ -98,13 +98,11 @@ class RiddleNowState extends ConsumerWidget {
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 150),
                 width: mW,
-                bottom: 0,
+                bottom: mH * 0.15,
+                top: mH * 0.09,
                 child: AnimatedSize(
                   duration: const Duration(milliseconds: 150),
-                  child: SizedBox(
-                    height: mH * 0.84,
-                    child: const RiddleNowStateState(),
-                  ),
+                  child: const RiddleNowStateState(),
                 ),
               ),
             ],
@@ -118,9 +116,12 @@ class RiddleNowStateState extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final DefaultTextTheme textTheme = DefaultTextTheme();
     final DateTime date = DateTime.now().convert();
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> searchWord = notifier.searchWord;
+
+    final int played = notifier.question?.played ?? 0;
 
     return Column(
       children: [
@@ -147,6 +148,19 @@ class RiddleNowStateState extends ConsumerWidget {
               ],
             ),
           ),
+        Spacer(),
+        if (notifier.question != null)
+          FadeInUp(
+            delay: const Duration(seconds: 3),
+            from: 30.h,
+            key: ValueKey(played),
+            child: Text(
+              played != 0
+                  ? "$played users have joined in on today's challenge."
+                  : "Be the first player to finish today's challenge!",
+              style: textTheme.bodySmall?.copyWith(color: celeste),
+            ),
+          )
       ],
     );
   }
@@ -176,7 +190,7 @@ class QuestionUntilNow extends ConsumerWidget {
             )
         ],
       ),
-      style: defaultTextTheme.emojiTheme,
+      style: defaultTextTheme.emojiMedium,
     );
   }
 }
@@ -194,6 +208,7 @@ class RiddleNowWelcome extends ConsumerWidget {
     final UnderlineText sentence = notifier.headline;
     List<String> words = sentence.text.split(' ');
     List<String> highlighter = (sentence.focused ?? "").split(' ');
+
     return FadeInUp(
       delay: const Duration(milliseconds: 1200),
       from: 45.h,

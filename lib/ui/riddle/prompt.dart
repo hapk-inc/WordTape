@@ -44,7 +44,7 @@ class PromptWidget extends ConsumerWidget {
                   text: word + (word != words.last ? " " : ""),
                   style: highlighter.contains(word)
                       ? isEmoji
-                          ? textTheme.emojiTheme
+                          ? textTheme.emojiMedium
                           : TextStyle(
                               color: prompt.state == PromptState.error
                                   ? melon

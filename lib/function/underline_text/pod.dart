@@ -70,6 +70,13 @@ String aiError(Ref ref) {
 }
 
 @riverpod
+String nextPuzzleThinking(Ref ref) {
+  final DateTime now = DateTime.now();
+  final List<String> next = List.generate(5, (i) => "next_puzzle_$i".tr());
+  return next[now.day % next.length];
+}
+
+@riverpod
 UnderlineText figureOut(Ref ref) {
   final DateTime now = DateTime.now();
   final List<String> figureOut = List.generate(7, (i) => "figure_$i".tr());

@@ -43,7 +43,7 @@ class WordClueState extends ConsumerWidget {
             bottom: 15.r,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 600),
-              child: notifier.clue.isEmpty
+              child: notifier.riddleClue.isEmpty
                   ? SizedBox.square(
                       dimension: 90.r,
                       child: Lottie.asset('lottie/loading.json'),
@@ -52,9 +52,9 @@ class WordClueState extends ConsumerWidget {
                       alignment: Alignment.topLeft,
                       child: FadeIn(
                         duration: const Duration(milliseconds: 600),
-                        key: ValueKey(notifier.clue),
+                        key: ValueKey(notifier.riddleClue),
                         child: TypewriterText(
-                          notifier.clue,
+                          notifier.riddleClue,
                           onEnd: () async {
                             await Future.delayed(_m4500);
                             notifier.typing = false;

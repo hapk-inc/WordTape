@@ -64,13 +64,7 @@ GoRouter router(Ref ref) {
               return RiddlePage(args);
             },
             onExit: (_, state) {
-              /*final PanelController panelController =
-                  ref.read(panelControllerProvider);
-              if (panelController.isAttached) {
-                if (panelController.isPanelOpen) panelController.close();
-              }*/
               ref.read(panelNotifierProvider.notifier).state = null;
-
               final RoutePath path = ref.read(pathNotifierProvider);
 
               ref.read(pathNotifierProvider.notifier).state = path.copyWith(

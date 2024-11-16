@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../function/instruction_notifier.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -16,41 +17,43 @@ import '../../theme/font.dart';
 import '../../theme/pod.dart';
 import 'editable_word.dart';
 
-class HowToPlay extends PanelWidget {
-  const HowToPlay({super.key});
+class InstructionDialog extends PanelWidget {
+  const InstructionDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
-    final List<UnderlineText> list = ref.read(howPlayProvider);
-
-    return Container(
-      decoration: BoxDecoration(
-        gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
-      ),
-      padding: EdgeInsets.fromLTRB(7.5.r, 15.r, 7.5.r, 45.r),
-      constraints: BoxConstraints(maxWidth: 540.r),
-      child: LayoutBuilder(
-        builder: (context, constraints) => FadeIn(
-          delay: const Duration(milliseconds: 300),
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                AutoSizeText(
-                  "How to Play",
-                  style: defaultTextTheme.headlineLarge,
-                ),
-                Gap(15.r),
-                for (UnderlineText underline in list)
-                  InstructionTile(underline.text, constraints.maxWidth * 0.9),
-                Gap(15.r),
-                EditableWord(Word(value: "WASHING"), initialised: false),
-                EditableWord(Word(value: "MACHINE"), initialised: false),
-                EditableWord(Word(value: "GUN"), initialised: false),
-              ],
+    final DefaultTextTheme textTheme = DefaultTextTheme();
+    final InstructionNotifier notifier = ref.watch(instructionNotifierProvider);
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 150),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
+        ),
+        padding: EdgeInsets.fromLTRB(7.5.r, 15.r, 7.5.r, 45.r),
+        constraints: BoxConstraints(maxWidth: 540.r),
+        child: LayoutBuilder(
+          builder: (_, constraints) => FadeIn(
+            delay: const Duration(milliseconds: 300),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AutoSizeText("How to Play", style: textTheme.headlineLarge),
+                  Gap(15.r),
+                  for (UnderlineText underline in ref.read(howPlayProvider))
+                    InstructionTile(underline.text, constraints.maxWidth * 0.9),
+                  Gap(15.r),
+                  ...notifier.displayed.map(
+                    (e) => FadeIn(
+                      key: ValueKey(e),
+                      child: EditableWord(Word(value: e), initialised: false),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

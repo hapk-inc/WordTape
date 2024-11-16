@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import '../function/question/notifier.dart';
 
 import '../model/word.dart';
 import '../panel/pod.dart';
+import 'common/instruction.dart';
 import 'riddle/custom_keyboard.dart';
 import 'common/editable_word.dart';
 import 'common/gradient_box.dart';
@@ -36,6 +38,9 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     Future.delayed(
       const Duration(milliseconds: 600),
       () {
+        if (kIsWeb) {
+          ref.read(panelNotifierProvider.notifier).state = InstructionDialog();
+        }
         if (notifier.done) {
           ref.read(panelNotifierProvider.notifier).state =
               SummaryPage(date: date);

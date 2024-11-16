@@ -48,7 +48,7 @@ class QuestionNotifier extends ChangeNotifier {
 
   //
   late bool _done = false;
-  String _clue = "";
+  String _riddleClue = "";
 
   bool _typing = false;
 
@@ -64,15 +64,15 @@ class QuestionNotifier extends ChangeNotifier {
     }
     final DateTime now = DateTime.now();
     _isToday = DateUtils.isSameDay(date, now);
-    _headline = const UnderlineText("Thinking for today's puzzle");
+    final String str = ref.read(nextPuzzleThinkingProvider);
+    _headline = UnderlineText(str, focused: "today’s");
   }
 
   FirestoreQuestion get _firestoreQuestion =>
       ref.read(firestoreQuestionProvider);
 
   Future questionFound() async {
-    //Safe-Initialisation Found
-    _found = Found(date: date);
+    _found = Found(date: date); //Safe-Initialisation Found
 
     _question = await _localQuestion.fromDate(date);
     _question ??= await _firestoreQuestion.question(date).then(
@@ -107,7 +107,7 @@ class QuestionNotifier extends ChangeNotifier {
 
     if (_found.untilNow.containsKey(_found.i)) {
       List l = _found.untilNow[_found.i];
-      _clue = l.last;
+      _riddleClue = l.last;
     }
 
     _done = _question!.isCompleted(_found.i);
@@ -175,11 +175,11 @@ class QuestionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get clue => _clue;
+  String get riddleClue => _riddleClue;
 
-  set clue(String value) {
-    if (_clue == value) return;
-    _clue = value;
+  set riddleClue(String value) {
+    if (_riddleClue == value) return;
+    _riddleClue = value;
     notifyListeners();
   }
 
@@ -257,16 +257,16 @@ class QuestionNotifier extends ChangeNotifier {
   Future<void> helpUser() async {
     typing = true;
     if (_found.untilNow.containsKey(_found.i)) {
-      final List<String> list = List.castFrom(_found.untilNow[_found.i]);
-      debugPrint(list.toString());
-      if (list.isNotEmpty && list.first.isNotEmpty) {
-        clue = list[0];
+      final List<String> clues = List.castFrom(_found.untilNow[_found.i]);
+
+      if (clues.isNotEmpty && clues.first.isNotEmpty) {
+        riddleClue = clues.first;
         return;
       }
     }
-    clue = "";
+    riddleClue = "";
     final String answer = _question!.answer(_found);
-    clue = await ref
+    riddleClue = await ref
         .read(createHintProvider(focusedWord!, answer).future)
         .catchError(
       (error, stackTrace) {
@@ -275,8 +275,8 @@ class QuestionNotifier extends ChangeNotifier {
         return "";
       },
     );
-    if (clue.isEmpty) {
-      clue = ref.read(aiErrorProvider);
+    if (riddleClue.isEmpty) {
+      riddleClue = ref.read(aiErrorProvider);
       return;
     }
 
@@ -285,10 +285,10 @@ class QuestionNotifier extends ChangeNotifier {
       _found.i,
       (value) {
         if (value is List) {
-          return [...value, if (!value.contains(_clue)) _clue];
+          return [...value, if (!value.contains(_riddleClue)) _riddleClue];
         }
       },
-      ifAbsent: () => [_clue],
+      ifAbsent: () => [_riddleClue],
     );
     found = _found.copyWith(untilNow: map);
   }

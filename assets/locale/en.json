@@ -91,5 +91,11 @@
   "think_4": "Seems you need to think it through yourself.",
   "think_5": "Looks like it's up to you to solve it.",
   "think_6": "Looks like you have to work this out on your own. Use your mind!",
-  "think_7": "You need to find a way to figure this out. Think it over!"
+  "think_7": "You need to find a way to figure this out. Think it over!",
+
+  "next_puzzle_0": "Let’s dive into today’s puzzle",
+  "next_puzzle_1": "Time to unravel the mystery of today’s puzzle!",
+  "next_puzzle_2": "Get ready to challenge your mind with today’s puzzle!",
+  "next_puzzle_3": "Join me in cracking today’s intriguing puzzle!",
+  "next_puzzle_4": "Let’s embark on a journey to solve today’s exciting riddle!"
 }

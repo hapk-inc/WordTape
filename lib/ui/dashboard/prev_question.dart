@@ -26,7 +26,7 @@ class PrevQuestion extends ConsumerWidget {
         height: 210.r,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 7,
+          itemCount: 15,
           itemBuilder: (context, index) {
             final DateTime now = DateTime.now();
             final DateTime date =
@@ -103,7 +103,7 @@ class PrevQuestionTile extends ConsumerWidget {
                       const TextSpan(text: "Completed")
                   ],
                 ),
-                style: textTheme.poppinsTheme.copyWith(
+                style: textTheme.kanitMedium.copyWith(
                   color: raisinBlack,
                   height: 1.5,
                 ),
