@@ -10,7 +10,6 @@ import '../../extension/extension.dart';
 
 import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
-import '../../model/found.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
@@ -116,12 +115,9 @@ class RiddleNowStateState extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DefaultTextTheme textTheme = DefaultTextTheme();
     final DateTime date = DateTime.now().convert();
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> searchWord = notifier.searchWord;
-
-    final int played = notifier.question?.played ?? 0;
 
     return Column(
       children: [
@@ -148,7 +144,7 @@ class RiddleNowStateState extends ConsumerWidget {
               ],
             ),
           ),
-        Spacer(),
+        /*Spacer(),
         if (notifier.question != null)
           FadeInUp(
             delay: const Duration(seconds: 3),
@@ -160,7 +156,7 @@ class RiddleNowStateState extends ConsumerWidget {
                   : "Be the first player to finish today's challenge!",
               style: textTheme.bodySmall?.copyWith(color: celeste),
             ),
-          )
+          )*/
       ],
     );
   }
@@ -173,22 +169,11 @@ class QuestionUntilNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
-
-    final Found found = notifier.found;
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
-    if (notifier.found.i == 1) return Container();
     return AutoSizeText.rich(
       TextSpan(
-        children: [
-          if (found.i != 1)
-            ...[
-              for (int i = 0; i <= found.i - 1; i++)
-                found.untilNow.containsKey(i) ? "🟧" : "🟩",
-            ].map(
-              (e) => TextSpan(text: e),
-            )
-        ],
+        children: List.of(notifier.summary.map((e) => TextSpan(text: e))),
       ),
       style: defaultTextTheme.emojiMedium,
     );

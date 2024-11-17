@@ -8,13 +8,13 @@ final AutoDisposeChangeNotifierProvider<InstructionNotifier>
 );
 
 class InstructionNotifier extends ChangeNotifier {
-  final List<String> _words = ["WASHING", "MACHINE", "GUN"];
+  final List<String> _words = ["WASHING", "MACHINE", "GUN", "POWDER"];
   final List<String> _displayed = ["WASHING"];
   int _index = 0;
   bool _isDisposed = false;
 
   Future<void> get constructor async {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 7; i++) {
       await Future.delayed(Duration(seconds: 1));
       if (i.isEven) {
         _displayed[_index] = _words[_index];

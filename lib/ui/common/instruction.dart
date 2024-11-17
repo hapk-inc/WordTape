@@ -24,6 +24,7 @@ class InstructionDialog extends PanelWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DefaultTextTheme textTheme = DefaultTextTheme();
     final InstructionNotifier notifier = ref.watch(instructionNotifierProvider);
+    final List<String> displayedText = notifier.displayed;
     return AnimatedSize(
       duration: const Duration(milliseconds: 150),
       child: Container(
@@ -41,17 +42,38 @@ class InstructionDialog extends PanelWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  AutoSizeText("How to Play", style: textTheme.headlineLarge),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.r),
+                    child: Row(
+                      children: [
+                        AutoSizeText("How to Play",
+                            style: textTheme.headlineLarge),
+                      ],
+                    ),
+                  ),
                   Gap(15.r),
                   for (UnderlineText underline in ref.read(howPlayProvider))
                     InstructionTile(underline.text, constraints.maxWidth * 0.9),
                   Gap(15.r),
-                  ...notifier.displayed.map(
-                    (e) => FadeIn(
-                      key: ValueKey(e),
-                      child: EditableWord(Word(value: e), initialised: false),
-                    ),
-                  ),
+                  ...List.generate(
+                    displayedText.length,
+                    (index) {
+                      final String str = notifier.displayed[index];
+                      final bool enabled = index == displayedText.length - 1 ||
+                          index == displayedText.length - 2;
+                      return FadeIn(
+                        key: ValueKey(str),
+                        child: AnimatedOpacity(
+                          opacity: enabled ? 1 : 0.15,
+                          duration: const Duration(milliseconds: 150),
+                          child: EditableWord(
+                            Word(value: str),
+                            initialised: false,
+                          ),
+                        ),
+                      );
+                    },
+                  )
                 ],
               ),
             ),

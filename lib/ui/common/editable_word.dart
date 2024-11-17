@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
-import 'package:wordtape/theme/color.dart';
 
 import '../../enum/enum.dart';
 import '../../function/question/notifier.dart';
@@ -18,6 +17,7 @@ import '../../extension/extension.dart';
 import '../../function/question/word_notifier.dart';
 import '../../model/word.dart';
 
+import '../../theme/color.dart';
 import '../../theme/pod.dart';
 
 class EditableWord extends ConsumerStatefulWidget {

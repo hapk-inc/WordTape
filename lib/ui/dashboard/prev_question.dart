@@ -27,6 +27,7 @@ class PrevQuestion extends ConsumerWidget {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: 15,
+          padding: EdgeInsets.only(left: 15.r),
           itemBuilder: (context, index) {
             final DateTime now = DateTime.now();
             final DateTime date =

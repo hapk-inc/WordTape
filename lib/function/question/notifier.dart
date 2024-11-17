@@ -296,4 +296,15 @@ class QuestionNotifier extends ChangeNotifier {
   Future<void> insert() async => await Future.wait(
         [_localFound.insert(found), _firestoreQuestion.setFound(found)],
       );
+
+  List<String> get summary {
+    if (found.i != 1) {
+      final List<String> list = [
+        for (int i = 0; i <= found.i - 1; i++)
+          found.untilNow.containsKey(i) ? "🟧" : "🟩",
+      ];
+      return list;
+    }
+    return [];
+  }
 }

@@ -22,14 +22,14 @@ class TypewriterText extends StatefulWidget {
 
 class _TypewriterTextState extends State<TypewriterText> {
   late Duration _typingDuration;
-  late String _displayedText;
+  late List<String> _displayedText;
   late String _incomingText;
 
   @override
   void initState() {
     _incomingText = widget.text;
     _typingDuration = widget.duration;
-    _displayedText = "";
+    _displayedText = List.filled(_incomingText.length, " ");
     animateText();
     super.initState();
   }
@@ -37,9 +37,9 @@ class _TypewriterTextState extends State<TypewriterText> {
   animateText() async {
     final forwardLength = _incomingText.length;
     if (forwardLength > 0) {
-      for (var i = 0; i <= forwardLength; i++) {
+      for (var i = 0; i < forwardLength; i++) {
         await Future.delayed(_typingDuration);
-        _displayedText = _incomingText.substring(0, i).trim();
+        _displayedText[i] = _incomingText.split('')[i];
         if (mounted) setState(() {});
       }
       widget.onEnd();
@@ -60,7 +60,7 @@ class _TypewriterTextState extends State<TypewriterText> {
   Widget build(BuildContext context) {
     final DefaultTextTheme textTheme = DefaultTextTheme();
     return AutoSizeText(
-      _displayedText,
+      _displayedText.join(),
       key: ValueKey(_displayedText),
       maxLines: 2,
       presetFontSizes: [21.r, 18.r, 15.r, 12.r],

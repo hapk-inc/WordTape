@@ -35,7 +35,7 @@ class SummaryPage extends PanelWidget {
   SlideDirection direction() => SlideDirection.UP;
 
   @override
-  double height() => 210.r;
+  double height() => 240.r;
 
   @override
   bool backdropEnabled() => false;
@@ -69,22 +69,20 @@ class _SummaryState extends ConsumerState<Summary> {
         color: seaWhite,
         child: Stack(
           children: [
-            if (noHelp)
-              Lottie.asset(
-                'confetti'.tr(),
-                repeat: false,
-                onLoaded: (p0) => Future.delayed(
-                  p0.duration * 0.75,
-                  () {
-                    if (mounted) setState(() => show = true);
-                  },
-                ),
+            Lottie.asset(
+              'confetti'.tr(),
+              repeat: false,
+              onLoaded: (p0) => Future.delayed(
+                p0.duration * 0.75,
+                () {
+                  if (mounted) setState(() => show = true);
+                },
               ),
-            if (show || !noHelp)
-              FadeIn(
-                duration: const Duration(milliseconds: 750),
-                child: const Center(child: SummaryContent()),
-              ),
+            ),
+            FadeIn(
+              duration: const Duration(milliseconds: 750),
+              child: const Center(child: SummaryContent()),
+            ),
           ],
         ),
       );
@@ -96,18 +94,13 @@ class SummaryContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(dateSelectedProvider);
-    final QuestionNotifier notifier = ref.read(questionNotifierProvider(date));
-    final bool noHelp = notifier.found.untilNow.isEmpty;
-
     return LayoutBuilder(
       builder: (_, constraints) => Column(
         children: [
           Expanded(
-            child: SafeArea(
-              child: FadeIn(
-                delay: const Duration(milliseconds: 750),
-                child: Center(child: QuestionUntilNow(date)),
-              ),
+            child: FadeIn(
+              delay: const Duration(milliseconds: 600),
+              child: Center(child: QuestionUntilNow(date)),
             ),
           ),
           AnimatedContainer(
@@ -116,7 +109,7 @@ class SummaryContent extends ConsumerWidget {
             height: 90.r,
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.symmetric(horizontal: 15.r),
-            child: SummaryFooter(noHelp),
+            child: SummaryFooter(date),
           )
         ],
       ),
@@ -125,33 +118,36 @@ class SummaryContent extends ConsumerWidget {
 }
 
 class SummaryFooter extends ConsumerWidget {
-  final bool noHelp;
-
-  const SummaryFooter(this.noHelp, {super.key});
+  final DateTime date;
+  const SummaryFooter(this.date, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final QuestionNotifier questionNotifier =
+        ref.watch(questionNotifierProvider(date));
     final PackageInfo? packageInfo = ref.read(packageProvider).value;
     final AppEnv appEnv = ref.read(appEnvProvider);
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
+    final String dateStr = DateFormat('MMM dd').format(date);
+
     final String url =
-        "https://${appEnv == AppEnv.dev ? "wordtape-demo" : "wordtape"}.web.app/";
+        "https://${appEnv == AppEnv.dev ? "wordtape-demo" : "wordtape-51"}"
+        ".web.app/";
+
+    final String str =
+        "$url\n\n${dateStr.toUpperCase()}: ${questionNotifier.summary.join()}";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          noHelp
-              ? "congrats_detail_${mockInteger(0, 5)}".tr()
-              : "pass_detail_${mockInteger(0, 6)}".tr(),
-          style: defaultTextTheme.kanitMedium.copyWith(
-            color: midnightGreen,
-          ),
+          "pass_detail_${mockInteger(0, 6)}".tr(),
+          style: defaultTextTheme.kanitMedium.copyWith(color: midnightGreen),
           maxLines: 1,
         ),
-        Gap(7.5.r),
+        Gap(4.5.r),
         if (packageInfo != null)
           SafeArea(
             bottom: false,
@@ -167,10 +163,9 @@ class SummaryFooter extends ConsumerWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () => Share.share(url),
+                  onTap: () => Share.share(str),
                   child: const Icon(Icons.copy),
                 ),
-                Gap(7.5.r),
               ],
             ),
           )
