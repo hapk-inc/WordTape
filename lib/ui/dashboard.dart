@@ -30,14 +30,12 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     Future.delayed(
       const Duration(milliseconds: 1500),
       () async {
-        final PanelNotifier notifier = ref.read(panelNotifierProvider.notifier);
-        final String location =
-            ref.read(routerProvider).routeInformationProvider.value.uri.path;
-        if (location == "/home") {
-          final SharedPreferences pref = await ref.read(sharedProvider.future);
-          if (kIsWeb) {
-            final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
-            if (!acceptCookies) notifier.state = const AcceptCookie();
+        final SharedPreferences pref = await ref.read(sharedProvider.future);
+        if (kIsWeb) {
+          final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
+          if (acceptCookies) {
+            ref.read(panelNotifierProvider.notifier).state =
+                const AcceptCookie();
           }
         }
       },

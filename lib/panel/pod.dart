@@ -24,6 +24,7 @@ class PanelNotifier extends _$PanelNotifier {
 
   @override
   set state(PanelWidget? value) {
+    print("27==$value");
     if ("$state" == "$value") return;
     super.state = value;
     final ScreenSize size = ref.read(sizeProvider);

@@ -96,12 +96,18 @@ class _KeyboardTile extends ConsumerWidget {
           border: Border.all(width: 0.27.r, color: seaWhite),
         ),
         padding: EdgeInsets.symmetric(horizontal: 7.5.r),
-        child: AutoSizeText(
-          str,
-          style: textTheme.headlineMedium?.copyWith(color: azureGreen),
-          presetFontSizes: [18.r, 15.r, 12.r],
-          maxLines: 1,
-        ),
+        child: str == "DEL"
+            ? Icon(Icons.backspace_outlined, color: cadetGray, size: 24.r)
+            : AutoSizeText(
+                str,
+                style: textTheme.headlineMedium?.copyWith(color: azureGreen),
+                presetFontSizes: [
+                  if (str.length == 1) 18.r,
+                  15.r,
+                  12.r,
+                ],
+                maxLines: 1,
+              ),
       ),
     );
   }

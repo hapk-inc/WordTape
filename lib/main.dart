@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:logger/logger.dart';
 
 import 'enum/enum.dart';
@@ -62,6 +63,10 @@ Future<void> main() async {
     if (kReleaseMode) crashlytics.recordError(error, stack, fatal: true);
     return true;
   };
+
+  print(DateTime.now().toLocal().timeZoneName);
+  print(DateTime.now().timeZoneName);
+  print(await FlutterTimezone.getLocalTimezone());
 
   await crashlytics.setCrashlyticsCollectionEnabled(kReleaseMode);
 

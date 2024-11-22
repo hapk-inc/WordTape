@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../function/question/notifier.dart';
 
 import '../model/word.dart';
 import '../panel/pod.dart';
+import '../shared/shared.dart';
 import 'common/instruction.dart';
 import 'riddle/custom_keyboard.dart';
 import 'common/editable_word.dart';
@@ -37,13 +39,21 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
 
     Future.delayed(
       const Duration(milliseconds: 600),
-      () {
-        if (kIsWeb) {
+      () async {
+        /*if (kIsWeb) {
           ref.read(panelNotifierProvider.notifier).state = InstructionDialog();
-        }
+        }*/
         if (notifier.done) {
           ref.read(panelNotifierProvider.notifier).state =
               SummaryPage(date: date);
+        } else {
+          final SharedPreferences pref = await ref.read(sharedProvider.future);
+
+          final bool howToPlay = pref.getBool('how_to_play') ?? false;
+          if (!howToPlay) {
+            ref.read(panelNotifierProvider.notifier).state =
+                const InstructionDialog();
+          }
         }
       },
     );

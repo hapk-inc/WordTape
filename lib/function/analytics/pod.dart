@@ -1,0 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'analytics_tracker.dart';
+
+@Riverpod(keepAlive: true)
+AnalyticsTracker analyticsTracker(Ref<AnalyticsTracker> ref) =>
+    AnalyticsTracker(ref);

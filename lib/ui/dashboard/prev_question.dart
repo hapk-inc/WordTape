@@ -22,19 +22,22 @@ class PrevQuestion extends ConsumerWidget {
   const PrevQuestion({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => SizedBox(
-        height: 210.r,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 15,
-          padding: EdgeInsets.only(left: 15.r),
-          itemBuilder: (context, index) {
-            final DateTime now = DateTime.now();
-            final DateTime date =
-                now.subtract(Duration(days: index + 1)).convert();
+  Widget build(BuildContext context, WidgetRef ref) => Theme(
+        data: ThemeData(scrollbarTheme: ScrollbarThemeData(interactive: false)),
+        child: SizedBox(
+          height: 210.r,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 15,
+            padding: EdgeInsets.only(left: 15.r),
+            itemBuilder: (context, index) {
+              final DateTime now = DateTime.now();
+              final DateTime date =
+                  now.subtract(Duration(days: index + 1)).convert();
 
-            return PrevQuestionTile(date);
-          },
+              return PrevQuestionTile(date);
+            },
+          ),
         ),
       );
 }
@@ -82,6 +85,7 @@ class PrevQuestionTile extends ConsumerWidget {
           context.go('/decode', extra: date);
         },
         child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -143,7 +147,7 @@ class PrevQuestionTile extends ConsumerWidget {
                         ? "No one started yet"
                         : "${question.played} users played",
                     maxLines: 1,
-                    style: textTheme.headlineSmall
+                    style: textTheme.bodyMedium
                         ?.copyWith(color: isCompleted ? raisinBlack : null),
                     presetFontSizes: [15.r, 12.r, 9.r],
                   ),
@@ -159,6 +163,7 @@ class PrevQuestionTile extends ConsumerWidget {
                   )
                 ],
               ),
+              Gap(300.r),
             ],
           ),
         ),

@@ -5,9 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lottie/lottie.dart';
+import '../firebase/pod.dart';
 import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
 import '../function/underline_text/pod.dart';
@@ -79,10 +81,15 @@ class Loader extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return FadeIn(
       child: TextButton(
-        onPressed: () {
+        onPressed: () async {
+          final String str = await FlutterTimezone.getLocalTimezone();
+          ref.read(firebaseAnalyticsProvider).logAppOpen(
+            parameters: {"timezone": str},
+          );
           final User? user = ref.read(runningUserProvider).value;
           if (user == null) ref.read(userLoginProvider);
           final GoRouter router = ref.read(routerProvider);
+
           router.go("/dashboard");
         },
         child: Text(ref.read(pressStartProvider), style: textTheme.labelSmall),

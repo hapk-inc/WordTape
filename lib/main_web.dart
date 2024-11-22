@@ -26,13 +26,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  //
   WidgetsBinding.instance.addPostFrameCallback((_) {});
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
   final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
-  final String url = kIsWeb ? web.window.location.href : "";
+  final String url = web.window.location.href;
 
   final AppEnv appEnv = kDebugMode
       ? AppEnv.dev
@@ -51,7 +50,8 @@ Future<void> main() async {
   final FirebaseRemoteConfig remoteConfig =
       FirebaseRemoteConfig.instanceFor(app: app);
 
-  final FirebaseAnalytics analytics = FirebaseAnalytics.instanceFor(app: app);
+  final FirebaseAnalytics firebaseAnalytics =
+      FirebaseAnalytics.instanceFor(app: app);
 
   final RemoteConfigSettings remoteConfigSetting = RemoteConfigSettings(
     fetchTimeout: const Duration(seconds: 45),
@@ -94,7 +94,7 @@ Future<void> main() async {
     firebaseAppProvider.overrideWithValue(app),
     firebaseAuthProvider.overrideWithValue(firebaseAuth),
     firestoreProvider.overrideWithValue(firebaseFirestore),
-    firebaseAnalyticsProvider.overrideWithValue(analytics),
+    firebaseAnalyticsProvider.overrideWithValue(firebaseAnalytics),
     //
     remoteConfigProvider.overrideWithValue(remoteConfig),
     envProvider.overrideWithValue(dotenv..load(fileName: "assets/env")),

@@ -12,6 +12,8 @@ import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/widget.dart';
+import '../../router/router.dart';
+import '../../shared/shared.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../../theme/pod.dart';
@@ -45,9 +47,29 @@ class InstructionDialog extends PanelWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15.r),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AutoSizeText("How to Play",
-                            style: textTheme.headlineLarge),
+                        AutoSizeText(
+                          "HOW TO PLAY",
+                          style: textTheme.headlineLarge?.copyWith(
+                            fontSize: 21.r,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            final pref = await ref.read(sharedProvider.future);
+                            pref.setBool('how_to_play', true).whenComplete(
+                                () => ref.read(routerProvider).pop());
+                          },
+                          child: Text(
+                            "I UNDERSTAND",
+                            style: textTheme.headlineSmall?.copyWith(
+                              color: midnightGreen,
+                              letterSpacing: 0.36,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
