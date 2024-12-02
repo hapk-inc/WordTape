@@ -51,9 +51,7 @@ class InstructionDialog extends PanelWidget {
                     children: [
                       AutoSizeText(
                         "How to play",
-                        style: textTheme.headlineLarge?.copyWith(
-                          fontSize: 30.r,
-                        ),
+                        style: textTheme.headlineLarge,
                       ),
                       /*  InkWell(
                         onTap: () async {

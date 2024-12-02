@@ -2,16 +2,24 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
+import '../../model/word.dart';
 import '../connectivity/pod.dart';
 import '../underline_text/pod.dart';
 
 part 'pod.g.dart';
+
+@Riverpod(keepAlive: true, dependencies: [GeminiAi])
+Future<String> generateToast(Ref ref, Word word, String answer) async {
+  final GeminiAi geminiAi = ref.read(geminiAiProvider.notifier);
+  return geminiAi.generateToast(word, answer);
+}
 
 /*@Riverpod(keepAlive: true, dependencies: [GeminiAi])
 Future<String> createHint(Ref ref, Word word, String answer) async {
@@ -74,6 +82,26 @@ class GeminiAi extends _$GeminiAi {
     final List<Content> contents = [Content.text(withNote ?? prompt)];
     return await callResponse(contents);
   }*/
+
+  FutureOr<String> generateToast(Word word, String answer) async {
+    final List<String> splitter = answer.split(' ');
+    final String find = splitter.last.toLowerCase();
+    final String? replaceQuestion = word.note?.replaceAll('?', find);
+    ref.read(trackerProvider).i("with_note".tr());
+    String? withNote;
+    String prompt;
+    if (word.note != null) {
+      withNote = replaceHash("with_note".tr(), [replaceQuestion ?? "", find]);
+    }
+    prompt = replaceHash("hint".tr(), [
+      capitalize(answer),
+      capitalize(answer),
+      find,
+    ]);
+    ref.read(trackerProvider).i(withNote ?? prompt);
+    final List<Content> contents = [Content.text(withNote ?? prompt)];
+    return await callResponse(contents);
+  }
 
   FutureOr<String> callResponse(List<Content> contents) =>
       state.generateContent(contents).then(

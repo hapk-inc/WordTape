@@ -202,7 +202,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
         date = DateFormat('yyyy-MM-dd').parse(splitter[0]);
       } else {
         index = 0;
-        date = DateTime.now().convert();
+        date = DateTime.now().onlyYYYYMMMDD;
       }
       wordNotifier = ref.read(wordNotifierProvider(word));
     }
@@ -212,8 +212,6 @@ class _EditableWordState extends ConsumerState<EditableWord> {
   @override
   Widget build(BuildContext context) {
     bool enabled = false;
-
-    //final WordNotifier wordNotifierRead = ref.read(wordNotifierProvider(word));
 
     if (initialised) {
       wordNotifier = ref.watch(wordNotifierProvider(word));
@@ -233,15 +231,17 @@ class _EditableWordState extends ConsumerState<EditableWord> {
       onTap: () {
         final QuestionNotifier notifier =
             ref.read(questionNotifierProvider(date));
-        final RoutePath path = ref.read(pathNotifierProvider);
-        final bool isDailyChallenge = path.path.contains("/daily-challenge/");
+        //final RoutePath path = ref.read(pathNotifierProvider);
+        //print("235-Route Path");
+        //print(path.path);
+        //final bool inDailyChallenge = path.path.contains("/daily-challenge/");
         if (notifier.focusedWord != word) return;
         notifier.prompt = Prompt(
           text: ref.read(figureOutProvider),
           state: PromptState.search,
         );
 
-        if (!isDailyChallenge && notifier.focusedWord == word) {
+        if (!initialised && notifier.focusedWord == word) {
           context.push('/daily-challenge', extra: date);
         }
       },

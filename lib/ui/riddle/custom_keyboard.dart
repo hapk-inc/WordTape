@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wordtape/router/path.dart';
 
-import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../function/question/word_notifier.dart';
 import '../../model/word.dart';
@@ -53,7 +53,6 @@ class _KeyboardTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(dateSelectedProvider);
     final bool isChar = str.length == 1;
     final DefaultTextTheme textTheme = DefaultTextTheme();
 
@@ -66,6 +65,7 @@ class _KeyboardTile extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
+        final DateTime date = ref.read(pathNotifierProvider).date;
         final QuestionNotifier notifier =
             ref.read(questionNotifierProvider(date));
         final Word? word = notifier.focusedWord;
@@ -83,6 +83,8 @@ class _KeyboardTile extends ConsumerWidget {
             default:
               wNotifier.keyboardTap(str);
           }
+        } else {
+          debugPrint("FocusedWord is null");
         }
       },
       child: AnimatedContainer(
@@ -100,7 +102,7 @@ class _KeyboardTile extends ConsumerWidget {
             ? Icon(Icons.backspace_outlined, color: azureGreen, size: 24.r)
             : AutoSizeText(
                 str,
-                style: textTheme.headlineMedium?.copyWith(color: mint),
+                style: textTheme.headlineMedium?.copyWith(color: azureGreen),
                 presetFontSizes: [
                   if (str.length == 1) 18.r,
                   15.r,

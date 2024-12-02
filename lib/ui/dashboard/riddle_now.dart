@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../extension/extension.dart';
 
-import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -26,7 +25,7 @@ class RiddleNow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = DateTime.now().convert();
+    final DateTime date = DateTime.now().onlyYYYYMMMDD;
 
     return SliverAppBar(
       pinned: true,
@@ -66,8 +65,7 @@ class BottomButton extends ConsumerWidget {
                 foregroundColor: WidgetStatePropertyAll(raisinBlack),
               ),
               onPressed: () {
-                final DateTime now = DateTime.now().convert();
-                ref.read(dateSelectedProvider.notifier).state = now;
+                final DateTime now = DateTime.now();
                 final String date = DateFormat('dd-MMM-yyyy').format(now);
                 context.push('/daily-challenge/$date');
               },
@@ -117,7 +115,7 @@ class RiddleNowStateState extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = DateTime.now().convert();
+    final DateTime date = DateTime.now().onlyYYYYMMMDD;
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> searchWord = notifier.searchWord;
 
@@ -187,7 +185,7 @@ class RiddleNowWelcome extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = DateTime.now().convert();
+    final DateTime date = DateTime.now().onlyYYYYMMMDD;
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final TextTheme textTheme = Theme.of(context).textTheme;
 

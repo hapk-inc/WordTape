@@ -16,6 +16,7 @@ import '../../model/word.dart';
 import '../../router/path.dart';
 import '../firestore/pod.dart';
 import '../firestore/question.dart';
+import '../gen_ai/pod.dart';
 import '../local/found.dart';
 import '../local/question.dart';
 import '../underline_text/pod.dart';
@@ -43,23 +44,17 @@ class QuestionNotifier extends ChangeNotifier {
   late Logger _tracker;
   final LocalQuestion _localQuestion = LocalQuestion();
   final LocalFound _localFound = LocalFound();
-  // late FirestoreQuestion _firestoreQuestion;
 
   //
   late bool _done = false;
-  late String? _toastText;
-  //String _riddleClue = "";
-
-  // bool _typing = false;
+  String? _toastText;
 
   QuestionNotifier(this.ref, {required this.date}) {
-    final RoutePath path = ref.read(pathNotifierProvider);
     _tracker = ref.read(trackerProvider);
-    final bool isDailyChallenge = path.path.contains("/daily-challenge/");
-    if (isDailyChallenge) {
-      final UnderlineText figureText = ref.read(figureOutProvider);
-      _prompt = Prompt(text: figureText, state: PromptState.search);
-    }
+
+    final UnderlineText figureText = ref.read(figureOutProvider);
+    _prompt = Prompt(text: figureText, state: PromptState.search);
+
     final DateTime now = DateTime.now();
     _isToday = DateUtils.isSameDay(date, now);
     final String str = ref.read(nextPuzzleThinkingProvider);
@@ -82,7 +77,6 @@ class QuestionNotifier extends ChangeNotifier {
     );
 
     if (_question == null) return;
-    _tracker.d(_question!);
 
     if (_isToday) _headline = ref.read(welcomeUserProvider);
 
@@ -99,16 +93,10 @@ class QuestionNotifier extends ChangeNotifier {
     );
 
     _found = f ?? Found.fromRiddle(_question!);
-    _tracker.d(f);
     final UnderlineText text = ref.read(figureOutProvider);
     _prompt = Prompt(text: text, state: PromptState.search);
 
     if (_found.i != 1 && _isToday) _headline = ref.read(resumeProvider);
-
-    /*if (_found.untilNow.containsKey(_found.i)) {
-      List l = _found.untilNow[_found.i];
-      _toastText = l.last;
-    }*/
 
     _done = _question!.isCompleted(_found.i);
 
@@ -213,6 +201,7 @@ class QuestionNotifier extends ChangeNotifier {
       bool isValid = focusedWord!.value == text;
       found = _found;
       if (isValid) {
+        _toastText = null;
         await _newFound();
       } else {
         prompt = Prompt(
@@ -242,27 +231,39 @@ class QuestionNotifier extends ChangeNotifier {
 
   Future<void> helpUser() async {
     List<String>? hints = _question?.words[_found.i].hints;
+    if (focusedWord == null) return;
     if (hints == null) {
-      _toastText = null;
-      return;
+      toastText = await ref.watch(generateToastProvider(
+        focusedWord!,
+        _question!.answer(_found),
+      ).future);
+      if (_toastText != null) saveToast(_toastText!);
+    } else {
+      final int index = mockInteger(0, hints.length - 1);
+      toastText = hints[index];
+      final String saveIndex = "#$index";
+      saveToast(saveIndex);
     }
-    final int index = mockInteger(0, hints.length - 1);
-    _toastText = hints[index];
+  }
 
-    final String saveIndex = "#$index";
-
+  void saveToast(String str) {
     Map<int, dynamic> map = Map<int, dynamic>.from(_found.untilNow);
     map.update(
       _found.i,
       (value) {
-        if (value is List) {
-          return [...value, if (!value.contains(saveIndex)) saveIndex];
-        }
+        if (value is List) return [...value, if (!value.contains(str)) str];
       },
-      ifAbsent: () => [saveIndex],
+      ifAbsent: () => [str],
     );
     found = _found.copyWith(untilNow: map);
   }
+
+  set toastText(String? value) {
+    if (_toastText == value) return;
+    _toastText = value;
+    notifyListeners();
+  }
+
   /*Future<void> helpUser() async {
     typing = true;
     if (_found.untilNow.containsKey(_found.i)) {

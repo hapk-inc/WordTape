@@ -9,7 +9,6 @@ import 'package:lottie/lottie.dart';
 
 import '../../extension/extension.dart';
 
-import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../model/found.dart';
 import '../../model/question.dart';
@@ -33,7 +32,7 @@ class PrevQuestion extends ConsumerWidget {
             itemBuilder: (context, index) {
               final DateTime now = DateTime.now();
               final DateTime date =
-                  now.subtract(Duration(days: index + 1)).convert();
+                  now.subtract(Duration(days: index + 1)).onlyYYYYMMMDD;
 
               return PrevQuestionTile(date);
             },
@@ -66,13 +65,7 @@ class PrevQuestionTile extends ConsumerWidget {
           ),
           borderRadius: BorderRadius.circular(7.5.r),
           gradient: isCompleted
-              ? ref.read(
-                  gradientProvider(
-                    color: [
-                      ...List.filled(9, celeste), /*aquaMarine*/
-                    ],
-                  ),
-                )
+              ? ref.read(gradientProvider(color: [...List.filled(2, celeste)]))
               : LinearGradient(colors: [...List.filled(5, azureGreen)])
           // color: isCompleted ? lightCyan : null,
           ),
@@ -81,7 +74,6 @@ class PrevQuestionTile extends ConsumerWidget {
       alignment: Alignment.centerLeft,
       child: InkWell(
         onTap: () {
-          ref.read(dateSelectedProvider.notifier).state = date;
           final String formatDate = DateFormat('dd-MMM-yyyy').format(date);
           context.go('/daily-challenge/$formatDate');
         },
@@ -142,10 +134,8 @@ class PrevQuestionTile extends ConsumerWidget {
                         presetFontSizes: [21.r, 18.r, 15.r],
                         maxLines: 1,
                       ),
-                // color: cerise,
               ),
               Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AutoSizeText(
                     question.played == 0

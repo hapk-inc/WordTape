@@ -8,7 +8,7 @@ part 'path.g.dart';
 @Riverpod(keepAlive: true, dependencies: [])
 class PathNotifier extends _$PathNotifier {
   @override
-  RoutePath build() => RoutePath(path: "/", date: DateTime.now().convert());
+  RoutePath build() => RoutePath(path: "/", date: DateTime.now().onlyYYYYMMMDD);
 
   @override
   set state(RoutePath value) {

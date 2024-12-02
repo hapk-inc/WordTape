@@ -1,10 +1,6 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+// part 'date_selected.g.dart';
 
-import '../../extension/extension.dart';
-
-part 'date_selected.g.dart';
-
-@Riverpod(keepAlive: true, dependencies: [])
+/*@Riverpod(keepAlive: true, dependencies: [])
 class DateSelected extends _$DateSelected {
   @override
   DateTime build() {
@@ -17,4 +13,4 @@ class DateSelected extends _$DateSelected {
     if (super.state == value) return;
     super.state = value.convert();
   }
-}
+}*/

@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wordtape/theme/color.dart';
 
 import '../enum/enum.dart';
 import '../router/router.dart';
@@ -50,7 +49,6 @@ class PanelNotifier extends _$PanelNotifier {
         builder: (_) => FadeIn(
           duration: const Duration(milliseconds: 750),
           child: Dialog(
-            backgroundColor: midnightGreen,
             shape: RoundedRectangleBorder(borderRadius: _radius()),
             child: ClipRRect(borderRadius: _radius(), child: value),
           ),

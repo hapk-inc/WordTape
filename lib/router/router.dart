@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../function/date_selected/date_selected.dart';
 import '../function/question/toast.dart';
 import '../model/route_path.dart';
 import '../panel/pod.dart';
@@ -26,63 +25,71 @@ final GlobalKey<ScaffoldMessengerState> scaffoldKey =
   keepAlive: true,
   dependencies: [
     renovation,
-    DateSelected,
     PathNotifier,
     panelController,
     ToastNotifier,
   ],
 )
-GoRouter router(Ref ref) {
-  return GoRouter(
-    navigatorKey: navigatorKey,
-    initialLocation: "/",
-    routes: <RouteBase>[
-      ShellRoute(
-        redirect: (_, state) async {
-          final String? renovation = await ref.read(renovationProvider.future);
-          if (renovation?.isNotEmpty ?? false) return "/renovation";
+GoRouter router(Ref ref) => GoRouter(
+      navigatorKey: navigatorKey,
+      initialLocation: "/",
+      routes: <RouteBase>[
+        ShellRoute(
+          redirect: (_, state) async {
+            print("40--ShellRoute Redirect");
+            print(state.matchedLocation);
+            final String? renovation =
+                await ref.read(renovationProvider.future);
+            if (renovation?.isNotEmpty ?? false) return "/renovation";
 
-          //
-          final RoutePath path = ref.read(pathNotifierProvider);
-          ref.read(pathNotifierProvider.notifier).state = path.copyWith(
-            path: state.matchedLocation,
-          );
+            //
+            final RoutePath path = ref.read(pathNotifierProvider);
+            ref.read(pathNotifierProvider.notifier).state = path.copyWith(
+              path: state.matchedLocation,
+            );
+            print(ref.read(pathNotifierProvider).path);
 
-          return state.matchedLocation;
-        },
-        builder: (_, __, child) => OutlinePage(child),
-        routes: [
-          GoRoute(path: '/', builder: (_, __) => const SplashPage()),
-          GoRoute(
-            path: '/renovation',
-            builder: (_, __) => const RenovationPage(),
-          ),
-          GoRoute(
-            path: '/daily-challenge',
-            builder: (_, __) => const DashboardPage(),
-          ),
-          GoRoute(
-            path: '/daily-challenge/:date',
-            builder: (_, GoRouterState state) {
+            if (state.pathParameters.containsKey('date')) {
               final String? str = state.pathParameters['date'];
               DateTime dateTime = DateFormat("dd-MMM-yyyy").parse(str!);
-              return RiddlePage(dateTime);
-            },
-            onExit: (_, state) {
-              ref.read(panelNotifierProvider.notifier).state = null;
-              ref.read(toastNotifierProvider.notifier).closingIfOpen();
-              final RoutePath path = ref.read(pathNotifierProvider);
-
               ref.read(pathNotifierProvider.notifier).state =
-                  path.copyWith(path: "/daily-challenge");
-              return true;
-            },
-          ),
-        ],
-      ),
-    ],
-  );
-}
+                  path.copyWith(date: dateTime);
+            }
+
+            return state.matchedLocation;
+          },
+          builder: (_, __, child) => OutlinePage(child),
+          routes: [
+            GoRoute(path: '/', builder: (_, __) => const SplashPage()),
+            GoRoute(
+              path: '/renovation',
+              builder: (_, __) => const RenovationPage(),
+            ),
+            GoRoute(
+              path: '/daily-challenge',
+              builder: (_, __) => const DashboardPage(),
+            ),
+            GoRoute(
+              path: '/daily-challenge/:date',
+              builder: (_, GoRouterState state) {
+                final String? str = state.pathParameters['date'];
+                DateTime dateTime = DateFormat("dd-MMM-yyyy").parse(str!);
+                return RiddlePage(dateTime);
+              },
+              onExit: (_, state) {
+                ref.read(panelNotifierProvider.notifier).state = null;
+                ref.read(toastNotifierProvider.notifier).closingIfOpen();
+                final RoutePath path = ref.read(pathNotifierProvider);
+
+                ref.read(pathNotifierProvider.notifier).state =
+                    path.copyWith(path: "/daily-challenge");
+                return true;
+              },
+            ),
+          ],
+        ),
+      ],
+    );
 
 //flutter packages pub run build_runner build --delete-conflicting-outputs
 

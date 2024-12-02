@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 extension IntExt on int {
   bool isPrev(int i) => i - 1 == this;
   bool isPrevPrev(int i) => this < i;
@@ -7,10 +5,8 @@ extension IntExt on int {
 }
 
 extension DateExt on DateTime {
-  DateTime convert() {
-    DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String dateStr = formatter.format(this);
-    final DateTime formatted = formatter.parse(dateStr);
+  DateTime get onlyYYYYMMMDD {
+    final DateTime formatted = DateTime(year, month, day);
     return formatted;
   }
 }

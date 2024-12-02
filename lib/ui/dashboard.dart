@@ -111,15 +111,18 @@ class GameArchive extends StatelessWidget {
   const GameArchive({super.key});
 
   @override
-  Widget build(BuildContext context) => SliverToBoxAdapter(
-        child: Container(
-          margin: EdgeInsets.all(15.r),
-          child: Text(
-            "Game Archives",
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.all(15.r),
+        child: Text(
+          "Game Archives",
+          style: textTheme.headlineMedium?.copyWith(color: slateGray),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class DashboardFooter extends ConsumerWidget {

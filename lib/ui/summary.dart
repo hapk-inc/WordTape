@@ -9,11 +9,11 @@ import 'package:mock_data/mock_data.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/router/path.dart';
 import '../../enum/enum.dart';
 
 import '../function/auth/pod.dart';
 
-import '../function/date_selected/date_selected.dart';
 import '../function/question/notifier.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
@@ -93,7 +93,7 @@ class SummaryContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(dateSelectedProvider);
+    final DateTime date = ref.read(pathNotifierProvider).date;
     return LayoutBuilder(
       builder: (_, constraints) => Column(
         children: [

@@ -18,7 +18,7 @@ class RiddleToast extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String? toastText =
-        ref.read(questionNotifierProvider(date)).toastText;
+        ref.watch(questionNotifierProvider(date)).toastText;
     return Material(
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
@@ -42,7 +42,13 @@ class RiddleToast extends ConsumerWidget {
                   ),
                 ),
               ),
-              Positioned.fill(right: 60.r, child: RiddleToastState(toastText)),
+              Positioned.fill(
+                right: 45.r,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: RiddleToastState(toastText),
+                ),
+              ),
               Positioned(
                 right: 7.5.r,
                 top: 7.5.r,
@@ -73,9 +79,14 @@ class RiddleToastState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.symmetric(horizontal: 15.r, vertical: 30.r),
-        child: TypewriterText(
-          text ?? "Fighting dog breed, known for its strength",
-          onEnd: () {},
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: text == null
+              ? SizedBox()
+              : TypewriterText(
+                  text!,
+                  onEnd: () {},
+                ),
         ),
       );
 }

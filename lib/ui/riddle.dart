@@ -39,9 +39,6 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     Future.delayed(
       const Duration(milliseconds: 600),
       () async {
-        /*if (kIsWeb) {
-          ref.read(panelNotifierProvider.notifier).state = InstructionDialog();
-        }*/
         if (notifier.done) {
           ref.read(panelNotifierProvider.notifier).state =
               SummaryPage(date: date);
