@@ -1,23 +1,19 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../extension/extension.dart';
 
 import '../../enum/enum.dart';
 import '../../firebase/pod.dart';
-import '../../model/word.dart';
 import '../connectivity/pod.dart';
 import '../underline_text/pod.dart';
 
 part 'pod.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [GeminiAi])
+/*@Riverpod(keepAlive: true, dependencies: [GeminiAi])
 Future<String> createHint(Ref ref, Word word, String answer) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
   return ai.createHint(word, answer);
@@ -27,7 +23,7 @@ Future<String> createHint(Ref ref, Word word, String answer) async {
 Future<String> helpUser(Ref ref, String correct, String mistake) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
   return ai.helpUser(correct, mistake);
-}
+}*/
 
 @Riverpod(keepAlive: true, dependencies: [env, appEnv])
 class GeminiAi extends _$GeminiAi {
@@ -42,7 +38,7 @@ class GeminiAi extends _$GeminiAi {
     return GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: api);
   }
 
-  FutureOr<String> helpUser(String correct, String mistake) async {
+/*  FutureOr<String> helpUser(String correct, String mistake) async {
     final List<String> splitter = correct.split(' ');
     final String mistakeWord = mistake.split(' ').last;
     final String prompt = replaceHash(
@@ -77,7 +73,7 @@ class GeminiAi extends _$GeminiAi {
     log(withNote ?? prompt);
     final List<Content> contents = [Content.text(withNote ?? prompt)];
     return await callResponse(contents);
-  }
+  }*/
 
   FutureOr<String> callResponse(List<Content> contents) =>
       state.generateContent(contents).then(

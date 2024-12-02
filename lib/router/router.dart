@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../function/date_selected/date_selected.dart';
+import '../function/question/toast.dart';
 import '../model/route_path.dart';
 import '../panel/pod.dart';
 import '../remote_config/pod.dart';
@@ -22,7 +24,13 @@ final GlobalKey<ScaffoldMessengerState> scaffoldKey =
 
 @Riverpod(
   keepAlive: true,
-  dependencies: [renovation, DateSelected, PathNotifier, panelController],
+  dependencies: [
+    renovation,
+    DateSelected,
+    PathNotifier,
+    panelController,
+    ToastNotifier,
+  ],
 )
 GoRouter router(Ref ref) {
   return GoRouter(
@@ -50,26 +58,23 @@ GoRouter router(Ref ref) {
             builder: (_, __) => const RenovationPage(),
           ),
           GoRoute(
-            path: '/dashboard',
+            path: '/daily-challenge',
             builder: (_, __) => const DashboardPage(),
           ),
           GoRoute(
-            path: '/decode',
+            path: '/daily-challenge/:date',
             builder: (_, GoRouterState state) {
-              if (state.extra == null) {
-                final DateTime args = ref.read(dateSelectedProvider);
-                return RiddlePage(args);
-              }
-              final DateTime args = state.extra as DateTime;
-              return RiddlePage(args);
+              final String? str = state.pathParameters['date'];
+              DateTime dateTime = DateFormat("dd-MMM-yyyy").parse(str!);
+              return RiddlePage(dateTime);
             },
             onExit: (_, state) {
               ref.read(panelNotifierProvider.notifier).state = null;
+              ref.read(toastNotifierProvider.notifier).closingIfOpen();
               final RoutePath path = ref.read(pathNotifierProvider);
 
-              ref.read(pathNotifierProvider.notifier).state = path.copyWith(
-                path: "/home",
-              );
+              ref.read(pathNotifierProvider.notifier).state =
+                  path.copyWith(path: "/daily-challenge");
               return true;
             },
           ),

@@ -17,4 +17,8 @@ class ToastNotifier extends _$ToastNotifier {
   set state(ToastificationItem value) => super.state = value;
 
   dismiss() => toastification.dismiss(state);
+
+  closingIfOpen() {
+    if (state.isStarted) toastification.dismiss(state);
+  }
 }

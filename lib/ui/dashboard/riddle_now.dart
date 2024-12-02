@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import '../../extension/extension.dart';
 
 import '../../function/date_selected/date_selected.dart';
@@ -67,7 +68,8 @@ class BottomButton extends ConsumerWidget {
               onPressed: () {
                 final DateTime now = DateTime.now().convert();
                 ref.read(dateSelectedProvider.notifier).state = now;
-                context.push('/decode', extra: now);
+                final String date = DateFormat('dd-MMM-yyyy').format(now);
+                context.push('/daily-challenge/$date');
               },
               child: const Text("Play now"),
             ),

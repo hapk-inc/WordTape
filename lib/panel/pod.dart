@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wordtape/theme/color.dart';
 
 import '../enum/enum.dart';
 import '../router/router.dart';
+import '../shared/shared.dart';
 import 'widget.dart';
 
 part 'pod.g.dart';
@@ -24,7 +27,6 @@ class PanelNotifier extends _$PanelNotifier {
 
   @override
   set state(PanelWidget? value) {
-    print("27==$value");
     if ("$state" == "$value") return;
     super.state = value;
     final ScreenSize size = ref.read(sizeProvider);
@@ -48,9 +50,23 @@ class PanelNotifier extends _$PanelNotifier {
         builder: (_) => FadeIn(
           duration: const Duration(milliseconds: 750),
           child: Dialog(
+            backgroundColor: midnightGreen,
             shape: RoundedRectangleBorder(borderRadius: _radius()),
             child: ClipRRect(borderRadius: _radius(), child: value),
           ),
         ),
-      ).then((_) => state = null);
+      ).then(
+        (_) async {
+          switch ("$state") {
+            case "InstructionDialog":
+              {
+                final SharedPreferences pref =
+                    await ref.read(sharedPrefProvider.future);
+                pref.setBool('how_to_play', true);
+                break;
+              }
+          }
+          return state = null;
+        },
+      );
 }

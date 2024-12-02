@@ -1,10 +1,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../function/instruction_notifier.dart';
@@ -12,8 +14,6 @@ import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/widget.dart';
-import '../../router/router.dart';
-import '../../shared/shared.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../../theme/pod.dart';
@@ -27,77 +27,84 @@ class InstructionDialog extends PanelWidget {
     final DefaultTextTheme textTheme = DefaultTextTheme();
     final InstructionNotifier notifier = ref.watch(instructionNotifierProvider);
     final List<String> displayedText = notifier.displayed;
-    return AnimatedSize(
+    return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
-        ),
-        padding: EdgeInsets.fromLTRB(7.5.r, 15.r, 7.5.r, 45.r),
-        constraints: BoxConstraints(maxWidth: 540.r),
-        child: LayoutBuilder(
-          builder: (_, constraints) => FadeIn(
-            delay: const Duration(milliseconds: 300),
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.r),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        AutoSizeText(
-                          "HOW TO PLAY",
-                          style: textTheme.headlineLarge?.copyWith(
-                            fontSize: 21.r,
+      decoration: BoxDecoration(
+        gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
+      ),
+      padding: EdgeInsets.fromLTRB(7.5.r, 15.r, 7.5.r, 45.r),
+      constraints: BoxConstraints(maxWidth: 600.r),
+      child: LayoutBuilder(
+        builder: (_, constraints) => FadeIn(
+          delay: const Duration(milliseconds: 300),
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.r),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      AutoSizeText(
+                        "How to play",
+                        style: textTheme.headlineLarge?.copyWith(
+                          fontSize: 30.r,
+                        ),
+                      ),
+                      /*  InkWell(
+                        onTap: () async {
+                          final pref = await ref.read(sharedProvider.future);
+                          pref.setBool('how_to_play', true).whenComplete(
+                              () => ref.read(routerProvider).pop());
+                        },
+                        child: Text(
+                          "I UNDERSTAND",
+                          style: textTheme.headlineSmall?.copyWith(
+                            color: midnightGreen,
+                            letterSpacing: 0.36,
                           ),
                         ),
-                        InkWell(
-                          onTap: () async {
-                            final pref = await ref.read(sharedProvider.future);
-                            pref.setBool('how_to_play', true).whenComplete(
-                                () => ref.read(routerProvider).pop());
-                          },
-                          child: Text(
-                            "I UNDERSTAND",
-                            style: textTheme.headlineSmall?.copyWith(
-                              color: midnightGreen,
-                              letterSpacing: 0.36,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )*/
+                    ],
                   ),
-                  Gap(15.r),
-                  for (UnderlineText underline in ref.read(howPlayProvider))
-                    InstructionTile(underline.text, constraints.maxWidth * 0.9),
-                  Gap(15.r),
-                  ...List.generate(
-                    displayedText.length,
-                    (index) {
-                      final String str = notifier.displayed[index];
-                      final bool enabled = index == displayedText.length - 1 ||
-                          index == displayedText.length - 2;
-                      return FadeIn(
-                        key: ValueKey(str),
-                        child: AnimatedOpacity(
-                          opacity: enabled ? 1 : 0.15,
-                          duration: const Duration(milliseconds: 150),
-                          child: EditableWord(
-                            Word(value: str),
-                            initialised: false,
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                ],
-              ),
+                ),
+                Gap(15.r),
+                // for (UnderlineText underline in ref.read(howPlayProvider))
+                //   InstructionTile(underline.text, constraints.maxWidth * 0.9),
+                // Gap(15.r),
+                ...List.generate(
+                  4,
+                  (index) {
+                    final int len = displayedText.length;
+                    if (len <= index) return SizedBox(height: 72.h);
+                    final String str = notifier.displayed[index];
+                    final bool enabled = index == len - 1 || index == len - 2;
+                    return InstructionWord(str: str, enabled: enabled);
+                  },
+                ),
+                Gap(15.r),
+                ...List.generate(
+                  4,
+                  (index) {
+                    final UnderlineText underline =
+                        ref.read(howPlayProvider)[index];
+                    return FadeIn(
+                      delay: const Duration(milliseconds: 7500),
+                      child: InstructionTile(
+                        underline.text,
+                        constraints.maxWidth * 0.9,
+                        hint: index == 3,
+                      ),
+                    );
+                  },
+                )
+                // for (UnderlineText underline in ref.read(howPlayProvider))
+                //   InstructionTile(underline.text, constraints.maxWidth * 0.9),
+              ],
             ),
           ),
         ),
@@ -106,13 +113,30 @@ class InstructionDialog extends PanelWidget {
   }
 
   @override
-  double height() => 720.r;
+  double height() => 750.r;
 
   @override
   SlideDirection direction() => SlideDirection.UP;
 
   @override
   bool backdropEnabled() => true;
+}
+
+class InstructionWord extends StatelessWidget {
+  const InstructionWord({super.key, required this.str, required this.enabled});
+
+  final String str;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) => FadeIn(
+        key: ValueKey(str),
+        child: AnimatedOpacity(
+          opacity: enabled ? 1 : 0.15,
+          duration: const Duration(milliseconds: 150),
+          child: EditableWord(Word(value: str), initialised: false),
+        ),
+      );
 }
 
 /*Wrap(
@@ -178,27 +202,45 @@ class InstructionDialog extends PanelWidget {
 class InstructionTile extends StatelessWidget {
   final String text;
   final double width;
-  const InstructionTile(this.text, this.width, {super.key});
+  final bool hint;
+  const InstructionTile(this.text, this.width, {this.hint = false, super.key});
 
   @override
   Widget build(BuildContext context) {
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
-    return Wrap(
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 12.r),
-          child: Icon(Icons.circle, color: midnightGreen, size: 7.5.r),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 7.5.r),
-          width: width,
-          child: Text(
-            text,
-            style: defaultTextTheme.bodySmall?.copyWith(color: raisinBlack),
+    return Container(
+      margin: EdgeInsets.only(top: 4.5.r),
+      child: Wrap(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 15.r),
+            child: Icon(Icons.circle, color: midnightGreen, size: 7.5.r),
           ),
-        ),
-      ],
+          Container(
+            padding: EdgeInsets.only(left: 7.5.r),
+            width: width,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  if (hint)
+                    WidgetSpan(
+                      child: SizedBox.square(
+                        dimension: 45.r,
+                        child: Lottie.asset("question_lottie".tr()),
+                      ),
+                    ),
+                  TextSpan(text: text)
+                ],
+                style: defaultTextTheme.bodySmall?.copyWith(
+                  color: cadetGray,
+                  fontSize: 18.r,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -88,13 +88,18 @@ class FirestoreQuestion {
     }
   }
 
-  Future<Found?> found(String id) async {
+  Future<Found?> found(String question) async {
     if (fUser == null) return null;
-    return collection.doc(id).collection("found").doc(fUser?.uid).get().then(
+    return collection
+        .doc(question)
+        .collection("found")
+        .doc(fUser?.uid)
+        .get()
+        .then(
       (DocumentSnapshot<Map<String, dynamic>> snapshot) {
         if (!snapshot.exists) return null;
-        final Found found =
-            Found.fromJson(snapshot.data() ?? {}).copyWith(id: snapshot.id);
+        Found found = Found.fromJson(snapshot.data() ?? {});
+        found = found.copyWith(id: question);
         return found;
       },
       onError: (e, s) {

@@ -3,6 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'analytics_tracker.dart';
 
+part 'pod.g.dart';
+
 @Riverpod(keepAlive: true)
 AnalyticsTracker analyticsTracker(Ref<AnalyticsTracker> ref) =>
     AnalyticsTracker(ref);

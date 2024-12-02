@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../theme/color.dart';
 import '../../theme/font.dart';
 
 class TypewriterText extends StatefulWidget {
@@ -35,8 +36,9 @@ class _TypewriterTextState extends State<TypewriterText> {
   }
 
   animateText() async {
-    final forwardLength = _incomingText.length;
+    final int forwardLength = _incomingText.length;
     if (forwardLength > 0) {
+      _displayedText = List.filled(_incomingText.length, " ");
       for (var i = 0; i < forwardLength; i++) {
         await Future.delayed(_typingDuration);
         _displayedText[i] = _incomingText.split('')[i];
@@ -48,23 +50,25 @@ class _TypewriterTextState extends State<TypewriterText> {
   }
 
   @override
-  void didUpdateWidget(covariant TypewriterText oldWidget) {
-    if (oldWidget.text != widget.text) {
+  void didUpdateWidget(covariant TypewriterText old) {
+    if (old.text != widget.text) {
       _incomingText = widget.text;
       animateText();
     }
-    super.didUpdateWidget(oldWidget);
+    super.didUpdateWidget(old);
   }
 
   @override
-  Widget build(BuildContext context) {
-    final DefaultTextTheme textTheme = DefaultTextTheme();
-    return AutoSizeText(
-      _displayedText.join(),
-      key: ValueKey(_displayedText),
-      maxLines: 2,
-      presetFontSizes: [21.r, 18.r, 15.r, 12.r],
-      style: textTheme.kanitLarge,
-    );
-  }
+  Widget build(BuildContext context) => AutoSizeText(
+        _displayedText.join(),
+        key: ValueKey(_displayedText),
+        maxLines: 3,
+        presetFontSizes: [21.r, 18.r],
+        style: DefaultTextTheme().robotoMonoFont.copyWith(
+              fontWeight: FontWeight.bold,
+              color: midnightGreen,
+              letterSpacing: 0,
+              wordSpacing: 0,
+            ),
+      );
 }

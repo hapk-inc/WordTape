@@ -72,7 +72,7 @@ class AcceptCookie extends PanelWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        final pref = await ref.read(sharedProvider.future);
+                        final pref = await ref.read(sharedPrefProvider.future);
                         pref.setBool('accept_cookies', true).whenComplete(
                               () => ref.read(routerProvider).pop(),
                             );

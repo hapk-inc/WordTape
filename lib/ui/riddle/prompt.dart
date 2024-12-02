@@ -6,18 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../enum/enum.dart';
-import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../model/prompt.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 
 class PromptWidget extends ConsumerWidget {
-  const PromptWidget({super.key});
+  final DateTime date;
+  const PromptWidget(this.date, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime date = ref.read(dateSelectedProvider);
     final Prompt prompt = ref.watch(questionNotifierProvider(date)).prompt;
 
     List<String> words = prompt.text.text.split(' ');

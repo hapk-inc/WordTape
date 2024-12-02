@@ -27,7 +27,7 @@ class SummaryPage extends PanelWidget {
   @override
   Widget build(context, ref) => SizedBox(
         height: height(),
-        width: 450.r,
+        width: 480.r,
         child: Summary(date: date),
       );
 
@@ -106,7 +106,7 @@ class SummaryContent extends ConsumerWidget {
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             color: azureGreen,
-            height: 90.r,
+            height: 120.r,
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.symmetric(horizontal: 15.r),
             child: SummaryFooter(date),
@@ -148,7 +148,7 @@ class SummaryFooter extends ConsumerWidget {
           maxLines: 1,
         ),
         Gap(4.5.r),
-        if (packageInfo != null)
+        if (packageInfo != null) ...[
           SafeArea(
             bottom: false,
             top: false,
@@ -162,13 +162,21 @@ class SummaryFooter extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                InkWell(
-                  onTap: () => Share.share(str),
-                  child: const Icon(Icons.copy),
-                ),
               ],
             ),
-          )
+          ),
+          // Gap(15.r),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(midnightGreen),
+              ),
+              onPressed: () => Share.share(str),
+              child: Text("Share"),
+            ),
+          ),
+        ]
       ],
     );
   }

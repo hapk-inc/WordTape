@@ -22,7 +22,7 @@ UnderlineText noQuestion(Ref ref) {
 @Riverpod(keepAlive: true)
 UnderlineText resume(Ref ref) {
   final List<UnderlineText> resume = List.generate(
-    7,
+    6,
     (i) => UnderlineText(
       "resume_$i".tr(),
       focused: "complete pattern. sequence.",

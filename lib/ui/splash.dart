@@ -90,7 +90,7 @@ class Loader extends ConsumerWidget {
           if (user == null) ref.read(userLoginProvider);
           final GoRouter router = ref.read(routerProvider);
 
-          router.go("/dashboard");
+          router.go("/daily-challenge");
         },
         child: Text(ref.read(pressStartProvider), style: textTheme.labelSmall),
       ),

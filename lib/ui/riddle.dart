@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,7 +46,8 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
           ref.read(panelNotifierProvider.notifier).state =
               SummaryPage(date: date);
         } else {
-          final SharedPreferences pref = await ref.read(sharedProvider.future);
+          final SharedPreferences pref =
+              await ref.read(sharedPrefProvider.future);
 
           final bool howToPlay = pref.getBool('how_to_play') ?? false;
           if (!howToPlay) {
@@ -87,10 +87,7 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   Widget build(BuildContext context) {
     notifier = ref.watch(questionNotifierProvider(date));
     return GradientBox(
-      child: SafeArea(
-        bottom: false,
-        child: RiddlePageState(date),
-      ),
+      child: SafeArea(bottom: false, child: RiddlePageState(date)),
     );
   }
 }
@@ -128,17 +125,30 @@ class RiddlePageState extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const RiddleAppBar(),
+                RiddleAppBar(date),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   height: h_03 * 4.8,
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(horizontal: w_03 * 1.5),
-                  child: const PromptWidget(),
+                  child: PromptWidget(date),
                 ),
-                for (Word word in notifier.question?.words ?? [])
-                  EditableWord(word),
-                Gap(h_03 * 1.2),
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 300),
+                  child: SizedBox(
+                    height: maxHeight * 0.6,
+                    child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          for (Word word in notifier.question?.words ?? [])
+                            EditableWord(word),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Gap(h_03 * 0.12),
                 const CustomKeyboard(),
               ],
             ),

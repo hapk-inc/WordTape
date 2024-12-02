@@ -9,15 +9,15 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:toastification/toastification.dart';
 
 import '../../function/auth/pod.dart';
-import '../../function/date_selected/date_selected.dart';
 import '../../function/question/notifier.dart';
 import '../../function/question/toast.dart';
 
 import '../../router/router.dart';
-import '../common/word_clue.dart';
+import '../common/riddle_toast.dart';
 
 class RiddleAppBar extends ConsumerWidget {
-  const RiddleAppBar({super.key});
+  final DateTime date;
+  const RiddleAppBar(this.date, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,17 +30,18 @@ class RiddleAppBar extends ConsumerWidget {
       leading: Container(),
       titleSpacing: 0,
       title: InkWell(
-        onTap: () => ref.read(routerProvider).go("/dashboard"),
+        onTap: () => ref.read(routerProvider).go("/daily-challenge"),
         child: Text(name.toUpperCase(), maxLines: 1),
       ),
-      actions: const [LottieHint(), Gap(1.5)],
+      actions: [LottieHint(date), Gap(1.5)],
       titleTextStyle: textTheme.displayMedium,
     );
   }
 }
 
 class LottieHint extends ConsumerStatefulWidget {
-  const LottieHint({super.key});
+  final DateTime dateTime;
+  const LottieHint(this.dateTime, {super.key});
 
   @override
   ConsumerState createState() => _LottieHintState();
@@ -52,21 +53,20 @@ class _LottieHintState extends ConsumerState<LottieHint> {
 
   @override
   void initState() {
-    date = ref.read(dateSelectedProvider);
+    date = widget.dateTime;
     notifier = ref.read(questionNotifierProvider(date));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) => InkWell(
-        onTap: () {
+        onTap: () async {
           notifier.helpUser();
-
           ref.read(toastNotifierProvider.notifier).state =
               toastification.showCustom(
             alignment: Alignment.topCenter,
-            autoCloseDuration: const Duration(seconds: 30),
-            builder: (_, ToastificationItem item) => WordClueState(date),
+            autoCloseDuration: const Duration(minutes: 30),
+            builder: (_, __) => RiddleToast(date),
           );
         },
         child: AnimatedSwitcher(

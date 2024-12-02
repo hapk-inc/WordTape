@@ -93,15 +93,6 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         fontSize: 18.r,
         fontWeight: FontWeight.w300,
       );
-
-/*
-  TextStyle get montserratLarge => montserratTheme.copyWith(
-        fontSize: 21.r,
-        fontWeight: FontWeight.w600,
-      );
-
-  TextStyle get montserratMedium => montserratTheme.copyWith(fontSize: 15.r);
-*/
 }
 
 mixin FontMixin {
@@ -132,6 +123,8 @@ mixin FontMixin {
   TextStyle get press2pFont => const TextStyle(
         fontFamily: 'PressStart2P',
         height: 0,
+        letterSpacing: 0,
+        wordSpacing: 0,
       );
 
   TextStyle get questrialFont => const TextStyle(

@@ -22,8 +22,6 @@ class OutlinePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ScreenSize size = ref.watch(sizeProvider);
-    final bool isMobile = size == ScreenSize.mobile;
     return ToastificationConfigProvider(
       config: ToastificationConfig(
         marginBuilder: (_, __) => EdgeInsets.all(15.r),
@@ -39,6 +37,8 @@ class OutlinePage extends ConsumerWidget {
           bottom: false,
           child: Builder(
             builder: (_) {
+              final ScreenSize size = ref.watch(sizeProvider);
+              final bool isMobile = size == ScreenSize.mobile;
               if (!isMobile) return OutlineState(child: child);
               final PanelWidget? panelWidget = ref.watch(panelNotifierProvider);
               final SlideDirection direction =
@@ -79,26 +79,53 @@ class OutlinePage extends ConsumerWidget {
   }
 }
 
-class OutlineState extends StatelessWidget {
+class OutlineState extends ConsumerWidget {
   final Widget child;
   const OutlineState({required this.child, super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double mobileWidth = 750.r;
+    final ScreenSize size = ref.watch(sizeProvider);
     return LayoutBuilder(
       builder: (_, constraints) => Stack(
         children: [
           AnimatedAlign(
             duration: const Duration(milliseconds: 300),
             alignment: Alignment.center,
-            child: AnimatedContainer(
+            child: Card(
+              margin: size == ScreenSize.pc
+                  ? EdgeInsets.symmetric(vertical: 15.r)
+                  : EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: size == ScreenSize.pc
+                    ? BorderRadius.circular(15.r)
+                    : BorderRadius.zero,
+              ),
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                child: ClipRRect(
+                  borderRadius: size == ScreenSize.pc
+                      ? BorderRadius.circular(15.r)
+                      : BorderRadius.zero,
+                  child: Container(
+                    constraints: BoxConstraints.tightForFinite(
+                      width: mobileWidth,
+                    ),
+                    child: child,
+                  ),
+                ),
+              ),
+            ),
+
+            /*child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
+              margin: EdgeInsets.all(7.5.r),
               constraints: BoxConstraints.tightForFinite(width: mobileWidth),
               color: seaWhite,
               alignment: Alignment.topLeft,
               child: child,
-            ),
+            ),*/
           ),
           /*if (maxWidth > mobileWidth)
               AnimatedPositioned(

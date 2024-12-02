@@ -59,9 +59,9 @@ class _KeyboardTile extends ConsumerWidget {
 
     double w = 0;
     if (isChar) {
-      w = 0.084;
+      w = 0.08;
     } else {
-      w = str == "DEL" ? 0.12 : 0.165;
+      w = str == "DEL" ? 0.12 : 0.18;
     }
 
     return InkWell(
@@ -73,7 +73,7 @@ class _KeyboardTile extends ConsumerWidget {
         if (word != null) {
           final WordNotifier wNotifier = ref.read(wordNotifierProvider(word));
           switch (str) {
-            case "ENTER":
+            case "SUBMIT":
               {
                 if (notifier.formKey.currentState?.validate() ?? false) {
                   notifier.validate(wNotifier.controller.text);
@@ -88,7 +88,7 @@ class _KeyboardTile extends ConsumerWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: width * w,
-        height: 54.h,
+        height: 51.h,
         margin: EdgeInsets.all(3.r),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -97,10 +97,10 @@ class _KeyboardTile extends ConsumerWidget {
         ),
         padding: EdgeInsets.symmetric(horizontal: 7.5.r),
         child: str == "DEL"
-            ? Icon(Icons.backspace_outlined, color: cadetGray, size: 24.r)
+            ? Icon(Icons.backspace_outlined, color: azureGreen, size: 24.r)
             : AutoSizeText(
                 str,
-                style: textTheme.headlineMedium?.copyWith(color: azureGreen),
+                style: textTheme.headlineMedium?.copyWith(color: mint),
                 presetFontSizes: [
                   if (str.length == 1) 18.r,
                   15.r,

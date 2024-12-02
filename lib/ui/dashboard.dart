@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +29,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     Future.delayed(
       const Duration(milliseconds: 1500),
       () async {
-        final SharedPreferences pref = await ref.read(sharedProvider.future);
+        final SharedPreferences pref =
+            await ref.read(sharedPrefProvider.future);
         if (kIsWeb) {
           final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
           if (acceptCookies) {
@@ -45,17 +45,20 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = ref.watch(runningUserProvider).value;
-    final bool isAnonymous = user?.isAnonymous ?? true;
+    // final User? user = ref.watch(runningUserProvider).value;
+    // final bool isAnonymous = user?.isAnonymous ?? true;
     return CustomScrollView(
       slivers: <Widget>[
         RiddleNow(),
-        if (isAnonymous) ...[
+        GameArchive(),
+        SliverToBoxAdapter(child: PrevQuestion()),
+
+/*        if (isAnonymous) ...[
           GoogleLogin(),
         ] else ...[
           GameArchive(),
           SliverToBoxAdapter(child: PrevQuestion()),
-        ],
+        ],*/
         SliverToBoxAdapter(child: DashboardFooter()),
       ],
     );

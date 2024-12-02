@@ -12,10 +12,6 @@ import '../../extension/extension.dart';
 
 import '../underline_text/pod.dart';
 import 'notifier.dart';
-// import 'p_notifier.dart';
-
-const String backspace = "🔙";
-const String done = "✔️";
 
 final ChangeNotifierProviderFamily<WordNotifier, Word> wordNotifierProvider =
     ChangeNotifierProvider.family<WordNotifier, Word>(
@@ -29,7 +25,7 @@ class WordNotifier extends ChangeNotifier {
   Color _color = Colors.white24;
   TextEditingController _controller = TextEditingController();
   late QuestionNotifier _notifier;
-  late FocusNode _node;
+  final FocusNode _node = FocusNode();
   late DateTime _date;
   late int _index;
   late Logger _tracker;
@@ -47,22 +43,20 @@ class WordNotifier extends ChangeNotifier {
     _notifier = ref.read(questionNotifierProvider(_date));
     _index = int.parse(splitter[1]);
 
-    validateController(_notifier.found.i);
+    validateController(_notifier.found.i, triggerNotifyListener: false);
   }
 
-  validateController(int i) {
+  validateController(int i, {bool triggerNotifyListener = true}) {
     _enabled = i == _index;
+
     final bool done = _notifier.done;
-    _node = FocusNode(canRequestFocus: _enabled);
     if (done) {
       _controller = TextEditingController(text: word.value);
       final bool didHeFound = !_notifier.found.untilNow.containsKey(_index);
       _color = didHeFound ? aquaMarine : melon;
     } else {
-      _node = FocusNode(canRequestFocus: _enabled);
       if (_enabled) {
-        _controller = TextEditingController(text: word.value.firstChar);
-        _color = aquaMarine;
+        onlyFirstChar();
       } else {
         if (_index.isPrevPrev(i)) {
           _controller = TextEditingController(text: word.value);
@@ -70,6 +64,16 @@ class WordNotifier extends ChangeNotifier {
         }
       }
     }
+    notifyListeners();
+  }
+
+  void onlyFirstChar() {
+    _controller.value = _controller.value.copyWith(
+      text: word.value.firstChar,
+      selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
+    );
+    _color = aquaMarine;
+    _node.requestFocus();
   }
 
   @override
@@ -106,11 +110,11 @@ class WordNotifier extends ChangeNotifier {
 
   Color get color => _color;
 
-  bool get isEnabled => _enabled;
-
   FocusNode get node => _node;
 
   bool get error => _error;
+
+  bool get enabled => _enabled;
 
   keyboardTap(String str) {
     _notifier.prompt = Prompt(
@@ -153,18 +157,20 @@ class WordNotifier extends ChangeNotifier {
 
     String exact = word.value;
     if (!txt.startsWith(exact.firstChar) || txt.isEmpty) {
-      _controller.value = _controller.value.copyWith(
+      onlyFirstChar();
+      /* _controller.value = _controller.value.copyWith(
         text: exact.firstChar,
         selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
-      );
+      );*/
     } else {
+      final int len = text.length;
       _controller.value = _controller.value.copyWith(
         text: txt,
-        selection: TextSelection.fromPosition(
-          TextPosition(offset: text.length),
-        ),
+        selection: TextSelection.fromPosition(TextPosition(offset: len)),
       );
+      _node.requestFocus();
     }
+
     notifyListeners();
   }
 
@@ -176,6 +182,7 @@ class WordNotifier extends ChangeNotifier {
     _error = true;
     final UnderlineText err = ref.read(fillTextProvider);
     _notifier.prompt = Prompt(text: err, state: PromptState.error);
+    _node.requestFocus();
     return err.text;
   }
 }

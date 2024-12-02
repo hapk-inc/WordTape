@@ -20,6 +20,7 @@ import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../../theme/pod.dart';
 
+/*
 class EditableWord extends ConsumerStatefulWidget {
   final Word word;
   final bool initialised;
@@ -116,7 +117,8 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             return Pinput(
               length: word.value.length,
               defaultPinTheme: pinTheme,
-              controller: wordNotifier.controller, focusNode: wordNotifier.node,
+              controller: wordNotifier.controller,
+              focusNode: wordNotifier.node,
               //
 
               pinAnimationType: PinAnimationType.fade,
@@ -128,6 +130,8 @@ class _EditableWordState extends ConsumerState<EditableWord> {
                     notifier.formKey.currentState?.validate();
                 if (validate ?? false) notifier.validate(value);
               },
+              onCompleted: (value) {},
+
               onTap: () {
                 if (notifier.focusedWord != word) return;
                 notifier.prompt = Prompt(
@@ -140,7 +144,7 @@ class _EditableWordState extends ConsumerState<EditableWord> {
                 }
               },
 
-              keyboardType: TextInputType.none, // readOnly: true,
+              keyboardType: TextInputType.name, // readOnly: true,
               forceErrorState: wordNotifier.error,
 
               //
@@ -166,4 +170,161 @@ class _EditableWordState extends ConsumerState<EditableWord> {
       ),
     );
   }
+}
+*/
+
+class EditableWord extends ConsumerStatefulWidget {
+  final Word word;
+  final bool initialised;
+
+  const EditableWord(this.word, {this.initialised = true, super.key});
+
+  @override
+  ConsumerState createState() => _EditableWordState();
+}
+
+class _EditableWordState extends ConsumerState<EditableWord> {
+  late Word word;
+  late WordNotifier wordNotifier;
+  late int index;
+  late DateTime date;
+  //late QuestionNotifier notifier;
+  late bool initialised;
+
+  @override
+  void initState() {
+    word = widget.word;
+    initialised = widget.initialised;
+    if (initialised) {
+      final List<String> splitter = word.id?.split("|") ?? [];
+      if (splitter.isNotEmpty) {
+        index = int.parse(splitter[1]);
+        date = DateFormat('yyyy-MM-dd').parse(splitter[0]);
+      } else {
+        index = 0;
+        date = DateTime.now().convert();
+      }
+      wordNotifier = ref.read(wordNotifierProvider(word));
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool enabled = false;
+
+    //final WordNotifier wordNotifierRead = ref.read(wordNotifierProvider(word));
+
+    if (initialised) {
+      wordNotifier = ref.watch(wordNotifierProvider(word));
+      enabled = wordNotifier.enabled;
+    }
+    return MissingWord(
+      widget.word.value,
+      controller: !initialised
+          ? TextEditingController(text: word.value)
+          : wordNotifier.controller,
+      color: initialised ? wordNotifier.color : raisinBlack,
+      onChanged: !initialised
+          ? null
+          : ref.read(wordNotifierProvider(word)).onTextChanged,
+      validator:
+          !enabled ? null : ref.read(wordNotifierProvider(word)).validator,
+      onTap: () {
+        final QuestionNotifier notifier =
+            ref.read(questionNotifierProvider(date));
+        final RoutePath path = ref.read(pathNotifierProvider);
+        final bool isDailyChallenge = path.path.contains("/daily-challenge/");
+        if (notifier.focusedWord != word) return;
+        notifier.prompt = Prompt(
+          text: ref.read(figureOutProvider),
+          state: PromptState.search,
+        );
+
+        if (!isDailyChallenge && notifier.focusedWord == word) {
+          context.push('/daily-challenge', extra: date);
+        }
+      },
+      onSubmitted: (value) {
+        final QuestionNotifier notifier =
+            ref.read(questionNotifierProvider(date));
+        final bool? validate = notifier.formKey.currentState?.validate();
+        if (validate ?? false) notifier.validate(value);
+      },
+      enabled: initialised ? enabled : false,
+      focusNode: initialised ? wordNotifier.node : null,
+    );
+  }
+}
+
+class MissingWord extends StatelessWidget {
+  final String word;
+  final TextEditingController controller;
+  final bool enabled;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onTap;
+  final FormFieldValidator<String>? validator;
+  final FocusNode? focusNode;
+  final Color color;
+
+  const MissingWord(
+    this.word, {
+    required this.controller,
+    required this.color,
+    required this.onChanged,
+    required this.onTap,
+    required this.onSubmitted,
+    required this.validator,
+    this.focusNode,
+    this.enabled = false,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) => AnimatedSize(
+        duration: const Duration(milliseconds: 90),
+        child: SizedBox(
+          height: 72.h,
+          child: Consumer(
+            builder: (_, ref, __) => LayoutBuilder(
+              builder: (_, constraints) {
+                final PinTheme pinTheme = ref.read(
+                  pinThemeProvider(constraints: constraints, color: color),
+                );
+
+                return Pinput(
+                  length: word.length,
+                  autofocus: enabled,
+                  enabled: enabled,
+                  defaultPinTheme: pinTheme,
+                  onTap: onTap,
+                  focusNode: focusNode,
+
+                  controller: controller,
+                  //keyboardType: TextInputType.none,
+                  animationCurve: Curves.easeOut,
+                  readOnly: !enabled,
+                  textCapitalization: TextCapitalization.characters,
+                  separatorBuilder: (_) {
+                    final int len = word.length;
+                    return SizedBox(width: len > 8 ? 4.5.r : 9.r);
+                  },
+                  errorBuilder: (e, _) => const SizedBox(),
+                  onChanged: onChanged,
+                  onSubmitted: onSubmitted,
+                  validator: validator,
+                  //onChanged: ref.read(wordNotifierProvider(word)).onTextChanged,
+                  //textInputAction: TextInputAction.none,
+
+                  pinAnimationType: PinAnimationType.fade,
+                  animationDuration: const Duration(milliseconds: 150),
+                  pinputAutovalidateMode: PinputAutovalidateMode.disabled,
+                  closeKeyboardWhenCompleted: false,
+                );
+              },
+            ),
+          ),
+        ),
+      );
 }

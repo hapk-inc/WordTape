@@ -28,7 +28,7 @@ class PrevQuestion extends ConsumerWidget {
           height: 210.r,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 15,
+            itemCount: 40,
             padding: EdgeInsets.only(left: 15.r),
             itemBuilder: (context, index) {
               final DateTime now = DateTime.now();
@@ -58,10 +58,10 @@ class PrevQuestionTile extends ConsumerWidget {
     if (question == null) return SizedBox();
 
     return Container(
-      width: 210.r,
+      width: 240.r,
       decoration: BoxDecoration(
           border: Border.all(
-            color: isCompleted ? midnightGreen : silver,
+            color: isCompleted ? midnightGreen : azureGreen,
             width: 0.45.r,
           ),
           borderRadius: BorderRadius.circular(7.5.r),
@@ -73,7 +73,7 @@ class PrevQuestionTile extends ConsumerWidget {
                     ],
                   ),
                 )
-              : null
+              : LinearGradient(colors: [...List.filled(5, azureGreen)])
           // color: isCompleted ? lightCyan : null,
           ),
       padding: EdgeInsets.all(15.r),
@@ -82,7 +82,8 @@ class PrevQuestionTile extends ConsumerWidget {
       child: InkWell(
         onTap: () {
           ref.read(dateSelectedProvider.notifier).state = date;
-          context.go('/decode', extra: date);
+          final String formatDate = DateFormat('dd-MMM-yyyy').format(date);
+          context.go('/daily-challenge/$formatDate');
         },
         child: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
@@ -101,14 +102,18 @@ class PrevQuestionTile extends ConsumerWidget {
                       TextSpan(
                         text: search[0].value,
                         children: [
-                          TextSpan(text: "❓", style: textTheme.emojiSmall),
+                          TextSpan(
+                            text: "❓",
+                            style:
+                                textTheme.emojiSmall.copyWith(fontSize: 18.r),
+                          ),
                         ],
                       )
                     else
                       const TextSpan(text: "Completed")
                   ],
                 ),
-                style: textTheme.kanitMedium.copyWith(
+                style: textTheme.headlineMedium?.copyWith(
                   color: raisinBlack,
                   height: 1.5,
                 ),
