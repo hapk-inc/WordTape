@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:toastification/toastification.dart';
 
 import '../enum/enum.dart';
 import '../panel/pod.dart';
@@ -22,57 +21,50 @@ class OutlinePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ToastificationConfigProvider(
-      config: ToastificationConfig(
-        marginBuilder: (_, __) => EdgeInsets.all(15.r),
-        alignment: Alignment.center,
-        animationDuration: const Duration(milliseconds: 600),
-      ),
-      child: Scaffold(
-        backgroundColor: blackBean,
-        key: scaffoldKey,
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          top: false,
-          bottom: false,
-          child: Builder(
-            builder: (_) {
-              final ScreenSize size = ref.watch(sizeProvider);
-              final bool isMobile = size == ScreenSize.mobile;
-              if (!isMobile) return OutlineState(child: child);
-              final PanelWidget? panelWidget = ref.watch(panelNotifierProvider);
-              final SlideDirection direction =
-                  panelWidget?.direction() ?? SlideDirection.UP;
-              return SlidingUpPanel(
-                backdropEnabled: panelWidget?.backdropEnabled() ?? false,
-                backdropOpacity: 1,
-                isDraggable: false,
-                color: seaWhite,
-                controller: isMobile ? ref.read(panelControllerProvider) : null,
-                minHeight: 0,
-                maxHeight: panelWidget?.height() ?? 0.h,
-                padding: EdgeInsets.zero,
-                backdropColor: gunMetal,
-                slideDirection: direction,
+    return Scaffold(
+      backgroundColor: blackBean,
+      key: scaffoldKey,
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Builder(
+          builder: (_) {
+            final ScreenSize size = ref.watch(sizeProvider);
+            final bool isMobile = size == ScreenSize.mobile;
+            if (!isMobile) return OutlineState(child: child);
+            final PanelWidget? panelWidget = ref.watch(panelNotifierProvider);
+            final SlideDirection direction =
+                panelWidget?.direction() ?? SlideDirection.UP;
+            return SlidingUpPanel(
+              backdropEnabled: panelWidget?.backdropEnabled() ?? false,
+              backdropOpacity: 1,
+              isDraggable: false,
+              color: seaWhite,
+              controller: isMobile ? ref.read(panelControllerProvider) : null,
+              minHeight: 0,
+              maxHeight: panelWidget?.height() ?? 0.h,
+              padding: EdgeInsets.zero,
+              backdropColor: gunMetal,
+              slideDirection: direction,
+              borderRadius: _borderRadius(
+                15,
+                isTop: direction == SlideDirection.UP,
+              ),
+              renderPanelSheet: true,
+              panel: ClipRRect(
                 borderRadius: _borderRadius(
                   15,
                   isTop: direction == SlideDirection.UP,
                 ),
-                renderPanelSheet: true,
-                panel: ClipRRect(
-                  borderRadius: _borderRadius(
-                    15,
-                    isTop: direction == SlideDirection.UP,
-                  ),
-                  child: panelWidget,
-                ),
-                body: OutlineState(child: child),
-                onPanelClosed: () {
-                  ref.read(panelNotifierProvider.notifier).state = null;
-                },
-              );
-            },
-          ),
+                child: panelWidget,
+              ),
+              body: OutlineState(child: child),
+              onPanelClosed: () {
+                ref.read(panelNotifierProvider.notifier).state = null;
+              },
+            );
+          },
         ),
       ),
     );

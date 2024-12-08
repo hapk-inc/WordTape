@@ -57,7 +57,7 @@ class PrevQuestionTile extends ConsumerWidget {
     if (question == null) return SizedBox();
 
     return Container(
-      width: 240.r,
+      width: 210.r,
       decoration: BoxDecoration(
           border: Border.all(
             color: isCompleted ? midnightGreen : azureGreen,
@@ -121,13 +121,9 @@ class PrevQuestionTile extends ConsumerWidget {
                     : AutoSizeText.rich(
                         TextSpan(
                           children: [
-                            if (found.i != 1)
-                              ...[
-                                for (int i = 0; i <= found.i - 1; i++)
-                                  found.untilNow.containsKey(i) ? "🟧" : "🟩",
-                              ].map(
-                                (e) => TextSpan(text: e),
-                              )
+                            ...List.of(
+                              notifier.summary.map((e) => TextSpan(text: e)),
+                            ),
                           ],
                           style: textTheme.emojiSmall,
                         ),

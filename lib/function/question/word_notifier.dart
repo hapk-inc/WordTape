@@ -158,10 +158,6 @@ class WordNotifier extends ChangeNotifier {
     String exact = word.value;
     if (!txt.startsWith(exact.firstChar) || txt.isEmpty) {
       onlyFirstChar();
-      /* _controller.value = _controller.value.copyWith(
-        text: exact.firstChar,
-        selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
-      );*/
     } else {
       final int len = text.length;
       _controller.value = _controller.value.copyWith(
@@ -184,5 +180,12 @@ class WordNotifier extends ChangeNotifier {
     _notifier.prompt = Prompt(text: err, state: PromptState.error);
     _node.requestFocus();
     return err.text;
+  }
+
+  void enablingFocus() {
+    _enabled = true;
+
+    _node.requestFocus();
+    notifyListeners();
   }
 }

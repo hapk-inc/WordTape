@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import '../../extension/extension.dart';
 
 import '../../function/question/notifier.dart';
+import '../../function/question/word_notifier.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
@@ -67,7 +68,7 @@ class BottomButton extends ConsumerWidget {
               onPressed: () {
                 final DateTime now = DateTime.now();
                 final String date = DateFormat('dd-MMM-yyyy').format(now);
-                context.push('/daily-challenge/$date');
+                context.go('/daily-challenge/$date');
               },
               child: const Text("Play now"),
             ),
@@ -139,7 +140,10 @@ class RiddleNowStateState extends ConsumerWidget {
                 for (Word search in searchWord)
                   FadeIn(
                     delay: const Duration(milliseconds: 750),
-                    child: EditableWord(search),
+                    child: EditableWord(
+                      search,
+                      inDailyChallenge: false,
+                    ),
                   )
               ],
             ),

@@ -53,7 +53,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         GameArchive(),
         SliverToBoxAdapter(child: PrevQuestion()),
 
-/*        if (isAnonymous) ...[
+        /* if (isAnonymous) ...[
           GoogleLogin(),
         ] else ...[
           GameArchive(),
@@ -115,10 +115,13 @@ class GameArchive extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.all(15.r),
+        margin: EdgeInsets.fromLTRB(15.r, 30.r, 0, 15.r),
         child: Text(
           "Game Archives",
-          style: textTheme.headlineMedium?.copyWith(color: slateGray),
+          style: textTheme.headlineMedium?.copyWith(
+            color: midnightGreen,
+            fontSize: 24.r,
+          ),
         ),
       ),
     );

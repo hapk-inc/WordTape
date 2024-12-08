@@ -49,24 +49,29 @@ class LottieHint extends ConsumerStatefulWidget {
 
 class _LottieHintState extends ConsumerState<LottieHint> {
   late DateTime date;
-  late QuestionNotifier notifier;
+  //late QuestionNotifier notifier;
 
   @override
   void initState() {
     date = widget.dateTime;
-    notifier = ref.read(questionNotifierProvider(date));
+    //notifier = ref.read(questionNotifierProvider(date));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) => InkWell(
         onTap: () async {
+          final QuestionNotifier notifier =
+              ref.read(questionNotifierProvider(date));
           notifier.helpUser();
           ref.read(toastNotifierProvider.notifier).state =
               toastification.showCustom(
             alignment: Alignment.topCenter,
             autoCloseDuration: const Duration(minutes: 30),
-            builder: (_, __) => RiddleToast(date),
+            builder: (_, __) => ClipRRect(
+              borderRadius: BorderRadius.circular(7.5.r),
+              child: RiddleToast(date, word: notifier.focusedWord),
+            ),
           );
         },
         child: AnimatedSwitcher(

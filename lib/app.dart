@@ -24,6 +24,11 @@ class App extends ConsumerWidget with CustomThemeMixin {
         final ScreenSize size = _validateSize(mW);
         ref.read(listenConnectivityProvider);
         return ToastificationWrapper(
+          config: ToastificationConfig(
+            marginBuilder: (_, __) => EdgeInsets.all(15.r),
+            alignment: Alignment.center,
+            animationDuration: const Duration(milliseconds: 600),
+          ),
           child: ProviderScope(
             overrides: [
               sizeProvider.overrideWithValue(size),

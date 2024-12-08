@@ -10,8 +10,10 @@ part 'prompt.freezed.dart';
 class Prompt extends Equatable with _$Prompt {
   const Prompt._();
 
-  const factory Prompt(
-      {required UnderlineText text, required PromptState state}) = _Prompt;
+  const factory Prompt({
+    required UnderlineText text,
+    @Default(PromptState.search) PromptState state,
+  }) = _Prompt;
 
   @override
   List<Object?> get props => [text, state];

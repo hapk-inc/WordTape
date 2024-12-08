@@ -10,10 +10,8 @@ import '../../enum/enum.dart';
 import '../../model/found.dart';
 import '../../model/prompt.dart';
 import '../../model/question.dart';
-import '../../model/route_path.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
-import '../../router/path.dart';
 import '../firestore/pod.dart';
 import '../firestore/question.dart';
 import '../gen_ai/pod.dart';
@@ -194,11 +192,12 @@ class QuestionNotifier extends ChangeNotifier {
 
   GlobalKey<FormState> get formKey => _formKey;
 
-  Future<void> validate(String text, {bool revealed = false}) async {
+  Future<bool> validate(String text, {bool revealed = false}) async {
     ref.read(toastNotifierProvider.notifier).closingIfOpen();
+    bool isValid = false;
     if (revealed) {
     } else {
-      bool isValid = focusedWord!.value == text;
+      isValid = focusedWord!.value == text;
       found = _found;
       if (isValid) {
         _toastText = null;
@@ -219,6 +218,7 @@ class QuestionNotifier extends ChangeNotifier {
         found = _found.copyWith(mistake: text);
       }
     }
+    return isValid;
   }
 
   Future<void> _newFound() async {
@@ -263,45 +263,6 @@ class QuestionNotifier extends ChangeNotifier {
     _toastText = value;
     notifyListeners();
   }
-
-  /*Future<void> helpUser() async {
-    typing = true;
-    if (_found.untilNow.containsKey(_found.i)) {
-      final List<String> clues = List.castFrom(_found.untilNow[_found.i]);
-
-      if (clues.isNotEmpty && clues.first.isNotEmpty) {
-        riddleClue = clues.first;
-        return;
-      }
-    }
-    riddleClue = "";
-    final String answer = _question!.answer(_found);
-    riddleClue = await ref
-        .read(createHintProvider(focusedWord!, answer).future)
-        .catchError(
-      (error, stackTrace) {
-        _tracker.e("Clue error", error: error);
-        if (focusedWord?.hint != null) return focusedWord?.hint ?? "";
-        return "";
-      },
-    );
-    if (riddleClue.isEmpty) {
-      riddleClue = ref.read(aiErrorProvider);
-      return;
-    }
-
-    Map<int, dynamic> map = Map<int, dynamic>.from(_found.untilNow);
-    map.update(
-      _found.i,
-      (value) {
-        if (value is List) {
-          return [...value, if (!value.contains(_riddleClue)) _riddleClue];
-        }
-      },
-      ifAbsent: () => [_riddleClue],
-    );
-    found = _found.copyWith(untilNow: map);
-  }*/
 
   Future<void> insert() async => await Future.wait(
         [

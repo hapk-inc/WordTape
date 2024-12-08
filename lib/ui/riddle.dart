@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../function/question/notifier.dart';
 
+import '../function/question/word_notifier.dart';
 import '../model/word.dart';
 import '../panel/pod.dart';
 import '../shared/shared.dart';
@@ -55,7 +56,7 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
       },
     );
 
-    ref.listenManual(
+    ref.listenManual<bool>(
       questionNotifierProvider(date).select((value) => value.done),
       (previous, next) {
         if (next) {
@@ -71,9 +72,6 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
 
   _onStateChanged(AppLifecycleState state) {}
 
-  // log(state.name);
-  // if (state == AppLifecycleState.inactive) notifier.insert();
-
   @override
   void dispose() {
     _listener.dispose();
@@ -88,10 +86,6 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
     );
   }
 }
-
-/*final FocusNode focusNode = notifier.focusedWord == null
-        ? FocusNode()
-        : ref.watch(wordNotifierProvider(notifier.focusedWord!)).node;*/
 
 /*child: KeyboardListener(
           focusNode: FocusNode(canRequestFocus: true),
@@ -117,6 +111,7 @@ class RiddlePageState extends ConsumerWidget {
         final double h_03 = maxHeight * 0.03;
         final double w_03 = maxWidth * 0.03;
         return SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: Form(
             key: notifier.formKey,
             child: Column(
@@ -134,8 +129,15 @@ class RiddlePageState extends ConsumerWidget {
                   duration: const Duration(milliseconds: 300),
                   child: SizedBox(
                     height: maxHeight * 0.6,
-                    child: SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
+                    child: Focus(
+                      onFocusChange: (hasFocus) {
+                        if (notifier.focusedWord != null) {
+                          ref
+                              .read(wordNotifierProvider(notifier.focusedWord!))
+                              .node
+                              .requestFocus();
+                        }
+                      },
                       child: Column(
                         children: [
                           for (Word word in notifier.question?.words ?? [])

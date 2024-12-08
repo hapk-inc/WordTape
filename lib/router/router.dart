@@ -36,8 +36,6 @@ GoRouter router(Ref ref) => GoRouter(
       routes: <RouteBase>[
         ShellRoute(
           redirect: (_, state) async {
-            print("40--ShellRoute Redirect");
-            print(state.matchedLocation);
             final String? renovation =
                 await ref.read(renovationProvider.future);
             if (renovation?.isNotEmpty ?? false) return "/renovation";
@@ -47,7 +45,6 @@ GoRouter router(Ref ref) => GoRouter(
             ref.read(pathNotifierProvider.notifier).state = path.copyWith(
               path: state.matchedLocation,
             );
-            print(ref.read(pathNotifierProvider).path);
 
             if (state.pathParameters.containsKey('date')) {
               final String? str = state.pathParameters['date'];

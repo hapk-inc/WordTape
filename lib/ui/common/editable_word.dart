@@ -5,12 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../enum/enum.dart';
 import '../../function/question/notifier.dart';
 import '../../function/underline_text/pod.dart';
 import '../../model/prompt.dart';
-import '../../model/route_path.dart';
-import '../../router/path.dart';
 
 import '../../extension/extension.dart';
 
@@ -20,12 +17,10 @@ import '../../model/word.dart';
 import '../../theme/color.dart';
 import '../../theme/pod.dart';
 
-/*
 class EditableWord extends ConsumerStatefulWidget {
   final Word word;
-  final bool initialised;
-
-  const EditableWord(this.word, {this.initialised = true, super.key});
+  final bool inDailyChallenge;
+  const EditableWord(this.word, {this.inDailyChallenge = true, super.key});
 
   @override
   ConsumerState createState() => _EditableWordState();
@@ -36,166 +31,14 @@ class _EditableWordState extends ConsumerState<EditableWord> {
   late WordNotifier wordNotifier;
   late int index;
   late DateTime date;
-  late QuestionNotifier notifier;
+  late bool isDummy;
+  bool enabled = false;
 
   @override
   void initState() {
     word = widget.word;
-    if (widget.initialised) {
-      final List<String> splitter = word.id?.split("|") ?? [];
-      if (splitter.isNotEmpty) {
-        index = int.parse(splitter[1]);
-        date = DateFormat('yyyy-MM-dd').parse(splitter[0]);
-      } else {
-        index = 0;
-        date = DateTime.now().convert();
-      }
-      wordNotifier = ref.read(wordNotifierProvider(word));
-    }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.initialised) {
-      return SizedBox(
-        height: 72.h,
-        child: LayoutBuilder(
-          builder: (_, constraints) {
-            final PinTheme pinTheme = ref.read(
-              pinThemeProvider(constraints: constraints, color: raisinBlack),
-            );
-
-            return Pinput(
-              length: word.value.length,
-              defaultPinTheme: pinTheme,
-              controller: TextEditingController(text: word.value),
-              //
-
-              keyboardType: TextInputType.none, // readOnly: true,
-
-              //
-              enabled: false,
-              animationCurve: Curves.easeOut,
-
-              readOnly: true,
-
-              textCapitalization: TextCapitalization.characters,
-              separatorBuilder: (_) {
-                final int len = word.value.length;
-                return SizedBox(width: len > 8 ? 4.5.r : 9.r);
-              },
-
-              errorBuilder: (e, _) => const SizedBox(),
-              textInputAction: TextInputAction.none,
-            );
-          },
-        ),
-      );
-    }
-    final RoutePath path = ref.read(pathNotifierProvider);
-
-    wordNotifier = ref.watch(wordNotifierProvider(word));
-
-    final bool isDecode = path.path == "/decode";
-
-    notifier = ref.watch(questionNotifierProvider(date));
-    final bool enabled = notifier.focusedWord == word && isDecode;
-
-    return Hero(
-      tag: word.id ?? "",
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 90),
-        height: 72.h,
-        child: LayoutBuilder(
-          builder: (_, constraints) {
-            final PinTheme pinTheme = ref.read(
-              pinThemeProvider(
-                  constraints: constraints, color: wordNotifier.color),
-            );
-
-            return Pinput(
-              length: word.value.length,
-              defaultPinTheme: pinTheme,
-              controller: wordNotifier.controller,
-              focusNode: wordNotifier.node,
-              //
-
-              pinAnimationType: PinAnimationType.fade,
-              animationDuration: const Duration(milliseconds: 150),
-              pinputAutovalidateMode: PinputAutovalidateMode.disabled,
-              validator: !enabled ? null : wordNotifier.validator,
-              onSubmitted: (value) {
-                final bool? validate =
-                    notifier.formKey.currentState?.validate();
-                if (validate ?? false) notifier.validate(value);
-              },
-              onCompleted: (value) {},
-
-              onTap: () {
-                if (notifier.focusedWord != word) return;
-                notifier.prompt = Prompt(
-                  text: ref.read(figureOutProvider),
-                  state: PromptState.search,
-                );
-
-                if (!isDecode && notifier.focusedWord == word) {
-                  context.push('/decode', extra: date);
-                }
-              },
-
-              keyboardType: TextInputType.name, // readOnly: true,
-              forceErrorState: wordNotifier.error,
-
-              //
-              enabled: notifier.focusedWord == word,
-              animationCurve: Curves.easeOut,
-              autofocus: enabled,
-
-              readOnly: !enabled,
-
-              onChanged: ref.read(wordNotifierProvider(word)).onTextChanged,
-
-              textCapitalization: TextCapitalization.characters,
-              separatorBuilder: (_) {
-                final int len = word.value.length;
-                return SizedBox(width: len > 8 ? 4.5.r : 9.r);
-              },
-
-              errorBuilder: (e, _) => const SizedBox(),
-              textInputAction: TextInputAction.none,
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-*/
-
-class EditableWord extends ConsumerStatefulWidget {
-  final Word word;
-  final bool initialised;
-
-  const EditableWord(this.word, {this.initialised = true, super.key});
-
-  @override
-  ConsumerState createState() => _EditableWordState();
-}
-
-class _EditableWordState extends ConsumerState<EditableWord> {
-  late Word word;
-  late WordNotifier wordNotifier;
-  late int index;
-  late DateTime date;
-  //late QuestionNotifier notifier;
-  late bool initialised;
-
-  @override
-  void initState() {
-    word = widget.word;
-    initialised = widget.initialised;
-    if (initialised) {
+    isDummy = word.id == null;
+    if (!isDummy) {
       final List<String> splitter = word.id?.split("|") ?? [];
       if (splitter.isNotEmpty) {
         index = int.parse(splitter[1]);
@@ -211,48 +54,51 @@ class _EditableWordState extends ConsumerState<EditableWord> {
 
   @override
   Widget build(BuildContext context) {
-    bool enabled = false;
-
-    if (initialised) {
+    if (!isDummy) {
       wordNotifier = ref.watch(wordNotifierProvider(word));
       enabled = wordNotifier.enabled;
     }
-    return MissingWord(
-      widget.word.value,
-      controller: !initialised
-          ? TextEditingController(text: word.value)
-          : wordNotifier.controller,
-      color: initialised ? wordNotifier.color : raisinBlack,
-      onChanged: !initialised
-          ? null
-          : ref.read(wordNotifierProvider(word)).onTextChanged,
-      validator:
-          !enabled ? null : ref.read(wordNotifierProvider(word)).validator,
-      onTap: () {
-        final QuestionNotifier notifier =
-            ref.read(questionNotifierProvider(date));
-        //final RoutePath path = ref.read(pathNotifierProvider);
-        //print("235-Route Path");
-        //print(path.path);
-        //final bool inDailyChallenge = path.path.contains("/daily-challenge/");
-        if (notifier.focusedWord != word) return;
-        notifier.prompt = Prompt(
-          text: ref.read(figureOutProvider),
-          state: PromptState.search,
-        );
-
-        if (!initialised && notifier.focusedWord == word) {
-          context.push('/daily-challenge', extra: date);
-        }
-      },
-      onSubmitted: (value) {
-        final QuestionNotifier notifier =
-            ref.read(questionNotifierProvider(date));
-        final bool? validate = notifier.formKey.currentState?.validate();
-        if (validate ?? false) notifier.validate(value);
-      },
-      enabled: initialised ? enabled : false,
-      focusNode: initialised ? wordNotifier.node : null,
+    return Hero(
+      tag: "$word",
+      child: MissingWord(
+        word.value,
+        controller: isDummy
+            ? TextEditingController(text: word.value)
+            : wordNotifier.controller,
+        color: isDummy ? midnightGreen : wordNotifier.color,
+        onChanged:
+            isDummy ? null : ref.read(wordNotifierProvider(word)).onTextChanged,
+        validator:
+            !enabled ? null : ref.read(wordNotifierProvider(word)).validator,
+        onSubmitted: (value) async {
+          final QuestionNotifier notifier =
+              ref.read(questionNotifierProvider(date));
+          final bool? validate = notifier.formKey.currentState?.validate();
+          if (validate ?? false) {
+            final bool v = await notifier.validate(value);
+            if (!v) ref.read(wordNotifierProvider(word)).node.requestFocus();
+          } else {
+            ref.read(wordNotifierProvider(word)).node.requestFocus();
+          }
+        },
+        enabled: enabled,
+        focusNode: isDummy ? null : wordNotifier.node,
+        onTap: () {
+          print("onTap ${widget.inDailyChallenge}");
+          if (widget.inDailyChallenge) {
+            final QuestionNotifier notifier =
+                ref.read(questionNotifierProvider(date));
+            if (notifier.focusedWord != word) {
+              FocusScope.of(context).unfocus();
+              return;
+            }
+            notifier.prompt = Prompt(text: ref.read(figureOutProvider));
+          } else {
+            final String formatDate = DateFormat('dd-MMM-yyyy').format(date);
+            context.go('/daily-challenge/$formatDate');
+          }
+        },
+      ),
     );
   }
 }
@@ -285,7 +131,7 @@ class MissingWord extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedSize(
         duration: const Duration(milliseconds: 90),
         child: SizedBox(
-          height: 72.h,
+          height: 70.h,
           child: Consumer(
             builder: (_, ref, __) => LayoutBuilder(
               builder: (_, constraints) {
@@ -295,16 +141,15 @@ class MissingWord extends StatelessWidget {
 
                 return Pinput(
                   length: word.length,
-                  autofocus: enabled,
-                  enabled: enabled,
+                  autofocus: true,
                   defaultPinTheme: pinTheme,
+                  showCursor: enabled,
                   onTap: onTap,
                   focusNode: focusNode,
-
+                  keyboardType: TextInputType.none,
+                  textInputAction: TextInputAction.next,
                   controller: controller,
-                  //keyboardType: TextInputType.none,
                   animationCurve: Curves.easeOut,
-                  readOnly: !enabled,
                   textCapitalization: TextCapitalization.characters,
                   separatorBuilder: (_) {
                     final int len = word.length;
@@ -314,9 +159,6 @@ class MissingWord extends StatelessWidget {
                   onChanged: onChanged,
                   onSubmitted: onSubmitted,
                   validator: validator,
-                  //onChanged: ref.read(wordNotifierProvider(word)).onTextChanged,
-                  //textInputAction: TextInputAction.none,
-
                   pinAnimationType: PinAnimationType.fade,
                   animationDuration: const Duration(milliseconds: 150),
                   pinputAutovalidateMode: PinputAutovalidateMode.disabled,

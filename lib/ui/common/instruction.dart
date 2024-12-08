@@ -132,7 +132,7 @@ class InstructionWord extends StatelessWidget {
         child: AnimatedOpacity(
           opacity: enabled ? 1 : 0.15,
           duration: const Duration(milliseconds: 150),
-          child: EditableWord(Word(value: str), initialised: false),
+          child: EditableWord(Word(value: str)),
         ),
       );
 }

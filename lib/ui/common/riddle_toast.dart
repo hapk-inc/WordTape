@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:wordtape/function/question/word_notifier.dart';
+import 'package:wordtape/model/word.dart';
 
 import '../../function/question/notifier.dart';
 import '../../function/question/toast.dart';
@@ -13,7 +15,8 @@ import 'typewriter_text.dart';
 
 class RiddleToast extends ConsumerWidget {
   final DateTime date;
-  const RiddleToast(this.date, {super.key});
+  final Word? word;
+  const RiddleToast(this.date, {super.key, this.word});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,11 +26,8 @@ class RiddleToast extends ConsumerWidget {
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         child: Container(
-          decoration: BoxDecoration(
-            color: azureGreen,
-            borderRadius: BorderRadius.circular(7.5.r),
-          ),
-          height: 135.r,
+          decoration: BoxDecoration(color: azureGreen),
+          height: 144.r,
           alignment: Alignment.center,
           child: Stack(
             children: [
@@ -52,7 +52,14 @@ class RiddleToast extends ConsumerWidget {
               Positioned(
                 right: 7.5.r,
                 top: 7.5.r,
-                child: _ToastCloseButton(),
+                child: _ToastCloseButton(
+                  onTap: () {
+                    ref.read(toastNotifierProvider.notifier).dismiss();
+                    if (word != null) {
+                      ref.read(wordNotifierProvider(word!)).node.requestFocus();
+                    }
+                  },
+                ),
               ),
             ],
           ),
@@ -63,11 +70,12 @@ class RiddleToast extends ConsumerWidget {
 }
 
 class _ToastCloseButton extends ConsumerWidget {
-  const _ToastCloseButton();
+  final GestureTapCallback? onTap;
+  const _ToastCloseButton({this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => InkWell(
-        onTap: () => ref.read(toastNotifierProvider.notifier).dismiss(),
+        onTap: onTap,
         child: Icon(Icons.close, color: midnightGreen),
       );
 }
