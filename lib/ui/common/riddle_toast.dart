@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:wordtape/function/question/word_notifier.dart';
 import 'package:wordtape/model/word.dart';
 
 import '../../function/question/notifier.dart';
@@ -54,10 +53,11 @@ class RiddleToast extends ConsumerWidget {
                 top: 7.5.r,
                 child: _ToastCloseButton(
                   onTap: () {
+                    ref.read(questionNotifierProvider(date)).toastText = null;
                     ref.read(toastNotifierProvider.notifier).dismiss();
-                    if (word != null) {
+                    /*if (word != null) {
                       ref.read(wordNotifierProvider(word!)).node.requestFocus();
-                    }
+                    }*/
                   },
                 ),
               ),

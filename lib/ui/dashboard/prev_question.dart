@@ -25,7 +25,35 @@ class PrevQuestion extends ConsumerWidget {
         data: ThemeData(scrollbarTheme: ScrollbarThemeData(interactive: false)),
         child: SizedBox(
           height: 210.r,
-          child: ListView.builder(
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.only(left: 15.r),
+            children: [
+              ...List.generate(
+                7,
+                (index) {
+                  final DateTime now = DateTime.now();
+                  final DateTime date =
+                      now.subtract(Duration(days: index + 1)).onlyYYYYMMMDD;
+
+                  return PrevQuestionTile(date);
+                },
+              ),
+              /*Container(
+                width: 420.r,
+                decoration: BoxDecoration(
+                  color: cerise,
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+                margin: EdgeInsets.symmetric(horizontal: 15.r),
+              )*/
+            ],
+          ),
+        ),
+      );
+}
+
+/*  child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: 40,
             padding: EdgeInsets.only(left: 15.r),
@@ -36,10 +64,7 @@ class PrevQuestion extends ConsumerWidget {
 
               return PrevQuestionTile(date);
             },
-          ),
-        ),
-      );
-}
+          ),*/
 
 class PrevQuestionTile extends ConsumerWidget {
   final DateTime date;
@@ -63,7 +88,7 @@ class PrevQuestionTile extends ConsumerWidget {
             color: isCompleted ? midnightGreen : azureGreen,
             width: 0.45.r,
           ),
-          borderRadius: BorderRadius.circular(7.5.r),
+          borderRadius: BorderRadius.circular(15.r),
           gradient: isCompleted
               ? ref.read(gradientProvider(color: [...List.filled(2, celeste)]))
               : LinearGradient(colors: [...List.filled(5, azureGreen)])

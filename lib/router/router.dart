@@ -10,6 +10,7 @@ import '../panel/pod.dart';
 import '../remote_config/pod.dart';
 import '../ui/dashboard.dart';
 import '../ui/outline.dart';
+import '../ui/privacy.dart';
 import '../ui/renovation.dart';
 import '../ui/riddle.dart';
 import '../ui/splash.dart';
@@ -82,6 +83,10 @@ GoRouter router(Ref ref) => GoRouter(
                     path.copyWith(path: "/daily-challenge");
                 return true;
               },
+            ),
+            GoRoute(
+              path: '/privacy-policy',
+              builder: (_, __) => const PrivacyPage(),
             ),
           ],
         ),

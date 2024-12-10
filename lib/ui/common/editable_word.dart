@@ -66,8 +66,16 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             ? TextEditingController(text: word.value)
             : wordNotifier.controller,
         color: isDummy ? midnightGreen : wordNotifier.color,
-        onChanged:
-            isDummy ? null : ref.read(wordNotifierProvider(word)).onTextChanged,
+        onChanged: isDummy
+            ? null
+            : (String s) {
+                ref.read(wordNotifierProvider(word)).onTextChanged(s);
+                if (!widget.inDailyChallenge) {
+                  final String formatDate =
+                      DateFormat('dd-MMM-yyyy').format(date);
+                  context.go('/daily-challenge/$formatDate');
+                }
+              },
         validator:
             !enabled ? null : ref.read(wordNotifierProvider(word)).validator,
         onSubmitted: (value) async {
@@ -84,7 +92,6 @@ class _EditableWordState extends ConsumerState<EditableWord> {
         enabled: enabled,
         focusNode: isDummy ? null : wordNotifier.node,
         onTap: () {
-          print("onTap ${widget.inDailyChallenge}");
           if (widget.inDailyChallenge) {
             final QuestionNotifier notifier =
                 ref.read(questionNotifierProvider(date));

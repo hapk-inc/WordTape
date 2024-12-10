@@ -21,4 +21,6 @@ class ToastNotifier extends _$ToastNotifier {
   closingIfOpen() {
     if (state.isStarted) toastification.dismiss(state);
   }
+
+  bool get checkIfShowing => state.isStarted;
 }

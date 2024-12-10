@@ -54,7 +54,6 @@ class _LottieHintState extends ConsumerState<LottieHint> {
   @override
   void initState() {
     date = widget.dateTime;
-    //notifier = ref.read(questionNotifierProvider(date));
     super.initState();
   }
 
@@ -63,6 +62,8 @@ class _LottieHintState extends ConsumerState<LottieHint> {
         onTap: () async {
           final QuestionNotifier notifier =
               ref.read(questionNotifierProvider(date));
+          final bool toastOpen = notifier.toastText != null;
+          if (toastOpen) return;
           notifier.helpUser();
           ref.read(toastNotifierProvider.notifier).state =
               toastification.showCustom(

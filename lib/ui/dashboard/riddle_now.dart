@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import '../../extension/extension.dart';
 
 import '../../function/question/notifier.dart';
-import '../../function/question/word_notifier.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
