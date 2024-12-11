@@ -97,5 +97,7 @@
   "next_puzzle_1": "Time to unravel the mystery of today’s puzzle!",
   "next_puzzle_2": "Get ready to challenge your mind with today’s puzzle!",
   "next_puzzle_3": "Join me in cracking today’s intriguing puzzle!",
-  "next_puzzle_4": "Let’s embark on a journey to solve today’s exciting riddle!"
+  "next_puzzle_4": "Let’s embark on a journey to solve today’s exciting riddle!",
+
+  "wait_until_day_comes": "{\"wait_until_day_comes\":[{\"text\":\"Patience, my friend. Let’s wait for the right moment.\",\"focused\":\"Patience, my friend. Let’s wait\"},{\"text\":\"Hold on, my friend. The time will come soon enough.\",\"focused\":\"Hold on, my friend. The time will come\"},{\"text\":\"Not just yet, my friend. Let’s bide our time until the day arrives.\",\"focused\":\"Not just yet, my friend. Let’s bide our time\"},{\"text\":\"Take it easy, my friend. We’ll wait for the day to unfold.\",\"focused\":\"Take it easy, my friend. We’ll wait\"},{\"text\":\"Not just now, my friend. Let's see what the future holds.\",\"focused\":\"Not just now, my friend. Let's see\"},{\"text\":\"Hold your horses, my friend. The day will come in due time.\",\"focused\":\"Hold your horses, my friend. The day will come\"},{\"text\":\"Let’s not rush it, my friend. Wait for the right day to arrive.\",\"focused\":\"Let’s not rush it, my friend. Wait for the right day\"},{\"text\":\"Easy there, my friend. We should wait until the moment is right.\",\"focused\":\"Easy there, my friend. We should wait\"},{\"text\":\"Not too hasty, my friend. Patience until that day comes.\",\"focused\":\"Not too hasty, my friend. Patience until\"},{\"text\":\"Slow down, my friend. The day will come when it’s meant to.\",\"focused\":\"Slow down, my friend. The day will come\"}]}"
 }

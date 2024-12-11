@@ -87,8 +87,8 @@ class App extends ConsumerWidget with CustomThemeMixin {
                       EdgeInsets.symmetric(horizontal: 15.r),
                     ),
                     minimumSize: WidgetStatePropertyAll(Size(90.r, 45.r)),
-                    textStyle:
-                        WidgetStatePropertyAll(defaultTextTheme.urlTheme),
+                    textStyle: WidgetStatePropertyAll(
+                        defaultTextTheme.urlTheme.copyWith(height: 0)),
                   ),
                 ),
               ),

@@ -34,7 +34,7 @@ class QuestionNotifier extends ChangeNotifier {
   Question? _question;
   late Found _found;
 
-  late bool _isToday;
+  late bool _isTodayOrBefore;
   late Prompt _prompt;
   late UnderlineText _headline;
 
@@ -54,7 +54,8 @@ class QuestionNotifier extends ChangeNotifier {
     _prompt = Prompt(text: figureText, state: PromptState.search);
 
     final DateTime now = DateTime.now();
-    _isToday = DateUtils.isSameDay(date, now);
+    _isTodayOrBefore =
+        DateUtils.isSameDay(date, now) ? true : date.isBefore(now);
     final String str = ref.read(nextPuzzleThinkingProvider);
     _headline = UnderlineText(str, focused: "today’s");
   }
@@ -64,6 +65,12 @@ class QuestionNotifier extends ChangeNotifier {
 
   Future questionFound() async {
     _tracker.i("Safe-Initialisation $date");
+    if (!_isTodayOrBefore) {
+      final UnderlineText text = ref.read(waitUntilDayComesProvider);
+      prompt = Prompt(text: text, state: PromptState.done);
+      return;
+    }
+
     _found = Found(date: date); //Safe-Initialisation Found
 
     _question = await _localQuestion.fromDate(date);
@@ -76,7 +83,7 @@ class QuestionNotifier extends ChangeNotifier {
 
     if (_question == null) return;
 
-    if (_isToday) _headline = ref.read(welcomeUserProvider);
+    if (_isTodayOrBefore) _headline = ref.read(welcomeUserProvider);
 
     final String id = _question!.id!;
     Found? f;
@@ -94,7 +101,7 @@ class QuestionNotifier extends ChangeNotifier {
     final UnderlineText text = ref.read(figureOutProvider);
     _prompt = Prompt(text: text, state: PromptState.search);
 
-    if (_found.i != 1 && _isToday) _headline = ref.read(resumeProvider);
+    if (_found.i != 1 && _isTodayOrBefore) _headline = ref.read(resumeProvider);
 
     _done = _question!.isCompleted(_found.i);
 

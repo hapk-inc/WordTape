@@ -58,7 +58,7 @@ class PanelNotifier extends _$PanelNotifier {
           switch ("$state") {
             case "InstructionDialog":
               {
-                print("Instruction = true");
+                debugPrint("Instruction = true");
                 final SharedPreferences pref =
                     await ref.read(sharedPrefProvider.future);
                 pref.setBool('how_to_play', true);

@@ -129,6 +129,13 @@ UnderlineText questionCracked(Ref ref) {
   return _conversion(list).elementAt(mockInteger(0, list.length - 1));
 }
 
+@Riverpod()
+UnderlineText waitUntilDayComes(Ref ref) {
+  final Map map = jsonDecode("wait_until_day_comes".tr());
+  final List list = map["wait_until_day_comes"];
+  return _conversion(list).elementAt(mockInteger(0, list.length - 1));
+}
+
 List<UnderlineText> _conversion(List list) => List.from(
       list.map(
         (e) {

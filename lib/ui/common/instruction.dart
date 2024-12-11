@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +13,7 @@ import '../../function/underline_text/pod.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/widget.dart';
+import '../../router/router.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
 import '../../theme/pod.dart';
@@ -24,7 +24,6 @@ class InstructionDialog extends PanelWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DefaultTextTheme textTheme = DefaultTextTheme();
     final InstructionNotifier notifier = ref.watch(instructionNotifierProvider);
     final List<String> displayedText = notifier.displayed;
     return AnimatedContainer(
@@ -46,13 +45,18 @@ class InstructionDialog extends PanelWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.r),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AutoSizeText(
+                      /*  AutoSizeText(
                         "How to play",
                         style: textTheme.headlineLarge,
-                      ),
+                      ),*/
+                      Spacer(),
+                      InkWell(
+                        onTap: () => ref.read(routerProvider).pop(),
+                        child: Icon(Icons.close),
+                      )
                       /*  InkWell(
                         onTap: () async {
                           final pref = await ref.read(sharedProvider.future);
@@ -91,7 +95,7 @@ class InstructionDialog extends PanelWidget {
                     final UnderlineText underline =
                         ref.read(howPlayProvider)[index];
                     return FadeIn(
-                      delay: const Duration(milliseconds: 7500),
+                      delay: const Duration(milliseconds: 6000),
                       child: InstructionTile(
                         underline.text,
                         constraints.maxWidth * 0.9,
@@ -213,7 +217,7 @@ class InstructionTile extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.only(top: 15.r),
-            child: Icon(Icons.circle, color: midnightGreen, size: 7.5.r),
+            child: Icon(Icons.circle, color: cadetGray, size: 7.5.r),
           ),
           Container(
             padding: EdgeInsets.only(left: 7.5.r),
@@ -230,10 +234,7 @@ class InstructionTile extends StatelessWidget {
                     ),
                   TextSpan(text: text)
                 ],
-                style: defaultTextTheme.bodySmall?.copyWith(
-                  color: cadetGray,
-                  fontSize: 18.r,
-                ),
+                style: defaultTextTheme.urlTheme.copyWith(color: raisinBlack),
               ),
             ),
           ),

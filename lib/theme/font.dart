@@ -58,10 +58,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   //==============
 
   @override
-  TextStyle? get headlineLarge => playFont.copyWith(
-        fontSize: 24.r,
-        height: 1.8,
-      );
+  TextStyle? get headlineLarge => playFont.copyWith(fontSize: 24.r);
 
   @override
   TextStyle? get headlineMedium => playFont.copyWith(fontSize: 16.r);
@@ -81,7 +78,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         fontSize: 15.r,
       );
 
-  TextStyle get urlTheme => robotoMonoFont.copyWith(fontSize: 15.r);
+  TextStyle get urlTheme => robotoMonoFont.copyWith(fontSize: 15.r, height: 2);
 
   TextStyle get emojiMedium => notoEmojiFont.copyWith(fontSize: 36.r);
 
