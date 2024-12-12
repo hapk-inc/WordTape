@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wordtape/app.dart';
 
 import '../function/auth/pod.dart';
 import '../panel/pod.dart';
@@ -143,7 +145,16 @@ class DashboardFooter extends ConsumerWidget {
           if (packageInfo != null)
             "Version ${packageInfo.version}(${packageInfo.buildNumber})",
           "Privacy Policy",
-        ].map((e) => TextButton(onPressed: () {}, child: Text(e))).toList(),
+        ]
+            .map(
+              (e) => TextButton(
+                onPressed: () {
+                  if (e == "Privacy Policy") context.push("/privacy-policy");
+                },
+                child: Text(e),
+              ),
+            )
+            .toList(),
       ),
     );
   }
