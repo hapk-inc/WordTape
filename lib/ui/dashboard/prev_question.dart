@@ -110,7 +110,7 @@ class PrevQuestionTile extends ConsumerWidget {
               Gap(7.5.r),
               Text(
                 DateFormat('MMMM dd').format(date),
-                style: textTheme.headlineSmall?.copyWith(color: raisinBlack),
+                style: textTheme.kanitSmall.copyWith(color: midnightGreen),
               ),
               AutoSizeText.rich(
                 TextSpan(
@@ -163,8 +163,9 @@ class PrevQuestionTile extends ConsumerWidget {
                         ? "No one started yet"
                         : "${question.played} users played",
                     maxLines: 1,
-                    style: textTheme.bodyMedium
-                        ?.copyWith(color: isCompleted ? raisinBlack : null),
+                    style: textTheme.kanitMedium.copyWith(
+                      color: isCompleted ? englishViolet : null,
+                    ),
                     presetFontSizes: [15.r, 12.r, 9.r],
                   ),
                   Spacer(),

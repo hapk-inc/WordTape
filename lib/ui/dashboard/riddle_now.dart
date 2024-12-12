@@ -102,7 +102,14 @@ class RiddleNowState extends ConsumerWidget {
                 top: mH * 0.09,
                 child: AnimatedSize(
                   duration: const Duration(milliseconds: 150),
-                  child: const RiddleNowStateState(),
+                  child: Theme(
+                    data: ThemeData(
+                      scrollbarTheme: ScrollbarThemeData(interactive: false),
+                    ),
+                    child: SingleChildScrollView(
+                      child: const RiddleNowStateState(),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -191,7 +198,7 @@ class RiddleNowWelcome extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = DateTime.now().onlyYYYYMMMDD;
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    final DefaultTextTheme textTheme = DefaultTextTheme();
 
     //
     final UnderlineText sentence = notifier.headline;
@@ -209,13 +216,13 @@ class RiddleNowWelcome extends ConsumerWidget {
               TextSpan(
                 text: word + (word != words.last ? " " : ""),
                 style: highlighter.contains(word)
-                    ? textTheme.titleLarge?.copyWith(color: aquaMarine)
+                    ? textTheme.displaySmall?.copyWith(color: aquaMarine)
                     : null,
               ),
           ],
         ),
         maxLines: 2,
-        style: textTheme.bodyLarge?.copyWith(color: azureGreen),
+        style: textTheme.kanitMedium.copyWith(color: azureGreen),
         presetFontSizes: [22.5.r, 21.r, 18.r],
         textAlign: TextAlign.center,
       ),

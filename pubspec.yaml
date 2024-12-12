@@ -195,5 +195,8 @@ flutter:
         - asset: fonts/Kanit-Regular.ttf
         - asset: fonts/Kanit-Light.ttf
           weight: 300
+        - asset: fonts/Kanit-ExtraLight.ttf
+          weight: 200
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

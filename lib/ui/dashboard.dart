@@ -116,7 +116,7 @@ class GameArchive extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.fromLTRB(15.r, 24.r, 0, 24.r),
+        margin: EdgeInsets.fromLTRB(15.r, 30.r, 0, 15.r),
         child: Text(
           "Game Archives",
           style: textTheme.displaySmall?.copyWith(color: midnightGreen),

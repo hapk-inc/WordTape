@@ -212,19 +212,15 @@ class InstructionTile extends StatelessWidget {
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
 
     return Container(
-      margin: EdgeInsets.only(top: 4.5.r),
+      margin: EdgeInsets.only(top: 7.5.r),
       child: Wrap(
         children: [
-          Container(
-            margin: EdgeInsets.only(top: 15.r),
-            child: Icon(Icons.circle, color: cadetGray, size: 7.5.r),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 7.5.r),
+          SizedBox(
             width: width,
             child: RichText(
               text: TextSpan(
                 children: [
+                  TextSpan(text: "*   "),
                   if (hint)
                     WidgetSpan(
                       child: SizedBox.square(
@@ -234,7 +230,7 @@ class InstructionTile extends StatelessWidget {
                     ),
                   TextSpan(text: text)
                 ],
-                style: defaultTextTheme.urlTheme.copyWith(color: raisinBlack),
+                style: defaultTextTheme.kanitSmall.copyWith(color: raisinBlack),
               ),
             ),
           ),

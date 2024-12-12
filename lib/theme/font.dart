@@ -94,6 +94,11 @@ class DefaultTextTheme extends TextTheme with FontMixin {
         fontSize: 18.r,
         fontWeight: FontWeight.w300,
       );
+
+  TextStyle get kanitSmall => kanitFont.copyWith(
+        fontSize: 15.r,
+        fontWeight: FontWeight.w200,
+      );
 }
 
 mixin FontMixin {

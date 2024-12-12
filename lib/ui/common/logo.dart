@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wordtape/theme/font.dart';
 
 class Logo extends ConsumerWidget {
   final void Function(AnimateDoDirection)? onFinish;
@@ -11,7 +12,7 @@ class Logo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    final DefaultTextTheme textTheme = DefaultTextTheme();
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 7.5.r),
       alignment: Alignment.center,
