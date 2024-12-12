@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wordtape/app.dart';
 
 import '../function/auth/pod.dart';
 import '../panel/pod.dart';
@@ -117,13 +116,10 @@ class GameArchive extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.fromLTRB(15.r, 30.r, 0, 15.r),
+        margin: EdgeInsets.fromLTRB(15.r, 24.r, 0, 24.r),
         child: Text(
           "Game Archives",
-          style: textTheme.headlineMedium?.copyWith(
-            color: midnightGreen,
-            fontSize: 24.r,
-          ),
+          style: textTheme.displaySmall?.copyWith(color: midnightGreen),
         ),
       ),
     );

@@ -11,8 +11,11 @@ import 'font.dart';
 part 'pod.g.dart';
 
 @Riverpod(keepAlive: true, dependencies: [size])
-PinTheme pinTheme(Ref ref,
-    {required BoxConstraints constraints, Color color = raisinBlack,}) {
+PinTheme pinTheme(
+  Ref ref, {
+  required BoxConstraints constraints,
+  Color color = raisinBlack,
+}) {
   final double maxWidth = constraints.maxWidth;
 
   final double boxWidth = maxWidth * 0.0975;
@@ -21,12 +24,14 @@ PinTheme pinTheme(Ref ref,
   return PinTheme(
     constraints: BoxConstraints(
       minWidth: isConstraintMeasurement ? boxWidth : 40.r,
-      maxHeight: 54.h,
+      maxHeight: 54.r,
     ),
     margin: EdgeInsets.zero,
     padding: EdgeInsets.zero,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(color: color, width: 0.54.r)),
+      border: Border(
+        bottom: BorderSide(color: color, width: 0.54.r),
+      ),
     ),
     textStyle: textTheme.headlineMedium?.copyWith(color: color),
   );

@@ -53,7 +53,11 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   TextStyle? get displayMedium => paytoneFont.copyWith(fontSize: 36.r);
 
   @override
-  TextStyle? get displaySmall => paytoneFont.copyWith(fontSize: 30.r);
+  TextStyle? get displaySmall => paytoneFont.copyWith(
+        fontSize: 24.r,
+        height: 1.5.r,
+        color: slateGray,
+      );
 
   //==============
 

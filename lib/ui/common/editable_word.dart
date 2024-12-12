@@ -138,7 +138,7 @@ class MissingWord extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedSize(
         duration: const Duration(milliseconds: 90),
         child: SizedBox(
-          height: 70.h,
+          height: 67.5.r,
           child: Consumer(
             builder: (_, ref, __) => LayoutBuilder(
               builder: (_, constraints) {

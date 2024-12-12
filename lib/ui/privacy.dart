@@ -1,14 +1,12 @@
+import 'dart:ui';
+
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mock_data/mock_data.dart';
-import 'package:wordtape/app.dart';
 
 import '../theme/color.dart';
 import '../theme/font.dart';
-
-import 'package:flutter/gestures.dart';
 
 const String _text1 = "Hapk built the WordTape app as a Free app. This service"
     " is provided by Hapk at no cost and is intended for use as is.";
@@ -109,8 +107,8 @@ const String _text20 = "hapk.inc@gmail.com.";
 TextSpan get _singleLine => const TextSpan(text: "\n");
 TextSpan get _doubleLine => const TextSpan(text: "\n\n");
 
-class PrivacyPage extends StatelessWidget {
-  const PrivacyPage({super.key});
+class PrivacyPage1 extends StatelessWidget {
+  const PrivacyPage1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -248,33 +246,54 @@ class PrivacyPage extends StatelessWidget {
   }
 }
 
-class PrivacyPage1 extends StatelessWidget {
-  const PrivacyPage1({super.key});
+final DefaultTextTheme textTheme = DefaultTextTheme();
+
+class PrivacyPage extends StatelessWidget {
+  const PrivacyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final DefaultTextTheme textTheme = DefaultTextTheme();
     return Column(
       children: [
         AppBar(
-          leading: BackButton(
-            onPressed: () => context.pop(),
-          ),
           title: Text("Privacy Policy"),
           titleTextStyle: textTheme.bodyMedium?.copyWith(color: seaWhite),
         ),
         Expanded(
-          child: Container(
-            alignment: Alignment.topLeft,
-            padding: EdgeInsets.all(15.r),
-            child: FadeIn(
-              delay: const Duration(milliseconds: 450),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(text: _text1 + _text2),
-                  ],
-                  style: textTheme.urlTheme.copyWith(color: slateGray),
+          child: SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.all(15.r),
+              child: FadeIn(
+                delay: const Duration(milliseconds: 450),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "$_text1$_nnt$_text2$_nnt$_text3$_nnt$_text4"),
+                      _Header("Information Collection and Use"),
+                      TextSpan(text: "$_nt$_text5$_nnt$_text6$_nnt$_text7"),
+                      _Header("Log Data"),
+                      TextSpan(text: _text8),
+                      _Header("Cookies"),
+                      TextSpan(text: "$_text9$_nnt$_text10"),
+                      _Header("Service Providers"),
+                      TextSpan(text: _text11),
+                      TextSpan(text: _nnt),
+                      TextSpan(text: "$_text12$_nnt$_text13"),
+                      _Header("Security"),
+                      TextSpan(text: _text14),
+                      _Header("Link to Other Sites"),
+                      TextSpan(text: _text15),
+                      _Header("Children's Privacy"),
+                      TextSpan(text: _text16),
+                      _Header("Changes to This Privacy Policy"),
+                      TextSpan(text: "$_text17$_nnt$_text18"),
+                      _Header("Contact us"),
+                      TextSpan(text: "$_text19"),
+                    ],
+                    style: textTheme.bodySmall?.copyWith(color: slateGray),
+                  ),
                 ),
               ),
             ),
@@ -283,4 +302,30 @@ class PrivacyPage1 extends StatelessWidget {
       ],
     );
   }
+}
+
+const String _nnt = "\n\n";
+const String _nt = "\n";
+
+class _Header extends TextSpan {
+  final String str;
+
+  const _Header(this.str);
+
+  @override
+  List<InlineSpan>? get children => [
+        WidgetSpan(
+          child: Container(
+            alignment: Alignment.centerLeft,
+            margin: EdgeInsets.symmetric(vertical: 24.r),
+            // height: 60.r,
+            child: AutoSizeText(
+              str,
+              style: textTheme.displaySmall,
+              maxLines: 2,
+              presetFontSizes: [27.r, 24.r],
+            ),
+          ),
+        )
+      ];
 }

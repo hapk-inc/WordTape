@@ -26,13 +26,14 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = DateTime.now().onlyYYYYMMMDD;
+    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
     return SliverAppBar(
       pinned: true,
       snap: false,
-      floating: true,
+      floating: false,
       leadingWidth: 120.r,
-      expandedHeight: 675.r,
+      expandedHeight: notifier.question != null ? 675.r : 420.r,
       toolbarHeight: 90.h,
       titleSpacing: 0.r,
       flexibleSpace: FlexibleSpaceBar(

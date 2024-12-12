@@ -120,7 +120,7 @@ class RiddlePageState extends ConsumerWidget {
                 RiddleAppBar(date),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: h_03 * 4.8,
+                  height: h_03 * 4.5,
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(horizontal: w_03 * 1.5),
                   child: PromptWidget(date),
@@ -138,11 +138,20 @@ class RiddlePageState extends ConsumerWidget {
                               .requestFocus();
                         }
                       },
-                      child: Column(
-                        children: [
-                          for (Word word in notifier.question?.words ?? [])
-                            EditableWord(word),
-                        ],
+                      child: Theme(
+                        data: ThemeData(
+                          scrollbarTheme:
+                              ScrollbarThemeData(interactive: false),
+                        ),
+                        child: SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Column(
+                            children: [
+                              for (Word word in notifier.question?.words ?? [])
+                                EditableWord(word),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
