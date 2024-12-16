@@ -130,6 +130,13 @@ UnderlineText questionCracked(Ref ref) {
 }
 
 @Riverpod()
+UnderlineText validWordCorrection(Ref ref) {
+  final Map map = jsonDecode("check_if_valid_word".tr());
+  final List list = map["check_if_valid_word"];
+  return _conversion(list).elementAt(mockInteger(0, list.length - 1));
+}
+
+@Riverpod()
 UnderlineText waitUntilDayComes(Ref ref) {
   final Map map = jsonDecode("wait_until_day_comes".tr());
   final List list = map["wait_until_day_comes"];

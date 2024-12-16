@@ -12,6 +12,7 @@ import '../../model/prompt.dart';
 import '../../model/question.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
+import '../analytics/pod.dart';
 import '../firestore/pod.dart';
 import '../firestore/question.dart';
 import '../gen_ai/pod.dart';
@@ -26,7 +27,7 @@ final ChangeNotifierProviderFamily<QuestionNotifier, DateTime>
   (ref, date) => QuestionNotifier(ref, date: date)..questionFound(),
 );
 
-const Duration _m2400 = Duration(milliseconds: 2400);
+// const Duration _m2400 = Duration(milliseconds: 2400);
 
 class QuestionNotifier extends ChangeNotifier {
   final Ref<QuestionNotifier> ref;
@@ -107,8 +108,14 @@ class QuestionNotifier extends ChangeNotifier {
 
     if (_done) {
       final UnderlineText text = ref.read(questionCrackedProvider);
-      _prompt = Prompt(text: text, state: PromptState.done);
       _headline = text;
+      _prompt = Prompt(text: text, state: PromptState.done);
+      ref.read(
+        questionCompletedProvider(
+          i: _question?.i ?? 0,
+          dateTime: _found.lastFound ?? DateTime.now(),
+        ),
+      );
     }
 
     notifyListeners();
@@ -173,10 +180,11 @@ class QuestionNotifier extends ChangeNotifier {
 
   set prompt(Prompt value) {
     if (_prompt == value) return;
+    //_prompt = value;
     if (_prompt.state == value.state) {
       if (_prompt.state == PromptState.error) {
         Future.delayed(
-          _m2400,
+          Duration(milliseconds: 1500),
           () {
             _prompt = value;
             notifyListeners();
@@ -239,14 +247,15 @@ class QuestionNotifier extends ChangeNotifier {
   Future<void> helpUser() async {
     List<String>? hints = _question?.words[_found.i].hints;
     if (focusedWord == null) return;
-    if (hints == null) {
+    if (hints == null || _question?.words[_found.i].note != null) {
       toastText = await ref.watch(generateToastProvider(
         focusedWord!,
         _question!.answer(_found),
       ).future);
       if (_toastText != null) saveToast(_toastText!);
     } else {
-      final int index = mockInteger(0, hints.length - 1);
+      final int index =
+          hints.length == 1 ? 0 : mockInteger(0, hints.length - 1);
       toastText = hints[index];
       final String saveIndex = "#$index";
       saveToast(saveIndex);
@@ -287,5 +296,33 @@ class QuestionNotifier extends ChangeNotifier {
       return list;
     }
     return [];
+  }
+
+  Future<void> validateIfWrong(String value) async {
+    if (focusedWord?.value != value) {
+      final bool typoCorrection = await ref.watch(typoCorrectionProvider(
+        focusedWord!,
+        value.toUpperCase(),
+      ).future);
+
+      if (typoCorrection) {
+        prompt = Prompt(
+          text: UnderlineText("Check your spelling"),
+          state: PromptState.error,
+        );
+      } else {
+        final bool checkValidWord = await ref.watch(checkIfValidWordProvider(
+          question!.typed(found, value),
+        ).future);
+        _tracker.i("300==$checkValidWord");
+        if (checkValidWord) {
+          prompt = Prompt(
+            text: ref.read(validWordCorrectionProvider),
+            //text: UnderlineText("Valid word, but incorrect word"),
+            state: PromptState.error,
+          );
+        }
+      }
+    }
   }
 }

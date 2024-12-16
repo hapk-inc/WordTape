@@ -21,6 +21,18 @@ Future<String> generateToast(Ref ref, Word word, String answer) async {
   return geminiAi.generateToast(word, answer);
 }
 
+@Riverpod(keepAlive: false, dependencies: [GeminiAi])
+Future<bool> typoCorrection(Ref ref, Word word, String typed) async {
+  final GeminiAi ai = ref.read(geminiAiProvider.notifier);
+  return ai.typoCorrection(word, typed);
+}
+
+@Riverpod(keepAlive: true, dependencies: [GeminiAi])
+Future<bool> checkIfValidWord(Ref ref, String string) async {
+  final GeminiAi ai = ref.read(geminiAiProvider.notifier);
+  return ai.checkIfValidWord(string);
+}
+
 /*@Riverpod(keepAlive: true, dependencies: [GeminiAi])
 Future<String> createHint(Ref ref, Word word, String answer) async {
   final GeminiAi ai = ref.read(geminiAiProvider.notifier);
@@ -83,6 +95,41 @@ class GeminiAi extends _$GeminiAi {
     return await callResponse(contents);
   }*/
 
+  /*FutureOr<String> helpUser(String correct, String mistake) async {
+    final List<String> splitter = correct.split(' ');
+    final String mistakeWord = mistake.split(' ').last;
+    final String prompt = replaceHash(
+      "help_user".tr(),
+      [
+        correct.toUpperCase(),
+        splitter.last,
+        mistakeWord.toUpperCase(),
+        splitter.last,
+      ],
+    );
+    ref.read(trackerProvider).i("105-$prompt");
+    final List<Content> contents = [Content.text(prompt)];
+    return await callResponse(contents);
+  }*/
+
+  Future<bool> typoCorrection(Word word, String typed) async {
+    final String str =
+        "User needs to enter ${word.value}, but user enters $typed. "
+        "Pass only 'true' or 'false' if the user entered word has to do only slight correction";
+    ref.read(trackerProvider).i("125-$str");
+    final List<Content> contents = [Content.text(str)];
+    return await callResponse(contents) == "true";
+  }
+
+  Future<bool> checkIfValidWord(String string) async {
+    final String str = "User entered word is \"$string\". "
+        "Pass 'True' or 'False' if the user entered whole word is a valid noun or verb."
+        " Spaces can be neglected or included if it makes a valid noun or verb";
+    ref.read(trackerProvider).i("127-$str");
+    final List<Content> contents = [Content.text(str)];
+    return (await callResponse(contents)).contains("True");
+  }
+
   FutureOr<String> generateToast(Word word, String answer) async {
     final List<String> splitter = answer.split(' ');
     final String find = splitter.last.toLowerCase();
@@ -108,6 +155,7 @@ class GeminiAi extends _$GeminiAi {
         (value) {
           String str = value.text ?? ref.read(aiErrorProvider);
           str = str.replaceAll('\n', '');
+          // print("callResponse $str");
           return str;
         },
       ).catchError(

@@ -20,6 +20,7 @@ class Question extends Equatable with _$Question {
     required List<Word> words,
     @Default(0) int played,
     @Default([]) List<String> win,
+    int? i,
     @JsonKey(includeIfNull: false) String? id,
   }) = _Question;
 
@@ -60,6 +61,12 @@ class Question extends Equatable with _$Question {
     if (words.isEmpty) return "";
     return words.fold("", (prev, e) => "$prev ${e.value}").trim();
   }
+
+  String correct(Found found) =>
+      "${words[found.i - 1].value} ${words[found.i].value}";
+
+  String typed(Found found, String? typed) =>
+      "${words[found.i - 1].value} $typed".toUpperCase();
 
   @override
   List<Object?> get props => [id, played, win, date];

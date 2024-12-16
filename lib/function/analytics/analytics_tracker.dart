@@ -4,7 +4,6 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:intl/intl.dart';
 
 import '../../firebase/pod.dart';
-import '../../model/found.dart';
 
 class AnalyticsTracker {
   final Ref ref;
@@ -25,14 +24,14 @@ class AnalyticsTracker {
         parameters: {"word": word, "toast_shown": toastShown},
       );
 
-  Future<void> puzzleDone(Found found) async {
-    if (found.date == null || found.lastFound == null) return;
-    final String formattedDate = DateFormat('MMM d, yyyy').format(found.date!);
-    final String lastFound =
-        DateFormat('MMM d, yyyy h:mm a').format(found.lastFound!);
+  Future<void> questionCompleted(int? i, DateTime dateTime) async {
+    final String found = DateFormat('MMM d, yyyy h:mm a').format(dateTime);
     return _analytics.logEvent(
-      name: "puzzle_done",
-      parameters: {"date": formattedDate, "found": lastFound},
+      name: "question_completed",
+      parameters: {"i": "$i", "last_found": found},
     );
   }
 }
+
+//if (found.date == null || found.lastFound == null) return;
+// final String formattedDate = DateFormat('MMM d, yyyy').format(found.date!);

@@ -202,6 +202,7 @@ class RiddleNowWelcome extends ConsumerWidget {
 
     //
     final UnderlineText sentence = notifier.headline;
+
     List<String> words = sentence.text.split(' ');
     List<String> highlighter = (sentence.focused ?? "").split(' ');
 
@@ -216,13 +217,16 @@ class RiddleNowWelcome extends ConsumerWidget {
               TextSpan(
                 text: word + (word != words.last ? " " : ""),
                 style: highlighter.contains(word)
-                    ? textTheme.displaySmall?.copyWith(color: aquaMarine)
+                    ? textTheme.displaySmall?.copyWith(
+                        color: aquaMarine,
+                        height: 1.8,
+                      )
                     : null,
               ),
           ],
         ),
         maxLines: 2,
-        style: textTheme.kanitMedium.copyWith(color: azureGreen),
+        style: textTheme.kanitMedium.copyWith(color: azureGreen, height: 1.8),
         presetFontSizes: [22.5.r, 21.r, 18.r],
         textAlign: TextAlign.center,
       ),

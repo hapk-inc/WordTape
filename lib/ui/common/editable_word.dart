@@ -105,6 +105,11 @@ class _EditableWordState extends ConsumerState<EditableWord> {
             context.go('/daily-challenge/$formatDate');
           }
         },
+        onCompleted: isDummy
+            ? null
+            : (value) {
+                ref.read(questionNotifierProvider(date)).validateIfWrong(value);
+              },
       ),
     );
   }
@@ -116,6 +121,7 @@ class MissingWord extends StatelessWidget {
   final bool enabled;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final ValueChanged<String>? onCompleted;
   final VoidCallback? onTap;
   final FormFieldValidator<String>? validator;
   final FocusNode? focusNode;
@@ -129,6 +135,7 @@ class MissingWord extends StatelessWidget {
     required this.onTap,
     required this.onSubmitted,
     required this.validator,
+    this.onCompleted,
     this.focusNode,
     this.enabled = false,
     super.key,
@@ -157,6 +164,7 @@ class MissingWord extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   controller: controller,
                   animationCurve: Curves.easeOut,
+                  onCompleted: onCompleted,
                   textCapitalization: TextCapitalization.characters,
                   separatorBuilder: (_) {
                     final int len = word.length;
