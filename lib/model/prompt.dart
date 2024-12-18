@@ -13,6 +13,7 @@ class Prompt extends Equatable with _$Prompt {
   const factory Prompt({
     required UnderlineText text,
     @Default(PromptState.search) PromptState state,
+    @Default(false) bool delay,
   }) = _Prompt;
 
   @override

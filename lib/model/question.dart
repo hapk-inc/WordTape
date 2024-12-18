@@ -20,7 +20,7 @@ class Question extends Equatable with _$Question {
     required List<Word> words,
     @Default(0) int played,
     @Default([]) List<String> win,
-    int? i,
+    @JsonKey(includeToJson: false) int? i,
     @JsonKey(includeIfNull: false) String? id,
   }) = _Question;
 

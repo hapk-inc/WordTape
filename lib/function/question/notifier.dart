@@ -38,6 +38,7 @@ class QuestionNotifier extends ChangeNotifier {
   late bool _isTodayOrBefore;
   late Prompt _prompt;
   late UnderlineText _headline;
+  Prompt? _mistakePrompt;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Logger _tracker;
@@ -180,8 +181,17 @@ class QuestionNotifier extends ChangeNotifier {
 
   set prompt(Prompt value) {
     if (_prompt == value) return;
+    if (_prompt.delay) {
+      Future.delayed(Duration(milliseconds: 1500), () {
+        _prompt = value;
+        notifyListeners();
+      });
+    } else {
+      _prompt = value;
+      notifyListeners();
+    }
     //_prompt = value;
-    if (_prompt.state == value.state) {
+    /*if (_prompt.state == value.state) {
       if (_prompt.state == PromptState.error) {
         Future.delayed(
           Duration(milliseconds: 1500),
@@ -193,8 +203,8 @@ class QuestionNotifier extends ChangeNotifier {
       }
     } else {
       _prompt = value;
-    }
-    notifyListeners();
+    }*/
+    // notifyListeners();
   }
 
   bool get isWinner => found.untilNow.isEmpty;
@@ -225,6 +235,7 @@ class QuestionNotifier extends ChangeNotifier {
           ),
           state: PromptState.error,
         );
+        if (_mistakePrompt != null) prompt = _mistakePrompt!;
         final int random2 = mockInteger(0, 7);
         prompt = _prompt.copyWith(
           text: UnderlineText("use_hint_$random2".tr(), focused: "Hint hint"),
@@ -306,23 +317,33 @@ class QuestionNotifier extends ChangeNotifier {
       ).future);
 
       if (typoCorrection) {
-        prompt = Prompt(
+        mistakePrompt = Prompt(
           text: UnderlineText("Check your spelling"),
           state: PromptState.error,
+          delay: true,
         );
       } else {
         final bool checkValidWord = await ref.watch(checkIfValidWordProvider(
           question!.typed(found, value),
         ).future);
-        _tracker.i("300==$checkValidWord");
         if (checkValidWord) {
-          prompt = Prompt(
+          print("It's valid word but not correct answer");
+          mistakePrompt = Prompt(
             text: ref.read(validWordCorrectionProvider),
-            //text: UnderlineText("Valid word, but incorrect word"),
             state: PromptState.error,
+            delay: true,
           );
+        } else {
+          mistakePrompt = null;
         }
       }
     }
+    notifyListeners();
+  }
+
+  set mistakePrompt(Prompt? value) {
+    if (_mistakePrompt == value) return;
+    _mistakePrompt = value;
+    notifyListeners();
   }
 }
