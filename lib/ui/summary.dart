@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,20 +26,23 @@ class SummaryPage extends PanelWidget {
   const SummaryPage({required this.date, super.key});
 
   @override
-  Widget build(context, ref) => SizedBox(
-        height: height(),
-        width: 480.r,
-        child: Summary(date: date),
-      );
+  Widget build(context, ref) {
+    final ScreenSize screenSize = ref.watch(sizeProvider);
+    return SizedBox(
+      height: screenSize != ScreenSize.mobile ? 270.r : height(),
+      width: 480.r,
+      child: Summary(date: date),
+    );
+  }
 
   @override
   SlideDirection direction() => SlideDirection.UP;
 
   @override
-  double height() => 240.r;
+  double height() => 300.r;
 
   @override
-  bool backdropEnabled() => false;
+  bool backdropEnabled() => true;
 }
 
 class Summary extends ConsumerStatefulWidget {
@@ -63,9 +67,7 @@ class _SummaryState extends ConsumerState<Summary> {
   }
 
   @override
-  Widget build(BuildContext context) => AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        constraints: BoxConstraints(maxWidth: 300.r),
+  Widget build(BuildContext context) => ColoredBox(
         color: seaWhite,
         child: Stack(
           children: [
@@ -94,19 +96,55 @@ class SummaryContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(pathNotifierProvider).date;
+    final DefaultTextTheme textTheme = DefaultTextTheme();
     return LayoutBuilder(
       builder: (_, constraints) => Column(
         children: [
           Expanded(
             child: FadeIn(
               delay: const Duration(milliseconds: 600),
-              child: Center(child: QuestionUntilNow(date)),
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 15.r,
+                    top: 7.5.r,
+                    child: AutoSizeText.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "🟩",
+                            style:
+                                textTheme.emojiSmall.copyWith(fontSize: 12.r),
+                          ),
+                          TextSpan(text: "  Found a word on your own\n"),
+                          TextSpan(
+                            text: "🟧",
+                            style:
+                                textTheme.emojiSmall.copyWith(fontSize: 12.r),
+                          ),
+                          TextSpan(text: "  Used hint"),
+                        ],
+                      ),
+                      style: textTheme.bodySmall?.copyWith(
+                        fontSize: 12.r,
+                        color: cadetGray,
+                      ),
+                      presetFontSizes: [12.r, 9.r],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    padding: EdgeInsets.only(bottom: 30.r),
+                    child: QuestionUntilNow(date),
+                  ),
+                ],
+              ),
             ),
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             color: azureGreen,
-            height: 120.r,
+            height: 135.r,
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.symmetric(horizontal: 15.r),
             child: SummaryFooter(date),
@@ -147,7 +185,7 @@ class SummaryFooter extends ConsumerWidget {
           style: defaultTextTheme.kanitMedium.copyWith(color: midnightGreen),
           maxLines: 1,
         ),
-        Gap(4.5.r),
+        Gap(1.5.r),
         if (packageInfo != null) ...[
           SafeArea(
             bottom: false,
@@ -165,7 +203,7 @@ class SummaryFooter extends ConsumerWidget {
               ],
             ),
           ),
-          // Gap(15.r),
+          Gap(7.5.r),
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton(

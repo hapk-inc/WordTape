@@ -327,7 +327,7 @@ class QuestionNotifier extends ChangeNotifier {
           question!.typed(found, value),
         ).future);
         if (checkValidWord) {
-          print("It's valid word but not correct answer");
+          debugPrint("It's valid word but not correct answer");
           mistakePrompt = Prompt(
             text: ref.read(validWordCorrectionProvider),
             state: PromptState.error,

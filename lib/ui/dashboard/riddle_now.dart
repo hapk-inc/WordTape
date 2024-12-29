@@ -26,14 +26,14 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = DateTime.now().onlyYYYYMMMDD;
-    final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
 
     return SliverAppBar(
       pinned: true,
       snap: false,
       floating: false,
       leadingWidth: 120.r,
-      expandedHeight: notifier.question != null ? 675.r : 420.r,
+      //expandedHeight: notifier.question != null ? 675.r : 420.r,
+      expandedHeight: 600.r,
       toolbarHeight: 90.h,
       titleSpacing: 0.r,
       flexibleSpace: FlexibleSpaceBar(
@@ -54,33 +54,35 @@ class BottomButton extends ConsumerWidget {
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     return Padding(
       padding: EdgeInsets.only(bottom: 15.r),
-      child: OverflowBar(
-        overflowAlignment: OverflowBarAlignment.center,
-        spacing: 15.r,
-        overflowSpacing: 15.r,
-        children: [
-          if (notifier.question != null)
-            ElevatedButton(
-              style: const ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(azureGreen),
-                foregroundColor: WidgetStatePropertyAll(raisinBlack),
-              ),
-              onPressed: () {
-                final DateTime now = DateTime.now();
-                final String date = DateFormat('dd-MMM-yyyy').format(now);
-                context.go('/daily-challenge/$date');
-              },
-              child: const Text("Play now"),
+      child: notifier.question == null
+          ? null
+          : OverflowBar(
+              overflowAlignment: OverflowBarAlignment.center,
+              spacing: 15.r,
+              overflowSpacing: 15.r,
+              children: [
+                //if (notifier.question != null)
+                ElevatedButton(
+                  style: const ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(azureGreen),
+                    foregroundColor: WidgetStatePropertyAll(raisinBlack),
+                  ),
+                  onPressed: () {
+                    final DateTime now = DateTime.now();
+                    final String date = DateFormat('dd-MMM-yyyy').format(now);
+                    context.go('/daily-challenge/$date');
+                  },
+                  child: const Text("Play now"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.read(panelNotifierProvider.notifier).state =
+                        const InstructionDialog();
+                  },
+                  child: const Text("How to Play"),
+                ),
+              ],
             ),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(panelNotifierProvider.notifier).state =
-                  const InstructionDialog();
-            },
-            child: const Text("How to Play"),
-          ),
-        ],
-      ),
     );
   }
 }

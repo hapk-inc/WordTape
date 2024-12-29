@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../theme/color.dart';
 import '../theme/font.dart';
@@ -254,6 +255,13 @@ class PrivacyPage extends StatelessWidget {
     return Column(
       children: [
         AppBar(
+          leading: BackButton(
+            //onPressed: () => context.pushReplacement("/daily-challenge"),
+            onPressed: () => context.canPop()
+                ? context.pop()
+                : context.replace("/daily-challenge"),
+          ),
+          leadingWidth: 60.r,
           title: Text("Privacy Policy"),
           titleTextStyle: textTheme.bodyMedium?.copyWith(color: seaWhite),
         ),

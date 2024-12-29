@@ -30,13 +30,15 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     Future.delayed(
       const Duration(milliseconds: 1500),
       () async {
-        final SharedPreferences pref =
-            await ref.read(sharedPrefProvider.future);
-        if (kIsWeb) {
-          final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
-          if (acceptCookies) {
-            ref.read(panelNotifierProvider.notifier).state =
-                const AcceptCookie();
+        if (mounted) {
+          final SharedPreferences pref =
+              await ref.read(sharedPrefProvider.future);
+          if (kIsWeb) {
+            final bool acceptCookies = pref.getBool('accept_cookies') ?? false;
+            if (acceptCookies) {
+              ref.read(panelNotifierProvider.notifier).state =
+                  const AcceptCookie();
+            }
           }
         }
       },
@@ -145,7 +147,7 @@ class DashboardFooter extends ConsumerWidget {
             .map(
               (e) => TextButton(
                 onPressed: () {
-                  if (e == "Privacy Policy") context.push("/privacy-policy");
+                  if (e == "Privacy Policy") context.go("/privacy-policy");
                 },
                 child: Text(e),
               ),
