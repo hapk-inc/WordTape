@@ -2,17 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../function/auth/pod.dart';
+import '../function/firestore/pod.dart';
 import '../panel/pod.dart';
-import '../router/router.dart';
 import '../shared/shared.dart';
 import '../theme/color.dart';
-import '../theme/font.dart';
 import 'common/accept_cookies.dart';
 import 'dashboard/prev_question.dart';
 import 'dashboard/riddle_now.dart';
@@ -47,28 +45,17 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // final User? user = ref.watch(runningUserProvider).value;
-    // final bool isAnonymous = user?.isAnonymous ?? true;
-    return CustomScrollView(
-      slivers: <Widget>[
-        RiddleNow(),
-        GameArchive(),
-        SliverToBoxAdapter(child: PrevQuestion()),
-
-        /* if (isAnonymous) ...[
-          GoogleLogin(),
-        ] else ...[
+  Widget build(BuildContext context) => CustomScrollView(
+        slivers: <Widget>[
+          RiddleNow(),
           GameArchive(),
           SliverToBoxAdapter(child: PrevQuestion()),
-        ],*/
-        SliverToBoxAdapter(child: DashboardFooter()),
-      ],
-    );
-  }
+          SliverToBoxAdapter(child: DashboardFooter()),
+        ],
+      );
 }
 
-class GoogleLogin extends ConsumerWidget {
+/*class GoogleLogin extends ConsumerWidget {
   const GoogleLogin({super.key});
 
   @override
@@ -108,24 +95,58 @@ class GoogleLogin extends ConsumerWidget {
       ),
     );
   }
-}
+}*/
 
-class GameArchive extends StatelessWidget {
+class GameArchive extends ConsumerWidget {
   const GameArchive({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    return SliverToBoxAdapter(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(15.r, 30.r, 0, 15.r),
-        child: Text(
-          "Game Archives",
-          style: textTheme.displaySmall?.copyWith(color: midnightGreen),
+  Widget build(BuildContext context, WidgetRef ref) => SliverToBoxAdapter(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(15.r, 30.r, 15.r, 15.r),
+          child: Row(
+            children: [
+              Text(
+                "Game Archives",
+                style: Theme.of(context)
+                    .textTheme
+                    .displaySmall
+                    ?.copyWith(color: midnightGreen),
+              ),
+              Spacer(),
+              InkWell(
+                onTap: () {
+                  final ScrollController controller =
+                      ref.read(scrollControllerProvider);
+                  if (controller.position.pixels > 0) {
+                    controller.animateTo(
+                      controller.offset - 450.r,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                child: Icon(Icons.chevron_left, size: 36.r),
+              ),
+              InkWell(
+                onTap: () {
+                  final ScrollController controller =
+                      ref.read(scrollControllerProvider);
+                  if (controller.position.pixels <
+                      controller.position.maxScrollExtent) {
+                    controller.animateTo(
+                      controller.offset + 450.r,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                child: Icon(Icons.chevron_right, size: 36.r),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class DashboardFooter extends ConsumerWidget {

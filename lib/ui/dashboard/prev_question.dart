@@ -9,6 +9,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../extension/extension.dart';
 
+import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
 import '../../model/found.dart';
 import '../../model/question.dart';
@@ -26,45 +27,25 @@ class PrevQuestion extends ConsumerWidget {
         child: SizedBox(
           height: 210.r,
           child: ListView(
+            controller: ref.read(scrollControllerProvider),
             scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.only(left: 15.r),
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.only(left: 30.r),
             children: [
               ...List.generate(
-                7,
+                10,
                 (index) {
                   final DateTime now = DateTime.now();
                   final DateTime date =
                       now.subtract(Duration(days: index + 1)).onlyYYYYMMMDD;
-
                   return PrevQuestionTile(date);
                 },
               ),
-              /*Container(
-                width: 420.r,
-                decoration: BoxDecoration(
-                  color: cerise,
-                  borderRadius: BorderRadius.circular(15.r),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 15.r),
-              )*/
             ],
           ),
         ),
       );
 }
-
-/*  child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 40,
-            padding: EdgeInsets.only(left: 15.r),
-            itemBuilder: (context, index) {
-              final DateTime now = DateTime.now();
-              final DateTime date =
-                  now.subtract(Duration(days: index + 1)).onlyYYYYMMMDD;
-
-              return PrevQuestionTile(date);
-            },
-          ),*/
 
 class PrevQuestionTile extends ConsumerWidget {
   final DateTime date;

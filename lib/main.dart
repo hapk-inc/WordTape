@@ -35,7 +35,8 @@ Future<void> main() async {
 
   final FirebaseOptions options = appEnv == AppEnv.dev ? dev : prod;
 
-  final FirebaseApp app = await Firebase.initializeApp(options: options);
+  final FirebaseApp app = await Firebase.initializeApp();
+  // final FirebaseApp app = await Firebase.initializeApp(options: options);
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instanceFor(app: app);
   final FirebaseFirestore fireStore = FirebaseFirestore.instanceFor(app: app);

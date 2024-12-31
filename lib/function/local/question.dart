@@ -59,6 +59,7 @@ class LocalQuestion {
 
     if (maps.isEmpty) return null;
     final Map<String, dynamic> map = Map<String, dynamic>.from(maps.first);
+    print(maps.first);
     map.update(
       "words",
       (value) {

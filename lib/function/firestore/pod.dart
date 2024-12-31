@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -61,3 +62,6 @@ Query<Question> prevQuestionQuery(Ref ref) {
       ref.read(firestoreQuestionProvider);
   return firestoreQuestion.prevQuestion;
 }
+
+@Riverpod(keepAlive: true)
+ScrollController scrollController(Ref ref) => ScrollController();

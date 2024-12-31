@@ -75,10 +75,10 @@ class QuestionNotifier extends ChangeNotifier {
 
     _found = Found(date: date); //Safe-Initialisation Found
 
-    _question = await _localQuestion.fromDate(date);
+    //_question = await _localQuestion.fromDate(date);
     _question ??= await _firestoreQuestion.question(date).then(
       (value) {
-        if (value != null) _localQuestion.insert(value);
+        //if (value != null) _localQuestion.insert(value);
         return value;
       },
     );
