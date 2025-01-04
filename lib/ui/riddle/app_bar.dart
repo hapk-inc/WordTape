@@ -12,12 +12,14 @@ import '../../function/auth/pod.dart';
 import '../../function/question/notifier.dart';
 import '../../function/question/toast.dart';
 
+import '../../model/question.dart';
 import '../../router/router.dart';
 import '../common/riddle_toast.dart';
 
 class RiddleAppBar extends ConsumerWidget {
-  final DateTime date;
-  const RiddleAppBar(this.date, {super.key});
+  final Question question;
+  //final DateTime date;
+  const RiddleAppBar(this.question, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,9 +33,9 @@ class RiddleAppBar extends ConsumerWidget {
       titleSpacing: 0,
       title: InkWell(
         onTap: () => ref.read(routerProvider).go("/daily-challenge"),
-        child: Text(name.toUpperCase(), maxLines: 1),
+        child: Text("${name.toUpperCase()} ${question.i ?? ""}", maxLines: 1),
       ),
-      actions: [LottieHint(date), Gap(1.5)],
+      actions: [LottieHint(question.date), Gap(1.5)],
       titleTextStyle: textTheme.displayMedium,
     );
   }

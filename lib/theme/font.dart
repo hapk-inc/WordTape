@@ -56,7 +56,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
   TextStyle? get displaySmall => paytoneFont.copyWith(
         fontSize: 24.r,
         height: 1.5.r,
-        color: slateGray,
+        // color: slateGray,
       );
 
   //==============
@@ -77,10 +77,7 @@ class DefaultTextTheme extends TextTheme with FontMixin {
 
   // Exception - only for "PRESS START"
   @override
-  TextStyle? get labelSmall => press2pFont.copyWith(
-        color: mint,
-        fontSize: 15.r,
-      );
+  TextStyle? get labelSmall => press2pFont.copyWith(fontSize: 15.r);
 
   TextStyle get urlTheme => robotoMonoFont.copyWith(fontSize: 15.r, height: 2);
 
@@ -115,7 +112,7 @@ mixin FontMixin {
         letterSpacing: 0,
         height: 0,
         wordSpacing: 0,
-        color: seaWhite,
+        color: ghostWhite,
       );
 
   TextStyle get playFont => const TextStyle(
@@ -123,7 +120,6 @@ mixin FontMixin {
         fontWeight: FontWeight.w600,
         letterSpacing: 0,
         height: 0,
-        color: midnightGreen,
       );
 
   TextStyle get press2pFont => const TextStyle(

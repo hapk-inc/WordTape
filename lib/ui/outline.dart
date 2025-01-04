@@ -40,7 +40,7 @@ class OutlinePage extends ConsumerWidget {
               backdropEnabled: panelWidget?.backdropEnabled() ?? false,
               backdropOpacity: 1,
               isDraggable: false,
-              color: seaWhite,
+              color: ghostWhite,
               controller: isMobile ? ref.read(panelControllerProvider) : null,
               minHeight: 0,
               maxHeight: panelWidget?.height() ?? 0.h,
@@ -101,31 +101,14 @@ class OutlineState extends ConsumerWidget {
                       ? BorderRadius.circular(15.r)
                       : BorderRadius.zero,
                   child: Container(
-                    constraints: BoxConstraints.tightForFinite(
-                      width: mobileWidth,
-                    ),
+                    constraints:
+                        BoxConstraints.tightForFinite(width: mobileWidth),
                     child: child,
                   ),
                 ),
               ),
             ),
-
-            /*child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: EdgeInsets.all(7.5.r),
-              constraints: BoxConstraints.tightForFinite(width: mobileWidth),
-              color: seaWhite,
-              alignment: Alignment.topLeft,
-              child: child,
-            ),*/
           ),
-          /*if (maxWidth > mobileWidth)
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 150),
-                right: 0,
-                width: maxWidth - mobileWidth,
-                child: Container(color: blackBean, height: 900.h),
-              )*/
         ],
       ),
     );

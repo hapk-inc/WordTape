@@ -3,7 +3,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wordtape/theme/font.dart';
+
+import '../../theme/color.dart';
+import '../../theme/font.dart';
 
 class Logo extends ConsumerWidget {
   final void Function(AnimateDoDirection)? onFinish;
@@ -23,7 +25,10 @@ class Logo extends ConsumerWidget {
         child: AutoSizeText(
           "WORDTAPE",
           textAlign: TextAlign.center,
-          style: textTheme.displayLarge?.copyWith(fontSize: 72.r),
+          style: textTheme.displayLarge?.copyWith(
+            fontSize: 72.r,
+            color: ghostWhite,
+          ),
           maxLines: 1,
           presetFontSizes: [72.r, 60.r, 54.r],
         ),

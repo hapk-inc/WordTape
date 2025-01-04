@@ -95,7 +95,7 @@ class _KeyboardTile extends ConsumerWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.5.r),
-          border: Border.all(width: 0.27.r, color: seaWhite),
+          border: Border.all(width: 0.45.r, color: ghostWhite),
         ),
         padding: EdgeInsets.symmetric(horizontal: 7.5.r),
         child: str == "DEL"

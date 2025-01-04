@@ -16,9 +16,11 @@ import '../../enum/enum.dart';
 import '../function/auth/pod.dart';
 
 import '../function/question/notifier.dart';
+import '../model/custom_theme.dart';
 import '../panel/widget.dart';
 import '../theme/color.dart';
 import '../theme/font.dart';
+import '../theme/pod.dart';
 import 'dashboard/riddle_now.dart';
 
 class SummaryPage extends PanelWidget {
@@ -68,7 +70,7 @@ class _SummaryState extends ConsumerState<Summary> {
 
   @override
   Widget build(BuildContext context) => ColoredBox(
-        color: seaWhite,
+        color: ghostWhite,
         child: Stack(
           children: [
             Lottie.asset(
@@ -97,6 +99,7 @@ class SummaryContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = ref.read(pathNotifierProvider).date;
     final DefaultTextTheme textTheme = DefaultTextTheme();
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
     return LayoutBuilder(
       builder: (_, constraints) => Column(
         children: [
@@ -143,7 +146,7 @@ class SummaryContent extends ConsumerWidget {
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            color: azureGreen,
+            color: customTheme.prevTile,
             height: 135.r,
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.symmetric(horizontal: 15.r),
@@ -166,6 +169,7 @@ class SummaryFooter extends ConsumerWidget {
     final PackageInfo? packageInfo = ref.read(packageProvider).value;
     final AppEnv appEnv = ref.read(appEnvProvider);
     final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
 
     final String dateStr = DateFormat('MMM dd').format(date);
 
@@ -182,7 +186,8 @@ class SummaryFooter extends ConsumerWidget {
       children: [
         Text(
           "pass_detail_${mockInteger(0, 6)}".tr(),
-          style: defaultTextTheme.kanitMedium.copyWith(color: midnightGreen),
+          style: defaultTextTheme.kanitMedium
+              .copyWith(color: customTheme.forToday[0]),
           maxLines: 1,
         ),
         Gap(1.5.r),
@@ -208,7 +213,9 @@ class SummaryFooter extends ConsumerWidget {
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(midnightGreen),
+                backgroundColor: WidgetStatePropertyAll(
+                  customTheme.forToday[1],
+                ),
               ),
               onPressed: () => Share.share(str),
               child: Text("Share"),

@@ -8,9 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../function/auth/pod.dart';
 import '../function/firestore/pod.dart';
+import '../model/custom_theme.dart';
 import '../panel/pod.dart';
 import '../shared/shared.dart';
-import '../theme/color.dart';
+import '../theme/pod.dart';
 import 'common/accept_cookies.dart';
 import 'dashboard/prev_question.dart';
 import 'dashboard/riddle_now.dart';
@@ -101,52 +102,56 @@ class GameArchive extends ConsumerWidget {
   const GameArchive({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => SliverToBoxAdapter(
-        child: Container(
-          margin: EdgeInsets.fromLTRB(15.r, 30.r, 15.r, 15.r),
-          child: Row(
-            children: [
-              Text(
-                "Game Archives",
-                style: Theme.of(context)
-                    .textTheme
-                    .displaySmall
-                    ?.copyWith(color: midnightGreen),
-              ),
-              Spacer(),
-              InkWell(
-                onTap: () {
-                  final ScrollController controller =
-                      ref.read(scrollControllerProvider);
-                  if (controller.position.pixels > 0) {
-                    controller.animateTo(
-                      controller.offset - 450.r,
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-                child: Icon(Icons.chevron_left, size: 36.r),
-              ),
-              InkWell(
-                onTap: () {
-                  final ScrollController controller =
-                      ref.read(scrollControllerProvider);
-                  if (controller.position.pixels <
-                      controller.position.maxScrollExtent) {
-                    controller.animateTo(
-                      controller.offset + 450.r,
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-                child: Icon(Icons.chevron_right, size: 36.r),
-              ),
-            ],
-          ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final DateTime now = DateTime.now();
+    final CustomTheme customTheme = ref.read(customThemeProvider(now.day));
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.fromLTRB(15.r, 30.r, 15.r, 15.r),
+        child: Row(
+          children: [
+            Text(
+              "Game Archives",
+              style: Theme.of(context)
+                  .textTheme
+                  .displaySmall
+                  ?.copyWith(color: customTheme.forToday[1]),
+            ),
+            Spacer(),
+            InkWell(
+              onTap: () {
+                final ScrollController controller =
+                    ref.read(scrollControllerProvider);
+                if (controller.position.pixels > 0) {
+                  controller.animateTo(
+                    controller.offset - 450.r,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              },
+              child: Icon(Icons.chevron_left, size: 36.r),
+            ),
+            InkWell(
+              onTap: () {
+                final ScrollController controller =
+                    ref.read(scrollControllerProvider);
+                if (controller.position.pixels <
+                    controller.position.maxScrollExtent) {
+                  controller.animateTo(
+                    controller.offset + 450.r,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              },
+              child: Icon(Icons.chevron_right, size: 36.r),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }
 
 class DashboardFooter extends ConsumerWidget {

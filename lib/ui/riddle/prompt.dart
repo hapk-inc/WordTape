@@ -7,9 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../enum/enum.dart';
 import '../../function/question/notifier.dart';
+import '../../model/custom_theme.dart';
 import '../../model/prompt.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
+import '../../theme/pod.dart';
 
 class PromptWidget extends ConsumerWidget {
   final DateTime date;
@@ -18,6 +20,7 @@ class PromptWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Prompt prompt = ref.watch(questionNotifierProvider(date)).prompt;
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
 
     List<String> words = prompt.text.text.split(' ');
     List<String> highlighter = (prompt.text.focused ?? "").split(' ');
@@ -44,10 +47,10 @@ class PromptWidget extends ConsumerWidget {
                   style: highlighter.contains(word)
                       ? isEmoji
                           ? textTheme.emojiMedium
-                          : TextStyle(
+                          : textTheme.displaySmall?.copyWith(
                               color: prompt.state == PromptState.error
-                                  ? melon
-                                  : selectiveYellow,
+                                  ? customTheme.wrong
+                                  : customTheme.pressColor,
                             )
                       : null,
                 ),
@@ -56,7 +59,7 @@ class PromptWidget extends ConsumerWidget {
           maxLines: 3,
           presetFontSizes: [21.r, 18.r, 15.r],
           textAlign: TextAlign.center,
-          style: textTheme.bodyMedium!.copyWith(color: celadon),
+          style: textTheme.bodyMedium!.copyWith(color: ghostWhite),
         ),
       ),
     );

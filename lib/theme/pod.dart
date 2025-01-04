@@ -5,6 +5,7 @@ import 'package:pinput/pinput.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../enum/enum.dart';
+import '../model/custom_theme.dart';
 import 'color.dart';
 import 'font.dart';
 
@@ -30,7 +31,7 @@ PinTheme pinTheme(
     padding: EdgeInsets.zero,
     decoration: BoxDecoration(
       border: Border(
-        bottom: BorderSide(color: color, width: 0.54.r),
+        bottom: BorderSide(color: color, width: 0.9.r),
       ),
     ),
     textStyle: textTheme.headlineMedium?.copyWith(color: color),
@@ -40,7 +41,46 @@ PinTheme pinTheme(
 @Riverpod(keepAlive: true)
 Gradient gradient(
   Ref ref, {
-  List<Color> color = const <Color>[midnightGreen, gunMetal],
+  List<Color> color = const <Color>[/*midnightGreen, gunMetal*/],
 }) =>
     LinearGradient(
         begin: Alignment.topLeft, end: Alignment.bottomRight, colors: color);
+
+@Riverpod(keepAlive: false)
+CustomTheme customTheme(Ref ref, int index) {
+  final List<CustomTheme> customThemes = <CustomTheme>[
+    CustomTheme(
+      forToday: [brown, sealBrown],
+      pressColor: naplesYellow,
+      btnColor: raisinBlack,
+      prevTile: beige,
+      completed: tigerEye,
+      right: lightGreen,
+      wrong: rustyRed,
+    ),
+    CustomTheme(
+      forToday: [marianBlue, darkBlue],
+      pressColor: uOrange,
+      btnColor: raisinBlack,
+      prevTile: magnolia,
+      completed: marianBlue,
+      right: turquoise,
+      wrong: imperialRed,
+    ),
+    CustomTheme(
+      forToday: [midnightGreen, gunMetal],
+      pressColor: mint,
+      btnColor: raisinBlack,
+      prevTile: azureGreen,
+      completed: midnightGreen,
+    ),
+    CustomTheme(
+      forToday: [tyrianPurple, murray],
+      pressColor: xantHous,
+      btnColor: raisinBlack,
+      prevTile: lavenderBlushPink,
+      completed: cerise,
+    ),
+  ];
+  return customThemes[index % 4];
+}

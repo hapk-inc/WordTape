@@ -7,9 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../function/question/notifier.dart';
 
 import '../function/question/word_notifier.dart';
+import '../model/custom_theme.dart';
 import '../model/word.dart';
 import '../panel/pod.dart';
 import '../shared/shared.dart';
+import '../theme/pod.dart';
 import 'common/instruction.dart';
 import 'riddle/custom_keyboard.dart';
 import 'common/editable_word.dart';
@@ -81,7 +83,9 @@ class _RiddlePageState extends ConsumerState<RiddlePage> {
   @override
   Widget build(BuildContext context) {
     notifier = ref.watch(questionNotifierProvider(date));
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
     return GradientBox(
+      color: customTheme.forToday,
       child: SafeArea(bottom: false, child: RiddlePageState(date)),
     );
   }
@@ -117,7 +121,7 @@ class RiddlePageState extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                RiddleAppBar(date),
+                if (notifier.question != null) RiddleAppBar(notifier.question!),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   height: h_03 * 4.5,

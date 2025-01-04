@@ -42,20 +42,20 @@ class App extends ConsumerWidget with CustomThemeMixin {
                 textTheme: defaultTextTheme,
                 appBarTheme: AppBarTheme(
                   toolbarHeight: 90.h,
-                  backgroundColor: midnightGreen,
-                  iconTheme: IconThemeData(color: seaWhite, size: 18.r),
+                  //backgroundColor: midnightGreen,
+                  //iconTheme: IconThemeData(color: seaWhite, size: 18.r),
                   centerTitle: false,
                   titleSpacing: 0,
                 ),
                 snackBarTheme: SnackBarThemeData(
                   insetPadding: EdgeInsets.zero,
                   contentTextStyle: defaultTextTheme.bodySmall?.copyWith(
-                    color: seaWhite,
-                  ),
+                      //color: seaWhite,
+                      ),
                 ),
                 inputDecorationTheme: InputDecorationTheme(
                   enabledBorder: underlineInputBorder(slateGray),
-                  focusedBorder: underlineInputBorder(seaWhite),
+                  focusedBorder: underlineInputBorder(ghostWhite),
                   errorBorder: underlineInputBorder(cerise),
                   focusedErrorBorder: underlineInputBorder(cerise),
                   contentPadding: const EdgeInsets.only(bottom: 9.6),
@@ -65,6 +65,7 @@ class App extends ConsumerWidget with CustomThemeMixin {
                 elevatedButtonTheme: ElevatedButtonThemeData(
                   style: defaultButtonStyle.copyWith(
                     backgroundColor: const WidgetStatePropertyAll(blackBean),
+                    foregroundColor: const WidgetStatePropertyAll(ghostWhite),
                   ),
                 ),
                 outlinedButtonTheme: OutlinedButtonThemeData(
@@ -109,7 +110,7 @@ ScreenSize _validateSize(double mW) {
 mixin CustomThemeMixin {
   IconThemeData get iconThemeData => IconThemeData(
         size: 18.r,
-        color: slateGray,
+        // color: slateGray,
       );
 
   DefaultTextTheme get defaultTextTheme => DefaultTextTheme();
@@ -124,10 +125,11 @@ mixin CustomThemeMixin {
         ),
         minimumSize: WidgetStatePropertyAll(Size(150.r, 51.r)),
         padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 30.r)),
-        foregroundColor: const WidgetStatePropertyAll(seaWhite),
+        // foregroundColor: const WidgetStatePropertyAll(seaWhite),
       );
 
-  BorderSide get outlineBorder => BorderSide(color: raisinBlack, width: 0.3.r);
+  BorderSide get outlineBorder =>
+      BorderSide(/*color: raisinBlack,*/ width: 0.3.r);
 
   UnderlineInputBorder underlineInputBorder(Color color) =>
       UnderlineInputBorder(borderSide: BorderSide(color: color, width: 0.9.r));

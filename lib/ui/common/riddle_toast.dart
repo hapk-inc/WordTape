@@ -8,6 +8,7 @@ import '../../function/question/notifier.dart';
 import '../../function/question/toast.dart';
 import '../../model/word.dart';
 import '../../theme/color.dart';
+import '../../theme/pod.dart';
 import 'typewriter_text.dart';
 
 // const Duration _m4500 = Duration(milliseconds: 4500);
@@ -25,7 +26,7 @@ class RiddleToast extends ConsumerWidget {
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
         child: Container(
-          decoration: BoxDecoration(color: azureGreen),
+          decoration: BoxDecoration(color: ghostWhite),
           height: 144.r,
           alignment: Alignment.center,
           child: Stack(
@@ -45,7 +46,7 @@ class RiddleToast extends ConsumerWidget {
                 right: 45.r,
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: RiddleToastState(toastText),
+                  child: RiddleToastState(toastText, date),
                 ),
               ),
               Positioned(
@@ -80,18 +81,25 @@ class _ToastCloseButton extends ConsumerWidget {
       );
 }
 
-class RiddleToastState extends StatelessWidget {
+class RiddleToastState extends ConsumerWidget {
   final String? text;
-  const RiddleToastState(this.text, {super.key});
+  final DateTime date;
+  const RiddleToastState(this.text, this.date, {super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context, WidgetRef ref) => Container(
         constraints: BoxConstraints.expand(),
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(15.r),
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
-          child: text == null ? null : TypewriterText(text!, onEnd: () {}),
+          child: text == null
+              ? null
+              : TypewriterText(
+                  text!,
+                  onEnd: () {},
+                  color: ref.read(customThemeProvider(date.day)).forToday[1],
+                ),
         ),
       );
 }

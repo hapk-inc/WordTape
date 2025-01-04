@@ -7,6 +7,7 @@ import '../../theme/font.dart';
 
 class TypewriterText extends StatefulWidget {
   final String text;
+  final Color color;
   final Duration duration;
   final void Function() onEnd;
 
@@ -14,6 +15,7 @@ class TypewriterText extends StatefulWidget {
     this.text, {
     super.key,
     this.duration = const Duration(milliseconds: 75),
+    this.color = raisinBlack,
     required this.onEnd,
   });
 
@@ -66,7 +68,7 @@ class _TypewriterTextState extends State<TypewriterText> {
         presetFontSizes: [21.r, 18.r],
         style: DefaultTextTheme().robotoMonoFont.copyWith(
               fontWeight: FontWeight.bold,
-              color: midnightGreen,
+              color: widget.color,
               letterSpacing: 0,
               wordSpacing: 0,
             ),

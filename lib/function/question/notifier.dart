@@ -17,7 +17,7 @@ import '../firestore/pod.dart';
 import '../firestore/question.dart';
 import '../gen_ai/pod.dart';
 import '../local/found.dart';
-import '../local/question.dart';
+// import '../local/question.dart';
 import '../underline_text/pod.dart';
 import 'toast.dart';
 
@@ -42,7 +42,7 @@ class QuestionNotifier extends ChangeNotifier {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Logger _tracker;
-  final LocalQuestion _localQuestion = LocalQuestion();
+  //final LocalQuestion _localQuestion = LocalQuestion();
   final LocalFound _localFound = LocalFound();
 
   //

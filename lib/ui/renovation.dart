@@ -25,7 +25,7 @@ class RenovationPage extends ConsumerWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      color: seaWhite,
+      color: ghostWhite,
       child: SingleChildScrollView(
         child: Column(
           children: [

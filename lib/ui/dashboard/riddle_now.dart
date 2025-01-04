@@ -10,11 +10,13 @@ import 'package:intl/intl.dart';
 import '../../extension/extension.dart';
 
 import '../../function/question/notifier.dart';
+import '../../model/custom_theme.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
 import '../../panel/pod.dart';
 import '../../theme/color.dart';
 import '../../theme/font.dart';
+import '../../theme/pod.dart';
 import '../common/editable_word.dart';
 import '../common/gradient_box.dart';
 import '../common/logo.dart';
@@ -26,20 +28,19 @@ class RiddleNow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = DateTime.now().onlyYYYYMMMDD;
-
+    final CustomTheme theme = ref.read(customThemeProvider(date.day));
     return SliverAppBar(
       pinned: true,
       snap: false,
       floating: false,
       leadingWidth: 120.r,
-      //expandedHeight: notifier.question != null ? 675.r : 420.r,
       expandedHeight: 600.r,
       toolbarHeight: 90.h,
       titleSpacing: 0.r,
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1,
         title: BottomButton(date),
-        background: const GradientBox(child: RiddleNowState()),
+        background: GradientBox(color: theme.forToday, child: RiddleNowState()),
       ),
     );
   }
@@ -52,6 +53,7 @@ class BottomButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
     return Padding(
       padding: EdgeInsets.only(bottom: 15.r),
       child: notifier.question == null
@@ -61,10 +63,11 @@ class BottomButton extends ConsumerWidget {
               spacing: 15.r,
               overflowSpacing: 15.r,
               children: [
-                //if (notifier.question != null)
                 ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(azureGreen),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                      customTheme.prevTile,
+                    ),
                     foregroundColor: WidgetStatePropertyAll(raisinBlack),
                   ),
                   onPressed: () {
@@ -108,9 +111,7 @@ class RiddleNowState extends ConsumerWidget {
                     data: ThemeData(
                       scrollbarTheme: ScrollbarThemeData(interactive: false),
                     ),
-                    child: SingleChildScrollView(
-                      child: const RiddleNowStateState(),
-                    ),
+                    child: const RiddleNowStateState(),
                   ),
                 ),
               ),
@@ -149,27 +150,11 @@ class RiddleNowStateState extends ConsumerWidget {
                 for (Word search in searchWord)
                   FadeIn(
                     delay: const Duration(milliseconds: 750),
-                    child: EditableWord(
-                      search,
-                      inDailyChallenge: false,
-                    ),
+                    child: EditableWord(search, inDailyChallenge: false),
                   )
               ],
             ),
           ),
-        /*Spacer(),
-        if (notifier.question != null)
-          FadeInUp(
-            delay: const Duration(seconds: 3),
-            from: 30.h,
-            key: ValueKey(played),
-            child: Text(
-              played != 0
-                  ? "$played users have joined in on today's challenge."
-                  : "Be the first player to finish today's challenge!",
-              style: textTheme.bodySmall?.copyWith(color: celeste),
-            ),
-          )*/
       ],
     );
   }
@@ -201,6 +186,7 @@ class RiddleNowWelcome extends ConsumerWidget {
     final DateTime date = DateTime.now().onlyYYYYMMMDD;
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final DefaultTextTheme textTheme = DefaultTextTheme();
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
 
     //
     final UnderlineText sentence = notifier.headline;
@@ -220,7 +206,7 @@ class RiddleNowWelcome extends ConsumerWidget {
                 text: word + (word != words.last ? " " : ""),
                 style: highlighter.contains(word)
                     ? textTheme.displaySmall?.copyWith(
-                        color: aquaMarine,
+                        color: customTheme.pressColor,
                         height: 1.8,
                       )
                     : null,

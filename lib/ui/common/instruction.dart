@@ -29,7 +29,7 @@ class InstructionDialog extends PanelWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
-        gradient: ref.read(gradientProvider(color: [seaWhite, azureGreen])),
+        gradient: ref.read(gradientProvider(color: [ghostWhite, azureGreen])),
       ),
       padding: EdgeInsets.fromLTRB(7.5.r, 15.r, 7.5.r, 45.r),
       constraints: BoxConstraints(maxWidth: 600.r),

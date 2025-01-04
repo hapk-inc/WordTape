@@ -263,7 +263,7 @@ class PrivacyPage extends StatelessWidget {
           ),
           leadingWidth: 60.r,
           title: Text("Privacy Policy"),
-          titleTextStyle: textTheme.bodyMedium?.copyWith(color: seaWhite),
+          titleTextStyle: textTheme.bodyMedium?.copyWith(color: ghostWhite),
         ),
         Expanded(
           child: SingleChildScrollView(

@@ -3,13 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import '../../enum/enum.dart';
+import '../../model/custom_theme.dart';
 import '../../model/found.dart';
 import '../../model/prompt.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
-import '../../theme/color.dart';
 import '../../extension/extension.dart';
 
+import '../../theme/pod.dart';
 import '../underline_text/pod.dart';
 import 'notifier.dart';
 
@@ -48,19 +49,20 @@ class WordNotifier extends ChangeNotifier {
 
   validateController(int i, {bool triggerNotifyListener = true}) {
     _enabled = i == _index;
+    final CustomTheme customTheme = ref.read(customThemeProvider(_date.day));
 
     final bool done = _notifier.done;
     if (done) {
       _controller = TextEditingController(text: word.value);
       final bool didHeFound = !_notifier.found.untilNow.containsKey(_index);
-      _color = didHeFound ? aquaMarine : melon;
+      _color = didHeFound ? customTheme.right : customTheme.wrong;
     } else {
       if (_enabled) {
         onlyFirstChar();
       } else {
         if (_index.isPrevPrev(i)) {
           _controller = TextEditingController(text: word.value);
-          _color = _index.isPrev(i) ? azureGreen : Colors.white24;
+          _color = _index.isPrev(i) ? customTheme.prevTile : Colors.white24;
         }
       }
     }
@@ -68,11 +70,13 @@ class WordNotifier extends ChangeNotifier {
   }
 
   void onlyFirstChar() {
+    final CustomTheme customTheme = ref.read(customThemeProvider(_date.day));
+
     _controller.value = _controller.value.copyWith(
       text: word.value.firstChar,
       selection: TextSelection.fromPosition(const TextPosition(offset: 1)),
     );
-    _color = aquaMarine;
+    _color = customTheme.pressColor;
     _node.requestFocus();
   }
 

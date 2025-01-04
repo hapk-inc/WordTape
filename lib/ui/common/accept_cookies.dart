@@ -37,7 +37,7 @@ class AcceptCookie extends PanelWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: ref.read(
-              gradientProvider(color: [seaWhite, azureGreen]),
+              gradientProvider(color: [ghostWhite, azureGreen]),
             ),
           ),
           padding: EdgeInsets.all(15.r),

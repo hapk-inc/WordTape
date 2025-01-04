@@ -16,8 +16,6 @@ import 'package:logger/logger.dart';
 
 import 'enum/enum.dart';
 import 'firebase/pod.dart';
-import 'firebase/firebase_option_dev.dart';
-import 'firebase/firebase_option_prod.dart';
 import 'app.dart';
 import 'function/connectivity/pod.dart';
 
@@ -28,12 +26,12 @@ Future<void> main() async {
   //
   WidgetsBinding.instance.addPostFrameCallback((_) {});
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
-  final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
+  // final FirebaseOptions dev = DefaultFirebaseOptionsDev.currentPlatform;
+  // final FirebaseOptions prod = DefaultFirebaseOptionsProd.currentPlatform;
 
   const AppEnv appEnv = kDebugMode ? AppEnv.dev : AppEnv.prod;
 
-  final FirebaseOptions options = appEnv == AppEnv.dev ? dev : prod;
+  //final FirebaseOptions options = appEnv == AppEnv.dev ? dev : prod;
 
   final FirebaseApp app = await Firebase.initializeApp();
   // final FirebaseApp app = await Firebase.initializeApp(options: options);

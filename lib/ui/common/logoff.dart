@@ -16,7 +16,7 @@ class LogoffAlert extends PanelWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: height(),
-      color: seaWhite,
+      color: ghostWhite,
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(horizontal: 15.r),
       constraints: BoxConstraints(maxWidth: 450.r),

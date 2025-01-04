@@ -13,7 +13,9 @@ import '../firebase/pod.dart';
 import '../function/auth/pod.dart';
 import '../function/auth/running_user.dart';
 import '../function/underline_text/pod.dart';
+import '../model/custom_theme.dart';
 import '../router/router.dart';
+import '../theme/pod.dart';
 import 'common/gradient_box.dart';
 import 'common/logo.dart';
 
@@ -54,23 +56,28 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   }
 
   @override
-  Widget build(BuildContext context) => GradientBox(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox.square(
-              dimension: 540.r,
-              child: Stack(
-                children: [
-                  if (_logo) Logo(onFinish: onFinish),
-                  if (_lottie) StampLottie(onLoaded: onLoaded)
-                ],
-              ),
+  Widget build(BuildContext context) {
+    final CustomTheme customTheme =
+        ref.read(customThemeProvider(DateTime.now().day));
+    return GradientBox(
+      color: customTheme.forToday,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox.square(
+            dimension: 540.r,
+            child: Stack(
+              children: [
+                if (_logo) Logo(onFinish: onFinish),
+                if (_lottie) StampLottie(onLoaded: onLoaded)
+              ],
             ),
-            SizedBox(height: 45.h, child: _loader ? const Loader() : null)
-          ],
-        ),
-      );
+          ),
+          SizedBox(height: 45.h, child: _loader ? const Loader() : null)
+        ],
+      ),
+    );
+  }
 }
 
 class Loader extends ConsumerWidget {
@@ -79,6 +86,8 @@ class Loader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final CustomTheme customTheme =
+        ref.read(customThemeProvider(DateTime.now().day));
     return FadeIn(
       child: TextButton(
         onPressed: () async {
@@ -92,7 +101,10 @@ class Loader extends ConsumerWidget {
 
           router.go("/daily-challenge");
         },
-        child: Text(ref.read(pressStartProvider), style: textTheme.labelSmall),
+        child: Text(
+          ref.read(pressStartProvider),
+          style: textTheme.labelSmall?.copyWith(color: customTheme.pressColor),
+        ),
       ),
     );
   }

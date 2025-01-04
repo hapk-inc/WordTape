@@ -11,6 +11,7 @@ import '../../extension/extension.dart';
 
 import '../../function/firestore/pod.dart';
 import '../../function/question/notifier.dart';
+import '../../model/custom_theme.dart';
 import '../../model/found.dart';
 import '../../model/question.dart';
 import '../../model/word.dart';
@@ -56,6 +57,7 @@ class PrevQuestionTile extends ConsumerWidget {
     final DefaultTextTheme textTheme = DefaultTextTheme();
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> search = notifier.searchWord;
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
 
     final bool isCompleted = notifier.done;
     final Found found = notifier.found;
@@ -65,16 +67,13 @@ class PrevQuestionTile extends ConsumerWidget {
     return Container(
       width: 210.r,
       decoration: BoxDecoration(
-          border: Border.all(
-            color: isCompleted ? midnightGreen : azureGreen,
-            width: 0.45.r,
-          ),
-          borderRadius: BorderRadius.circular(15.r),
-          gradient: isCompleted
-              ? ref.read(gradientProvider(color: [...List.filled(2, celeste)]))
-              : LinearGradient(colors: [...List.filled(5, azureGreen)])
-          // color: isCompleted ? lightCyan : null,
-          ),
+        border: Border.all(
+          color: isCompleted ? customTheme.completed : customTheme.prevTile,
+          width: 0.45.r,
+        ),
+        color: isCompleted ? customTheme.completed : customTheme.prevTile,
+        borderRadius: BorderRadius.circular(15.r),
+      ),
       padding: EdgeInsets.all(15.r),
       margin: EdgeInsets.symmetric(horizontal: 7.5.r),
       alignment: Alignment.centerLeft,
@@ -91,7 +90,9 @@ class PrevQuestionTile extends ConsumerWidget {
               Gap(7.5.r),
               Text(
                 DateFormat('MMMM dd').format(date),
-                style: textTheme.kanitSmall.copyWith(color: midnightGreen),
+                style: textTheme.kanitSmall.copyWith(
+                  color: isCompleted ? customTheme.prevTile : raisinBlack,
+                ),
               ),
               AutoSizeText.rich(
                 TextSpan(
@@ -112,7 +113,7 @@ class PrevQuestionTile extends ConsumerWidget {
                   ],
                 ),
                 style: textTheme.headlineMedium?.copyWith(
-                  color: raisinBlack,
+                  color: isCompleted ? customTheme.prevTile : raisinBlack,
                   height: 1.5,
                 ),
                 maxLines: 1,
@@ -145,7 +146,7 @@ class PrevQuestionTile extends ConsumerWidget {
                         : "${question.played} users played",
                     maxLines: 1,
                     style: textTheme.kanitMedium.copyWith(
-                      color: isCompleted ? englishViolet : null,
+                      color: isCompleted ? customTheme.prevTile : englishViolet,
                     ),
                     presetFontSizes: [15.r, 12.r, 9.r],
                   ),
@@ -156,8 +157,9 @@ class PrevQuestionTile extends ConsumerWidget {
                   ),
                   Text(
                     "${question.win.length}",
-                    style: textTheme.bodySmall
-                        ?.copyWith(color: isCompleted ? raisinBlack : null),
+                    style: textTheme.bodySmall?.copyWith(
+                      color: isCompleted ? customTheme.prevTile : englishViolet,
+                    ),
                   )
                 ],
               ),
