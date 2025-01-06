@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mock_data/mock_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -97,6 +98,21 @@ UnderlineText notifyText(Ref ref) {
   final List list = map["notify"];
   final List<UnderlineText> notify = _conversion(list);
   return notify[mockInteger(0, list.length - 1)];
+}
+
+@Riverpod(keepAlive: true)
+UnderlineText dataLoading(Ref ref) {
+  try {
+    final String string = jsonDecode("data_loading".tr());
+    Map map = jsonDecode(string);
+    final List list = map["data_loading"];
+    final List<UnderlineText> loading = _conversion(list);
+    return loading[mockInteger(0, list.length - 1)];
+  } catch (e, s) {
+    debugPrint(e.toString());
+    debugPrintStack(stackTrace: s);
+  }
+  return UnderlineText("sdf");
 }
 
 @Riverpod(keepAlive: true)

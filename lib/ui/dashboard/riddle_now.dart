@@ -7,9 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import '../../extension/extension.dart';
 
 import '../../function/question/notifier.dart';
+import '../../function/underline_text/pod.dart';
 import '../../model/custom_theme.dart';
 import '../../model/underline_text.dart';
 import '../../model/word.dart';
@@ -127,35 +129,86 @@ class RiddleNowStateState extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime date = DateTime.now().onlyYYYYMMMDD;
+    final UnderlineText underlineText = ref.read(dataLoadingProvider);
     final QuestionNotifier notifier = ref.watch(questionNotifierProvider(date));
     final List<Word> searchWord = notifier.searchWord;
 
-    return Column(
-      children: [
-        Gap(30.r),
-        const Logo(),
-        Gap(15.r),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 7.5.r),
-          child: const RiddleNowWelcome(),
-        ),
-        Gap(45.r),
-        if (searchWord.isEmpty) ...[
-          QuestionUntilNow(date),
-        ] else
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 4.5.r),
-            child: Column(
-              children: [
-                for (Word search in searchWord)
-                  FadeIn(
-                    delay: const Duration(milliseconds: 750),
-                    child: EditableWord(search, inDailyChallenge: false),
-                  )
+    final CustomTheme customTheme = ref.read(customThemeProvider(date.day));
+
+    List<String> words = underlineText.text.split(' ');
+    List<String> highlighter = (underlineText.focused ?? "").split(' ');
+
+    final DefaultTextTheme defaultTextTheme = DefaultTextTheme();
+
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: Column(
+        children: notifier.question == null
+            ? [
+                FadeIn(
+                  delay: const Duration(milliseconds: 2400),
+                  child: AutoSizeText.rich(
+                    TextSpan(
+                      children: [
+                        for (String word in words)
+                          TextSpan(
+                            text: word + (word != words.last ? " " : ""),
+                            style: highlighter.contains(word)
+                                ? defaultTextTheme.kanitMedium.copyWith(
+                                    color: customTheme.pressColor,
+                                    height: 1.8,
+                                  )
+                                : null,
+                          ),
+                      ],
+                    ),
+                    maxLines: 2,
+                    style: defaultTextTheme.kanitMedium
+                        .copyWith(color: azureGreen, height: 1.8),
+                    presetFontSizes: [22.5.r, 21.r, 18.r],
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                FadeIn(
+                  delay: const Duration(milliseconds: 1500),
+                  child: SizedBox.square(
+                    dimension: 450.r,
+                    child: Lottie.asset(
+                      'lottie/under_construction.json',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ]
+            : [
+                Gap(30.r),
+                const Logo(),
+                Gap(15.r),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 7.5.r),
+                  child: const RiddleNowWelcome(),
+                ),
+                Gap(45.r),
+                if (searchWord.isEmpty) ...[
+                  QuestionUntilNow(date),
+                ] else
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 4.5.r),
+                    child: Column(
+                      children: [
+                        for (Word search in searchWord)
+                          FadeIn(
+                            delay: const Duration(milliseconds: 750),
+                            child: EditableWord(
+                              search,
+                              inDailyChallenge: false,
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
               ],
-            ),
-          ),
-      ],
+      ),
     );
   }
 }
